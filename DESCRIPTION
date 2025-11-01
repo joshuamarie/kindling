@@ -1,0 +1,34 @@
+Package: kindling
+Type: Package
+Title: Higher-level interface of torch package in training neural networks
+Version: 0.1.0
+Authors@R: c(
+    person(
+      "Joshua", "Marie",
+      email = "joshua.marie.k@gmail.com",
+      role = c("aut", "cre")
+    )
+  )
+Description: Provides a higher-level interface that bridges the 'torch' and 
+    'tidymodels' ecosystems, allowing users to easily define, train, and tune 
+    deep learning multiple types of model, such as feedforward neural networks, 
+    convolutional neural networks (CNNs) and recurrent neural networks (RNNs). 
+    The package supports hyperparameter tuning for network architecture 
+    (number of hidden layers, units, and activation functions) and is designed 
+    to integrate seamlessly into 'tidymodels' workflows for 
+    model training and evaluation.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    stringr,
+    purrr, 
+    torch, 
+    parsnip, 
+    rlang, 
+    magrittr
+Config/testthat/edition: 3
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.3
+Depends: 
+    R (>= 3.5)
