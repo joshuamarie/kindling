@@ -7,6 +7,9 @@
 
 <!-- badges: end -->
 
+> 🚧 **Under Construction**: This package is currently in early
+> development.
+
 `{kindling}` provides a higher-level interface that bridges the
 `{torch}` and `{tidymodels}` ecosystems, making it easier to define,
 train, and tune deep learning models in R. The package allows users to
