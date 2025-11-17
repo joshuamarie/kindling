@@ -26,6 +26,9 @@ Imports:
     torch, 
     parsnip, 
     rlang, 
+    cli
+Suggests: 
+    testthat (>= 3.0.0), 
     magrittr
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
