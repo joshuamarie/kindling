@@ -8,7 +8,7 @@
 <!-- badges: end -->
 
 > 🚧 **Under Construction**: This package is currently in early
-> development.
+> development. 🚧
 
 `{kindling}` provides a higher-level interface that bridges the
 `{torch}` and `{tidymodels}` ecosystems, making it easier to define,
