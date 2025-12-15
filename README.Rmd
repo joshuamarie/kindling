@@ -26,7 +26,7 @@ desc = setNames(as.list(desc), colnames(desc))
 `{kindling}` provides a higher-level interface that bridges the `{torch}` and `{tidymodels}` ecosystems, making it easier to define, train, and tune deep learning models in R. The package allows users to work with multiple types of neural network architectures including:
 
 - Feedforward neural networks (FNNs)
-- Convolutional neural networks (CNNs)
+<!-- - Convolutional neural networks (CNNs) -->
 - Recurrent neural networks (RNNs)
 
 The package is designed to integrate seamlessly into `{tidymodels}` workflows, bringing the power of deep learning to the familiar tidymodels interface. It supports hyperparameter tuning for network architecture components such as the number of hidden layers, units per layer, and activation functions.

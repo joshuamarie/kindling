@@ -16,7 +16,7 @@ train, and tune deep learning models in R. The package allows users to
 work with multiple types of neural network architectures including:
 
 - Feedforward neural networks (FNNs)
-- Convolutional neural networks (CNNs)
+  <!-- - Convolutional neural networks (CNNs) -->
 - Recurrent neural networks (RNNs)
 
 The package is designed to integrate seamlessly into `{tidymodels}`
