@@ -58,9 +58,12 @@ The generated RNN module will have the specified number of recurrent layers,
 with each layer containing the specified number of hidden units. Activation functions
 can be applied after each RNN layer as specified. The final output is taken from the
 last time step and passed through a linear layer.
+
+The generated module properly namespaces all torch functions to avoid
+polluting the global namespace.
 }
 \examples{
-
+\dontrun{
 # Basic LSTM with 2 layers
 rnn_mod = rnn_generator(
     nn_name = "MyLSTM",
@@ -70,6 +73,9 @@ rnn_mod = rnn_generator(
     rnn_type = "lstm",
     activations = 'relu'
 )
+
+# Evaluate and instantiate
+model <- eval(rnn_mod)()
 
 # GRU with different activations
 rnn_mod2 = rnn_generator(
@@ -96,5 +102,6 @@ rnn_mod3 = rnn_generator(
     bidirectional = TRUE,
     dropout = 0.3
 )
+}
 
 }

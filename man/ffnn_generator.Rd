@@ -50,9 +50,12 @@ The generated FFNN module will have the specified number of hidden layers,
 with each layer containing the specified number of neurons. Activation functions
 can be applied after each hidden layer as specified.
 This can be used for both classification and regression tasks.
+
+The generated module properly namespaces all torch functions to avoid
+polluting the global namespace.
 }
 \examples{
-
+\dontrun{
 # Generate a FFNN module with 3 hidden layers
 ffnn_mod = ffnn_generator(
     nn_name = "MyFFNN",
@@ -62,6 +65,9 @@ ffnn_mod = ffnn_generator(
     activations = 'relu'
 )
 
+# Evaluate and instantiate
+model <- eval(ffnn_mod)()
+
 # More complex example with different activations
 ffnn_mod2 = ffnn_generator(
     nn_name = "MyFFNN2",
@@ -70,7 +76,7 @@ ffnn_mod2 = ffnn_generator(
     no_y = 5,
     activations = act_funs(
         relu,
-        tanh,
+        selu,
         softshrink = args(lambd = 0.5)
     )
 )
@@ -81,7 +87,8 @@ ffnn_mod3 = ffnn_generator(
     no_x = 10,
     no_y = 3,
     activations = 'relu',
-    output_activation = act_funs(softmax = args(dim = 1L))
+    output_activation = act_funs(softmax = args(dim = 2L))
 )
+}
 
 }

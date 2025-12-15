@@ -196,23 +196,23 @@ parse_activation_spec = function(activations, n_layers) {
         parsed_activation =
             imap(activations, function(elem, i) {
 
-            if (inherits(elem, "parameterized_activation")) {
-                params = unclass(elem)
-                attr(params, "act_name") = NULL
+                if (inherits(elem, "parameterized_activation")) {
+                    params = unclass(elem)
+                    attr(params, "act_name") = NULL
 
-                list(
-                    name = attr(elem, "act_name"),
-                    param = params
-                )
-            } else if (is.character(elem)) {
-                list(
-                    name = elem,
-                    param = list()
-                )
-            } else {
-                cli_abort(paste("Unsupported activation type at index", i))
-            }
-        })
+                    list(
+                        name = attr(elem, "act_name"),
+                        param = params
+                    )
+                } else if (is.character(elem)) {
+                    list(
+                        name = elem,
+                        param = list()
+                    )
+                } else {
+                    cli_abort(paste("Unsupported activation type at index", i))
+                }
+            })
 
         set_names(transpose(parsed_activation), c("names", "params"))
     } else if (is.character(activations)) {
@@ -283,14 +283,15 @@ parse_activation_spec = function(activations, n_layers) {
 #' Activation Functions Processor
 #'
 #' This function processes activation function specifications into callable
-#' expressions.
+#' expressions with proper torch namespace handling.
 #'
 #' @param activation_spec A list with two elements:
 #' - `names`: Character vector of activation function names.
 #' - `params`: List of parameter lists for each activation function.
 #' @param prefix Prefix for activation function names (default: "nnf_").
 #'
-#' @return A list of functions that generate activation function calls.
+#' @return A list of functions that generate activation function calls with
+#' proper torch:: namespace prefixing.
 #'
 #' @importFrom rlang call2 sym exec
 #' @importFrom purrr map2
@@ -304,12 +305,14 @@ process_activations = function(activation_spec, prefix = "nnf_") {
         if (is.na(name)) {
             NULL
         } else {
-            fn_sym = sym(paste0(prefix, name))
+            # Create namespaced function call: torch::nnf_*
+            fn_name = paste0(prefix, name)
+            fn_call = call2("::", sym("torch"), sym(fn_name))
 
             if (is.null(params) || length(params) == 0) {
-                function(x_expr) call2(fn_sym, x_expr)
+                function(x_expr) call2(fn_call, x_expr)
             } else {
-                function(x_expr) exec(call2, fn_sym, x_expr, !!!params)
+                function(x_expr) exec(call2, fn_call, x_expr, !!!params)
             }
         }
     })

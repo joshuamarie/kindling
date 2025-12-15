@@ -25,8 +25,11 @@
 #' can be applied after each hidden layer as specified.
 #' This can be used for both classification and regression tasks.
 #'
-#' @examples
+#' The generated module properly namespaces all torch functions to avoid
+#' polluting the global namespace.
 #'
+#' @examples
+#' \dontrun{
 #' # Generate a FFNN module with 3 hidden layers
 #' ffnn_mod = ffnn_generator(
 #'     nn_name = "MyFFNN",
@@ -36,6 +39,9 @@
 #'     activations = 'relu'
 #' )
 #'
+#' # Evaluate and instantiate
+#' model <- eval(ffnn_mod)()
+#'
 #' # More complex example with different activations
 #' ffnn_mod2 = ffnn_generator(
 #'     nn_name = "MyFFNN2",
@@ -44,7 +50,7 @@
 #'     no_y = 5,
 #'     activations = act_funs(
 #'         relu,
-#'         tanh,
+#'         selu,
 #'         softshrink = args(lambd = 0.5)
 #'     )
 #' )
@@ -55,8 +61,9 @@
 #'     no_x = 10,
 #'     no_y = 3,
 #'     activations = 'relu',
-#'     output_activation = act_funs(softmax = args(dim = 1L))
+#'     output_activation = act_funs(softmax = args(dim = 2L))
 #' )
+#' }
 #'
 #' @importFrom rlang new_function call2 expr sym
 #' @importFrom purrr map map2
@@ -102,7 +109,8 @@ ffnn_generator = function(nn_name = "DeepFFN",
         .f = function(i, dims) {
             layer_name = if (i == n_layers) "out" else glue("fc{i}")
             call2("=", call2("$", expr(self), sym(layer_name)),
-                  call2("nn_linear", !!!dims, bias = bias))
+                  call2(call2("::", sym("torch"), sym("nn_linear")),
+                        !!!dims, bias = bias))
         }
     )
 
@@ -136,7 +144,8 @@ ffnn_generator = function(nn_name = "DeepFFN",
         body = call2("{", !!!forward_body_exprs)
     )
 
-    call2("nn_module", nn_name, initialize = init, forward = forward)
+    call2(call2("::", sym("torch"), sym("nn_module")),
+          nn_name, initialize = init, forward = forward)
 }
 
 #' Check RNN Type Validity
@@ -199,8 +208,11 @@ check_rnn_type = function(rnn_type, hd_neurons) {
 #' can be applied after each RNN layer as specified. The final output is taken from the
 #' last time step and passed through a linear layer.
 #'
-#' @examples
+#' The generated module properly namespaces all torch functions to avoid
+#' polluting the global namespace.
 #'
+#' @examples
+#' \dontrun{
 #' # Basic LSTM with 2 layers
 #' rnn_mod = rnn_generator(
 #'     nn_name = "MyLSTM",
@@ -210,6 +222,9 @@ check_rnn_type = function(rnn_type, hd_neurons) {
 #'     rnn_type = "lstm",
 #'     activations = 'relu'
 #' )
+#'
+#' # Evaluate and instantiate
+#' model <- eval(rnn_mod)()
 #'
 #' # GRU with different activations
 #' rnn_mod2 = rnn_generator(
@@ -236,6 +251,7 @@ check_rnn_type = function(rnn_type, hd_neurons) {
 #'     bidirectional = TRUE,
 #'     dropout = 0.3
 #' )
+#' }
 #'
 #' @importFrom rlang new_function call2 expr sym
 #' @importFrom purrr map map2
@@ -269,8 +285,9 @@ rnn_generator = function(nn_name = "DeepRNN",
         hidden_size = hd_neurons[i]
         layer_dropout = if (i < n_rnn_layers && dropout > 0) dropout else 0
 
+        rnn_fn_name = paste0("nn_", rnn_type)
         rnn_call = call2(
-            paste0("nn_", rnn_type),
+            call2("::", sym("torch"), sym(rnn_fn_name)),
             input_size = input_size,
             hidden_size = hidden_size,
             num_layers = 1L,
@@ -284,9 +301,11 @@ rnn_generator = function(nn_name = "DeepRNN",
     })
 
     final_hidden = hd_neurons[n_rnn_layers] * (if (bidirectional) 2L else 1L)
+
     output_layer = call2(
         "=", call2("$", expr(self), sym("out")),
-        call2("nn_linear", final_hidden, no_y)
+        call2(call2("::", sym("torch"), sym("nn_linear")),
+              final_hidden, no_y)
     )
 
     init_body = c(rnn_layers, list(output_layer))
@@ -311,6 +330,7 @@ rnn_generator = function(nn_name = "DeepRNN",
         if (is.null(act_call_fn)) {
             list(rnn_call_expr)
         } else {
+            # Activation function already has torch:: namespace
             activation_expr = call2("=", expr(x), act_call_fn(expr(x)))
             list(rnn_call_expr, activation_expr)
         }
@@ -337,5 +357,7 @@ rnn_generator = function(nn_name = "DeepRNN",
         body = call2("{", !!!forward_body_exprs)
     )
 
-    call2("nn_module", nn_name, initialize = init, forward = forward)
+
+    call2(call2("::", sym("torch"), sym("nn_module")),
+          nn_name, initialize = init, forward = forward)
 }
