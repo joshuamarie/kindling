@@ -1,11 +1,15 @@
 bibentry(
-  bibtype = "Article",
-  title = ,
-  author = ,
-  journal = ,
-  year = ,
-  volume = ,
-  number = ,
-  pages = ,
-  doi =
+    bibtype = "Manual",
+    title = "{kindling}: Higher-level interface of torch package in training neural networks",
+    author = "Joshua Marie",
+    year = "2026",
+    url = "https://packages.joshuamarie.com/kindling"
+)
+
+bibentry(
+    bibtype = "Article",
+    title = "Higher-level interface of torch package in training neural networks with kindling",
+    author = "Joshua Marie",
+    year = "2026",
+    url = "https://joshuamarie.com/posts/kindling"
 )
