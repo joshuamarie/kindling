@@ -29,7 +29,7 @@
 #'
 #' @examples
 #' \dontrun{
-#' # Regression example
+#' # Regression task
 #' model_reg = ffnn(
 #'     Sepal.Length ~ .,
 #'     data = iris[, 1:4],
@@ -39,7 +39,7 @@
 #'     verbose = FALSE
 #' )
 #'
-#' # Classification example
+#' # Classification task
 #' model_clf = ffnn(
 #'     Species ~ .,
 #'     data = iris,
@@ -49,7 +49,7 @@
 #'     epochs = 100
 #' )
 #'
-#' # Make predictions
+#' # Predictions work for both tasks
 #' pred_reg = predict(model_reg, iris[1:5, 1:4])
 #' pred_clf = predict(model_clf, iris[1:5, ])
 #' }
@@ -74,7 +74,6 @@ ffnn = function(formula,
         cli::cli_abort("Package {.pkg torch} is required but not installed.")
     }
 
-    # Extract response and predictors
     mf = model.frame(formula, data)
     y = model.response(mf)
     x = model.matrix(formula, mf)[, -1, drop = FALSE]
@@ -82,7 +81,6 @@ ffnn = function(formula,
     feature_names = colnames(x)
     response_name = as.character(formula[[2]])
 
-    # Determine task type
     is_classification = is.factor(y) || is.character(y)
 
     if (is_classification) {
@@ -90,15 +88,13 @@ ffnn = function(formula,
         y_levels = levels(y)
         n_classes = length(y_levels)
 
-        # Convert to 1-indexed integers for cross_entropy (R torch uses 1-indexing!)
         y_numeric = as.integer(y)
         no_y = n_classes
 
-        # Auto-set loss if not specified
         if (loss == "mse") {
             loss = "cross_entropy"
             if (verbose) {
-                message("Auto-detected classification task. Using cross_entropy loss.")
+                cli::cli_alert("Auto-detected classification task. Using cross_entropy loss.")
             }
         }
     } else {
@@ -111,7 +107,6 @@ ffnn = function(formula,
     no_x = ncol(x)
     n_obs = nrow(x)
 
-    # Validation split
     if (validation_split > 0 && validation_split < 1) {
         n_val = floor(n_obs * validation_split)
         val_idx = sample(n_obs, n_val)
@@ -128,11 +123,10 @@ ffnn = function(formula,
         y_val = NULL
     }
 
-    # Convert to tensors
+    # ---Torch data conversion---
     x_train_t = torch::torch_tensor(x_train, dtype = torch::torch_float32())
 
     if (is_classification) {
-        # For cross_entropy, target should be Long tensor of class indices
         y_train_t = torch::torch_tensor(y_train, dtype = torch::torch_long())
     } else {
         y_train_t = torch::torch_tensor(
@@ -153,7 +147,7 @@ ffnn = function(formula,
         }
     }
 
-    # Generate model
+    # ---Generate model---
     model_expr = ffnn_generator(
         nn_name = "FFNN",
         hd_neurons = hidden_neurons,
@@ -163,19 +157,18 @@ ffnn = function(formula,
         output_activation = output_activation,
         bias = bias
     )
-
     model = eval(model_expr)()
 
-    # Optimizer
-    opt = switch(
-        tolower(optimizer),
-        adam = torch::optim_adam(model$parameters, lr = learning_rate, ...),
-        sgd = torch::optim_sgd(model$parameters, lr = learning_rate, ...),
-        rmsprop = torch::optim_rmsprop(model$parameters, lr = learning_rate, ...),
-        cli::cli_abort("Unknown optimizer: {optimizer}")
-    )
-
-    # Loss function
+    # ---Optimizer and Loss Function---
+    validate_optimizer(tolower(optimizer))
+    opt = eval(rlang::call2(paste0("optim_", tolower(optimizer)), model$parameters, lr = learning_rate, ..., .ns = "torch"))
+    # opt = switch(
+    #     tolower(optimizer),
+    #     adam = torch::optim_adam(model$parameters, lr = learning_rate, ...),
+    #     sgd = torch::optim_sgd(model$parameters, lr = learning_rate, ...),
+    #     rmsprop = torch::optim_rmsprop(model$parameters, lr = learning_rate, ...),
+    #     cli::cli_abort("Unknown optimizer: {optimizer}")
+    # )
     loss_fn = switch(
         tolower(loss),
         mse = torch::nnf_mse_loss,
@@ -184,13 +177,13 @@ ffnn = function(formula,
         bce = torch::nnf_binary_cross_entropy_with_logits,
         cli::cli_abort("Unknown loss function: {loss}")
     )
-
     loss_history = numeric(epochs)
     val_loss_history = if (!is.null(x_val)) numeric(epochs) else NULL
 
+    # ---Valid number of batches---
     n_batches = ceiling(nrow(x_train) / batch_size)
 
-    # Training loop
+    # ---Start training loop---
     for (epoch in seq_len(epochs)) {
         model$train()
         epoch_loss = 0
@@ -216,7 +209,6 @@ ffnn = function(formula,
 
         loss_history[epoch] = epoch_loss / n_batches
 
-        # Validation
         if (!is.null(x_val)) {
             model$eval()
             torch::with_no_grad({
@@ -235,14 +227,13 @@ ffnn = function(formula,
         }
     }
 
-    # Fitted values
+    # ---Get predictions---
     model$eval()
     fitted_tensor = torch::with_no_grad({
         model(torch::torch_tensor(x, dtype = torch::torch_float32()))
     })
 
     if (is_classification) {
-        # Get predicted classes
         fitted_probs = torch::nnf_softmax(fitted_tensor, dim = 2)
         fitted_classes = torch::torch_argmax(fitted_probs, dim = 2)
         fitted_values = as.integer(fitted_classes)
@@ -334,7 +325,6 @@ rnn = function(formula,
     feature_names = colnames(x)
     response_name = as.character(formula[[2]])
 
-    # Determine task type
     is_classification = is.factor(y) || is.character(y)
 
     if (is_classification) {
@@ -360,7 +350,6 @@ rnn = function(formula,
     no_x = ncol(x)
     n_obs = nrow(x)
 
-    # Validation split
     if (validation_split > 0 && validation_split < 1) {
         n_val = floor(n_obs * validation_split)
         val_idx = sample(n_obs, n_val)
@@ -377,7 +366,7 @@ rnn = function(formula,
         y_val = NULL
     }
 
-    # Add sequence dimension: (batch, seq, features)
+    # ---Torch data conversion---
     x_train_t = torch::torch_tensor(x_train, dtype = torch::torch_float32())$unsqueeze(2)
 
     if (is_classification) {
@@ -401,6 +390,7 @@ rnn = function(formula,
         }
     }
 
+    # ---Generate model---
     model_expr = rnn_generator(
         nn_name = "RNN",
         hd_neurons = hidden_neurons,
@@ -412,19 +402,11 @@ rnn = function(formula,
         bidirectional = bidirectional,
         dropout = dropout
     )
-
     model = eval(model_expr)()
 
-    # Optimizer
-    opt = switch(
-        tolower(optimizer),
-        adam = torch::optim_adam(model$parameters, lr = learning_rate, ...),
-        sgd = torch::optim_sgd(model$parameters, lr = learning_rate, ...),
-        rmsprop = torch::optim_rmsprop(model$parameters, lr = learning_rate, ...),
-        cli::cli_abort("Unknown optimizer: {optimizer}")
-    )
-
-    # Loss function
+    # ---Optimizer and Loss Function---
+    validate_optimizer(tolower(optimizer))
+    opt = eval(rlang::call2(paste0("optim_", tolower(optimizer)), model$parameters, lr = learning_rate, ..., .ns = "torch"))
     loss_fn = switch(
         tolower(loss),
         mse = torch::nnf_mse_loss,
@@ -433,10 +415,10 @@ rnn = function(formula,
         bce = torch::nnf_binary_cross_entropy_with_logits,
         cli::cli_abort("Unknown loss function: {loss}")
     )
-
     loss_history = numeric(epochs)
     val_loss_history = if (!is.null(x_val)) numeric(epochs) else NULL
 
+    # ---Valid number of batches---
     n_batches = ceiling(nrow(x_train) / batch_size)
 
     for (epoch in seq_len(epochs)) {
@@ -482,6 +464,7 @@ rnn = function(formula,
         }
     }
 
+    # ---Get predictions---
     model$eval()
     x_full_t = torch::torch_tensor(x, dtype = torch::torch_float32())$unsqueeze(2)
     fitted_tensor = torch::with_no_grad({
