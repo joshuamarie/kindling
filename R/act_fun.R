@@ -245,7 +245,7 @@ parse_activation_spec = function(activations, n_layers) {
 
         parsed_activation =
             imap(activations, function(elem, i) {
-                elem_name = if (!is.null(act_names)) act_names[i] else ""
+                elem_name = if (!is.null(activations)) activations[i] else ""
 
                 if (elem_name != "" && is.list(elem)) {
                     list(name = elem_name, param = elem)
