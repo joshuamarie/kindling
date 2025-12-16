@@ -90,7 +90,9 @@ rnn_mod2 = rnn_generator(
     bidirectional = FALSE
 )
 
+\dontrun{
 # Parameterized activation and dropout
+# (Will throw an error due to `nnf_tanh()` not being available in `{torch}`)
 rnn_mod3 = rnn_generator(
     hd_neurons = c(100, 50, 25),
     no_x = 15,
@@ -104,5 +106,6 @@ rnn_mod3 = rnn_generator(
     bidirectional = TRUE,
     dropout = 0.3
 )
+}
 
 }

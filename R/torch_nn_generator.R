@@ -265,7 +265,9 @@ check_rnn_type = function(rnn_type, hd_neurons) {
 #'     bidirectional = FALSE
 #' )
 #'
+#' \dontrun{
 #' # Parameterized activation and dropout
+#' # (Will throw an error due to `nnf_tanh()` not being available in `{torch}`)
 #' rnn_mod3 = rnn_generator(
 #'     hd_neurons = c(100, 50, 25),
 #'     no_x = 15,
@@ -279,6 +281,7 @@ check_rnn_type = function(rnn_type, hd_neurons) {
 #'     bidirectional = TRUE,
 #'     dropout = 0.3
 #' )
+#' }
 #'
 #' @importFrom rlang new_function call2 expr sym
 #' @importFrom purrr map map2
