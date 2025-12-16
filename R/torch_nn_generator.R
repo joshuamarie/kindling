@@ -108,9 +108,16 @@ ffnn_generator = function(nn_name = "DeepFFN",
         .y = map2(nodes[-length(nodes)], nodes[-1], c),
         .f = function(i, dims) {
             layer_name = if (i == n_layers) "out" else glue("fc{i}")
-            call2("=", call2("$", expr(self), sym(layer_name)),
-                  call2(call2("::", sym("torch"), sym("nn_linear")),
-                        !!!dims, bias = bias))
+            call2(
+                "=",
+                call2("$", expr(self), sym(layer_name)),
+                call2(
+                    sym("nn_linear"),
+                    !!!dims,
+                    bias = bias,
+                    .ns = "torch"
+                )
+            )
         }
     )
 
@@ -144,8 +151,11 @@ ffnn_generator = function(nn_name = "DeepFFN",
         body = call2("{", !!!forward_body_exprs)
     )
 
-    call2(call2("::", sym("torch"), sym("nn_module")),
-          nn_name, initialize = init, forward = forward)
+    call2(
+        sym("nn_module"),
+        nn_name, initialize = init, forward = forward,
+        .ns = "torch"
+    )
 }
 
 #' Check RNN Type Validity
@@ -287,14 +297,15 @@ rnn_generator = function(nn_name = "DeepRNN",
 
         rnn_fn_name = paste0("nn_", rnn_type)
         rnn_call = call2(
-            call2("::", sym("torch"), sym(rnn_fn_name)),
+            sym(rnn_fn_name),
             input_size = input_size,
             hidden_size = hidden_size,
             num_layers = 1L,
             bias = bias,
             batch_first = TRUE,
             bidirectional = bidirectional,
-            dropout = layer_dropout
+            dropout = layer_dropout,
+            .ns = "torch"
         )
 
         call2("=", call2("$", expr(self), sym(layer_name)), rnn_call)
@@ -304,8 +315,7 @@ rnn_generator = function(nn_name = "DeepRNN",
 
     output_layer = call2(
         "=", call2("$", expr(self), sym("out")),
-        call2(call2("::", sym("torch"), sym("nn_linear")),
-              final_hidden, no_y)
+        call2(sym("nn_linear"), final_hidden, no_y, .ns = "torch")
     )
 
     init_body = c(rnn_layers, list(output_layer))
@@ -330,7 +340,6 @@ rnn_generator = function(nn_name = "DeepRNN",
         if (is.null(act_call_fn)) {
             list(rnn_call_expr)
         } else {
-            # Activation function already has torch:: namespace
             activation_expr = call2("=", expr(x), act_call_fn(expr(x)))
             list(rnn_call_expr, activation_expr)
         }
@@ -338,9 +347,11 @@ rnn_generator = function(nn_name = "DeepRNN",
 
     slice_expr = call2(
         "=", expr(x),
-        call2("[", expr(x), expr(),
-              call2(call2("$", expr(x), sym("size")), 2L),
-              expr())
+        call2(
+            "[", expr(x), expr(),
+            call2(call2("$", expr(x), sym("size")), 2L),
+            expr()
+        )
     )
 
     output_expr = call2(
@@ -358,6 +369,11 @@ rnn_generator = function(nn_name = "DeepRNN",
     )
 
 
-    call2(call2("::", sym("torch"), sym("nn_module")),
-          nn_name, initialize = init, forward = forward)
+    call2(
+        sym("nn_module"),
+        nn_name,
+        initialize = init,
+        forward = forward,
+        .ns = "torch"
+    )
 }
