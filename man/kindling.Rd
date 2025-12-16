@@ -77,6 +77,17 @@ Level 3: tidymodels interface (not yet implemented)
 MIT + file LICENSE
 }
 
+\references{
+Falbel D, Luraschi J (2023). \emph{torch: Tensors and Neural Networks with 'GPU'
+Acceleration}. R package version 0.13.0,
+\url{https://torch.mlverse.org}, \url{https://github.com/mlverse/torch}.
+
+Wickham H (2019). \emph{Advanced R}, 2nd edition. Chapman and Hall/CRC.
+ISBN 978-0815384571, \url{https://adv-r.hadley.nz/}.
+
+Goodfellow I, Bengio Y, Courville A (2016). \emph{Deep Learning}. MIT Press.
+\url{https://www.deeplearningbook.org/}.
+}
 \author{
 \strong{Maintainer}: Joshua Marie \email{joshua.marie.k@gmail.com}
 

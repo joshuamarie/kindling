@@ -61,6 +61,18 @@
 #' - Hyperparameter tuning for architecture depth, units, and activation
 #' - Compatible with `{torch}` tensors for GPU acceleration
 #'
+#' @references
+#'
+#' Falbel D, Luraschi J (2023). _torch: Tensors and Neural Networks with 'GPU'
+#' Acceleration_. R package version 0.13.0,
+#' \url{https://torch.mlverse.org}, \url{https://github.com/mlverse/torch}.
+#'
+#' Wickham H (2019). _Advanced R_, 2nd edition. Chapman and Hall/CRC.
+#' ISBN 978-0815384571, \url{https://adv-r.hadley.nz/}.
+#'
+#' Goodfellow I, Bengio Y, Courville A (2016). _Deep Learning_. MIT Press.
+#' \url{https://www.deeplearningbook.org/}.
+#'
 #' @section License:
 #' MIT + file LICENSE
 #'
