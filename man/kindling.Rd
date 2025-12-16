@@ -4,39 +4,71 @@
 \name{kindling}
 \alias{kindling-package}
 \alias{kindling}
-\title{kindling: A High-Level Interface for Deep Learning with Torch and Tidymodels}
+\title{\code{{kindling}}: Higher-level interface of torch package in training neural networks}
 \description{
-\code{kindling} enables R users to build and train deep neural networks such as:
+\code{{kindling}} enables R users to build and train deep neural networks such as:
 \itemize{
-\item Feedforward Neural Networks (DNN)
-\item Convolutional Neural Networks (CNN)
+\item Deep Neural Networks / (Deep) Feedforward Neural Networks (DNN / FFNN)
 \item Recurrent Neural Networks (RNN)
 }
 
-The package supports hyperparameter tuning for:
+It is designed to reduce boilerplate \code{{torch}} code for FFNN and RNN. It also
+integrate seamlessly with \code{{tidymodels}} components like \code{{parsnip}}, \code{{recipes}},
+and \code{{workflows}}, allowing flexibility and a consistent interface for model
+specification, training, and evaluation.
+
+Thus, the package supports hyperparameter tuning for:
 \itemize{
 \item Number of hidden layers
 \item Number of units per layer
 \item Choice of activation functions
 }
 
-It is designed to integrate seamlessly with \code{tidymodels} components like
-\code{parsnip}, \code{recipes}, and \code{workflows}, allowing a consistent interface for
-model specification, training, and evaluation.
+Note: The hyperparameter tuning support is not currently implemented.
 }
 \details{
-The \code{kindling} package provides a unified, high-level interface that bridges
+The \code{{kindling}} package provides a unified, high-level interface that bridges
 the \strong{{torch}} and \strong{{tidymodels}} ecosystems, making it easy to define, train,
 and tune deep learning models using the familiar \code{tidymodels} workflow.
 }
+\section{How to use}{
+
+The following uses of this package has 3 levels:
+
+Level 1: Code generation
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{ffnn_generator(
+   nn_name = "MyFFNN",
+   hd_neurons = c(64, 32, 16),
+   no_x = 10,
+   no_y = 1,
+   activations = 'relu'
+)
+}\if{html}{\out{</div>}}
+
+Level 2: Direct Execution
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{ffnn(
+   Species ~ .,
+   data = iris,
+   hidden_neurons = c(128, 64, 32),
+   activations = 'relu',
+   loss = "cross_entropy",
+   epochs = 100
+)
+}\if{html}{\out{</div>}}
+
+Level 3: tidymodels interface (not yet implemented)
+}
+
 \section{Key Features}{
 
 \itemize{
 \item Define neural network models using \code{parsnip::set_engine("kindling")}
-\item Integrate deep learning into \code{tidymodels} workflows
-\item Support for multiple architectures (DNN, CNN, RNN, LSTM)
+\item Integrate deep learning into \code{{tidymodels}} workflows
+\item Support for multiple architectures (DNN, RNN)
 \item Hyperparameter tuning for architecture depth, units, and activation
-\item Compatible with \code{torch} tensors for GPU acceleration
+\item Compatible with \code{{torch}} tensors for GPU acceleration
 }
 }
 
