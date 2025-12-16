@@ -66,7 +66,7 @@ Train a feed-forward neural network using the torch package.
 }
 \examples{
 \dontrun{
-# Regression example
+# Regression task
 model_reg = ffnn(
     Sepal.Length ~ .,
     data = iris[, 1:4],
@@ -76,7 +76,7 @@ model_reg = ffnn(
     verbose = FALSE
 )
 
-# Classification example
+# Classification task
 model_clf = ffnn(
     Species ~ .,
     data = iris,
@@ -86,7 +86,7 @@ model_clf = ffnn(
     epochs = 100
 )
 
-# Make predictions
+# Predictions work for both tasks
 pred_reg = predict(model_reg, iris[1:5, 1:4])
 pred_clf = predict(model_clf, iris[1:5, ])
 }
