@@ -54,6 +54,8 @@
 #' pred_clf = predict(model_clf, iris[1:5, ])
 #' }
 #'
+#' @importFrom stats model.frame model.response model.matrix delete.response terms
+#'
 #' @export
 ffnn = function(formula,
                 data,
