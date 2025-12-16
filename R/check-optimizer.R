@@ -1,7 +1,6 @@
 #' Validate Optimizer Exists
 #'
 #' @param act_name Character. Activation function name (without prefix).
-#' @param prefix Character. Prefix for the function name (default: "nnf_").
 #'
 #' @importFrom cli cli_abort
 #' @importFrom rlang is_installed
