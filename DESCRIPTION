@@ -9,24 +9,20 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: Provides a higher-level interface that bridges the 'torch' and 
-    'tidymodels' ecosystems, allowing users to easily define, train, and tune 
-    deep learning multiple types of model, such as feedforward neural networks, 
-    convolutional neural networks (CNNs) and recurrent neural networks (RNNs). 
-    The package supports hyperparameter tuning for network architecture 
-    (number of hidden layers, units, and activation functions) and is designed 
-    to integrate seamlessly into 'tidymodels' workflows for 
-    model training and evaluation.
+Description: Provides a higher-level interface designed to reduce boilerplate 'torch' code 
+    and designed to integrate 'tidymodels' ecosystems, allowing users to easily define, 
+    train, and tune deep learning multiple types of model, namely feedforward neural networks, 
+    recurrent neural networks (RNNs). 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    stringr,
     purrr, 
     torch, 
-    parsnip, 
     rlang, 
-    cli
+    cli, 
+    glue, 
+    vctrs
 Suggests: 
     testthat (>= 3.0.0), 
     magrittr, 
