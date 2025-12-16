@@ -34,9 +34,12 @@ rnn_generator(
 Can be:
 \itemize{
 \item \code{NULL}: No activation functions.
-\item Character vector: e.g., \code{c("relu", "tanh")}.
+\item Character vector: e.g., \code{c("relu", "sigmoid")}.
+\item List: e.g., \code{act_funs(relu, elu, softshrink = args(lambd = 0.5))}.
 \item \code{activation_spec} object from \code{act_funs()}.
-}}
+}
+
+If the length of \code{activations} is \code{1L}, this will be the activation throughout the architecture.}
 
 \item{bidirectional}{Logical. Whether to use bidirectional RNN layers. Default is \code{TRUE}.}
 
@@ -63,7 +66,6 @@ The generated module properly namespaces all torch functions to avoid
 polluting the global namespace.
 }
 \examples{
-\dontrun{
 # Basic LSTM with 2 layers
 rnn_mod = rnn_generator(
     nn_name = "MyLSTM",
@@ -75,7 +77,7 @@ rnn_mod = rnn_generator(
 )
 
 # Evaluate and instantiate
-model <- eval(rnn_mod)()
+model = eval(rnn_mod)()
 
 # GRU with different activations
 rnn_mod2 = rnn_generator(
@@ -84,11 +86,11 @@ rnn_mod2 = rnn_generator(
     no_x = 20,
     no_y = 5,
     rnn_type = "gru",
-    activations = act_funs(relu, tanh, relu),
+    activations = act_funs(relu, elu, relu),
     bidirectional = FALSE
 )
 
-# With parameterized activation and dropout
+# Parameterized activation and dropout
 rnn_mod3 = rnn_generator(
     hd_neurons = c(100, 50, 25),
     no_x = 15,
@@ -102,6 +104,5 @@ rnn_mod3 = rnn_generator(
     bidirectional = TRUE,
     dropout = 0.3
 )
-}
 
 }

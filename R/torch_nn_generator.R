@@ -11,9 +11,12 @@
 #' @param activations Activation function specifications for each hidden layer.
 #' Can be:
 #' - `NULL`: No activation functions.
-#' - Character vector: e.g., `c("relu", "tanh")`.
-#' - List: e.g., `act_funs(relu, tanh, softshrink = args(lambd = 0.5))`.
+#' - Character vector: e.g., `c("relu", "sigmoid")`.
+#' - List: e.g., `act_funs(relu, elu, softshrink = args(lambd = 0.5))`.
 #' - `activation_spec` object from `act_funs()`.
+#'
+#' If the length of `activations` is `1L`, this will be the activation throughout the architecture.
+#'
 #' @param output_activation Optional. Activation function for the output layer.
 #' Same format as `activations` but should be a single activation.
 #' @param bias Logical. Whether to use bias weights. Default is `TRUE`.
@@ -29,8 +32,7 @@
 #' polluting the global namespace.
 #'
 #' @examples
-#' \dontrun{
-#' # Generate a FFNN module with 3 hidden layers
+#' # Generate an MLP module with 3 hidden layers
 #' ffnn_mod = ffnn_generator(
 #'     nn_name = "MyFFNN",
 #'     hd_neurons = c(64, 32, 16),
@@ -40,9 +42,23 @@
 #' )
 #'
 #' # Evaluate and instantiate
-#' model <- eval(ffnn_mod)()
+#' model = eval(rnn_mod)()
 #'
-#' # More complex example with different activations
+#' # More complex: With different activations
+#' ffnn_mod2 = ffnn_generator(
+#'     nn_name = "MyFFNN2",
+#'     hd_neurons = c(128, 64, 32),
+#'     no_x = 20,
+#'     no_y = 5,
+#'     activations = act_funs(
+#'         relu,
+#'         selu,
+#'         sigmoid
+#'     )
+#' )
+#'
+#' # Even more complex: Different activations and customized argument
+#' # for the specific activation function
 #' ffnn_mod2 = ffnn_generator(
 #'     nn_name = "MyFFNN2",
 #'     hd_neurons = c(128, 64, 32),
@@ -55,7 +71,7 @@
 #'     )
 #' )
 #'
-#' # With output activation for classification
+#' # Customize output activation (softmax is useful for classification tasks)
 #' ffnn_mod3 = ffnn_generator(
 #'     hd_neurons = c(64, 32),
 #'     no_x = 10,
@@ -63,7 +79,6 @@
 #'     activations = 'relu',
 #'     output_activation = act_funs(softmax = args(dim = 2L))
 #' )
-#' }
 #'
 #' @importFrom rlang new_function call2 expr sym
 #' @importFrom purrr map map2
@@ -204,8 +219,12 @@ check_rnn_type = function(rnn_type, hd_neurons) {
 #' @param activations Activation function specifications for each hidden layer.
 #' Can be:
 #' - `NULL`: No activation functions.
-#' - Character vector: e.g., `c("relu", "tanh")`.
+#' - Character vector: e.g., `c("relu", "sigmoid")`.
+#' - List: e.g., `act_funs(relu, elu, softshrink = args(lambd = 0.5))`.
 #' - `activation_spec` object from `act_funs()`.
+#'
+#' If the length of `activations` is `1L`, this will be the activation throughout the architecture.
+#'
 #' @param bias Logical. Whether to use bias weights. Default is `TRUE`
 #' @param bidirectional Logical. Whether to use bidirectional RNN layers. Default is `TRUE`.
 #' @param dropout Numeric. Dropout rate between RNN layers. Default is `0`.
@@ -222,7 +241,6 @@ check_rnn_type = function(rnn_type, hd_neurons) {
 #' polluting the global namespace.
 #'
 #' @examples
-#' \dontrun{
 #' # Basic LSTM with 2 layers
 #' rnn_mod = rnn_generator(
 #'     nn_name = "MyLSTM",
@@ -234,7 +252,7 @@ check_rnn_type = function(rnn_type, hd_neurons) {
 #' )
 #'
 #' # Evaluate and instantiate
-#' model <- eval(rnn_mod)()
+#' model = eval(rnn_mod)()
 #'
 #' # GRU with different activations
 #' rnn_mod2 = rnn_generator(
@@ -243,11 +261,11 @@ check_rnn_type = function(rnn_type, hd_neurons) {
 #'     no_x = 20,
 #'     no_y = 5,
 #'     rnn_type = "gru",
-#'     activations = act_funs(relu, tanh, relu),
+#'     activations = act_funs(relu, elu, relu),
 #'     bidirectional = FALSE
 #' )
 #'
-#' # With parameterized activation and dropout
+#' # Parameterized activation and dropout
 #' rnn_mod3 = rnn_generator(
 #'     hd_neurons = c(100, 50, 25),
 #'     no_x = 15,
@@ -261,7 +279,6 @@ check_rnn_type = function(rnn_type, hd_neurons) {
 #'     bidirectional = TRUE,
 #'     dropout = 0.3
 #' )
-#' }
 #'
 #' @importFrom rlang new_function call2 expr sym
 #' @importFrom purrr map map2

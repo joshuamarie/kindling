@@ -27,10 +27,12 @@ ffnn_generator(
 Can be:
 \itemize{
 \item \code{NULL}: No activation functions.
-\item Character vector: e.g., \code{c("relu", "tanh")}.
-\item List: e.g., \code{act_funs(relu, tanh, softshrink = args(lambd = 0.5))}.
+\item Character vector: e.g., \code{c("relu", "sigmoid")}.
+\item List: e.g., \code{act_funs(relu, elu, softshrink = args(lambd = 0.5))}.
 \item \code{activation_spec} object from \code{act_funs()}.
-}}
+}
+
+If the length of \code{activations} is \code{1L}, this will be the activation throughout the architecture.}
 
 \item{output_activation}{Optional. Activation function for the output layer.
 Same format as \code{activations} but should be a single activation.}
@@ -55,8 +57,7 @@ The generated module properly namespaces all torch functions to avoid
 polluting the global namespace.
 }
 \examples{
-\dontrun{
-# Generate a FFNN module with 3 hidden layers
+# Generate an MLP module with 3 hidden layers
 ffnn_mod = ffnn_generator(
     nn_name = "MyFFNN",
     hd_neurons = c(64, 32, 16),
@@ -66,9 +67,23 @@ ffnn_mod = ffnn_generator(
 )
 
 # Evaluate and instantiate
-model <- eval(ffnn_mod)()
+model = eval(rnn_mod)()
 
-# More complex example with different activations
+# More complex: With different activations
+ffnn_mod2 = ffnn_generator(
+    nn_name = "MyFFNN2",
+    hd_neurons = c(128, 64, 32),
+    no_x = 20,
+    no_y = 5,
+    activations = act_funs(
+        relu,
+        selu,
+        sigmoid
+    )
+)
+
+# Even more complex: Different activations and customized argument
+# for the specific activation function
 ffnn_mod2 = ffnn_generator(
     nn_name = "MyFFNN2",
     hd_neurons = c(128, 64, 32),
@@ -81,7 +96,7 @@ ffnn_mod2 = ffnn_generator(
     )
 )
 
-# With output activation for classification
+# Customize output activation (softmax is useful for classification tasks)
 ffnn_mod3 = ffnn_generator(
     hd_neurons = c(64, 32),
     no_x = 10,
@@ -89,6 +104,5 @@ ffnn_mod3 = ffnn_generator(
     activations = 'relu',
     output_activation = act_funs(softmax = args(dim = 2L))
 )
-}
 
 }
