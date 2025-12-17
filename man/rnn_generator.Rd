@@ -12,6 +12,7 @@ rnn_generator(
   rnn_type = "lstm",
   bias = TRUE,
   activations = NULL,
+  output_activation = NULL,
   bidirectional = TRUE,
   dropout = 0,
   ...
@@ -40,6 +41,9 @@ Can be:
 }
 
 If the length of \code{activations} is \code{1L}, this will be the activation throughout the architecture.}
+
+\item{output_activation}{Optional. Activation function for the output layer.
+Same format as \code{activations} but should be a single activation.}
 
 \item{bidirectional}{Logical. Whether to use bidirectional RNN layers. Default is \code{TRUE}.}
 

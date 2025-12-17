@@ -10,6 +10,7 @@ rnn(
   hidden_neurons,
   rnn_type = "lstm",
   activations = NULL,
+  output_activation = NULL,
   bias = TRUE,
   bidirectional = TRUE,
   dropout = 0,
@@ -33,6 +34,8 @@ rnn(
 \item{rnn_type}{Character. Type of RNN ("rnn", "lstm", "gru"). Default \code{"lstm"}.}
 
 \item{activations}{Activation function specifications. See \code{act_funs()}.}
+
+\item{output_activation}{Optional. Activation for output layer.}
 
 \item{bias}{Logical. Use bias weights. Default \code{TRUE}.}
 
@@ -77,7 +80,7 @@ model_gru = rnn(
     data = iris,
     hidden_neurons = c(128, 64),
     rnn_type = "gru",
-    activations = act_funs(relu, tanh),
+    activations = act_funs(relu, elu),
     loss = "cross_entropy",
     epochs = 100
 )

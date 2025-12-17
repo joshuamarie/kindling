@@ -225,6 +225,8 @@ check_rnn_type = function(rnn_type, hd_neurons) {
 #'
 #' If the length of `activations` is `1L`, this will be the activation throughout the architecture.
 #'
+#' @param output_activation Optional. Activation function for the output layer.
+#' Same format as `activations` but should be a single activation.
 #' @param bias Logical. Whether to use bias weights. Default is `TRUE`
 #' @param bidirectional Logical. Whether to use bidirectional RNN layers. Default is `TRUE`.
 #' @param dropout Numeric. Dropout rate between RNN layers. Default is `0`.
@@ -296,6 +298,7 @@ rnn_generator = function(nn_name = "DeepRNN",
                          rnn_type = "lstm",
                          bias = TRUE,
                          activations = NULL,
+                         output_activation = NULL,
                          bidirectional = TRUE,
                          dropout = 0,
                          ...) {
@@ -306,6 +309,13 @@ rnn_generator = function(nn_name = "DeepRNN",
 
     activation_spec = parse_activation_spec(activations, n_rnn_layers)
     activation_calls = process_activations(activation_spec, prefix = "nnf_")
+
+    if (!is.null(output_activation)) {
+        output_spec = parse_activation_spec(output_activation, 1L)
+        output_call = process_activations(output_spec, prefix = "nnf_")[[1]]
+    } else {
+        output_call = NULL
+    }
 
     # ---- Build initialize() ----
     input_sizes = c(no_x, hd_neurons[-n_rnn_layers] * (if (bidirectional) 2L else 1L))
@@ -378,16 +388,23 @@ rnn_generator = function(nn_name = "DeepRNN",
         "=", expr(x), call2(call2("$", expr(self), sym("out")), expr(x))
     )
 
-    forward_body_exprs = c(
-        unlist(rnn_forward_exprs, recursive = FALSE),
-        list(slice_expr, output_expr, expr(x))
-    )
+    if (!is.null(output_call)) {
+        output_activation_expr = call2("=", expr(x), output_call(expr(x)))
+        forward_body_exprs = c(
+            unlist(rnn_forward_exprs, recursive = FALSE),
+            list(slice_expr, output_expr, output_activation_expr, expr(x))
+        )
+    } else {
+        forward_body_exprs = c(
+            unlist(rnn_forward_exprs, recursive = FALSE),
+            list(slice_expr, output_expr, expr(x))
+        )
+    }
 
     forward = new_function(
         args = alist(x = ),
         body = call2("{", !!!forward_body_exprs)
     )
-
 
     call2(
         sym("nn_module"),
