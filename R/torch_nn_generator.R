@@ -42,7 +42,7 @@
 #' )
 #'
 #' # Evaluate and instantiate
-#' model = eval(rnn_mod)()
+#' model = eval(ffnn_mod)()
 #'
 #' # More complex: With different activations
 #' ffnn_mod2 = ffnn_generator(
