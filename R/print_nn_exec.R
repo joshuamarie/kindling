@@ -98,11 +98,14 @@ print.ffnn_fit = function(x, ...) {
     inner_acts = if (is.list(x$activations)) {
         vapply(x$activations, concat, character(1))
     } else if (!is.null(x$activations)) {
-        rep(as.character(x$activations), length(x$activations))
+        if (length(x$activations) == 1) {
+            rep(as.character(x$activations), length(x$hidden_neurons))
+        } else {
+            as.character(x$activations)
+        }
     } else {
         "None"
     }
-
     outer_acts = concat(x$output_activation)
 
     act_data = data.frame(
@@ -190,7 +193,11 @@ print.rnn_fit = function(x, ...) {
     inner_acts = if (is.list(x$activations)) {
         vapply(x$activations, concat, character(1))
     } else if (!is.null(x$activations)) {
-        rep(as.character(x$activations), length(x$activations))
+        if (length(x$activations) == 1) {
+            rep(as.character(x$activations), length(x$hidden_neurons))
+        } else {
+            as.character(x$activations)
+        }
     } else {
         "None"
     }
