@@ -29,6 +29,66 @@ args = function(...) {
     }
 }
 
+#' Activation Functions Specification Helper
+#'
+#' This function is a DSL function, kind of like `ggplot2::aes()`, that helps to
+#' specify activation functions for neural network layers. It validates that
+#' activation functions exist in `torch` and that any parameters match the
+#' function's formal arguments.
+#'
+#' @param ... Activation function specifications. Can be:
+#' - Bare symbols: `relu`, `tanh`
+#' - Character strings: `"relu"`, `"tanh"`
+#' - Named with parameters: `softmax = args(dim = 2L)`
+#'
+#' @return A `vctrs` vector with class "activation_spec" containing validated
+#' activation specifications.
+#'
+#' @importFrom rlang enquos quo_get_expr is_call call_name as_string
+#' @importFrom cli cli_abort
+#' @importFrom vctrs new_vctr
+#'
+#' @export
+act_funs = function(...) {
+    dots = enquos(...)
+
+    out = purrr::imap(dots, function(quo, name) {
+        expr = quo_get_expr(quo)
+
+        if (!is.null(name) && name != "") {
+            validate_activation(name, prefix = "nnf_")
+
+            if (is_call(expr) && call_name(expr) == "args") {
+                params = as.list(expr)[-1]
+                validate_args_formals(name, params, prefix = "nnf_")
+                structure(params, act_name = name, class = "parameterized_activation")
+            } else if (is.character(expr) && expr == "") {
+                structure(list(), act_name = name, class = "parameterized_activation")
+            } else {
+                cli_abort(c(
+                    "Invalid syntax for parameterized activation at position {i}.",
+                    i = "Use: {.code {name} = args(param = value)}."
+                ), class = "activation_syntax_error")
+            }
+        } else if (is.symbol(expr)) {
+            act_name = as_string(expr)
+            validate_activation(act_name, prefix = "nnf_")
+            act_name
+        } else if (is.character(expr)) {
+            validate_activation(expr, prefix = "nnf_")
+            expr
+        } else {
+            cli_abort(c(
+                "Invalid activation specification at position {i}.",
+                i = "Use bare names like {.code relu}, strings like {.code 'relu'},",
+                i = "or parameterized like {.code softmax = args(dim = 2L)}."
+            ), class = "activation_syntax_error")
+        }
+    })
+
+    new_vctr(out, class = "activation_spec")
+}
+
 #' Validate Activation Function Exists
 #'
 #' @param act_name Character. Activation function name (without prefix).
@@ -91,68 +151,6 @@ validate_args_formals = function(act_name, params, prefix = "nnf_") {
 
         invisible(NULL)
     }
-}
-
-#' Activation Functions Specification Helper
-#'
-#' This function is a DSL function, kind of like `ggplot2::aes()`, that helps to
-#' specify activation functions for neural network layers. It validates that
-#' activation functions exist in `torch` and that any parameters match the
-#' function's formal arguments.
-#'
-#' @param ... Activation function specifications. Can be:
-#' - Bare symbols: `relu`, `tanh`
-#' - Character strings: `"relu"`, `"tanh"`
-#' - Named with parameters: `softmax = args(dim = 2L)`
-#'
-#' @return A `vctrs` vector with class "activation_spec" containing validated
-#' activation specifications.
-#'
-#' @importFrom rlang enquos quo_get_expr is_call call_name as_string
-#' @importFrom cli cli_abort
-#' @importFrom vctrs new_vctr
-#'
-#' @export
-act_funs = function(...) {
-    dots = enquos(...)
-
-    out = lapply(seq_along(dots), function(i) {
-        quo = dots[[i]]
-        expr = quo_get_expr(quo)
-        name = names(dots)[i]
-
-        if (!is.null(name) && name != "") {
-            validate_activation(name, prefix = "nnf_")
-
-            if (is_call(expr) && call_name(expr) == "args") {
-                params = as.list(expr)[-1]
-                validate_args_formals(name, params, prefix = "nnf_")
-                structure(params, act_name = name, class = "parameterized_activation")
-            } else if (is.character(expr) && expr == "") {
-                structure(list(), act_name = name, class = "parameterized_activation")
-            } else {
-                cli_abort(c(
-                    "Invalid syntax for parameterized activation at position {i}.",
-                    i = "Use: {.code {name} = args(param = value)}."
-                ), class = "activation_syntax_error")
-            }
-        } else if (is.symbol(expr)) {
-            act_name = as_string(expr)
-            validate_activation(act_name, prefix = "nnf_")
-            act_name
-        } else if (is.character(expr)) {
-            validate_activation(expr, prefix = "nnf_")
-            expr
-        } else {
-            cli_abort(c(
-                "Invalid activation specification at position {i}.",
-                i = "Use bare names like {.code relu}, strings like {.code 'relu'},",
-                i = "or parameterized like {.code softmax = args(dim = 2L)}."
-            ), class = "activation_syntax_error")
-        }
-    })
-
-    new_vctr(out, class = "activation_spec")
 }
 
 #' Activation Function Specifications Parser
