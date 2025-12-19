@@ -1,6 +1,6 @@
 Package: kindling
 Type: Package
-Title: Tidymodels Extension for Torch-Based Neural Networks
+Title: Higher-level interface of torch package to auto-train neural networks
 Version: 0.1.1
 Authors@R: c(
     person(
@@ -10,10 +10,12 @@ Authors@R: c(
     )
   )
 Description: Provides a higher-level interface to the 'torch' package for defining,
-    training, and tuning neural networks within the 'tidymodels' ecosystem. Supports
-    feedforward (multi-layer perceptron) and recurrent neural networks (RNN, LSTM, GRU)
-    via 'parsnip' model specifications, reducing boilerplate code while enabling
-    seamless integration with workflows, recipes, and tuning tools.
+    training, and tuning neural networks. This package supports feedforward 
+    (multi-layer perceptron) and recurrent neural networks (RNN, LSTM, GRU), and also reduces 
+    boilerplate code while enabling seamless integration with 'torch'. The methods to train 
+    neural networks from this package also bridges to titanic ML frameworks in R namely
+    'tidymodels' ecosystem, enabling the 'parsnip' model specifications, workflows, recipes, 
+    and tuning tools. 
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

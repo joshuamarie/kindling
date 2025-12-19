@@ -1,4 +1,4 @@
-#' `{kindling}`: Higher-level interface of torch package in training neural networks
+#' `{kindling}`: Higher-level interface of torch package to auto-train neural networks
 #'
 #' The `{kindling}` package provides a unified, high-level interface that bridges
 #' the **{torch}** and **{tidymodels}** ecosystems, making it easy to define, train,
