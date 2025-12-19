@@ -12,10 +12,16 @@ ordinal_gen(x)
 \description{
 This function is originally from \code{numform::f_ordinal()}.
 }
-\examples{
-ordinal_gen(1:10)
+\section{This is how you use it}{
 
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{kindling:::ordinal_gen(1:10)
+}\if{html}{\out{</div>}}
+
+Note: This is not exported into public namespace.
+So please, refer to \code{numform::f_ordinal()} instead.
 }
+
 \references{
 Rinker, T. W. (2021). numform: A publication style number and plot formatter
 version 0.7.0. \url{https://github.com/trinker/numform}

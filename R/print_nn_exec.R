@@ -29,8 +29,14 @@ concat = function(x) {
 #' Rinker, T. W. (2021). numform: A publication style number and plot formatter
 #' version 0.7.0. \url{https://github.com/trinker/numform}
 #'
-#' @examples
-#' ordinal_gen(1:10)
+#' @section This is how you use it:
+#'
+#' ``` r
+#' kindling:::ordinal_gen(1:10)
+#' ```
+#'
+#' Note: This is not exported into public namespace.
+#' So please, refer to `numform::f_ordinal()` instead.
 #'
 #' @rdname ordinal_gen
 ordinal_gen = function(x) {
