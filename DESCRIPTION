@@ -1,7 +1,7 @@
 Package: kindling
 Type: Package
-Title: Higher-level interface of torch package in training neural networks
-Version: 0.1.0
+Title: Tidymodels Extension for Torch-Based Neural Networks
+Version: 0.1.1
 Authors@R: c(
     person(
       "Joshua", "Marie",
@@ -9,10 +9,11 @@ Authors@R: c(
       role = c("aut", "cre")
     )
   )
-Description: Provides a higher-level interface designed to reduce boilerplate 'torch' code 
-    and designed to integrate 'tidymodels' ecosystems, allowing users to easily define, 
-    train, and tune deep learning multiple types of model, namely feedforward neural networks, 
-    recurrent neural networks (RNNs). 
+Description: Provides a higher-level interface to the 'torch' package for defining,
+    training, and tuning neural networks within the 'tidymodels' ecosystem. Supports
+    feedforward (multi-layer perceptron) and recurrent neural networks (RNN, LSTM, GRU)
+    via 'parsnip' model specifications, reducing boilerplate code while enabling
+    seamless integration with workflows, recipes, and tuning tools.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -22,13 +23,27 @@ Imports:
     rlang, 
     cli, 
     glue, 
-    vctrs
+    vctrs,
+    parsnip (>= 1.0.0),
+    tibble
 Suggests: 
     testthat (>= 3.0.0), 
     magrittr, 
-    box
+    box,
+    recipes,
+    workflows,
+    rsample,
+    yardstick,
+    tune,
+    dials,
+    dplyr,
+    tidyr,
+    mlbench,      
+    modeldata     
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Depends: 
-    R (>= 3.5)
+    R (>= 4.1.0)  
+URL: https://github.com/joshuamarie/kindling
+BugReports: https://github.com/joshuamarie/kindling/issues
