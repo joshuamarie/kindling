@@ -4,7 +4,7 @@
 \alias{predict.ffnn_fit}
 \title{Predict Method for FFNN Fits}
 \usage{
-\method{predict}{ffnn_fit}(object, newdata, type = "response", ...)
+\method{predict}{ffnn_fit}(object, newdata = NULL, type = "response", ...)
 }
 \arguments{
 \item{object}{An object of class "ffnn_fit".}

@@ -4,7 +4,7 @@
 \alias{predict.rnn_fit}
 \title{Predict Method for RNN Fits}
 \usage{
-\method{predict}{rnn_fit}(object, newdata, type = "response", ...)
+\method{predict}{rnn_fit}(object, newdata = NULL, type = "response", ...)
 }
 \arguments{
 \item{object}{An object of class "rnn_fit".}
