@@ -77,6 +77,7 @@ ffnn = function(formula,
     }
 
     mf = model.frame(formula, data)
+    mt = attr(mf, "terms")
     y = model.response(mf)
     x = model.matrix(formula, mf)[, -1, drop = FALSE]
 
@@ -253,13 +254,17 @@ ffnn = function(formula,
             loss_history = loss_history,
             val_loss_history = val_loss_history,
             n_epochs = epochs,
+            hidden_neurons = hidden_neurons,
+            activations = activations,
+            output_activation = output_activation,
             feature_names = feature_names,
             response_name = response_name,
             no_x = no_x,
             no_y = no_y,
             is_classification = is_classification,
             y_levels = y_levels,
-            n_classes = n_classes
+            n_classes = n_classes,
+            terms = mt
         ),
         class = "ffnn_fit"
     )
@@ -322,6 +327,7 @@ rnn = function(formula,
     }
 
     mf = model.frame(formula, data)
+    mt = attr(mf, "terms")
     y = model.response(mf)
     x = model.matrix(formula, mf)[, -1, drop = FALSE]
 
@@ -493,14 +499,19 @@ rnn = function(formula,
             loss_history = loss_history,
             val_loss_history = val_loss_history,
             n_epochs = epochs,
+            hidden_neurons = hidden_neurons,
+            activations = activations,
+            output_activation = output_activation,
             feature_names = feature_names,
             response_name = response_name,
+            bidirectional = bidirectional,
             no_x = no_x,
             no_y = no_y,
             rnn_type = rnn_type,
             is_classification = is_classification,
             y_levels = y_levels,
-            n_classes = n_classes
+            n_classes = n_classes,
+            terms = mt
         ),
         class = "rnn_fit"
     )
@@ -514,18 +525,33 @@ rnn = function(formula,
 #' @param ... Additional arguments (unused).
 #'
 #' @export
-predict.ffnn_fit = function(object, newdata, type = "response", ...) {
+predict.ffnn_fit = function(object, newdata = NULL, type = "response", ...) {
     if (!requireNamespace("torch", quietly = TRUE)) {
         cli::cli_abort("Package {.pkg torch} is required but not installed.")
     }
 
-    mf = model.frame(
-        delete.response(terms(object$formula)),
-        newdata,
-        xlev = NULL
-    )
-    x_new = model.matrix(delete.response(terms(object$formula)), mf)[, -1, drop = FALSE]
+    if (is.null(newdata)) {
+        if (type == "prob" && object$is_classification) {
+            x_t = torch::torch_tensor(
+                model.matrix(object$terms, model.frame(object$terms, object$data))[, -1, drop = FALSE],
+                dtype = torch::torch_float32()
+            )
+            object$model$eval()
+            pred_tensor = torch::with_no_grad({
+                object$model(x_t)
+            })
+            probs = torch::nnf_softmax(pred_tensor, dim = 2)
+            prob_matrix = as.matrix(probs)
+            colnames(prob_matrix) = object$y_levels
+            return(prob_matrix)
+        } else {
+            return(object$fitted)
+        }
+    }
 
+    mt = delete.response(object$terms)
+    mf = model.frame(mt, newdata, xlev = NULL)
+    x_new = model.matrix(mt, mf)[, -1, drop = FALSE]
     x_new_t = torch::torch_tensor(x_new, dtype = torch::torch_float32())
 
     object$model$eval()
@@ -537,12 +563,12 @@ predict.ffnn_fit = function(object, newdata, type = "response", ...) {
         probs = torch::nnf_softmax(pred_tensor, dim = 2)
 
         if (type == "prob") {
-            # Return probability matrix
+            # ---Probability matrix---
             prob_matrix = as.matrix(probs)
             colnames(prob_matrix) = object$y_levels
             return(prob_matrix)
         } else {
-            # Return predicted classes
+            # ---Predicted classes---
             pred_classes = torch::torch_argmax(probs, dim = 2)
             predictions = as.integer(pred_classes)
             predictions = factor(predictions,
@@ -565,18 +591,33 @@ predict.ffnn_fit = function(object, newdata, type = "response", ...) {
 #' @param ... Additional arguments (unused).
 #'
 #' @export
-predict.rnn_fit = function(object, newdata, type = "response", ...) {
+predict.rnn_fit = function(object, newdata = NULL, type = "response", ...) {
     if (!requireNamespace("torch", quietly = TRUE)) {
         cli::cli_abort("Package {.pkg torch} is required but not installed.")
     }
 
-    mf = model.frame(
-        delete.response(terms(object$formula)),
-        newdata,
-        xlev = NULL
-    )
-    x_new = model.matrix(delete.response(terms(object$formula)), mf)[, -1, drop = FALSE]
+    if (is.null(newdata)) {
+        if (type == "prob" && object$is_classification) {
+            x_t = torch::torch_tensor(
+                model.matrix(object$terms, model.frame(object$terms, object$data))[, -1, drop = FALSE],
+                dtype = torch::torch_float32()
+            )
+            object$model$eval()
+            pred_tensor = torch::with_no_grad({
+                object$model(x_t)
+            })
+            probs = torch::nnf_softmax(pred_tensor, dim = 2)
+            prob_matrix = as.matrix(probs)
+            colnames(prob_matrix) = object$y_levels
+            return(prob_matrix)
+        } else {
+            return(object$fitted)
+        }
+    }
 
+    mt = delete.response(object$terms)
+    mf = model.frame(mt, newdata, xlev = NULL)
+    x_new = model.matrix(mt, mf)[, -1, drop = FALSE]
     x_new_t = torch::torch_tensor(x_new, dtype = torch::torch_float32())$unsqueeze(2)
 
     object$model$eval()
