@@ -58,7 +58,55 @@ Level 2: Direct Execution
 )
 }\if{html}{\out{</div>}}
 
-Level 3: tidymodels interface (not yet implemented)
+Level 3: tidymodels interface part 1
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{# library(parsnip)
+# library(kindling)
+box::use(
+   kindling[mlp_kindling, rnn_kindling, act_funs, args],
+   parsnip[fit, augment],
+   yardstick[metrics],
+   mlbench[Ionosphere] # data(Ionosphere, package = "mlbench")
+)
+
+# Remove V2 as it's all zeros
+ionosphere_data = Ionosphere[, -2]
+
+# MLP example
+mlp_kindling(
+   mode = "classification",
+   hidden_neurons = c(128, 64),
+   activations = act_funs(relu, softshrink = args(lambd = 0.5)),
+   epochs = 100
+) |>
+   fit(Class ~ ., data = ionosphere_data) |>
+   augment(new_data = ionosphere_data) |>
+   metrics(truth = Class, estimate = .pred_class)
+#> A tibble: 2 × 3
+#>   .metric  .estimator .estimate
+#>   <chr>    <chr>          <dbl>
+#> 1 accuracy binary         0.989
+#> 2 kap      binary         0.975
+
+# RNN example (toy usage on non-sequential data)
+rnn_kindling(
+   mode = "classification",
+   hidden_neurons = c(128, 64),
+   activations = act_funs(relu, elu),
+   epochs = 100,
+   rnn_type = "gru"
+) |>
+   fit(Class ~ ., data = ionosphere_data) |>
+   augment(new_data = ionosphere_data) |>
+   metrics(truth = Class, estimate = .pred_class)
+#> A tibble: 2 × 3
+#>   .metric  .estimator .estimate
+#>   <chr>    <chr>          <dbl>
+#> 1 accuracy binary         0.641
+#> 2 kap      binary         0
+}\if{html}{\out{</div>}}
+
+Level 4: tidymodels interface part 2 - tuning (not yet implemented)
 }
 
 \section{Key Features}{
@@ -87,6 +135,14 @@ ISBN 978-0815384571, \url{https://adv-r.hadley.nz/}.
 
 Goodfellow I, Bengio Y, Courville A (2016). \emph{Deep Learning}. MIT Press.
 \url{https://www.deeplearningbook.org/}.
+}
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/joshuamarie/kindling}
+  \item Report bugs at \url{https://github.com/joshuamarie/kindling/issues}
+}
+
 }
 \author{
 \strong{Maintainer}: Joshua Marie \email{joshua.marie.k@gmail.com}
