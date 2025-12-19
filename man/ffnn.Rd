@@ -17,6 +17,7 @@ ffnn(
   optimizer = "adam",
   loss = "mse",
   validation_split = 0,
+  device = NULL,
   verbose = FALSE,
   ...
 )
@@ -46,6 +47,8 @@ ffnn(
 
 \item{validation_split}{Numeric. Proportion of data for validation (0-1). Default \code{0}.}
 
+\item{device}{Character. Device to use ("cpu", "cuda", "mps"). Default \code{NULL} (auto-detect).}
+
 \item{verbose}{Logical. Print training progress. Default \code{FALSE}.}
 
 \item{...}{Additional arguments passed to the optimizer.}
@@ -60,13 +63,14 @@ An object of class "ffnn_fit" containing:
 \item{n_epochs}{Number of epochs trained}
 \item{feature_names}{Names of predictor variables}
 \item{response_name}{Name of response variable}
+\item{device}{Device used for training}
 }
 \description{
 Train a feed-forward neural network using the torch package.
 }
 \examples{
 \dontrun{
-# Regression task
+# Regression task (auto-detect GPU)
 model_reg = ffnn(
     Sepal.Length ~ .,
     data = iris[, 1:4],
@@ -76,19 +80,16 @@ model_reg = ffnn(
     verbose = FALSE
 )
 
-# Classification task
+# Classification task (force CPU)
 model_clf = ffnn(
     Species ~ .,
     data = iris,
     hidden_neurons = c(128, 64, 32),
     activations = act_funs(relu, selu, softshrink = args(lambd = 0.5)),
     loss = "cross_entropy",
+    device = "cpu",
     epochs = 100
 )
-
-# Predictions work for both tasks
-pred_reg = predict(model_reg, iris[1:5, 1:4])
-pred_clf = predict(model_clf, iris[1:5, ])
 }
 
 }

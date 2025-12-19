@@ -14,6 +14,7 @@
 #' @param optimizer Character. Optimizer type ("adam", "sgd", "rmsprop"). Default `"adam"`.
 #' @param loss Character. Loss function ("mse", "mae", "cross_entropy", "bce"). Default `"mse"`.
 #' @param validation_split Numeric. Proportion of data for validation (0-1). Default `0`.
+#' @param device Character. Device to use ("cpu", "cuda", "mps"). Default `NULL` (auto-detect).
 #' @param verbose Logical. Print training progress. Default `FALSE`.
 #' @param ... Additional arguments passed to the optimizer.
 #'
@@ -26,10 +27,11 @@
 #' \item{n_epochs}{Number of epochs trained}
 #' \item{feature_names}{Names of predictor variables}
 #' \item{response_name}{Name of response variable}
+#' \item{device}{Device used for training}
 #'
 #' @examples
 #' \dontrun{
-#' # Regression task
+#' # Regression task (auto-detect GPU)
 #' model_reg = ffnn(
 #'     Sepal.Length ~ .,
 #'     data = iris[, 1:4],
@@ -39,41 +41,53 @@
 #'     verbose = FALSE
 #' )
 #'
-#' # Classification task
+#' # Classification task (force CPU)
 #' model_clf = ffnn(
 #'     Species ~ .,
 #'     data = iris,
 #'     hidden_neurons = c(128, 64, 32),
 #'     activations = act_funs(relu, selu, softshrink = args(lambd = 0.5)),
 #'     loss = "cross_entropy",
+#'     device = "cpu",
 #'     epochs = 100
 #' )
-#'
-#' # Predictions work for both tasks
-#' pred_reg = predict(model_reg, iris[1:5, 1:4])
-#' pred_clf = predict(model_clf, iris[1:5, ])
 #' }
 #'
 #' @importFrom stats model.frame model.response model.matrix delete.response terms
 #'
 #' @export
-ffnn = function(formula,
-                data,
-                hidden_neurons,
-                activations = NULL,
-                output_activation = NULL,
-                bias = TRUE,
-                epochs = 100,
-                batch_size = 32,
-                learning_rate = 0.001,
-                optimizer = "adam",
-                loss = "mse",
-                validation_split = 0,
-                verbose = FALSE,
-                ...) {
+ffnn =
+    function(
+        formula,
+        data,
+        hidden_neurons,
+        activations = NULL,
+        output_activation = NULL,
+        bias = TRUE,
+        epochs = 100,
+        batch_size = 32,
+        learning_rate = 0.001,
+        optimizer = "adam",
+        loss = "mse",
+        validation_split = 0,
+        device = NULL,
+        verbose = FALSE,
+        ...
+    ) {
 
     if (!requireNamespace("torch", quietly = TRUE)) {
         cli::cli_abort("Package {.pkg torch} is required but not installed.")
+    }
+
+    # ---Device selection---
+    if (is.null(device)) {
+        device = get_default_device()
+    } else {
+        device = validate_device(device)
+    }
+
+    if (verbose) {
+        cli::cli_alert_info("Using device: {device}")
     }
 
     mf = model.frame(formula, data)
@@ -126,31 +140,33 @@ ffnn = function(formula,
         y_val = NULL
     }
 
-    # ---Torch data conversion---
-    x_train_t = torch::torch_tensor(x_train, dtype = torch::torch_float32())
+    # ---Torch data conversion (move to device)---
+    x_train_t = torch::torch_tensor(x_train, dtype = torch::torch_float32(), device = device)
 
     if (is_classification) {
-        y_train_t = torch::torch_tensor(y_train, dtype = torch::torch_long())
+        y_train_t = torch::torch_tensor(y_train, dtype = torch::torch_long(), device = device)
     } else {
         y_train_t = torch::torch_tensor(
             if (is.matrix(y_train)) y_train else matrix(y_train, ncol = 1),
-            dtype = torch::torch_float32()
+            dtype = torch::torch_float32(),
+            device = device
         )
     }
 
     if (!is.null(x_val)) {
-        x_val_t = torch::torch_tensor(x_val, dtype = torch::torch_float32())
+        x_val_t = torch::torch_tensor(x_val, dtype = torch::torch_float32(), device = device)
         if (is_classification) {
-            y_val_t = torch::torch_tensor(y_val, dtype = torch::torch_long())
+            y_val_t = torch::torch_tensor(y_val, dtype = torch::torch_long(), device = device)
         } else {
             y_val_t = torch::torch_tensor(
                 if (is.matrix(y_val)) y_val else matrix(y_val, ncol = 1),
-                dtype = torch::torch_float32()
+                dtype = torch::torch_float32(),
+                device = device
             )
         }
     }
 
-    # ---Generate model---
+    # ---Generate model and move to device---
     model_expr = ffnn_generator(
         nn_name = "FFNN",
         hd_neurons = hidden_neurons,
@@ -161,17 +177,12 @@ ffnn = function(formula,
         bias = bias
     )
     model = eval(model_expr)()
+    model$to(device = device)
 
     # ---Optimizer and Loss Function---
     validate_optimizer(tolower(optimizer))
     opt = eval(rlang::call2(paste0("optim_", tolower(optimizer)), model$parameters, lr = learning_rate, ..., .ns = "torch"))
-    # opt = switch(
-    #     tolower(optimizer),
-    #     adam = torch::optim_adam(model$parameters, lr = learning_rate, ...),
-    #     sgd = torch::optim_sgd(model$parameters, lr = learning_rate, ...),
-    #     rmsprop = torch::optim_rmsprop(model$parameters, lr = learning_rate, ...),
-    #     cli::cli_abort("Unknown optimizer: {optimizer}")
-    # )
+
     loss_fn = switch(
         tolower(loss),
         mse = torch::nnf_mse_loss,
@@ -230,19 +241,19 @@ ffnn = function(formula,
         }
     }
 
-    # ---Get predictions---
+    # ---Get predictions (move data to device)---
     model$eval()
     fitted_tensor = torch::with_no_grad({
-        model(torch::torch_tensor(x, dtype = torch::torch_float32()))
+        model(torch::torch_tensor(x, dtype = torch::torch_float32(), device = device))
     })
 
     if (is_classification) {
         fitted_probs = torch::nnf_softmax(fitted_tensor, dim = 2)
         fitted_classes = torch::torch_argmax(fitted_probs, dim = 2)
-        fitted_values = as.integer(fitted_classes)
+        fitted_values = as.integer(fitted_classes$cpu())
         fitted_values = factor(fitted_values, levels = seq_along(y_levels), labels = y_levels)
     } else {
-        fitted_values = as.matrix(fitted_tensor)
+        fitted_values = as.matrix(fitted_tensor$cpu())
         if (no_y == 1L) fitted_values = as.vector(fitted_values)
     }
 
@@ -264,6 +275,7 @@ ffnn = function(formula,
             is_classification = is_classification,
             y_levels = y_levels,
             n_classes = n_classes,
+            device = device,
             terms = mt
         ),
         class = "ffnn_fit"
@@ -281,7 +293,7 @@ ffnn = function(formula,
 #'
 #' @examples
 #' \dontrun{
-#' # Regression with LSTM
+#' # Regression with LSTM on GPU
 #' model_rnn = rnn(
 #'     Sepal.Length ~ .,
 #'     data = iris[, 1:4],
@@ -291,7 +303,7 @@ ffnn = function(formula,
 #'     epochs = 50
 #' )
 #'
-#' # Classification with GRU
+#' # Classification with GRU on CPU
 #' model_gru = rnn(
 #'     Species ~ .,
 #'     data = iris,
@@ -299,31 +311,47 @@ ffnn = function(formula,
 #'     rnn_type = "gru",
 #'     activations = act_funs(relu, elu),
 #'     loss = "cross_entropy",
+#'     device = "cpu",
 #'     epochs = 100
 #' )
 #' }
 #'
 #' @export
-rnn = function(formula,
-               data,
-               hidden_neurons,
-               rnn_type = "lstm",
-               activations = NULL,
-               output_activation = NULL,
-               bias = TRUE,
-               bidirectional = TRUE,
-               dropout = 0,
-               epochs = 100,
-               batch_size = 32,
-               learning_rate = 0.001,
-               optimizer = "adam",
-               loss = "mse",
-               validation_split = 0,
-               verbose = FALSE,
-               ...) {
+rnn =
+    function(
+        formula,
+        data,
+        hidden_neurons,
+        rnn_type = "lstm",
+        activations = NULL,
+        output_activation = NULL,
+        bias = TRUE,
+        bidirectional = TRUE,
+        dropout = 0,
+        epochs = 100,
+        batch_size = 32,
+        learning_rate = 0.001,
+        optimizer = "adam",
+        loss = "mse",
+        validation_split = 0,
+        device = NULL,
+        verbose = FALSE,
+        ...
+    ) {
 
     if (!requireNamespace("torch", quietly = TRUE)) {
         cli::cli_abort("Package {.pkg torch} is required but not installed.")
+    }
+
+    # ---Device selection---
+    if (is.null(device)) {
+        device = get_default_device()
+    } else {
+        device = validate_device(device)
+    }
+
+    if (verbose) {
+        cli::cli_alert_info("Using device: {device}")
     }
 
     mf = model.frame(formula, data)
@@ -375,31 +403,33 @@ rnn = function(formula,
         y_val = NULL
     }
 
-    # ---Torch data conversion---
-    x_train_t = torch::torch_tensor(x_train, dtype = torch::torch_float32())$unsqueeze(2)
+    # ---Torch data conversion (move to device)---
+    x_train_t = torch::torch_tensor(x_train, dtype = torch::torch_float32(), device = device)$unsqueeze(2)
 
     if (is_classification) {
-        y_train_t = torch::torch_tensor(y_train, dtype = torch::torch_long())
+        y_train_t = torch::torch_tensor(y_train, dtype = torch::torch_long(), device = device)
     } else {
         y_train_t = torch::torch_tensor(
             if (is.matrix(y_train)) y_train else matrix(y_train, ncol = 1),
-            dtype = torch::torch_float32()
+            dtype = torch::torch_float32(),
+            device = device
         )
     }
 
     if (!is.null(x_val)) {
-        x_val_t = torch::torch_tensor(x_val, dtype = torch::torch_float32())$unsqueeze(2)
+        x_val_t = torch::torch_tensor(x_val, dtype = torch::torch_float32(), device = device)$unsqueeze(2)
         if (is_classification) {
-            y_val_t = torch::torch_tensor(y_val, dtype = torch::torch_long())
+            y_val_t = torch::torch_tensor(y_val, dtype = torch::torch_long(), device = device)
         } else {
             y_val_t = torch::torch_tensor(
                 if (is.matrix(y_val)) y_val else matrix(y_val, ncol = 1),
-                dtype = torch::torch_float32()
+                dtype = torch::torch_float32(),
+                device = device
             )
         }
     }
 
-    # ---Generate model---
+    # ---Generate model and move to device---
     model_expr = rnn_generator(
         nn_name = "RNN",
         hd_neurons = hidden_neurons,
@@ -413,6 +443,7 @@ rnn = function(formula,
         dropout = dropout
     )
     model = eval(model_expr)()
+    model$to(device = device)
 
     # ---Optimizer and Loss Function---
     validate_optimizer(tolower(optimizer))
@@ -474,9 +505,9 @@ rnn = function(formula,
         }
     }
 
-    # ---Get predictions---
+    # ---Get predictions (move data to device)---
     model$eval()
-    x_full_t = torch::torch_tensor(x, dtype = torch::torch_float32())$unsqueeze(2)
+    x_full_t = torch::torch_tensor(x, dtype = torch::torch_float32(), device = device)$unsqueeze(2)
     fitted_tensor = torch::with_no_grad({
         model(x_full_t)
     })
@@ -484,10 +515,10 @@ rnn = function(formula,
     if (is_classification) {
         fitted_probs = torch::nnf_softmax(fitted_tensor, dim = 2)
         fitted_classes = torch::torch_argmax(fitted_probs, dim = 2)
-        fitted_values = as.integer(fitted_classes)
+        fitted_values = as.integer(fitted_classes$cpu())
         fitted_values = factor(fitted_values, levels = seq_along(y_levels), labels = y_levels)
     } else {
-        fitted_values = as.matrix(fitted_tensor)
+        fitted_values = as.matrix(fitted_tensor$cpu())
         if (no_y == 1L) fitted_values = as.vector(fitted_values)
     }
 
@@ -511,6 +542,7 @@ rnn = function(formula,
             is_classification = is_classification,
             y_levels = y_levels,
             n_classes = n_classes,
+            device = device,
             terms = mt
         ),
         class = "rnn_fit"
@@ -530,18 +562,21 @@ predict.ffnn_fit = function(object, newdata = NULL, type = "response", ...) {
         cli::cli_abort("Package {.pkg torch} is required but not installed.")
     }
 
+    device = object$device
+
     if (is.null(newdata)) {
         if (type == "prob" && object$is_classification) {
             x_t = torch::torch_tensor(
                 model.matrix(object$terms, model.frame(object$terms, object$data))[, -1, drop = FALSE],
-                dtype = torch::torch_float32()
+                dtype = torch::torch_float32(),
+                device = device
             )
             object$model$eval()
             pred_tensor = torch::with_no_grad({
                 object$model(x_t)
             })
             probs = torch::nnf_softmax(pred_tensor, dim = 2)
-            prob_matrix = as.matrix(probs)
+            prob_matrix = as.matrix(probs$cpu())
             colnames(prob_matrix) = object$y_levels
             return(prob_matrix)
         } else {
@@ -552,7 +587,7 @@ predict.ffnn_fit = function(object, newdata = NULL, type = "response", ...) {
     mt = delete.response(object$terms)
     mf = model.frame(mt, newdata, xlev = NULL)
     x_new = model.matrix(mt, mf)[, -1, drop = FALSE]
-    x_new_t = torch::torch_tensor(x_new, dtype = torch::torch_float32())
+    x_new_t = torch::torch_tensor(x_new, dtype = torch::torch_float32(), device = device)
 
     object$model$eval()
     pred_tensor = torch::with_no_grad({
@@ -564,20 +599,20 @@ predict.ffnn_fit = function(object, newdata = NULL, type = "response", ...) {
 
         if (type == "prob") {
             # ---Probability matrix---
-            prob_matrix = as.matrix(probs)
+            prob_matrix = as.matrix(probs$cpu())
             colnames(prob_matrix) = object$y_levels
             return(prob_matrix)
         } else {
             # ---Predicted classes---
             pred_classes = torch::torch_argmax(probs, dim = 2)
-            predictions = as.integer(pred_classes)
+            predictions = as.integer(pred_classes$cpu())
             predictions = factor(predictions,
                                  levels = seq_along(object$y_levels),
                                  labels = object$y_levels)
             return(predictions)
         }
     } else {
-        predictions = as.matrix(pred_tensor)
+        predictions = as.matrix(pred_tensor$cpu())
         if (object$no_y == 1L) predictions = as.vector(predictions)
         return(predictions)
     }
@@ -596,18 +631,21 @@ predict.rnn_fit = function(object, newdata = NULL, type = "response", ...) {
         cli::cli_abort("Package {.pkg torch} is required but not installed.")
     }
 
+    device = object$device
+
     if (is.null(newdata)) {
         if (type == "prob" && object$is_classification) {
             x_t = torch::torch_tensor(
                 model.matrix(object$terms, model.frame(object$terms, object$data))[, -1, drop = FALSE],
-                dtype = torch::torch_float32()
+                dtype = torch::torch_float32(),
+                device = device
             )
             object$model$eval()
             pred_tensor = torch::with_no_grad({
                 object$model(x_t)
             })
             probs = torch::nnf_softmax(pred_tensor, dim = 2)
-            prob_matrix = as.matrix(probs)
+            prob_matrix = as.matrix(probs$cpu())
             colnames(prob_matrix) = object$y_levels
             return(prob_matrix)
         } else {
@@ -618,7 +656,7 @@ predict.rnn_fit = function(object, newdata = NULL, type = "response", ...) {
     mt = delete.response(object$terms)
     mf = model.frame(mt, newdata, xlev = NULL)
     x_new = model.matrix(mt, mf)[, -1, drop = FALSE]
-    x_new_t = torch::torch_tensor(x_new, dtype = torch::torch_float32())$unsqueeze(2)
+    x_new_t = torch::torch_tensor(x_new, dtype = torch::torch_float32(), device = device)$unsqueeze(2)
 
     object$model$eval()
     pred_tensor = torch::with_no_grad({
@@ -629,19 +667,19 @@ predict.rnn_fit = function(object, newdata = NULL, type = "response", ...) {
         probs = torch::nnf_softmax(pred_tensor, dim = 2)
 
         if (type == "prob") {
-            prob_matrix = as.matrix(probs)
+            prob_matrix = as.matrix(probs$cpu())
             colnames(prob_matrix) = object$y_levels
             return(prob_matrix)
         } else {
             pred_classes = torch::torch_argmax(probs, dim = 2)
-            predictions = as.integer(pred_classes)
+            predictions = as.integer(pred_classes$cpu())
             predictions = factor(predictions,
                                  levels = seq_along(object$y_levels),
                                  labels = object$y_levels)
             return(predictions)
         }
     } else {
-        predictions = as.matrix(pred_tensor)
+        predictions = as.matrix(pred_tensor$cpu())
         if (object$no_y == 1L) predictions = as.vector(predictions)
         return(predictions)
     }

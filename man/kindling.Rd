@@ -4,7 +4,7 @@
 \name{kindling}
 \alias{kindling-package}
 \alias{kindling}
-\title{\code{{kindling}}: Higher-level interface of torch package in training neural networks}
+\title{\code{{kindling}}: Higher-level interface of torch package to auto-train neural networks}
 \description{
 \code{{kindling}} enables R users to build and train deep neural networks such as:
 \itemize{

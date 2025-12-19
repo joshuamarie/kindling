@@ -20,6 +20,7 @@ rnn(
   optimizer = "adam",
   loss = "mse",
   validation_split = 0,
+  device = NULL,
   verbose = FALSE,
   ...
 )
@@ -55,6 +56,8 @@ rnn(
 
 \item{validation_split}{Numeric. Proportion of data for validation (0-1). Default \code{0}.}
 
+\item{device}{Character. Device to use ("cpu", "cuda", "mps"). Default \code{NULL} (auto-detect).}
+
 \item{verbose}{Logical. Print training progress. Default \code{FALSE}.}
 
 \item{...}{Additional arguments passed to the optimizer.}
@@ -64,7 +67,7 @@ Train a recurrent neural network using the torch package.
 }
 \examples{
 \dontrun{
-# Regression with LSTM
+# Regression with LSTM on GPU
 model_rnn = rnn(
     Sepal.Length ~ .,
     data = iris[, 1:4],
@@ -74,7 +77,7 @@ model_rnn = rnn(
     epochs = 50
 )
 
-# Classification with GRU
+# Classification with GRU on CPU
 model_gru = rnn(
     Species ~ .,
     data = iris,
@@ -82,6 +85,7 @@ model_gru = rnn(
     rnn_type = "gru",
     activations = act_funs(relu, elu),
     loss = "cross_entropy",
+    device = "cpu",
     epochs = 100
 )
 }

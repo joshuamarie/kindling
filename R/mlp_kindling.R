@@ -20,8 +20,13 @@
 #' @param learn_rate A number for the learning rate. Can be tuned.
 #' @param optimizer A character string for the optimizer type ("adam", "sgd",
 #'   "rmsprop"). Can be tuned.
+#' @param loss A character string for the loss function ("mse", "mae",
+#'   "cross_entropy", "bce"). Can be tuned.
 #' @param validation_split A number between 0 and 1 for the proportion of data
 #'   used for validation. Can be tuned.
+#' @param device A character string for the device to use ("cpu", "cuda", "mps").
+#'   If NULL, auto-detects available GPU. Can be tuned.
+#' @param verbose Logical for whether to print training progress. Default FALSE.
 #'
 #' @details
 #' This function creates a model specification for a feedforward neural network
@@ -29,6 +34,7 @@
 #'
 #' - Multiple hidden layers with configurable units
 #' - Various activation functions per layer
+#' - GPU acceleration (CUDA, MPS, or CPU)
 #' - Hyperparameter tuning integration
 #' - Both regression and classification tasks
 #'
@@ -36,16 +42,23 @@
 #' represents the number of neurons in that hidden layer. For example,
 #' `hidden_neurons = c(128, 64, 32)` creates a network with three hidden layers.
 #'
+#' The `device` parameter controls where computation occurs:
+#' - `NULL` (default): Auto-detect best available device (CUDA > MPS > CPU)
+#' - `"cuda"`: Use NVIDIA GPU
+#' - `"mps"`: Use Apple Silicon GPU
+#' - `"cpu"`: Use CPU only
+#'
 #' When tuning, you can use special tune tokens:
 #' - For `hidden_neurons`: use `tune("hidden_neurons")` with a custom range
 #' - For `activation`: use `tune("activation")` with values like "relu", "tanh"
+#' - For `device`: use `tune("device")` to compare CPU vs GPU performance
 #'
 #' @return A model specification object with class `mlp_kindling`.
 #'
 #' @examples
 #' \dontrun{
 #' box::use(
-#'     recipe[recipe],
+#'     recipes[recipe],
 #'     workflows[workflow, add_recipe, add_model],
 #'     tune[tune]
 #' )
@@ -75,17 +88,23 @@
 #' }
 #'
 #' @export
-mlp_kindling = function(mode = "unknown",
-                        engine = "kindling",
-                        hidden_neurons = NULL,
-                        activations = NULL,
-                        output_activation = NULL,
-                        bias = NULL,
-                        epochs = NULL,
-                        batch_size = NULL,
-                        learn_rate = NULL,
-                        optimizer = NULL,
-                        validation_split = NULL) {
+mlp_kindling =
+    function(
+        mode = "unknown",
+        engine = "kindling",
+        hidden_neurons = NULL,
+        activations = NULL,
+        output_activation = NULL,
+        bias = NULL,
+        epochs = NULL,
+        batch_size = NULL,
+        learn_rate = NULL,
+        optimizer = NULL,
+        loss = NULL,
+        validation_split = NULL,
+        device = NULL,
+        verbose = NULL
+    ) {
 
     if (!requireNamespace("parsnip", quietly = TRUE)) {
         cli::cli_abort("Package {.pkg parsnip} is required but not installed.")
@@ -100,7 +119,10 @@ mlp_kindling = function(mode = "unknown",
         batch_size = rlang::enquo(batch_size),
         learn_rate = rlang::enquo(learn_rate),
         optimizer = rlang::enquo(optimizer),
-        validation_split = rlang::enquo(validation_split)
+        loss = rlang::enquo(loss),
+        validation_split = rlang::enquo(validation_split),
+        device = rlang::enquo(device),
+        verbose = rlang::enquo(verbose)
     )
 
     parsnip::new_model_spec(
@@ -123,19 +145,25 @@ print.mlp_kindling = function(x, ...) {
 }
 
 #' @exportS3Method recipe::update
-update.mlp_kindling = function(object,
-                               parameters = NULL,
-                               hidden_neurons = NULL,
-                               activations = NULL,
-                               output_activation = NULL,
-                               bias = NULL,
-                               epochs = NULL,
-                               batch_size = NULL,
-                               learn_rate = NULL,
-                               optimizer = NULL,
-                               validation_split = NULL,
-                               fresh = FALSE,
-                               ...) {
+update.mlp_kindling =
+    function(
+        object,
+        parameters = NULL,
+        hidden_neurons = NULL,
+        activations = NULL,
+        output_activation = NULL,
+        bias = NULL,
+        epochs = NULL,
+        batch_size = NULL,
+        learn_rate = NULL,
+        optimizer = NULL,
+        loss = NULL,
+        validation_split = NULL,
+        device = NULL,
+        verbose = NULL,
+        fresh = FALSE,
+        ...
+    ) {
 
     args = list(
         hidden_neurons = rlang::enquo(hidden_neurons),
@@ -146,7 +174,10 @@ update.mlp_kindling = function(object,
         batch_size = rlang::enquo(batch_size),
         learn_rate = rlang::enquo(learn_rate),
         optimizer = rlang::enquo(optimizer),
-        validation_split = rlang::enquo(validation_split)
+        loss = rlang::enquo(loss),
+        validation_split = rlang::enquo(validation_split),
+        device = rlang::enquo(device),
+        verbose = rlang::enquo(verbose)
     )
 
     parsnip::update_spec(
@@ -165,6 +196,6 @@ translate.mlp_kindling = function(x, engine = x$engine, ...) {
         cli::cli_abort("Please set an engine with `set_engine()`.")
     }
 
-    x = parsnip::translate_default(x, engine, ...)
+    x = parsnip::translate.default(x, engine, ...)
     x
 }

@@ -11,13 +11,17 @@ rnn_kindling(
   rnn_type = NULL,
   activations = NULL,
   output_activation = NULL,
+  bias = NULL,
   bidirectional = NULL,
   dropout = NULL,
   epochs = NULL,
   batch_size = NULL,
   learn_rate = NULL,
   optimizer = NULL,
-  validation_split = NULL
+  loss = NULL,
+  validation_split = NULL,
+  device = NULL,
+  verbose = NULL
 )
 }
 \arguments{
@@ -39,6 +43,8 @@ hidden layer (e.g., "relu", "tanh", "sigmoid"). Can be tuned.}
 \item{output_activation}{A character string for the output activation function.
 Can be tuned.}
 
+\item{bias}{Logical for whether to include bias terms. Can be tuned.}
+
 \item{bidirectional}{A logical indicating whether to use bidirectional RNN.
 Can be tuned.}
 
@@ -54,8 +60,16 @@ Can be tuned.}
 \item{optimizer}{A character string for the optimizer type ("adam", "sgd",
 "rmsprop"). Can be tuned.}
 
+\item{loss}{A character string for the loss function ("mse", "mae",
+"cross_entropy", "bce"). Can be tuned.}
+
 \item{validation_split}{A number between 0 and 1 for the proportion of data
 used for validation. Can be tuned.}
+
+\item{device}{A character string for the device to use ("cpu", "cuda", "mps").
+If NULL, auto-detects available GPU. Can be tuned.}
+
+\item{verbose}{Logical for whether to print training progress. Default FALSE.}
 }
 \value{
 A model specification object with class \code{rnn_kindling}.
@@ -72,14 +86,22 @@ that can be used within tidymodels workflows. The model supports:
 \item Multiple RNN types: basic RNN, LSTM, and GRU
 \item Bidirectional processing
 \item Dropout regularization
+\item GPU acceleration (CUDA, MPS, or CPU)
 \item Hyperparameter tuning integration
 \item Both regression and classification tasks
+}
+
+The \code{device} parameter controls where computation occurs:
+\itemize{
+\item \code{NULL} (default): Auto-detect best available device (CUDA > MPS > CPU)
+\item \code{"cuda"}: Use NVIDIA GPU
+\item \code{"mps"}: Use Apple Silicon GPU
+\item \code{"cpu"}: Use CPU only
 }
 }
 \examples{
 \dontrun{
-library(parsnip)
-library(workflows)
+box::use(tune[tune])
 
 # Model Specs for LSTM
 rnn_spec = rnn_kindling(
@@ -89,15 +111,6 @@ rnn_spec = rnn_kindling(
     activation = c("relu", "elu"),
     epochs = 100,
     bidirectional = TRUE
-)
-
-# Tune RNN
-rnn_tune_spec = rnn_kindling(
-    mode = "regression",
-    hidden_neurons = tune(),
-    rnn_type = tune(),
-    activation = tune(),
-    dropout = tune()
 )
 }
 

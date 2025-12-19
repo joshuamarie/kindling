@@ -15,7 +15,10 @@ mlp_kindling(
   batch_size = NULL,
   learn_rate = NULL,
   optimizer = NULL,
-  validation_split = NULL
+  loss = NULL,
+  validation_split = NULL,
+  device = NULL,
+  verbose = NULL
 )
 }
 \arguments{
@@ -45,8 +48,16 @@ Can be tuned.}
 \item{optimizer}{A character string for the optimizer type ("adam", "sgd",
 "rmsprop"). Can be tuned.}
 
+\item{loss}{A character string for the loss function ("mse", "mae",
+"cross_entropy", "bce"). Can be tuned.}
+
 \item{validation_split}{A number between 0 and 1 for the proportion of data
 used for validation. Can be tuned.}
+
+\item{device}{A character string for the device to use ("cpu", "cuda", "mps").
+If NULL, auto-detects available GPU. Can be tuned.}
+
+\item{verbose}{Logical for whether to print training progress. Default FALSE.}
 }
 \value{
 A model specification object with class \code{mlp_kindling}.
@@ -62,6 +73,7 @@ that can be used within tidymodels workflows. The model supports:
 \itemize{
 \item Multiple hidden layers with configurable units
 \item Various activation functions per layer
+\item GPU acceleration (CUDA, MPS, or CPU)
 \item Hyperparameter tuning integration
 \item Both regression and classification tasks
 }
@@ -70,16 +82,25 @@ The \code{hidden_neurons} parameter accepts an integer vector where each element
 represents the number of neurons in that hidden layer. For example,
 \code{hidden_neurons = c(128, 64, 32)} creates a network with three hidden layers.
 
+The \code{device} parameter controls where computation occurs:
+\itemize{
+\item \code{NULL} (default): Auto-detect best available device (CUDA > MPS > CPU)
+\item \code{"cuda"}: Use NVIDIA GPU
+\item \code{"mps"}: Use Apple Silicon GPU
+\item \code{"cpu"}: Use CPU only
+}
+
 When tuning, you can use special tune tokens:
 \itemize{
 \item For \code{hidden_neurons}: use \code{tune("hidden_neurons")} with a custom range
 \item For \code{activation}: use \code{tune("activation")} with values like "relu", "tanh"
+\item For \code{device}: use \code{tune("device")} to compare CPU vs GPU performance
 }
 }
 \examples{
 \dontrun{
 box::use(
-    recipe[recipe],
+    recipes[recipe],
     workflows[workflow, add_recipe, add_model],
     tune[tune]
 )

@@ -79,7 +79,8 @@ print.ffnn_fit = function(x, ...) {
             "Number of Hidden Layers",
             "Pred. Type",
             "n_predictors",
-            "n_response"
+            "n_response",
+            "Device"
         ),
         res = c(
             "FFNN",
@@ -88,12 +89,12 @@ print.ffnn_fit = function(x, ...) {
             as.character(length(x$activations)),
             if (x$is_classification) "classification" else "regression",
             as.character(x$no_x),
-            as.character(x$no_y)
+            as.character(x$no_y),
+            x$device
         ),
         stringsAsFactors = FALSE
     )
 
-    # Activation function details
     inner_acts = if (is.list(x$activations)) {
         vapply(x$activations, concat, character(1))
     } else if (!is.null(x$activations)) {
@@ -120,14 +121,14 @@ print.ffnn_fit = function(x, ...) {
     heading1 = rule(left = "FFNN Model Summary", line = "-")
     heading1_block = style_italic(heading1)
     cat_line("\n", heading1_block, "\n\n")
-    table_summary(summary_data, l = 5, center_table = TRUE)
+    table_summary(summary_data, l = 5, center_table = TRUE, style = list(sep = ":  "))
     cat("\n\n")
 
     # ---Activation function summary---
     heading2 = rule(left = "Activation function", line = "-")
     heading2_block = style_italic(heading2)
     cat_line("\n", heading2_block, "\n\n")
-    table_summary(act_data, l = 5, center_table = TRUE)
+    table_summary(act_data, l = 5, center_table = TRUE, style = list(sep = ":  "))
 
     invisible(x)
 }
@@ -168,7 +169,8 @@ print.rnn_fit = function(x, ...) {
             "Number of Hidden Layers",
             "Pred. Type",
             "n_predictors",
-            "n_response"
+            "n_response",
+            "Device"
         ),
         res = c(
             "RNN",
@@ -179,7 +181,8 @@ print.rnn_fit = function(x, ...) {
             as.character(length(x$activations)),
             if (x$is_classification) "classification" else "regression",
             as.character(x$no_x),
-            as.character(x$no_y)
+            as.character(x$no_y),
+            x$device
         ),
         stringsAsFactors = FALSE
     )
@@ -191,7 +194,6 @@ print.rnn_fit = function(x, ...) {
     } else {
         "None"
     }
-
     outer_acts = concat(x$output_activation)
 
     act_data = data.frame(
@@ -210,14 +212,14 @@ print.rnn_fit = function(x, ...) {
     heading1 = rule(left = "RNN Model Summary", line = "-")
     heading1_block = style_italic(heading1)
     cat_line("\n", heading1_block, "\n\n")
-    table_summary(summary_data, l = 7, center_table = TRUE)
+    table_summary(summary_data, l = 7, center_table = TRUE, style = list(sep = ":  "))
     cat("\n\n")
 
     # ---Activation function summary---
     heading2 = rule(left = "Activation function", line = "-")
     heading2_block = style_italic(heading2)
     cat_line("\n", heading2_block, "\n\n")
-    table_summary(act_data, l = 5, center_table = TRUE)
+    table_summary(act_data, l = 5, center_table = TRUE, style = list(sep = ":  "))
     cat("\n")
 
     invisible(x)

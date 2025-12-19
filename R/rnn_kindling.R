@@ -19,15 +19,21 @@
 #' - Multiple RNN types: basic RNN, LSTM, and GRU
 #' - Bidirectional processing
 #' - Dropout regularization
+#' - GPU acceleration (CUDA, MPS, or CPU)
 #' - Hyperparameter tuning integration
 #' - Both regression and classification tasks
+#'
+#' The `device` parameter controls where computation occurs:
+#' - `NULL` (default): Auto-detect best available device (CUDA > MPS > CPU)
+#' - `"cuda"`: Use NVIDIA GPU
+#' - `"mps"`: Use Apple Silicon GPU
+#' - `"cpu"`: Use CPU only
 #'
 #' @return A model specification object with class `rnn_kindling`.
 #'
 #' @examples
 #' \dontrun{
-#' library(parsnip)
-#' library(workflows)
+#' box::use(tune[tune])
 #'
 #' # Model Specs for LSTM
 #' rnn_spec = rnn_kindling(
@@ -38,31 +44,29 @@
 #'     epochs = 100,
 #'     bidirectional = TRUE
 #' )
-#'
-#' # Tune RNN
-#' rnn_tune_spec = rnn_kindling(
-#'     mode = "regression",
-#'     hidden_neurons = tune(),
-#'     rnn_type = tune(),
-#'     activation = tune(),
-#'     dropout = tune()
-#' )
 #' }
 #'
 #' @export
-rnn_kindling = function(mode = "unknown",
-                        engine = "kindling",
-                        hidden_neurons = NULL,
-                        rnn_type = NULL,
-                        activations = NULL,
-                        output_activation = NULL,
-                        bidirectional = NULL,
-                        dropout = NULL,
-                        epochs = NULL,
-                        batch_size = NULL,
-                        learn_rate = NULL,
-                        optimizer = NULL,
-                        validation_split = NULL) {
+rnn_kindling =
+    function(
+        mode = "unknown",
+        engine = "kindling",
+        hidden_neurons = NULL,
+        rnn_type = NULL,
+        activations = NULL,
+        output_activation = NULL,
+        bias = NULL,
+        bidirectional = NULL,
+        dropout = NULL,
+        epochs = NULL,
+        batch_size = NULL,
+        learn_rate = NULL,
+        optimizer = NULL,
+        loss = NULL,
+        validation_split = NULL,
+        device = NULL,
+        verbose = NULL
+    ) {
 
     if (!requireNamespace("parsnip", quietly = TRUE)) {
         cli::cli_abort("Package {.pkg parsnip} is required but not installed.")
@@ -73,13 +77,17 @@ rnn_kindling = function(mode = "unknown",
         rnn_type = rlang::enquo(rnn_type),
         activations = rlang::enquo(activations),
         output_activation = rlang::enquo(output_activation),
+        bias = rlang::enquo(bias),
         bidirectional = rlang::enquo(bidirectional),
         dropout = rlang::enquo(dropout),
         epochs = rlang::enquo(epochs),
         batch_size = rlang::enquo(batch_size),
         learn_rate = rlang::enquo(learn_rate),
         optimizer = rlang::enquo(optimizer),
-        validation_split = rlang::enquo(validation_split)
+        loss = rlang::enquo(loss),
+        validation_split = rlang::enquo(validation_split),
+        device = rlang::enquo(device),
+        verbose = rlang::enquo(verbose)
     )
 
     parsnip::new_model_spec(
@@ -102,34 +110,45 @@ print.rnn_kindling = function(x, ...) {
 }
 
 #' @exportS3Method recipe::update
-update.rnn_kindling = function(object,
-                               parameters = NULL,
-                               hidden_neurons = NULL,
-                               rnn_type = NULL,
-                               activations = NULL,
-                               output_activation = NULL,
-                               bidirectional = NULL,
-                               dropout = NULL,
-                               epochs = NULL,
-                               batch_size = NULL,
-                               learn_rate = NULL,
-                               optimizer = NULL,
-                               validation_split = NULL,
-                               fresh = FALSE,
-                               ...) {
+update.rnn_kindling =
+    function(
+        object,
+        parameters = NULL,
+        hidden_neurons = NULL,
+        rnn_type = NULL,
+        activations = NULL,
+        output_activation = NULL,
+        bias = NULL,
+        bidirectional = NULL,
+        dropout = NULL,
+        epochs = NULL,
+        batch_size = NULL,
+        learn_rate = NULL,
+        optimizer = NULL,
+        loss = NULL,
+        validation_split = NULL,
+        device = NULL,
+        verbose = NULL,
+        fresh = FALSE,
+        ...
+    ) {
 
     args = list(
         hidden_neurons = rlang::enquo(hidden_neurons),
         rnn_type = rlang::enquo(rnn_type),
         activations = rlang::enquo(activations),
         output_activation = rlang::enquo(output_activation),
+        bias = rlang::enquo(bias),
         bidirectional = rlang::enquo(bidirectional),
         dropout = rlang::enquo(dropout),
         epochs = rlang::enquo(epochs),
         batch_size = rlang::enquo(batch_size),
         learn_rate = rlang::enquo(learn_rate),
         optimizer = rlang::enquo(optimizer),
-        validation_split = rlang::enquo(validation_split)
+        loss = rlang::enquo(loss),
+        validation_split = rlang::enquo(validation_split),
+        device = rlang::enquo(device),
+        verbose = rlang::enquo(verbose)
     )
 
     parsnip::update_spec(
@@ -148,6 +167,6 @@ translate.rnn_kindling = function(x, engine = x$engine, ...) {
         cli::cli_abort("Please set an engine with `set_engine()`.")
     }
 
-    x = parsnip::translate_default(x, engine, ...)
+    x = parsnip::translate.default(x, engine, ...)
     x
 }
