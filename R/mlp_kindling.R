@@ -60,7 +60,8 @@
 #' box::use(
 #'     recipes[recipe],
 #'     workflows[workflow, add_recipe, add_model],
-#'     tune[tune]
+#'     tune[tune],
+#'     parsnip[fit]
 #' )
 #'
 #' # Model specs

@@ -33,9 +33,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' box::use(tune[tune])
+#' box::use(
+#'     recipes[recipe],
+#'     workflows[workflow, add_recipe, add_model],
+#'     parsnip[fit]
+#' )
 #'
-#' # Model Specs for LSTM
+#' # Model specs
 #' rnn_spec = rnn_kindling(
 #'     mode = "classification",
 #'     hidden_neurons = c(64, 32),
@@ -44,6 +48,14 @@
 #'     epochs = 100,
 #'     bidirectional = TRUE
 #' )
+#'
+#' wf = workflow() |>
+#'     add_recipe(recipe(Species ~ ., data = iris)) |>
+#'     add_model(rnn_spec)
+#'
+#' fit_wf = fit(wf, data = iris)
+#' fit_wf
+#'
 #' }
 #'
 #' @export

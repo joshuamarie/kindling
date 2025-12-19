@@ -102,7 +102,8 @@ When tuning, you can use special tune tokens:
 box::use(
     recipes[recipe],
     workflows[workflow, add_recipe, add_model],
-    tune[tune]
+    tune[tune],
+    parsnip[fit]
 )
 
 # Model specs
