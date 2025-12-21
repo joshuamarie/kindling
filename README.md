@@ -6,11 +6,11 @@
 > 🚧 **Under Construction**: This package is currently in early
 > development. 🚧
 
-<!-- <!-- badges: start -->
+<!-- badges: start -->
 
-–\>
 <!-- [![R-CMD-check](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml) -->
-<!-- <!-- badges: end --> –\>
+
+<!-- badges: end -->
 
 ## Overview
 
@@ -137,23 +137,23 @@ model
 
     -- FFNN Model Summary ----------------------------------------------------------
 
-          --------------------------------------------------------------------
-            NN Model Type                        FFNN    n_predictors      4
-            Number of Epochs                      100    n_response        3
-            Hidden Layer Units                 64, 32                       
-            Number of Hidden Layers                 2                       
-            Pred. Type                 classification                       
-          --------------------------------------------------------------------
+         ----------------------------------------------------------------------
+           NN Model Type           :             FFNN    n_predictors :     4
+           Number of Epochs        :              100    n_response   :     3
+           Hidden Layer Units      :           64, 32    Device       :   cpu
+           Number of Hidden Layers :                2                 :      
+           Pred. Type              :   classification                 :      
+         ----------------------------------------------------------------------
 
 
 
     -- Activation function ---------------------------------------------------------
 
-                    ------------------------------------------------
-                      1st Layer {64}                          relu
-                      2nd Layer {32}       softshrink(lambd = 0.5)
-                      Output Activation    No act function applied
-                    ------------------------------------------------
+                   -------------------------------------------------
+                     1st Layer {64}    :                      relu
+                     2nd Layer {32}    :   softshrink(lambd = 0.5)
+                     Output Activation :   No act function applied
+                   -------------------------------------------------
 
 The `predict()` method offers flexible prediction behavior through its
 `newdata` argument:
@@ -166,8 +166,8 @@ The `predict()` method offers flexible prediction behavior through its
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
-    #>   versicolor      0         47         3
-    #>   virginica       0          0        50
+    #>   versicolor      0         49         1
+    #>   virginica       0          1        49
     ```
 
 2.  **With new data** — simply pass a data frame:
@@ -181,7 +181,7 @@ The `predict()` method offers flexible prediction behavior through its
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
     #>   versicolor      0         10         0
-    #>   virginica       0          0        10
+    #>   virginica       0          1         9
     ```
 
 ### Level 3: Full tidymodels Integration
@@ -239,14 +239,85 @@ rnn_kindling(
 
 ### Level 4: Hyperparameter Tuning & Resampling
 
-> **Coming Soon**: This functionality is planned but not yet available.
+> This functionality is available, but still not fully optimized.
 
 The roadmap includes full support for hyperparameter tuning via `{tune}`
 with searchable parameters:
 
-- Network depth (number of hidden layers)
+- Network depth (number of hidden layers - coming soon)
 - Layer widths (neurons per layer)
 - Activation function combinations
+- Output activation
+- Optimizer (Type of optimization algorithm)
+- Bias (choose between the presence and the absence of the bias term)
+- Validation Split Proportion
+- Bidirectional (only for RNN)
+
+Here’s an example:
+
+``` r
+box::use(
+    kindling[
+        mlp_kindling, hidden_neurons, activations, output_activation, grid_depth
+    ],
+    parsnip[fit, augment],
+    recipes[recipe],
+    workflows[workflow, add_recipe, add_model],
+    rsample[vfold_cv],
+    tune[tune_grid, tune, select_best, finalize_workflow],
+    dials[grid_random],
+    yardstick[accuracy, roc_auc, metric_set, metrics]
+)
+
+mlp_tune_spec = mlp_kindling(
+    mode = "classification",
+    hidden_neurons = tune(),
+    activations = tune(),
+    output_activation = tune()
+)
+
+iris_folds = vfold_cv(iris, v = 3)
+nn_wf = workflow() |>
+    add_recipe(recipe(Species ~ ., data = iris)) |>
+    add_model(mlp_tune_spec)
+
+nn_grid = grid_random(
+    hidden_neurons(c(32L, 128L)),
+    activations(c("relu", "elu")),
+    output_activation(c("sigmoid", "linear")),
+    size = 10
+)
+
+nn_grid_depth = grid_depth(
+    hidden_neurons(c(32L, 128L)),
+    activations(c("relu", "elu")),
+    output_activation(c("sigmoid", "linear")),
+    n_hlayer = 2,
+    size = 10,
+    type = "latin_hypercube"
+)
+
+nn_tunes = tune::tune_grid(
+    nn_wf,
+    iris_folds,
+    grid = nn_grid_depth
+    # metrics = metric_set(accuracy, roc_auc)
+)
+
+best_nn = select_best(nn_tunes)
+final_nn = finalize_workflow(nn_wf, best_nn)
+# Last run: 4 - 91 (relu) - 3 (sigmoid) units
+final_nn_model = fit(final_nn, data = iris)
+
+final_nn_model |>
+    augment(new_data = iris) |>
+    metrics(truth = Species, estimate = .pred_class)
+#> # A tibble: 2 × 3
+#>   .metric  .estimator .estimate
+#>   <chr>    <chr>          <dbl>
+#> 1 accuracy multiclass     0.667
+#> 2 kap      multiclass     0.5
+```
 
 Resampling strategies from `{rsample}` will enable robust
 cross-validation workflows, orchestrated through the `{tune}` and
