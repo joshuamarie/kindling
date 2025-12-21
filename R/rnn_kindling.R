@@ -121,7 +121,8 @@ print.rnn_kindling = function(x, ...) {
     invisible(x)
 }
 
-#' @exportS3Method recipe::update
+#' @export
+#' @importFrom stats update
 update.rnn_kindling =
     function(
         object,
@@ -173,7 +174,8 @@ update.rnn_kindling =
     )
 }
 
-#' @exportS3Method parsnip::translate
+#' @export
+#' @importFrom parsnip translate
 translate.rnn_kindling = function(x, engine = x$engine, ...) {
     if (is.null(engine)) {
         cli::cli_abort("Please set an engine with `set_engine()`.")

@@ -145,7 +145,8 @@ print.mlp_kindling = function(x, ...) {
     invisible(x)
 }
 
-#' @exportS3Method recipe::update
+#' @export
+#' @importFrom stats update
 update.mlp_kindling =
     function(
         object,
@@ -191,7 +192,8 @@ update.mlp_kindling =
     )
 }
 
-#' @exportS3Method parsnip::translate
+#' @export
+#' @importFrom parsnip translate
 translate.mlp_kindling = function(x, engine = x$engine, ...) {
     if (is.null(engine)) {
         cli::cli_abort("Please set an engine with `set_engine()`.")
