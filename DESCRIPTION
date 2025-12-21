@@ -27,7 +27,10 @@ Imports:
     glue, 
     vctrs,
     parsnip (>= 1.0.0),
-    tibble
+    tibble,
+    tidyr,
+    dplyr,
+    stats
 Suggests: 
     testthat (>= 3.0.0), 
     magrittr, 
@@ -38,8 +41,6 @@ Suggests:
     yardstick,
     tune,
     dials,
-    dplyr,
-    tidyr,
     mlbench,      
     modeldata     
 Config/testthat/edition: 3
