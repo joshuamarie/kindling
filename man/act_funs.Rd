@@ -10,7 +10,8 @@ act_funs(...)
 \item{...}{Activation function specifications. Can be:
 \itemize{
 \item Bare symbols: \code{relu}, \code{tanh}
-\item Character strings: \code{"relu"}, \code{"tanh"}
+\item Character strings (simple): \code{"relu"}, \code{"tanh"}
+\item Character strings (with params): \code{"softshrink(lambda = 0.1)"}, \code{"rrelu(lower = 1/5, upper = 1/4)"}
 \item Named with parameters: \code{softmax = args(dim = 2L)}
 }}
 }

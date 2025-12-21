@@ -38,7 +38,8 @@ args = function(...) {
 #'
 #' @param ... Activation function specifications. Can be:
 #' - Bare symbols: `relu`, `tanh`
-#' - Character strings: `"relu"`, `"tanh"`
+#' - Character strings (simple): `"relu"`, `"tanh"`
+#' - Character strings (with params): `"softshrink(lambda = 0.1)"`, `"rrelu(lower = 1/5, upper = 1/4)"`
 #' - Named with parameters: `softmax = args(dim = 2L)`
 #'
 #' @return A `vctrs` vector with class "activation_spec" containing validated
@@ -56,6 +57,7 @@ act_funs = function(...) {
         expr = quo_get_expr(quo)
 
         if (!is.null(name) && name != "") {
+            # Named parameter: softshrink = args(lambda = 0.5)
             validate_activation(name, prefix = "nnf_")
 
             if (is_call(expr) && call_name(expr) == "args") {
@@ -71,22 +73,85 @@ act_funs = function(...) {
                 ), class = "activation_syntax_error")
             }
         } else if (is.symbol(expr)) {
+            # Bare symbol: relu, tanh
             act_name = as_string(expr)
             validate_activation(act_name, prefix = "nnf_")
             act_name
         } else if (is.character(expr)) {
-            validate_activation(expr, prefix = "nnf_")
-            expr
+            # Character string: "relu" or "softshrink(lambda = 0.1)"
+            parsed = parse_activation_string(expr)
+            validate_activation(parsed$name, prefix = "nnf_")
+
+            if (length(parsed$params) > 0) {
+                validate_args_formals(parsed$name, parsed$params, prefix = "nnf_")
+                structure(parsed$params, act_name = parsed$name, class = "parameterized_activation")
+            } else {
+                parsed$name
+            }
         } else {
             cli_abort(c(
                 "Invalid activation specification at position {i}.",
                 i = "Use bare names like {.code relu}, strings like {.code 'relu'},",
-                i = "or parameterized like {.code softmax = args(dim = 2L)}."
+                i = "parameterized strings like {.code 'softshrink(lambda = 0.1)'},",
+                i = "or DSL like {.code softmax = args(dim = 2L)}."
             ), class = "activation_syntax_error")
         }
     })
 
     new_vctr(out, class = "activation_spec")
+}
+
+#' Parse activation function string with parameters
+#'
+#' Parse strings like "softshrink(lambda = 0.1)" or "rrelu(lower = 1/5, upper = 1/4)"
+#' into activation name and parameter list.
+#'
+#' @param act_str Character string with activation and optional parameters.
+#' @return List with `name` and `params` elements.
+#'
+#' @importFrom cli cli_abort
+#'
+#' @noRd
+parse_activation_string = function(act_str) {
+    if (!is.character(act_str) || length(act_str) != 1) {
+        cli_abort("Activation string must be a single character value.")
+    }
+
+    # Check if it has parameters (contains parentheses)
+    if (!grepl("\\(", act_str)) {
+        return(list(name = act_str, params = list()))
+    }
+
+    match = regexec("^([a-z_0-9]+)\\((.*)\\)$", act_str, ignore.case = TRUE)
+    matches = regmatches(act_str, match)[[1]]
+
+    if (length(matches) != 3) {
+        cli_abort(c(
+            "Invalid activation string format: {.val {act_str}}",
+            i = "Expected format: {.code 'function_name(param1 = value1, param2 = value2)'}"
+        ))
+    }
+
+    act_name = matches[2]
+    params_str = matches[3]
+
+    if (nchar(trimws(params_str)) == 0) {
+        params_list = list()
+    } else {
+        expr_str = paste0("list(", params_str, ")")
+
+        tryCatch({
+            params_list = eval(parse(text = expr_str))
+        }, error = function(e) {
+            cli_abort(c(
+                "Failed to parse parameters in: {.val {act_str}}",
+                i = "Error: {e$message}",
+                i = "Parameters must be valid R expressions."
+            ))
+        })
+    }
+
+    list(name = act_name, params = params_list)
 }
 
 #' Validate Activation Function Exists
@@ -159,7 +224,7 @@ validate_args_formals = function(act_name, params, prefix = "nnf_") {
 #'
 #' @param activations Activation function specifications. Can be:
 #' - `NULL`: No activation functions.
-#' - Character vector: e.g., `c("relu", "tanh")`.
+#' - Character vector: e.g., `c("relu", "tanh")` or `c("relu", "softshrink(lambda = 0.1)")`.
 #' - List: e.g., `list(relu, tanh, softmax = args(dim = 2L))`.
 #' - `activation_spec` object from `act_funs()`.
 #' @param n_layers Number of layers to apply activations to.
@@ -225,10 +290,12 @@ parse_activation_spec = function(activations, n_layers) {
             ), class = "activation_spec_length_error")
         }
 
-        list(
-            names = activations,
-            params = vector("list", n_layers)
-        )
+        parsed_activation = lapply(activations, function(act_str) {
+            parsed = parse_activation_string(act_str)
+            list(name = parsed$name, param = parsed$params)
+        })
+
+        set_names(transpose(parsed_activation), c("names", "params"))
     } else if (is.list(activations)) {
         if (length(activations) == 1L) {
             activations = rep(activations, n_layers)
@@ -243,13 +310,14 @@ parse_activation_spec = function(activations, n_layers) {
 
         parsed_activation =
             imap(activations, function(elem, i) {
-                elem_name = if (!is.null(activations)) activations[i] else ""
+                elem_name = if (!is.null(names(activations))) names(activations)[i] else ""
 
                 if (elem_name != "" && is.list(elem)) {
                     list(name = elem_name, param = elem)
 
                 } else if (elem_name == "" && is.character(elem) && length(elem) == 1L) {
-                    list(name = elem, param = list())
+                    parsed = parse_activation_string(elem)
+                    list(name = parsed$name, param = parsed$params)
 
                 } else if (elem_name == "" && is.name(elem)) {
                     list(name = as.character(elem), param = list())
@@ -261,7 +329,8 @@ parse_activation_spec = function(activations, n_layers) {
                     cli_abort(c(
                         "Invalid activation specification at position {i}.",
                         i = "Use: {.code relu} or {.code 'relu'} for simple activations",
-                        i = "Use: {.code softmax = args(dim = 2L)} for parameterized"
+                        i = "Use: {.code 'softshrink(lambda = 0.1)'} for parameterized strings",
+                        i = "Use: {.code softmax = args(dim = 2L)} for DSL"
                     ), class = "activation_syntax_error")
                 }
             })
@@ -272,6 +341,7 @@ parse_activation_spec = function(activations, n_layers) {
             "{.arg activations} must be character vector, list, or {.code act_funs()}.",
             i = "Examples:",
             "*" = "Character: {.code c('relu', 'tanh')}",
+            "*" = "Parameterized: {.code c('relu', 'softshrink(lambda = 0.1)')}",
             "*" = "List: {.code list(relu, tanh, softmax = args(dim = 2L))}",
             "*" = "DSL: {.code act_funs(relu, tanh, softmax = args(dim = 2L))}"
         ), class = "activation_type_error")
@@ -303,7 +373,6 @@ process_activations = function(activation_spec, prefix = "nnf_") {
         if (is.na(name)) {
             NULL
         } else {
-            # Create namespaced function call: torch::nnf_*
             fn_name = paste0(prefix, name)
             fn_call = call2("::", sym("torch"), sym(fn_name))
 
