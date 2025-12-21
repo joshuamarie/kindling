@@ -16,7 +16,7 @@ rnn(
   dropout = 0,
   epochs = 100,
   batch_size = 32,
-  learning_rate = 0.001,
+  learn_rate = 0.001,
   optimizer = "adam",
   loss = "mse",
   validation_split = 0,
@@ -48,7 +48,7 @@ rnn(
 
 \item{batch_size}{Integer. Batch size for training. Default \code{32}.}
 
-\item{learning_rate}{Numeric. Learning rate for optimizer. Default \code{0.001}.}
+\item{learn_rate}{Numeric. Learning rate for optimizer. Default \code{0.001}.}
 
 \item{optimizer}{Character. Optimizer type ("adam", "sgd", "rmsprop"). Default \code{"adam"}.}
 

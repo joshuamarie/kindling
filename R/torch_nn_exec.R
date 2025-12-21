@@ -10,7 +10,7 @@
 #' @param bias Logical. Use bias weights. Default `TRUE`.
 #' @param epochs Integer. Number of training epochs. Default `100`.
 #' @param batch_size Integer. Batch size for training. Default `32`.
-#' @param learning_rate Numeric. Learning rate for optimizer. Default `0.001`.
+#' @param learn_rate Numeric. Learning rate for optimizer. Default `0.001`.
 #' @param optimizer Character. Optimizer type ("adam", "sgd", "rmsprop"). Default `"adam"`.
 #' @param loss Character. Loss function ("mse", "mae", "cross_entropy", "bce"). Default `"mse"`.
 #' @param validation_split Numeric. Proportion of data for validation (0-1). Default `0`.
@@ -66,7 +66,7 @@ ffnn =
         bias = TRUE,
         epochs = 100,
         batch_size = 32,
-        learning_rate = 0.001,
+        learn_rate = 0.001,
         optimizer = "adam",
         loss = "mse",
         validation_split = 0,
@@ -90,6 +90,7 @@ ffnn =
         cli::cli_alert_info("Using device: {device}")
     }
 
+    ffnn_call = match.call()
     mf = model.frame(formula, data)
     mt = attr(mf, "terms")
     y = model.response(mf)
@@ -181,14 +182,14 @@ ffnn =
 
     # ---Optimizer and Loss Function---
     validate_optimizer(tolower(optimizer))
-    opt = eval(rlang::call2(paste0("optim_", tolower(optimizer)), model$parameters, lr = learning_rate, ..., .ns = "torch"))
+    opt = eval(rlang::call2(paste0("optim_", tolower(optimizer)), model$parameters, lr = learn_rate, ..., .ns = "torch"))
 
     loss_fn = switch(
         tolower(loss),
-        mse = torch::nnf_mse_loss,
-        mae = torch::nnf_l1_loss,
-        cross_entropy = torch::nnf_cross_entropy,
-        bce = torch::nnf_binary_cross_entropy_with_logits,
+        mse = function(input, target) torch::nnf_mse_loss(input, target),
+        mae = function(input, target) torch::nnf_l1_loss(input, target),
+        cross_entropy = function(input, target) torch::nnf_cross_entropy(input, target),
+        bce = function(input, target) torch::nnf_binary_cross_entropy_with_logits(input, target),
         cli::cli_abort("Unknown loss function: {loss}")
     )
     loss_history = numeric(epochs)
@@ -276,7 +277,8 @@ ffnn =
             y_levels = y_levels,
             n_classes = n_classes,
             device = device,
-            terms = mt
+            terms = mt,
+            call = ffnn_call
         ),
         class = "ffnn_fit"
     )
@@ -330,7 +332,7 @@ rnn =
         dropout = 0,
         epochs = 100,
         batch_size = 32,
-        learning_rate = 0.001,
+        learn_rate = 0.001,
         optimizer = "adam",
         loss = "mse",
         validation_split = 0,
@@ -354,6 +356,7 @@ rnn =
         cli::cli_alert_info("Using device: {device}")
     }
 
+    rnn_call = match.call()
     mf = model.frame(formula, data)
     mt = attr(mf, "terms")
     y = model.response(mf)
@@ -447,13 +450,13 @@ rnn =
 
     # ---Optimizer and Loss Function---
     validate_optimizer(tolower(optimizer))
-    opt = eval(rlang::call2(paste0("optim_", tolower(optimizer)), model$parameters, lr = learning_rate, ..., .ns = "torch"))
+    opt = eval(rlang::call2(paste0("optim_", tolower(optimizer)), model$parameters, lr = learn_rate, ..., .ns = "torch"))
     loss_fn = switch(
         tolower(loss),
-        mse = torch::nnf_mse_loss,
-        mae = torch::nnf_l1_loss,
-        cross_entropy = torch::nnf_cross_entropy,
-        bce = torch::nnf_binary_cross_entropy_with_logits,
+        mse = function(input, target) torch::nnf_mse_loss(input, target),
+        mae = function(input, target) torch::nnf_l1_loss(input, target),
+        cross_entropy = function(input, target) torch::nnf_cross_entropy(input, target),
+        bce = function(input, target) torch::nnf_binary_cross_entropy_with_logits(input, target),
         cli::cli_abort("Unknown loss function: {loss}")
     )
     loss_history = numeric(epochs)
@@ -543,7 +546,8 @@ rnn =
             y_levels = y_levels,
             n_classes = n_classes,
             device = device,
-            terms = mt
+            terms = mt,
+            call = rnn_call
         ),
         class = "rnn_fit"
     )
@@ -684,3 +688,22 @@ predict.rnn_fit = function(object, newdata = NULL, type = "response", ...) {
         return(predictions)
     }
 }
+
+#' @export
+`$.ffnn_fit` = function(x, name) {
+    if (name %in% names(x)) {
+        return(x[[name]])
+    }
+
+    attr(x, name, exact = TRUE)
+}
+
+#' @export
+`$.rnn_fit` = function(x, name) {
+    if (name %in% names(x)) {
+        return(x[[name]])
+    }
+
+    attr(x, name, exact = TRUE)
+}
+
