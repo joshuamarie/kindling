@@ -1,7 +1,7 @@
 Package: kindling
 Type: Package
 Title: Higher-level interface of torch package to auto-train neural networks
-Version: 0.1.1
+Version: 0.1.0
 Authors@R: c(
     person(
       "Joshua", "Marie",
@@ -30,7 +30,9 @@ Imports:
     tibble,
     tidyr,
     dplyr,
-    stats
+    stats,
+    NeuralNetTools,
+    vip
 Suggests: 
     testthat (>= 3.0.0), 
     magrittr, 

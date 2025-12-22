@@ -1,5 +1,6 @@
-#' Feed-Forward Neural Network Training
+#' Base models for Neural Network Training in kindling
 #'
+#' @section FFNN:
 #' Train a feed-forward neural network using the torch package.
 #'
 #' @param formula Formula. Model formula (e.g., y ~ x1 + x2).
@@ -16,6 +17,10 @@
 #' @param validation_split Numeric. Proportion of data for validation (0-1). Default `0`.
 #' @param device Character. Device to use ("cpu", "cuda", "mps"). Default `NULL` (auto-detect).
 #' @param verbose Logical. Print training progress. Default `FALSE`.
+#' @param cache_weights Logical. Cache weight matrices for faster variable importance
+#'   computation. Default `FALSE`. When `TRUE`, weight matrices are extracted and
+#'   stored in the returned object, avoiding repeated extraction during importance
+#'   calculations. Only enable if you plan to compute variable importance multiple times.
 #' @param ... Additional arguments passed to the optimizer.
 #'
 #' @return An object of class "ffnn_fit" containing:
@@ -28,6 +33,7 @@
 #' \item{feature_names}{Names of predictor variables}
 #' \item{response_name}{Name of response variable}
 #' \item{device}{Device used for training}
+#' \item{cached_weights}{Weight matrices (only if cache_weights = TRUE)}
 #'
 #' @examples
 #' \dontrun{
@@ -41,20 +47,20 @@
 #'     verbose = FALSE
 #' )
 #'
-#' # Classification task (force CPU)
-#' model_clf = ffnn(
+#' # With weight caching for multiple importance calculations
+#' model_cached = ffnn(
 #'     Species ~ .,
 #'     data = iris,
 #'     hidden_neurons = c(128, 64, 32),
-#'     activations = act_funs(relu, selu, softshrink = args(lambd = 0.5)),
-#'     loss = "cross_entropy",
-#'     device = "cpu",
+#'     activations = "relu",
+#'     cache_weights = TRUE,
 #'     epochs = 100
 #' )
 #' }
 #'
 #' @importFrom stats model.frame model.response model.matrix delete.response terms
 #'
+#' @rdname kindling-basemodels
 #' @export
 ffnn =
     function(
@@ -72,6 +78,7 @@ ffnn =
         validation_split = 0,
         device = NULL,
         verbose = FALSE,
+        cache_weights = FALSE,
         ...
     ) {
 
@@ -141,7 +148,7 @@ ffnn =
         y_val = NULL
     }
 
-    # ---Torch data conversion (move to device)---
+    # ---Torch data conversion---
     x_train_t = torch::torch_tensor(x_train, dtype = torch::torch_float32(), device = device)
 
     if (is_classification) {
@@ -167,7 +174,7 @@ ffnn =
         }
     }
 
-    # ---Generate model and move to device---
+    # ---Generate model---
     model_expr = ffnn_generator(
         nn_name = "FFNN",
         hd_neurons = hidden_neurons,
@@ -242,7 +249,7 @@ ffnn =
         }
     }
 
-    # ---Get predictions (move data to device)---
+    # ---Predictions---
     model$eval()
     fitted_tensor = torch::with_no_grad({
         model(torch::torch_tensor(x, dtype = torch::torch_float32(), device = device))
@@ -256,6 +263,30 @@ ffnn =
     } else {
         fitted_values = as.matrix(fitted_tensor$cpu())
         if (no_y == 1L) fitted_values = as.vector(fitted_values)
+    }
+
+    # ---Cache weights if requested---
+    cached_weights = NULL
+    if (cache_weights) {
+        n_hidden = length(hidden_neurons)
+        input_layer = model$fc1
+        W_input = as.matrix(input_layer$weight$cpu())
+        output_layer = model$out
+        W_output = as.matrix(output_layer$weight$cpu())
+
+        intermediate_weights = list()
+        if (n_hidden > 1) {
+            for (i in seq_len(n_hidden - 1)) {
+                layer = model[[paste0("fc", i + 1)]]
+                intermediate_weights[[i]] = as.matrix(layer$weight$cpu())
+            }
+        }
+
+        cached_weights = list(
+            input = W_input,
+            output = W_output,
+            intermediate = intermediate_weights
+        )
     }
 
     structure(
@@ -277,6 +308,7 @@ ffnn =
             y_levels = y_levels,
             n_classes = n_classes,
             device = device,
+            cached_weights = cached_weights,
             terms = mt,
             call = ffnn_call
         ),
@@ -284,11 +316,9 @@ ffnn =
     )
 }
 
-#' Recurrent Neural Network Training
-#'
+#' @section RNN:
 #' Train a recurrent neural network using the torch package.
 #'
-#' @inheritParams ffnn
 #' @param rnn_type Character. Type of RNN ("rnn", "lstm", "gru"). Default `"lstm"`.
 #' @param bidirectional Logical. Use bidirectional RNN. Default `TRUE`.
 #' @param dropout Numeric. Dropout rate between layers. Default `0`.
@@ -305,19 +335,18 @@ ffnn =
 #'     epochs = 50
 #' )
 #'
-#' # Classification with GRU on CPU
-#' model_gru = rnn(
+#' # With weight caching
+#' model_cached = rnn(
 #'     Species ~ .,
 #'     data = iris,
 #'     hidden_neurons = c(128, 64),
 #'     rnn_type = "gru",
-#'     activations = act_funs(relu, elu),
-#'     loss = "cross_entropy",
-#'     device = "cpu",
+#'     cache_weights = TRUE,
 #'     epochs = 100
 #' )
 #' }
 #'
+#' @rdname kindling-basemodels
 #' @export
 rnn =
     function(
@@ -406,7 +435,7 @@ rnn =
         y_val = NULL
     }
 
-    # ---Torch data conversion (move to device)---
+    # ---Torch data conversion---
     x_train_t = torch::torch_tensor(x_train, dtype = torch::torch_float32(), device = device)$unsqueeze(2)
 
     if (is_classification) {
@@ -432,7 +461,7 @@ rnn =
         }
     }
 
-    # ---Generate model and move to device---
+    # ---Generate model---
     model_expr = rnn_generator(
         nn_name = "RNN",
         hd_neurons = hidden_neurons,
@@ -508,7 +537,7 @@ rnn =
         }
     }
 
-    # ---Get predictions (move data to device)---
+    # ---Get predictions---
     model$eval()
     x_full_t = torch::torch_tensor(x, dtype = torch::torch_float32(), device = device)$unsqueeze(2)
     fitted_tensor = torch::with_no_grad({
