@@ -91,8 +91,8 @@ Let's classify iris species:
 model = ffnn(
     Species ~ .,
     data = iris,
-    hidden_neurons = c(64, 32),
-    activations = act_funs(relu, softshrink = args(lambd = 0.5)),
+    hidden_neurons = c(10, 15, 7),
+    activations = act_funs(relu, softshrink = args(lambd = 0.5), elu),
     loss = "cross_entropy",
     epochs = 100
 )
@@ -250,6 +250,31 @@ final_nn_model |>
 ```
 
 Resampling strategies from `{rsample}` will enable robust cross-validation workflows, orchestrated through the `{tune}` and `{dials}` APIs.
+
+## Variable Importance
+
+`{kindling}` integrates with established variable importance methods from `{NeuralNetTools}` and `{vip}` to interpret trained neural networks. Two primary algorithms are available:
+
+1.  Garson's Algorithm
+
+    ```{r}
+    garson(model, bar_plot = FALSE)
+    ```
+
+2.  Olden's Algorithm
+
+    ```{r}
+    olden(model, bar_plot = FALSE)
+    ```
+
+### Integration with {vip}
+
+For users working within the `{tidymodels}` ecosystem, `{kindling}` models work seamlessly with the `{vip}` package:
+
+```{r}
+vip::vi(model) |> 
+    vip::vip()
+```
 
 ## References
 

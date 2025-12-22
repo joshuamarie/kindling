@@ -123,8 +123,8 @@ Let’s classify iris species:
 model = ffnn(
     Species ~ .,
     data = iris,
-    hidden_neurons = c(64, 32),
-    activations = act_funs(relu, softshrink = args(lambd = 0.5)),
+    hidden_neurons = c(10, 15, 7),
+    activations = act_funs(relu, softshrink = args(lambd = 0.5), elu),
     loss = "cross_entropy",
     epochs = 100
 )
@@ -140,8 +140,8 @@ model
          ----------------------------------------------------------------------
            NN Model Type           :             FFNN    n_predictors :     4
            Number of Epochs        :              100    n_response   :     3
-           Hidden Layer Units      :           64, 32    Device       :   cpu
-           Number of Hidden Layers :                2                 :      
+           Hidden Layer Units      :        10, 15, 7    Device       :   cpu
+           Number of Hidden Layers :                3                 :      
            Pred. Type              :   classification                 :      
          ----------------------------------------------------------------------
 
@@ -150,8 +150,9 @@ model
     -- Activation function ---------------------------------------------------------
 
                    -------------------------------------------------
-                     1st Layer {64}    :                      relu
-                     2nd Layer {32}    :   softshrink(lambd = 0.5)
+                     1st Layer {10}    :                      relu
+                     2nd Layer {15}    :   softshrink(lambd = 0.5)
+                     3rd Layer {7}     :                       elu
                      Output Activation :   No act function applied
                    -------------------------------------------------
 
@@ -166,7 +167,7 @@ The `predict()` method offers flexible prediction behavior through its
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
-    #>   versicolor      0         49         1
+    #>   versicolor      0         48         2
     #>   virginica       0          1        49
     ```
 
@@ -181,7 +182,7 @@ The `predict()` method offers flexible prediction behavior through its
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
     #>   versicolor      0         10         0
-    #>   virginica       0          1         9
+    #>   virginica       0          0        10
     ```
 
 ### Level 3: Full tidymodels Integration
@@ -322,6 +323,46 @@ final_nn_model |>
 Resampling strategies from `{rsample}` will enable robust
 cross-validation workflows, orchestrated through the `{tune}` and
 `{dials}` APIs.
+
+## Variable Importance
+
+`{kindling}` integrates with established variable importance methods
+from `{NeuralNetTools}` and `{vip}` to interpret trained neural
+networks. Two primary algorithms are available:
+
+1.  Garson’s Algorithm
+
+    ``` r
+    garson(model, bar_plot = FALSE)
+    #>        x_names y_names  rel_imp
+    #> 1 Petal.Length Species 26.22997
+    #> 2  Sepal.Width Species 25.78264
+    #> 3 Sepal.Length Species 24.35065
+    #> 4  Petal.Width Species 23.63674
+    ```
+
+2.  Olden’s Algorithm
+
+    ``` r
+    olden(model, bar_plot = FALSE)
+    #>        x_names y_names    rel_imp
+    #> 1 Petal.Length Species  0.5022917
+    #> 2  Petal.Width Species  0.4372640
+    #> 3  Sepal.Width Species -0.3673676
+    #> 4 Sepal.Length Species -0.2594173
+    ```
+
+### Integration with {vip}
+
+For users working within the `{tidymodels}` ecosystem, `{kindling}`
+models work seamlessly with the `{vip}` package:
+
+``` r
+vip::vi(model) |> 
+    vip::vip()
+```
+
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
 
 ## References
 
