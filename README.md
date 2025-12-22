@@ -335,21 +335,21 @@ networks. Two primary algorithms are available:
     ``` r
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1 Petal.Length Species 26.22997
-    #> 2  Sepal.Width Species 25.78264
-    #> 3 Sepal.Length Species 24.35065
-    #> 4  Petal.Width Species 23.63674
+    #> 1 Petal.Length Species 31.85590
+    #> 2 Sepal.Length Species 25.41797
+    #> 3  Petal.Width Species 24.76293
+    #> 4  Sepal.Width Species 17.96321
     ```
 
 2.  Olden’s Algorithm
 
     ``` r
     olden(model, bar_plot = FALSE)
-    #>        x_names y_names    rel_imp
-    #> 1 Petal.Length Species  0.5022917
-    #> 2  Petal.Width Species  0.4372640
-    #> 3  Sepal.Width Species -0.3673676
-    #> 4 Sepal.Length Species -0.2594173
+    #>        x_names y_names     rel_imp
+    #> 1 Petal.Length Species  0.48116106
+    #> 2  Petal.Width Species  0.27058509
+    #> 3 Sepal.Length Species -0.10347596
+    #> 4  Sepal.Width Species -0.03652659
     ```
 
 ### Integration with {vip}
@@ -358,11 +358,19 @@ For users working within the `{tidymodels}` ecosystem, `{kindling}`
 models work seamlessly with the `{vip}` package:
 
 ``` r
-vip::vi(model) |> 
-    vip::vip()
+box::use(
+    vip[vi, vip]
+)
+
+vi(model) |> 
+    vip()
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
+<img src="man/figures/README-example-1.png" alt="Variable Importance Plot" width="100%" />
+
+*Note: Weight caching increases memory usage proportional to network
+size. Only enable it when you plan to compute variable importance
+multiple times on the same model.*
 
 ## References
 

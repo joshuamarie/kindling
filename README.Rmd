@@ -271,10 +271,18 @@ Resampling strategies from `{rsample}` will enable robust cross-validation workf
 
 For users working within the `{tidymodels}` ecosystem, `{kindling}` models work seamlessly with the `{vip}` package:
 
-```{r}
-vip::vi(model) |> 
-    vip::vip()
+```{r, fig.height=6, fig.width=8}
+#| label: example
+#| fig.alt: "Variable Importance Plot"
+box::use(
+    vip[vi, vip]
+)
+
+vi(model) |> 
+    vip()
 ```
+
+*Note: Weight caching increases memory usage proportional to network size. Only enable it when you plan to compute variable importance multiple times on the same model.*
 
 ## References
 
