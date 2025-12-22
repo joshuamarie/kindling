@@ -2,7 +2,8 @@
 % Please edit documentation in R/torch_nn_exec.R
 \name{ffnn}
 \alias{ffnn}
-\title{Feed-Forward Neural Network Training}
+\alias{rnn}
+\title{Base models for Neural Network Training in kindling}
 \usage{
 ffnn(
   formula,
@@ -11,6 +12,28 @@ ffnn(
   activations = NULL,
   output_activation = NULL,
   bias = TRUE,
+  epochs = 100,
+  batch_size = 32,
+  learn_rate = 0.001,
+  optimizer = "adam",
+  loss = "mse",
+  validation_split = 0,
+  device = NULL,
+  verbose = FALSE,
+  cache_weights = FALSE,
+  ...
+)
+
+rnn(
+  formula,
+  data,
+  hidden_neurons,
+  rnn_type = "lstm",
+  activations = NULL,
+  output_activation = NULL,
+  bias = TRUE,
+  bidirectional = TRUE,
+  dropout = 0,
   epochs = 100,
   batch_size = 32,
   learn_rate = 0.001,
@@ -51,7 +74,18 @@ ffnn(
 
 \item{verbose}{Logical. Print training progress. Default \code{FALSE}.}
 
+\item{cache_weights}{Logical. Cache weight matrices for faster variable importance
+computation. Default \code{FALSE}. When \code{TRUE}, weight matrices are extracted and
+stored in the returned object, avoiding repeated extraction during importance
+calculations. Only enable if you plan to compute variable importance multiple times.}
+
 \item{...}{Additional arguments passed to the optimizer.}
+
+\item{rnn_type}{Character. Type of RNN ("rnn", "lstm", "gru"). Default \code{"lstm"}.}
+
+\item{bidirectional}{Logical. Use bidirectional RNN. Default \code{TRUE}.}
+
+\item{dropout}{Numeric. Dropout rate between layers. Default \code{0}.}
 }
 \value{
 An object of class "ffnn_fit" containing:
@@ -64,10 +98,21 @@ An object of class "ffnn_fit" containing:
 \item{feature_names}{Names of predictor variables}
 \item{response_name}{Name of response variable}
 \item{device}{Device used for training}
+\item{cached_weights}{Weight matrices (only if cache_weights = TRUE)}
 }
 \description{
+Base models for Neural Network Training in kindling
+}
+\section{FFNN}{
+
 Train a feed-forward neural network using the torch package.
 }
+
+\section{RNN}{
+
+Train a recurrent neural network using the torch package.
+}
+
 \examples{
 \dontrun{
 # Regression task (auto-detect GPU)
@@ -80,14 +125,35 @@ model_reg = ffnn(
     verbose = FALSE
 )
 
-# Classification task (force CPU)
-model_clf = ffnn(
+# With weight caching for multiple importance calculations
+model_cached = ffnn(
     Species ~ .,
     data = iris,
     hidden_neurons = c(128, 64, 32),
-    activations = act_funs(relu, selu, softshrink = args(lambd = 0.5)),
-    loss = "cross_entropy",
-    device = "cpu",
+    activations = "relu",
+    cache_weights = TRUE,
+    epochs = 100
+)
+}
+
+\dontrun{
+# Regression with LSTM on GPU
+model_rnn = rnn(
+    Sepal.Length ~ .,
+    data = iris[, 1:4],
+    hidden_neurons = c(64, 32),
+    rnn_type = "lstm",
+    activations = "relu",
+    epochs = 50
+)
+
+# With weight caching
+model_cached = rnn(
+    Species ~ .,
+    data = iris,
+    hidden_neurons = c(128, 64),
+    rnn_type = "gru",
+    cache_weights = TRUE,
     epochs = 100
 )
 }

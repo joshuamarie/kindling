@@ -1,6 +1,9 @@
-#' Feed-Forward Neural Network Module Generator
+#' Functions to generate `nn_module` (language) expression
 #'
-#' This function generates a feed-forward neural network (FFNN) module expression
+#' @rdname nn_gens
+#'
+#' @section Feed-Forward Neural Network Module Generator:
+#' The `ffnn_generator()` function generates a feed-forward neural network (FFNN) module expression
 #' from the `torch` package in R. It allows customization of the FFNN architecture,
 #' including the number of hidden layers, neurons, and activation functions.
 #'
@@ -204,9 +207,10 @@ check_rnn_type = function(rnn_type, hd_neurons) {
     invisible(NULL)
 }
 
-#' Recurrent Neural Network Module Generator
+#' @rdname nn_gens
 #'
-#' This function generates a recurrent neural network (RNN) module expression
+#' @section Recurrent Neural Network Module Generator:
+#' The `rnn_generator()` function generates a recurrent neural network (RNN) module expression
 #' from the `torch` package in R. It allows customization of the RNN architecture,
 #' including the number of hidden layers, neurons, RNN type, activation functions,
 #' and other parameters.
