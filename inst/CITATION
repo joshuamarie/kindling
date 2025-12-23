@@ -1,15 +1,28 @@
 bibentry(
     bibtype = "Manual",
-    title = "{kindling}: Higher-level interface of torch package in training neural networks",
-    author = "Joshua Marie",
+    title = "{kindling}: Higher-Level Interface for Training Neural Networks with torch",
+    author = person("Joshua", "Marie"),
     year = "2026",
-    url = "https://packages.joshuamarie.com/kindling"
+    note = "R package version 0.1.0",
+    url = "https://packages.joshuamarie.com/kindling",
+    textVersion = paste(
+        "Marie, Joshua (2026).",
+        "kindling: Higher-Level Interface for Training Neural Networks with torch.",
+        "R package version 0.1.0.",
+        "https://packages.joshuamarie.com/kindling"
+    )
 )
 
 bibentry(
     bibtype = "Article",
-    title = "Higher-level interface of torch package in training neural networks with kindling",
-    author = "Joshua Marie",
+    title = "Higher-Level Interface for Training Neural Networks with {torch} Using {kindling}",
+    author = person("Joshua", "Marie"),
     year = "2026",
-    url = "https://joshuamarie.com/posts/xx-kindling"
+    journal = "Personal Blog",
+    url = "https://joshuamarie.com/posts/kindling-introduction",
+    textVersion = paste(
+        "Marie, Joshua (2026).",
+        "Higher-Level Interface for Training Neural Networks with torch Using kindling.",
+        "https://joshuamarie.com/posts/kindling-introduction"
+    )
 )
