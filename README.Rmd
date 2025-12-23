@@ -18,11 +18,11 @@ desc = setNames(as.list(desc), colnames(desc))
 
 # `r desc$Package`: Higher-level interface of torch package to auto-train neural networks <img src="man/figures/logo.png" align="right" alt="" width="120"/>
 
-> 🚧 **Under Construction**: This package is currently in early development. 🚧
-
 <!-- badges: start -->
-<!-- [![R-CMD-check](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml) -->
+[![R-CMD-check](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
+
+> **Note**: This package is under active development. The API may change in future versions.
 
 ## Overview
 
@@ -48,7 +48,13 @@ Whether you're prototyping neural architectures or deploying production models, 
 
 ## Installation
 
-This package isn't on CRAN yet. Install the development version from GitHub:
+You can install `{kindling}` on CRAN:
+
+``` r
+install.packages('kindling')
+```
+
+Or install the development version from GitHub:
 
 ```r
 # install.packages("pak")

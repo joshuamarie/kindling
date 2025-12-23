@@ -1,6 +1,6 @@
 Package: kindling
 Type: Package
-Title: Higher-level interface of torch package to auto-train neural networks
+Title: Higher-Level Interface of torch Package to Auto-Train Neural Networks
 Version: 0.1.0
 Authors@R: c(
     person(
@@ -35,8 +35,8 @@ Imports:
     vip,
     ggplot2
 Suggests: 
-    testthat (>= 3.0.0), 
-    magrittr, 
+    testthat (>= 3.0.0),
+    magrittr,
     box,
     recipes,
     workflows,
@@ -44,12 +44,15 @@ Suggests:
     yardstick,
     tune,
     dials,
-    mlbench,      
-    modeldata     
+    mlbench,
+    modeldata,
+    knitr,
+    rmarkdown
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Depends: 
     R (>= 4.1.0)  
-URL: https://github.com/joshuamarie/kindling
+URL: https://packages.joshuamarie.com/kindling, https://github.com/joshuamarie/kindling
 BugReports: https://github.com/joshuamarie/kindling/issues
+VignetteBuilder: knitr

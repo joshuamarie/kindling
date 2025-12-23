@@ -3,14 +3,13 @@
 
 # kindling: Higher-level interface of torch package to auto-train neural networks <img src="man/figures/logo.png" align="right" alt="" width="120"/>
 
-> 🚧 **Under Construction**: This package is currently in early
-> development. 🚧
-
 <!-- badges: start -->
 
-<!-- [![R-CMD-check](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml) -->
-
+[![R-CMD-check](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
+
+> **Note**: This package is under active development. The API may change
+> in future versions.
 
 ## Overview
 
@@ -48,8 +47,13 @@ modeling pipeline.
 
 ## Installation
 
-This package isn’t on CRAN yet. Install the development version from
-GitHub:
+You can install `{kindling}` on CRAN:
+
+``` r
+install.packages('kindling')
+```
+
+Or install the development version from GitHub:
 
 ``` r
 # install.packages("pak")
@@ -167,8 +171,8 @@ The `predict()` method offers flexible prediction behavior through its
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
-    #>   versicolor      0         48         2
-    #>   virginica       0          1        49
+    #>   versicolor      0         47         3
+    #>   virginica       0          0        50
     ```
 
 2.  **With new data** — simply pass a data frame:
@@ -181,7 +185,7 @@ The `predict()` method offers flexible prediction behavior through its
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
-    #>   versicolor      0         10         0
+    #>   versicolor      0          9         1
     #>   virginica       0          0        10
     ```
 
@@ -335,21 +339,21 @@ networks. Two primary algorithms are available:
     ``` r
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1 Petal.Length Species 31.85590
-    #> 2 Sepal.Length Species 25.41797
-    #> 3  Petal.Width Species 24.76293
-    #> 4  Sepal.Width Species 17.96321
+    #> 1 Petal.Length Species 28.88009
+    #> 2  Petal.Width Species 26.88130
+    #> 3  Sepal.Width Species 23.57173
+    #> 4 Sepal.Length Species 20.66689
     ```
 
 2.  Olden’s Algorithm
 
     ``` r
     olden(model, bar_plot = FALSE)
-    #>        x_names y_names     rel_imp
-    #> 1 Petal.Length Species  0.48116106
-    #> 2  Petal.Width Species  0.27058509
-    #> 3 Sepal.Length Species -0.10347596
-    #> 4  Sepal.Width Species -0.03652659
+    #>        x_names y_names      rel_imp
+    #> 1  Sepal.Width Species  0.229987422
+    #> 2 Sepal.Length Species  0.208463802
+    #> 3 Petal.Length Species  0.014147852
+    #> 4  Petal.Width Species -0.007682353
     ```
 
 ### Integration with {vip}

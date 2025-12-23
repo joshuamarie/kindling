@@ -6,3 +6,6 @@ renv/
 .Renviron
 
 *.Rproj
+docs
+docs/
+inst/doc

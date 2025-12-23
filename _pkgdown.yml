@@ -1,0 +1,90 @@
+url: https://packages.joshuamarie.com/kindling
+
+template:
+  bootstrap: 5
+  bootswatch: flatly
+  bslib:
+    primary: "#0054AD"
+
+home:
+  title: "kindling • Higher-Level Interface for torch"
+  description: >
+    Train neural networks with a clean, intuitive interface built on top of torch.
+
+navbar:
+  structure:
+    left: [intro, reference, articles, tutorials, news]
+    right: [search, github, blog]
+  components:
+    intro:
+      text: Get started
+      href: articles/kindling.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    articles:
+      text: Articles
+      menu:
+        - text: Fitting and Predicting
+          href: articles/examples.html
+    tutorials:
+      text: Learn more
+      menu:
+        - text: "Regression modeling"
+          href: https://www.tidymodels.org/learn/models/parsnip-ranger-glmnet/
+        - text: "Classification modeling"
+          href: https://www.tidymodels.org/learn/models/parsnip-nnet/
+    blog:
+      text: Blog
+      icon: fa-blog
+      href: https://joshuamarie.com
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/joshuamarie/kindling
+      aria-label: GitHub
+
+reference:
+  - title: Model Specifications
+    desc: Define neural network architectures
+    contents:
+    - has_concept("models")
+
+  - title: Training Functions
+    desc: Fit and train your models
+    contents:
+    - has_concept("training")
+
+  - title: Prediction Functions
+    desc: Make predictions with trained models
+    contents:
+    - has_concept("prediction")
+
+  - title: Utilities
+    desc: Helper and convenience functions
+    contents:
+    - has_concept("utilities")
+
+articles:
+  - title: Get started
+    navbar: ~
+    contents:
+    - kindling
+
+  - title: Learn more
+    navbar: Learn more
+    contents:
+    - examples
+
+footer:
+  structure:
+    left: developed_by
+    right: built_with
+  components:
+    built_with: >
+      Built with <a href="https://pkgdown.r-lib.org/">pkgdown</a>.
+      Visit my <a href="https://joshuamarie.com">blog</a> for more content.
+
+development:
+  mode: auto
+  version_label: default
+  version_tooltip: "Version"
