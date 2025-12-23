@@ -32,7 +32,8 @@ Imports:
     dplyr,
     stats,
     NeuralNetTools,
-    vip
+    vip,
+    ggplot2
 Suggests: 
     testthat (>= 3.0.0), 
     magrittr, 

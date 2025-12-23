@@ -117,9 +117,9 @@ garson.ffnn_fit = function(mod_in, bar_plot = FALSE, ...) {
     importance = numeric(n_features)
     for (i in seq_len(n_features)) {
         total = 0
-        for (o in seq_len(n_outputs)) {
-            for (h in seq_len(ncol(W_combined))) {
-                total = total + W_combined[i, h] * W_out[o, h]
+        for (j in seq_len(n_outputs)) {
+            for (k in seq_len(ncol(W_combined))) {
+                total = total + W_combined[i, k] * W_out[j, k]
             }
         }
         importance[i] = total
@@ -143,7 +143,18 @@ garson.ffnn_fit = function(mod_in, bar_plot = FALSE, ...) {
     class(out_gar) = c("garson", "data.frame")
 
     if (bar_plot && requireNamespace("ggplot2", quietly = TRUE)) {
-        print(NeuralNetTools:::plot.garson(out_gar, ...))
+        p = ggplot2::ggplot(out_gar) +
+            ggplot2::aes(x = reorder(x_names, rel_imp), y = rel_imp) +
+            ggplot2::geom_col(fill = "steelblue") +
+            ggplot2::coord_flip() +
+            ggplot2::labs(
+                x = "Features",
+                y = "Relative Importance",
+                title = "Variable Importance (Olden Method)"
+            ) +
+            ggplot2::theme_minimal()
+
+        print(p)
     }
 
     out_gar
@@ -192,10 +203,10 @@ olden.ffnn_fit = function(mod_in, bar_plot = TRUE, ...) {
         }
     }
 
-    if (n_outputs > 1) {
-        importance = rowMeans(importance_matrix)
+    importance = if (n_outputs > 1) {
+        rowMeans(importance_matrix)
     } else {
-        importance = importance_matrix[, 1]
+        importance_matrix[, 1]
     }
 
     out_old = data.frame(
@@ -211,7 +222,18 @@ olden.ffnn_fit = function(mod_in, bar_plot = TRUE, ...) {
     class(out_old) = c("olden", "data.frame")
 
     if (bar_plot && requireNamespace("ggplot2", quietly = TRUE)) {
-        print(NeuralNetTools:::plot.olden(out_old, ...))
+        p = ggplot2::ggplot(out_old) +
+            ggplot2::aes(x = reorder(x_names, rel_imp), y = rel_imp) +
+            ggplot2::geom_col(fill = "steelblue") +
+            ggplot2::coord_flip() +
+            ggplot2::labs(
+                x = "Features",
+                y = "Relative Importance",
+                title = "Variable Importance (Olden Method)"
+            ) +
+            ggplot2::theme_minimal()
+
+        print(p)
     }
 
     out_old
