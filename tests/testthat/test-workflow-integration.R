@@ -1,8 +1,13 @@
+skip_if_no_torch = function() {
+    skip_if_not_installed("torch")
+    skip_if_not(torch::torch_is_installed(), "Torch backend not available")
+}
+
 test_that("mlp_kindling works within workflows", {
     skip_if_not_installed("workflows")
     skip_if_not_installed("recipes")
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = mlp_kindling(
         mode = "classification",
@@ -33,7 +38,7 @@ test_that("rnn_kindling works within workflows", {
     skip_if_not_installed("workflows")
     skip_if_not_installed("recipes")
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = rnn_kindling(
         mode = "classification",
@@ -60,7 +65,7 @@ test_that("workflow with preprocessing recipe works", {
     skip_if_not_installed("workflows")
     skip_if_not_installed("recipes")
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = mlp_kindling(
         mode = "regression",

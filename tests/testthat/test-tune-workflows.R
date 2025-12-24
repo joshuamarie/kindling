@@ -1,3 +1,8 @@
+skip_if_no_torch = function() {
+    skip_if_not_installed("torch")
+    skip_if_not(torch::torch_is_installed(), "Torch backend not available")
+}
+
 test_that("Tuning mlp_kindling with grid_depth works", {
     skip_if_not_installed("parsnip")
     skip_if_not_installed("workflows")
@@ -5,6 +10,7 @@ test_that("Tuning mlp_kindling with grid_depth works", {
     skip_if_not_installed("rsample")
     skip_if_not_installed("recipes")
     skip_if_not_installed("dials")
+    skip_if_no_torch()
 
     mlp_spec = mlp_kindling(
         mode = "classification",
@@ -57,6 +63,7 @@ test_that("Tuning mlp_kindling with latin_hypercube grid works", {
     skip_if_not_installed("parsnip")
     skip_if_not_installed("workflows")
     skip_if_not_installed("tune")
+    skip_if_no_torch()
 
     mlp_spec = mlp_kindling(
         mode = "regression",
@@ -105,6 +112,7 @@ test_that("Tuning rnn_kindling with grid_depth works", {
     skip_if_not_installed("tune")
     skip_if_not_installed("rsample")
     skip_if_not_installed("recipes")
+    skip_if_no_torch()
 
     rnn_spec = rnn_kindling(
         mode = "classification",
@@ -149,6 +157,8 @@ test_that("Tuning rnn_kindling with grid_depth works", {
 })
 
 test_that("grid_depth handles different n_hlayer specifications", {
+    skip_if_no_torch()
+
     grid1 = grid_depth(
         hidden_neurons(c(16L, 32L)),
         activations(c("relu", "elu")),
@@ -176,6 +186,7 @@ test_that("grid_depth handles different n_hlayer specifications", {
 test_that("grid_depth works with workflow method", {
     skip_if_not_installed("parsnip")
     skip_if_not_installed("workflows")
+    skip_if_no_torch()
 
     mlp_spec = mlp_kindling(
         mode = "classification",
@@ -202,6 +213,8 @@ test_that("grid_depth works with workflow method", {
 })
 
 test_that("grid_depth handles scalar parameters correctly", {
+    skip_if_no_torch()
+
     grid = grid_depth(
         hidden_neurons(c(16L, 32L)),
         activations(c("relu", "elu")),
@@ -227,6 +240,7 @@ test_that("finalize_workflow works with grid_depth results", {
     skip_if_not_installed("workflows")
     skip_if_not_installed("tune")
     skip_if_not_installed("rsample")
+    skip_if_no_torch()
 
     mlp_spec = mlp_kindling(
         mode = "classification",

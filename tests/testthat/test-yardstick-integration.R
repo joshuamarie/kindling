@@ -1,7 +1,12 @@
+skip_if_no_torch = function() {
+    skip_if_not_installed("torch")
+    skip_if_not(torch::torch_is_installed(), "Torch backend not available")
+}
+
 test_that("classification metrics work with mlp predictions", {
     skip_if_not_installed("parsnip")
     skip_if_not_installed("yardstick")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = mlp_kindling(
         mode = "classification",
@@ -32,7 +37,7 @@ test_that("classification metrics work with mlp predictions", {
 test_that("regression metrics work with mlp predictions", {
     skip_if_not_installed("parsnip")
     skip_if_not_installed("yardstick")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = mlp_kindling(
         mode = "regression",

@@ -1,5 +1,10 @@
-test_that("garson method works for ffnn_fit", {
+skip_if_no_torch = function() {
     skip_if_not_installed("torch")
+    skip_if_not(torch::torch_is_installed(), "Torch backend not available")
+}
+
+test_that("garson method works for ffnn_fit", {
+    skip_if_no_torch()
     skip_if_not_installed("NeuralNetTools")
 
     model = ffnn(
@@ -22,7 +27,7 @@ test_that("garson method works for ffnn_fit", {
 })
 
 test_that("olden method works for ffnn_fit", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
     skip_if_not_installed("NeuralNetTools")
 
     model = ffnn(
@@ -45,7 +50,7 @@ test_that("olden method works for ffnn_fit", {
 })
 
 test_that("vi_model method works with ffnn_fit", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
     skip_if_not_installed("vip")
 
     model = ffnn(
@@ -70,7 +75,7 @@ test_that("vi_model method works with ffnn_fit", {
 })
 
 test_that("vip integration works", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
     skip_if_not_installed("vip")
 
     model = ffnn(
@@ -91,7 +96,7 @@ test_that("vip integration works", {
 })
 
 test_that("variable importance works without cached weights", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
     skip_if_not_installed("NeuralNetTools")
 
     model = ffnn(
@@ -112,7 +117,7 @@ test_that("variable importance works without cached weights", {
 })
 
 test_that("variable importance handles multi-layer networks", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
     skip_if_not_installed("NeuralNetTools")
 
     model = ffnn(
