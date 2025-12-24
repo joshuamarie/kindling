@@ -25,8 +25,8 @@ navbar:
     articles:
       text: Articles
       menu:
-        - text: Fitting and Predicting
-          href: articles/examples.html
+        - text: Getting Started
+          href: articles/kindling.html
     tutorials:
       text: Learn more
       menu:
@@ -45,35 +45,73 @@ navbar:
 
 reference:
   - title: Model Specifications
-    desc: Define neural network architectures
+    desc: Define neural network architectures for tidymodels
     contents:
-    - has_concept("models")
+    - mlp_kindling
+    - rnn_kindling
 
   - title: Training Functions
-    desc: Fit and train your models
+    desc: Direct training interface (Level 2)
     contents:
-    - has_concept("training")
+    - ffnn
+    - rnn
 
-  - title: Prediction Functions
+  - title: Code Generators
+    desc: Generate torch nn_module code (Level 1)
+    contents:
+    - ffnn_generator
+    - rnn_generator
+
+  - title: Prediction Methods
     desc: Make predictions with trained models
     contents:
-    - has_concept("prediction")
+    - predict.ffnn_fit
+    - predict.rnn_fit
 
-  - title: Utilities
-    desc: Helper and convenience functions
+  - title: Variable Importance
+    desc: Interpret neural network models
     contents:
-    - has_concept("utilities")
+    - garson
+    - olden
+    - vi_model
+
+  - title: Tuning Parameters
+    desc: Hyperparameter specifications for tidymodels
+    contents:
+    - hidden_neurons
+    - activations
+    - output_activation
+    - bias
+    - bidirectional
+    - optimizer
+    - validation_split
+    - n_hlayers
+
+  - title: Helper Functions
+    desc: Utilities for model configuration
+    contents:
+    - act_funs
+    - args
+    - grid_depth
+    - table_summary
+
+  - title: Print Methods
+    desc: Display model information
+    contents:
+    - print.ffnn_fit
+    - print.rnn_fit
+
+  - title: Internal Functions
+    desc: Functions for tidymodels integration (not for direct use)
+    contents:
+    - ffnn_wrapper
+    - rnn_wrapper
 
 articles:
   - title: Get started
     navbar: ~
     contents:
     - kindling
-
-  - title: Learn more
-    navbar: Learn more
-    contents:
-    - examples
 
 footer:
   structure:
