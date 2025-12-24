@@ -5,6 +5,7 @@
 renv/
 renv.lock
 .Renviron
+.Rprofile
 
 *.Rproj
 docs

@@ -33,7 +33,9 @@ Imports:
     stats,
     NeuralNetTools,
     vip,
-    ggplot2
+    ggplot2,
+    tune,
+    dials
 Suggests: 
     testthat (>= 3.0.0),
     magrittr,
@@ -42,12 +44,13 @@ Suggests:
     workflows,
     rsample,
     yardstick,
-    tune,
-    dials,
     mlbench,
     modeldata,
     knitr,
-    rmarkdown
+    rmarkdown,
+    DiceDesign,
+    lhs,
+    sfd
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
