@@ -139,7 +139,7 @@ Goodfellow I, Bengio Y, Courville A (2016). \emph{Deep Learning}. MIT Press.
 \seealso{
 Useful links:
 \itemize{
-  \item \url{https://packages.joshuamarie.com/kindling}
+  \item \url{https://kindling.joshuamarie.com}
   \item \url{https://github.com/joshuamarie/kindling}
   \item Report bugs at \url{https://github.com/joshuamarie/kindling/issues}
 }
