@@ -4,7 +4,7 @@ test_that("garson method works for ffnn_fit", {
 
     model = ffnn(
         Species ~ .,
-        data = ,
+        data = iris,
         hidden_neurons = c(32, 16),
         activations = "relu",
         epochs = 20,
