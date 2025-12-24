@@ -541,6 +541,10 @@ make_kindling = function() {
 
 #' Basemodels-tidymodels wrappers
 #'
+#' @param formula A formula specifying the model (e.g., `y ~ x1 + x2`)
+#' @param data A data frame containing the training data
+#' @param ... Additional arguments passed to the underlying training function
+#'
 #' @rdname kindling-nn-wrappers
 #' @section FFNN (MLP) Wrapper for `{tidymodels}` interface:
 #' This is a function to interface into `{tidymodels}`

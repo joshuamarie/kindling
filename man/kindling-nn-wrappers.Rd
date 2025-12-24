@@ -9,6 +9,13 @@ ffnn_wrapper(formula, data, ...)
 
 rnn_wrapper(formula, data, ...)
 }
+\arguments{
+\item{formula}{A formula specifying the model (e.g., \code{y ~ x1 + x2})}
+
+\item{data}{A data frame containing the training data}
+
+\item{...}{Additional arguments passed to the underlying training function}
+}
 \description{
 Basemodels-tidymodels wrappers
 }
