@@ -184,3 +184,32 @@ translate.rnn_kindling = function(x, engine = x$engine, ...) {
     x = parsnip::translate.default(x, engine, ...)
     x
 }
+
+#' @export
+#' @importFrom tune tunable
+tunable.rnn_kindling = function(x, ...) {
+    tibble::tibble(
+        name = c(
+            "hidden_neurons", "activations", "output_activation",
+            "bias", "bidirectional", "dropout", "epochs", "batch_size",
+            "learn_rate", "optimizer", "loss", "validation_split"
+        ),
+        call_info = list(
+            list(pkg = "kindling", fun = "hidden_neurons"),
+            list(pkg = "kindling", fun = "activations"),
+            list(pkg = "kindling", fun = "output_activation"),
+            list(pkg = "kindling", fun = "bias"),
+            list(pkg = "kindling", fun = "bidirectional"),
+            list(pkg = "dials", fun = "dropout"),
+            list(pkg = "dials", fun = "epochs"),
+            list(pkg = "dials", fun = "batch_size"),
+            list(pkg = "dials", fun = "learn_rate"),
+            list(pkg = "kindling", fun = "optimizer"),
+            list(pkg = "dials", fun = "loss"),
+            list(pkg = "kindling", fun = "validation_split")
+        ),
+        source = "model_spec",
+        component = "rnn_kindling",
+        component_id = "main"
+    )
+}
