@@ -41,7 +41,7 @@ jobs:
         shell: Rscript {0}
 
       - name: Create CNAME file
-        run: echo "packages.joshuamarie.com" > docs/CNAME
+        run: echo "kindling.joshuamarie.com" > docs/CNAME
 
       - name: Deploy to GitHub pages 🚀
         if: github.event_name != 'pull_request'

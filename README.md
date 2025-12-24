@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![CRAN
+status](https://www.r-pkg.org/badges/version/kindling)](https://CRAN.R-project.org/package=kindling)
 [![R-CMD-check](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -172,7 +174,7 @@ The `predict()` method offers flexible prediction behavior through its
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
     #>   versicolor      0         47         3
-    #>   virginica       0          0        50
+    #>   virginica       0          1        49
     ```
 
 2.  **With new data** — simply pass a data frame:
@@ -186,7 +188,7 @@ The `predict()` method offers flexible prediction behavior through its
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
     #>   versicolor      0          9         1
-    #>   virginica       0          0        10
+    #>   virginica       0          1         9
     ```
 
 ### Level 3: Full tidymodels Integration
@@ -339,10 +341,10 @@ networks. Two primary algorithms are available:
     ``` r
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1 Petal.Length Species 28.88009
-    #> 2  Petal.Width Species 26.88130
-    #> 3  Sepal.Width Species 23.57173
-    #> 4 Sepal.Length Species 20.66689
+    #> 1  Petal.Width Species 30.38174
+    #> 2 Petal.Length Species 25.83497
+    #> 3 Sepal.Length Species 22.78038
+    #> 4  Sepal.Width Species 21.00291
     ```
 
 2.  Olden’s Algorithm
@@ -350,10 +352,10 @@ networks. Two primary algorithms are available:
     ``` r
     olden(model, bar_plot = FALSE)
     #>        x_names y_names      rel_imp
-    #> 1  Sepal.Width Species  0.229987422
-    #> 2 Sepal.Length Species  0.208463802
-    #> 3 Petal.Length Species  0.014147852
-    #> 4  Petal.Width Species -0.007682353
+    #> 1  Petal.Width Species  0.575948477
+    #> 2  Sepal.Width Species -0.286548868
+    #> 3 Sepal.Length Species -0.204277142
+    #> 4 Petal.Length Species  0.006615014
     ```
 
 ### Integration with {vip}

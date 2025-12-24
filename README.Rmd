@@ -19,6 +19,7 @@ desc = setNames(as.list(desc), colnames(desc))
 # `r desc$Package`: Higher-level interface of torch package to auto-train neural networks <img src="man/figures/logo.png" align="right" alt="" width="120"/>
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/kindling)](https://CRAN.R-project.org/package=kindling)
 [![R-CMD-check](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
