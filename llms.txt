@@ -5,13 +5,13 @@
 
 ## Overview
 
-[kindling](https://packages.joshuamarie.com/kindling) bridges the gap
-between **{torch}** and **{tidymodels}**, offering a streamlined
-interface for building, training, and tuning deep learning models within
-the familiar `tidymodels` ecosystem.
+[kindling](https://kindling.joshuamarie.com) bridges the gap between
+**{torch}** and **{tidymodels}**, offering a streamlined interface for
+building, training, and tuning deep learning models within the familiar
+`tidymodels` ecosystem.
 
 Whether you’re prototyping neural architectures or deploying production
-models, [kindling](https://packages.joshuamarie.com/kindling) minimizes
+models, [kindling](https://kindling.joshuamarie.com) minimizes
 boilerplate code while preserving the flexibility of
 [torch](https://torch.mlverse.org/docs). It works seamlessly with
 [parsnip](https://github.com/tidymodels/parsnip),
@@ -46,8 +46,7 @@ learning into your existing modeling pipeline.
 
 ## Installation
 
-You can install [kindling](https://packages.joshuamarie.com/kindling) on
-CRAN:
+You can install [kindling](https://kindling.joshuamarie.com) on CRAN:
 
 ``` r
 install.packages('kindling')
@@ -62,7 +61,7 @@ pak::pak("joshuamarie/kindling")
 
 ## Usage: Four Levels of Interaction
 
-[kindling](https://packages.joshuamarie.com/kindling) leverages R’s
+[kindling](https://kindling.joshuamarie.com) leverages R’s
 metaprogramming capabilities through *code generation*. Generated
 [`torch::nn_module`](https://torch.mlverse.org/docs/reference/nn_module.html)
 expressions power the training functions, which in turn serve as engines
@@ -337,8 +336,8 @@ will enable robust cross-validation workflows, orchestrated through the
 
 ## Variable Importance
 
-[kindling](https://packages.joshuamarie.com/kindling) integrates with
-established variable importance methods from `{NeuralNetTools}` and
+[kindling](https://kindling.joshuamarie.com) integrates with established
+variable importance methods from `{NeuralNetTools}` and
 [vip](https://github.com/koalaverse/vip/) to interpret trained neural
 networks. Two primary algorithms are available:
 
@@ -368,8 +367,8 @@ networks. Two primary algorithms are available:
 
 For users working within the
 [tidymodels](https://tidymodels.tidymodels.org) ecosystem,
-[kindling](https://packages.joshuamarie.com/kindling) models work
-seamlessly with the [vip](https://github.com/koalaverse/vip/) package:
+[kindling](https://kindling.joshuamarie.com) models work seamlessly with
+the [vip](https://github.com/koalaverse/vip/) package:
 
 ``` r
 box::use(

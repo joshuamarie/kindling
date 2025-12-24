@@ -109,15 +109,18 @@ model_mlp = ffnn(
     verbose = FALSE,
     cache_weights = TRUE
 )
-#> Error in cpp_cuda_is_available(): Lantern is not loaded. Please use `install_torch()` to install additional dependencies.
 
 model_mlp |>
     garson()
-#> Error: object 'model_mlp' not found
+#>        x_names y_names  rel_imp
+#> 1  Sepal.Width Species 26.78129
+#> 2  Petal.Width Species 25.78785
+#> 3 Petal.Length Species 25.04967
+#> 4 Sepal.Length Species 22.38120
 
 # kindling also supports `vip::vi()` / `vip::vi_model()`
 model_mlp |>
     vip::vi(type = 'garson') |>
     vip::vip()
-#> Error: object 'model_mlp' not found
+
 ```

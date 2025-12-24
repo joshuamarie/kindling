@@ -2,8 +2,8 @@
 
 ## Introduction
 
-[kindling](https://packages.joshuamarie.com/kindling) bridges the gap
-between [torch](https://torch.mlverse.org/docs) and
+[kindling](https://kindling.joshuamarie.com) bridges the gap between
+[torch](https://torch.mlverse.org/docs) and
 [tidymodels](https://tidymodels.tidymodels.org), providing a streamlined
 interface for building, training, and tuning deep learning models. This
 vignette will guide you through the basic usage.
@@ -26,8 +26,8 @@ library(kindling)
 
 ## Four Levels of Interaction
 
-[kindling](https://packages.joshuamarie.com/kindling) offers flexibility
-through four levels of abstraction:
+[kindling](https://kindling.joshuamarie.com) offers flexibility through
+four levels of abstraction:
 
 1.  **Code Generation** - Generate raw
     [`torch::nn_module`](https://torch.mlverse.org/docs/reference/nn_module.html)

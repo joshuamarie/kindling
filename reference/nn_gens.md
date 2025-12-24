@@ -145,7 +145,6 @@ ffnn_mod = ffnn_generator(
 
 # Evaluate and instantiate
 model = eval(ffnn_mod)()
-#> Error in (function (size, options, memory_format) {    .Call(`_torch_cpp_torch_namespace_empty_size_IntArrayRef`,         size, options, memory_format)})(size = list(64, 10), options = list(dtype = NULL, layout = NULL,     device = NULL, requires_grad = FALSE), memory_format = NULL): Lantern is not loaded. Please use `install_torch()` to install additional dependencies.
 
 # More complex: With different activations
 ffnn_mod2 = ffnn_generator(
@@ -195,7 +194,6 @@ rnn_mod = rnn_generator(
 
 # Evaluate and instantiate
 model = eval(rnn_mod)()
-#> Error in (function (size, options, memory_format) {    .Call(`_torch_cpp_torch_namespace_empty_size_IntArrayRef`,         size, options, memory_format)})(size = list(256, 10), options = list(dtype = NULL, layout = NULL,     device = NULL, requires_grad = FALSE), memory_format = NULL): Lantern is not loaded. Please use `install_torch()` to install additional dependencies.
 
 # GRU with different activations
 rnn_mod2 = rnn_generator(

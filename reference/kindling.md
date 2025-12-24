@@ -135,7 +135,7 @@ Goodfellow I, Bengio Y, Courville A (2016). *Deep Learning*. MIT Press.
 
 Useful links:
 
-- <https://packages.joshuamarie.com/kindling>
+- <https://kindling.joshuamarie.com>
 
 - <https://github.com/joshuamarie/kindling>
 

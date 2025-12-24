@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -179,7 +179,6 @@ and other parameters.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Evaluate and instantiate</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="va">ffnn_mod</span><span class="op">)</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in (function (size, options, memory_format) {    .Call(`_torch_cpp_torch_namespace_empty_size_IntArrayRef`,         size, options, memory_format)})(size = list(64, 10), options = list(dtype = NULL, layout = NULL,     device = NULL, requires_grad = FALSE), memory_format = NULL):</span> Lantern is not loaded. Please use `install_torch()` to install additional dependencies.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># More complex: With different activations</span></span></span>
 <span class="r-in"><span><span class="va">ffnn_mod2</span> <span class="op">=</span> <span class="fu">ffnn_generator</span><span class="op">(</span></span></span>
@@ -229,7 +228,6 @@ and other parameters.</p>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Evaluate and instantiate</span></span></span>
 <span class="r-in"><span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="va">rnn_mod</span><span class="op">)</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in (function (size, options, memory_format) {    .Call(`_torch_cpp_torch_namespace_empty_size_IntArrayRef`,         size, options, memory_format)})(size = list(256, 10), options = list(dtype = NULL, layout = NULL,     device = NULL, requires_grad = FALSE), memory_format = NULL):</span> Lantern is not loaded. Please use `install_torch()` to install additional dependencies.</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># GRU with different activations</span></span></span>
 <span class="r-in"><span><span class="va">rnn_mod2</span> <span class="op">=</span> <span class="fu">rnn_generator</span><span class="op">(</span></span></span>
