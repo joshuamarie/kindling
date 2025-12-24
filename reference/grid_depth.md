@@ -109,7 +109,7 @@ grid_depth(
 - ...:
 
   One or more `param` objects (e.g.,
-  [`hidden_neurons()`](https://packages.joshuamarie.com/kindling/reference/dials-kindling.md),
+  [`hidden_neurons()`](https://kindling.joshuamarie.com/reference/dials-kindling.md),
   [`epochs()`](https://dials.tidymodels.org/reference/dropout.html)). If
   `x` is a `parameters` object, `...` is ignored. None of the objects
   can have

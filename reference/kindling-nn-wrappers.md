@@ -28,12 +28,12 @@ rnn_wrapper(formula, data, ...)
 
 This is a function to interface into `{tidymodels}` (do not use this,
 use
-[`kindling::ffnn()`](https://packages.joshuamarie.com/kindling/reference/kindling-basemodels.md)
+[`kindling::ffnn()`](https://kindling.joshuamarie.com/reference/kindling-basemodels.md)
 instead).
 
 ## RNN Wrapper for `{tidymodels}` interface
 
 This is a function to interface into `{tidymodels}` (do not use this,
 use
-[`kindling::rnn()`](https://packages.joshuamarie.com/kindling/reference/kindling-basemodels.md)
+[`kindling::rnn()`](https://kindling.joshuamarie.com/reference/kindling-basemodels.md)
 instead).

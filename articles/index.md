@@ -3,4 +3,4 @@
 ### Get started
 
 - [Getting Started with
-  kindling](https://packages.joshuamarie.com/kindling/articles/kindling.md):
+  kindling](https://kindling.joshuamarie.com/articles/kindling.md):

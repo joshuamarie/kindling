@@ -15,7 +15,7 @@
 ">
 <meta property="og:description" content="Train neural networks with a clean, intuitive interface built on top of torch.
 ">
-<meta property="og:image" content="https://packages.joshuamarie.com/kindling/logo.png">
+<meta property="og:image" content="https://kindling.joshuamarie.com/logo.png">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -49,6 +49,7 @@
     <li><a class="external-link dropdown-item" href="https://www.tidymodels.org/learn/models/parsnip-nnet/">Classification modeling</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -76,8 +77,8 @@
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
-<p><a href="https://packages.joshuamarie.com/kindling">kindling</a> bridges the gap between <strong>{torch}</strong> and <strong>{tidymodels}</strong>, offering a streamlined interface for building, training, and tuning deep learning models within the familiar <code>tidymodels</code> ecosystem.</p>
-<p>Whether you’re prototyping neural architectures or deploying production models, <a href="https://packages.joshuamarie.com/kindling">kindling</a> minimizes boilerplate code while preserving the flexibility of <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>. It works seamlessly with <a href="https://github.com/tidymodels/parsnip" class="external-link">parsnip</a>, <a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a>, and <a href="https://github.com/tidymodels/workflows" class="external-link">workflows</a> to bring deep learning into your existing modeling pipeline.</p>
+<p><a href="https://packages.joshuamarie.com/kindling" class="external-link">kindling</a> bridges the gap between <strong>{torch}</strong> and <strong>{tidymodels}</strong>, offering a streamlined interface for building, training, and tuning deep learning models within the familiar <code>tidymodels</code> ecosystem.</p>
+<p>Whether you’re prototyping neural architectures or deploying production models, <a href="https://packages.joshuamarie.com/kindling" class="external-link">kindling</a> minimizes boilerplate code while preserving the flexibility of <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>. It works seamlessly with <a href="https://github.com/tidymodels/parsnip" class="external-link">parsnip</a>, <a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a>, and <a href="https://github.com/tidymodels/workflows" class="external-link">workflows</a> to bring deep learning into your existing modeling pipeline.</p>
 <div class="section level3">
 <h3 id="key-features">Key Features<a class="anchor" aria-label="anchor" href="#key-features"></a>
 </h3>
@@ -109,7 +110,7 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install <a href="https://packages.joshuamarie.com/kindling">kindling</a> on CRAN:</p>
+<p>You can install <a href="https://packages.joshuamarie.com/kindling" class="external-link">kindling</a> on CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'kindling'</span><span class="op">)</span></span></code></pre></div>
 <p>Or install the development version from GitHub:</p>
@@ -120,9 +121,9 @@
 <div class="section level2">
 <h2 id="usage-four-levels-of-interaction">Usage: Four Levels of Interaction<a class="anchor" aria-label="anchor" href="#usage-four-levels-of-interaction"></a>
 </h2>
-<p><a href="https://packages.joshuamarie.com/kindling">kindling</a> leverages R’s metaprogramming capabilities through <em>code generation</em>. Generated <code><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">torch::nn_module</a></code> expressions power the training functions, which in turn serve as engines for <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> integration. This architecture gives you flexibility to work at whatever abstraction level suits your task.</p>
+<p><a href="https://packages.joshuamarie.com/kindling" class="external-link">kindling</a> leverages R’s metaprogramming capabilities through <em>code generation</em>. Generated <code><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">torch::nn_module</a></code> expressions power the training functions, which in turn serve as engines for <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> integration. This architecture gives you flexibility to work at whatever abstraction level suits your task.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://packages.joshuamarie.com/kindling">kindling</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://packages.joshuamarie.com/kindling" class="external-link">kindling</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'kindling'</span></span>
 <span><span class="co">#&gt; The following object is masked from 'package:base':</span></span>
@@ -210,7 +211,7 @@
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         50          0         0</span></span>
 <span><span class="co">#&gt;   versicolor      0         47         3</span></span>
-<span><span class="co">#&gt;   virginica       0          0        50</span></span></code></pre></div>
+<span><span class="co">#&gt;   virginica       0          1        49</span></span></code></pre></div>
 </li>
 <li>
 <p><strong>With new data</strong> — simply pass a data frame:</p>
@@ -223,7 +224,7 @@
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         10          0         0</span></span>
 <span><span class="co">#&gt;   versicolor      0          9         1</span></span>
-<span><span class="co">#&gt;   virginica       0          0        10</span></span></code></pre></div>
+<span><span class="co">#&gt;   virginica       0          1         9</span></span></code></pre></div>
 </li>
 </ol>
 </div>
@@ -363,33 +364,33 @@
 <div class="section level2">
 <h2 id="variable-importance">Variable Importance<a class="anchor" aria-label="anchor" href="#variable-importance"></a>
 </h2>
-<p><a href="https://packages.joshuamarie.com/kindling">kindling</a> integrates with established variable importance methods from <code>{NeuralNetTools}</code> and <a href="https://github.com/koalaverse/vip/" class="external-link">vip</a> to interpret trained neural networks. Two primary algorithms are available:</p>
+<p><a href="https://packages.joshuamarie.com/kindling" class="external-link">kindling</a> integrates with established variable importance methods from <code>{NeuralNetTools}</code> and <a href="https://github.com/koalaverse/vip/" class="external-link">vip</a> to interpret trained neural networks. Two primary algorithms are available:</p>
 <ol style="list-style-type: decimal">
 <li>
 <p>Garson’s Algorithm</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/garson.html" class="external-link">garson</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names  rel_imp</span></span>
-<span><span class="co">#&gt; 1 Petal.Length Species 28.88009</span></span>
-<span><span class="co">#&gt; 2  Petal.Width Species 26.88130</span></span>
-<span><span class="co">#&gt; 3  Sepal.Width Species 23.57173</span></span>
-<span><span class="co">#&gt; 4 Sepal.Length Species 20.66689</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  Petal.Width Species 30.38174</span></span>
+<span><span class="co">#&gt; 2 Petal.Length Species 25.83497</span></span>
+<span><span class="co">#&gt; 3 Sepal.Length Species 22.78038</span></span>
+<span><span class="co">#&gt; 4  Sepal.Width Species 21.00291</span></span></code></pre></div>
 </li>
 <li>
 <p>Olden’s Algorithm</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/olden.html" class="external-link">olden</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names      rel_imp</span></span>
-<span><span class="co">#&gt; 1  Sepal.Width Species  0.229987422</span></span>
-<span><span class="co">#&gt; 2 Sepal.Length Species  0.208463802</span></span>
-<span><span class="co">#&gt; 3 Petal.Length Species  0.014147852</span></span>
-<span><span class="co">#&gt; 4  Petal.Width Species -0.007682353</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  Petal.Width Species  0.575948477</span></span>
+<span><span class="co">#&gt; 2  Sepal.Width Species -0.286548868</span></span>
+<span><span class="co">#&gt; 3 Sepal.Length Species -0.204277142</span></span>
+<span><span class="co">#&gt; 4 Petal.Length Species  0.006615014</span></span></code></pre></div>
 </li>
 </ol>
 <div class="section level3">
 <h3 id="integration-with-vip">Integration with {vip}<a class="anchor" aria-label="anchor" href="#integration-with-vip"></a>
 </h3>
-<p>For users working within the <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> ecosystem, <a href="https://packages.joshuamarie.com/kindling">kindling</a> models work seamlessly with the <a href="https://github.com/koalaverse/vip/" class="external-link">vip</a> package:</p>
+<p>For users working within the <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> ecosystem, <a href="https://packages.joshuamarie.com/kindling" class="external-link">kindling</a> models work seamlessly with the <a href="https://github.com/koalaverse/vip/" class="external-link">vip</a> package:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span></span>
 <span>    <span class="va">vip</span><span class="op">[</span><span class="va">vi</span>, <span class="va">vip</span><span class="op">]</span></span>
@@ -438,6 +439,7 @@
 <div class="community">
 <h2 data-toc-skip>Community</h2>
 <ul class="list-unstyled">
+<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
 <li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
 </ul>
 </div>

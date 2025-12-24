@@ -92,8 +92,8 @@ augment(nn_fit, new_data = iris) |>
 
 ## Learn More
 
-- Read the [README](https://packages.joshuamarie.com/kindling/index.md)
-  for comprehensive examples
+- Read the [README](https://kindling.joshuamarie.com/index.md) for
+  comprehensive examples
 - Browse the [function
-  reference](https://packages.joshuamarie.com/kindling/reference/index.md)
+  reference](https://kindling.joshuamarie.com/reference/index.md)
 - Visit the [blog](https://joshuamarie.com) for tutorials

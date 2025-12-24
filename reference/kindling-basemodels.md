@@ -63,7 +63,7 @@ rnn(
 - activations:
 
   Activation function specifications. See
-  [`act_funs()`](https://packages.joshuamarie.com/kindling/reference/act_funs.md).
+  [`act_funs()`](https://kindling.joshuamarie.com/reference/act_funs.md).
 
 - output_activation:
 

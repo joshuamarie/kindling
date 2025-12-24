@@ -60,7 +60,7 @@ rnn_generator(
   - List: e.g., `act_funs(relu, elu, softshrink = args(lambd = 0.5))`.
 
   - `activation_spec` object from
-    [`act_funs()`](https://packages.joshuamarie.com/kindling/reference/act_funs.md).
+    [`act_funs()`](https://kindling.joshuamarie.com/reference/act_funs.md).
 
   If the length of `activations` is `1L`, this will be the activation
   throughout the architecture.

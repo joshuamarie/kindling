@@ -57,7 +57,7 @@ only).
 `{kindling}` inherits
 [`NeuralNetTools::garson`](https://rdrr.io/pkg/NeuralNetTools/man/garson.html)
 to extract the variable importance from the fitted
-[`ffnn()`](https://packages.joshuamarie.com/kindling/reference/kindling-basemodels.md)
+[`ffnn()`](https://kindling.joshuamarie.com/reference/kindling-basemodels.md)
 model.
 
 ## Olden's Algorithm for FFNN Models
@@ -65,7 +65,7 @@ model.
 `{kindling}` inherits
 [`NeuralNetTools::olden`](https://rdrr.io/pkg/NeuralNetTools/man/olden.html)
 to extract the variable importance from the fitted
-[`ffnn()`](https://packages.joshuamarie.com/kindling/reference/kindling-basemodels.md)
+[`ffnn()`](https://kindling.joshuamarie.com/reference/kindling-basemodels.md)
 model.
 
 ## Variable Importance via `{vip}` Package
@@ -74,7 +74,7 @@ You can directly use
 [`vip::vi()`](https://koalaverse.github.io/vip/reference/vi.html) and
 [`vip::vi_model()`](https://koalaverse.github.io/vip/reference/vi_model.html)
 to extract the variable importance from the fitted
-[`ffnn()`](https://packages.joshuamarie.com/kindling/reference/kindling-basemodels.md)
+[`ffnn()`](https://kindling.joshuamarie.com/reference/kindling-basemodels.md)
 model.
 
 ## References
