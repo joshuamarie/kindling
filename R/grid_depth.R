@@ -176,7 +176,7 @@ grid_depth.model_spec = function(
         variogram_range = 0.5,
         iter = 1000L
 ) {
-    tunable_params = parsnip::tunable(x)
+    tunable_params = tune::tunable(x)
     param_list = purrr::map(seq_len(nrow(tunable_params)), function(i) {
         call_info = tunable_params$call_info[[i]]
         rlang::exec(call_info$fun, !!!call_info$args, .env = asNamespace(call_info$pkg))
