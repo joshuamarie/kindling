@@ -1,0 +1,123 @@
+# Variable Importance Methods for kindling Models
+
+This file implements methods for variable importance generics from
+NeuralNetTools and vip packages.
+
+## Usage
+
+``` r
+# S3 method for class 'ffnn_fit'
+garson(mod_in, bar_plot = FALSE, ...)
+
+# S3 method for class 'ffnn_fit'
+olden(mod_in, bar_plot = TRUE, ...)
+
+# S3 method for class 'ffnn_fit'
+vi_model(object, type = c("olden", "garson"), ...)
+```
+
+## Arguments
+
+- mod_in:
+
+  A fitted model object of class "ffnn_fit".
+
+- bar_plot:
+
+  Logical. Whether to plot variable importance (default TRUE).
+
+- ...:
+
+  Additional arguments passed to methods.
+
+- object:
+
+  A fitted model object of class "ffnn_fit".
+
+- type:
+
+  Type of algorithm to extract the variable importance. This must be one
+  of the strings:
+
+  - 'olden'
+
+  - 'garson'
+
+## Value
+
+A data frame with variable importance scores.
+
+A tibble with columns "Variable" and "Importance" (via
+[`vip::vi()`](https://koalaverse.github.io/vip/reference/vi.html) /
+[`vip::vi_model()`](https://koalaverse.github.io/vip/reference/vi_model.html)
+only).
+
+## Garson's Algorithm for FFNN Models
+
+`{kindling}` inherits
+[`NeuralNetTools::garson`](https://rdrr.io/pkg/NeuralNetTools/man/garson.html)
+to extract the variable importance from the fitted
+[`ffnn()`](https://packages.joshuamarie.com/kindling/reference/kindling-basemodels.md)
+model.
+
+## Olden's Algorithm for FFNN Models
+
+`{kindling}` inherits
+[`NeuralNetTools::olden`](https://rdrr.io/pkg/NeuralNetTools/man/olden.html)
+to extract the variable importance from the fitted
+[`ffnn()`](https://packages.joshuamarie.com/kindling/reference/kindling-basemodels.md)
+model.
+
+## Variable Importance via `{vip}` Package
+
+You can directly use
+[`vip::vi()`](https://koalaverse.github.io/vip/reference/vi.html) and
+[`vip::vi_model()`](https://koalaverse.github.io/vip/reference/vi_model.html)
+to extract the variable importance from the fitted
+[`ffnn()`](https://packages.joshuamarie.com/kindling/reference/kindling-basemodels.md)
+model.
+
+## References
+
+Beck, M.W. 2018. NeuralNetTools: Visualization and Analysis Tools for
+Neural Networks. Journal of Statistical Software. 85(11):1-20.
+
+Garson, G.D. 1991. Interpreting neural network connection weights.
+Artificial Intelligence Expert. 6(4):46-51.
+
+Goh, A.T.C. 1995. Back-propagation neural networks for modeling complex
+systems. Artificial Intelligence in Engineering. 9(3):143-151.
+
+Olden, J.D., Jackson, D.A. 2002. Illuminating the 'black-box': a
+randomization approach for understanding variable contributions in
+artificial neural networks. Ecological Modelling. 154:135-150.
+
+Olden, J.D., Joy, M.K., Death, R.G. 2004. An accurate comparison of
+methods for quantifying variable importance in artificial neural
+networks using simulated data. Ecological Modelling. 178:389-397.
+
+## Examples
+
+``` r
+# Directly use `NeuralNetTools::garson`
+model_mlp = ffnn(
+    Species ~ .,
+    data = iris,
+    hidden_neurons = c(64, 32),
+    activations = "relu",
+    epochs = 100,
+    verbose = FALSE,
+    cache_weights = TRUE
+)
+#> Error in cpp_cuda_is_available(): Lantern is not loaded. Please use `install_torch()` to install additional dependencies.
+
+model_mlp |>
+    garson()
+#> Error: object 'model_mlp' not found
+
+# kindling also supports `vip::vi()` / `vip::vi_model()`
+model_mlp |>
+    vip::vi(type = 'garson') |>
+    vip::vip()
+#> Error: object 'model_mlp' not found
+```
