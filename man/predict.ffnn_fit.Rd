@@ -18,3 +18,4 @@
 \description{
 Predict Method for FFNN Fits
 }
+\keyword{internal}

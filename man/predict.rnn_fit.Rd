@@ -18,3 +18,4 @@
 \description{
 Predict Method for RNN Fits
 }
+\keyword{internal}

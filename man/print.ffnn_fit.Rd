@@ -14,3 +14,4 @@
 \description{
 Print method for ffnn_fit objects
 }
+\keyword{internal}

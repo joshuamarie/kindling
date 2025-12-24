@@ -589,6 +589,7 @@ rnn =
 #' @param type Character. Type of prediction: "response" (default) or "prob" for classification.
 #' @param ... Additional arguments (unused).
 #'
+#' @keywords internal
 #' @export
 predict.ffnn_fit = function(object, newdata = NULL, type = "response", ...) {
     if (!requireNamespace("torch", quietly = TRUE)) {
@@ -658,6 +659,7 @@ predict.ffnn_fit = function(object, newdata = NULL, type = "response", ...) {
 #' @param type Character. Type of prediction: "response" (default) or "prob" for classification.
 #' @param ... Additional arguments (unused).
 #'
+#' @keywords internal
 #' @export
 predict.rnn_fit = function(object, newdata = NULL, type = "response", ...) {
     if (!requireNamespace("torch", quietly = TRUE)) {
@@ -718,6 +720,7 @@ predict.rnn_fit = function(object, newdata = NULL, type = "response", ...) {
     }
 }
 
+#' @keywords internal
 #' @export
 `$.ffnn_fit` = function(x, name) {
     if (name %in% names(x)) {
@@ -727,6 +730,7 @@ predict.rnn_fit = function(object, newdata = NULL, type = "response", ...) {
     attr(x, name, exact = TRUE)
 }
 
+#' @keywords internal
 #' @export
 `$.rnn_fit` = function(x, name) {
     if (name %in% names(x)) {

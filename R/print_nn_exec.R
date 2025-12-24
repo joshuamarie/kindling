@@ -56,6 +56,8 @@ ordinal_gen = function(x) {
 #'
 #' @param x An object of class "ffnn_fit"
 #' @param ... Additional arguments (unused)
+#'
+#' @keywords internal
 #' @export
 print.ffnn_fit = function(x, ...) {
     # ---Title section---
@@ -140,6 +142,8 @@ print.ffnn_fit = function(x, ...) {
 #'
 #' @param x An object of class "rnn_fit"
 #' @param ... Additional arguments (unused)
+#'
+#' @keywords internal
 #' @export
 print.rnn_fit = function(x, ...) {
     rnn_type = x$rnn_type

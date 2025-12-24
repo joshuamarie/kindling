@@ -62,18 +62,10 @@ reference:
     - ffnn_generator
     - rnn_generator
 
-  - title: Prediction Methods
-    desc: Make predictions with trained models
-    contents:
-    - predict.ffnn_fit
-    - predict.rnn_fit
-
   - title: Variable Importance
     desc: Interpret neural network models
     contents:
-    - garson
-    - olden
-    - vi_model
+    - kindling-varimp
 
   - title: Tuning Parameters
     desc: Hyperparameter specifications for tidymodels
@@ -94,14 +86,9 @@ reference:
     - args
     - grid_depth
     - table_summary
+    - ordinal_gen
 
-  - title: Print Methods
-    desc: Display model information
-    contents:
-    - print.ffnn_fit
-    - print.rnn_fit
-
-  - title: Internal Functions
+  - title: Basemodels-tidymodels wrappers
     desc: Functions for tidymodels integration (not for direct use)
     contents:
     - ffnn_wrapper

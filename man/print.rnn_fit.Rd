@@ -14,3 +14,4 @@
 \description{
 Print method for rnn_fit objects
 }
+\keyword{internal}
