@@ -1,6 +1,11 @@
+skip_if_no_torch = function() {
+    skip_if_not_installed("torch")
+    skip_if_not(torch::torch_is_installed(), "Torch backend not available")
+}
+
 test_that("mlp_kindling with multiple activation functions works", {
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = mlp_kindling(
         mode = "classification",
@@ -24,7 +29,7 @@ test_that("mlp_kindling with multiple activation functions works", {
 
 test_that("mlp_kindling handles single hidden layer and accepts using `list()`", {
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = mlp_kindling(
         mode = "classification",
@@ -41,7 +46,7 @@ test_that("mlp_kindling handles single hidden layer and accepts using `list()`",
 
 test_that("mlp_kindling handles deep networks", {
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = mlp_kindling(
         mode = "regression",
@@ -62,7 +67,7 @@ test_that("mlp_kindling handles deep networks", {
 
 test_that("mlp_kindling handles deep neural networks and accepts both using `list()` and a stringed argument for the activation function", {
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = mlp_kindling(
         mode = "classification",
@@ -84,7 +89,7 @@ test_that("mlp_kindling handles deep neural networks and accepts both using `lis
 
 test_that("predictions work with single observation", {
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = mlp_kindling(
         mode = "classification",
@@ -102,7 +107,7 @@ test_that("predictions work with single observation", {
 
 test_that("augment method works correctly", {
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = mlp_kindling(
         mode = "classification",

@@ -1,5 +1,10 @@
-test_that("FFNN generator uses torch namespace explicitly", {
+skip_if_no_torch = function() {
     skip_if_not_installed("torch")
+    skip_if_not(torch::torch_is_installed(), "Torch backend not available")
+}
+
+test_that("FFNN generator uses torch namespace explicitly", {
+    skip_if_no_torch()
 
     expr = ffnn_generator(
         nn_name = "TestFFNN",
@@ -18,7 +23,7 @@ test_that("FFNN generator uses torch namespace explicitly", {
 })
 
 test_that("RNN generator uses torch namespace explicitly", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     expr = rnn_generator(
         nn_name = "TestRNN",
@@ -41,7 +46,7 @@ test_that("RNN generator uses torch namespace explicitly", {
 })
 
 test_that("Invalid activation 'tanh' throws error in FFNN generator", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     expect_error(
         ffnn_generator(
@@ -55,7 +60,7 @@ test_that("Invalid activation 'tanh' throws error in FFNN generator", {
 })
 
 test_that("Invalid activation 'tanh' throws error in RNN generator", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     expect_error(
         rnn_generator(
@@ -70,7 +75,7 @@ test_that("Invalid activation 'tanh' throws error in RNN generator", {
 })
 
 test_that("Generated model can be evaluated without library(torch)", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     test_env = new.env()
     expr = ffnn_generator(
@@ -87,7 +92,7 @@ test_that("Generated model can be evaluated without library(torch)", {
 })
 
 test_that("Activation functions are properly namespaced", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = parse_activation_spec(
         act_funs(relu, selu, leaky_relu = args(negative_slope = 0.01)),
@@ -103,7 +108,7 @@ test_that("Activation functions are properly namespaced", {
 })
 
 test_that("Complex activations maintain namespace", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     expr = ffnn_generator(
         hd_neurons = c(128, 64, 32, 16),
@@ -126,7 +131,7 @@ test_that("Complex activations maintain namespace", {
 })
 
 test_that("Generated model works in isolated environment", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     isolated_env = new.env(parent = asNamespace("kindling"))
     expr = ffnn_generator(
@@ -155,7 +160,7 @@ test_that("torch functions not in kindling namespace", {
 })
 
 test_that("Generated code doesn't require torch in global env", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     if ("package:torch" %in% search()) {
         detach("package:torch", unload = FALSE)
@@ -174,7 +179,7 @@ test_that("Generated code doesn't require torch in global env", {
 })
 
 test_that("RNN types use correct namespace", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     for (rnn_type in c("rnn", "lstm", "gru")) {
         expr = rnn_generator(
@@ -193,7 +198,7 @@ test_that("RNN types use correct namespace", {
 })
 
 test_that("Bidirectional RNN maintains namespace", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     expr = rnn_generator(
         hd_neurons = c(20, 10),
@@ -209,7 +214,7 @@ test_that("Bidirectional RNN maintains namespace", {
 })
 
 test_that("Dropout in RNN maintains namespace", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     expr = rnn_generator(
         hd_neurons = c(30, 20, 10),
@@ -225,7 +230,7 @@ test_that("Dropout in RNN maintains namespace", {
 })
 
 test_that("No torch imports in generated forward pass", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     expr = ffnn_generator(
         hd_neurons = c(10, 5),
@@ -242,7 +247,7 @@ test_that("No torch imports in generated forward pass", {
 })
 
 test_that("Real model training works without explicit torch load", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
     if ("package:torch" %in% search()) {
         detach("package:torch", unload = FALSE)
     }
@@ -261,7 +266,7 @@ test_that("Real model training works without explicit torch load", {
 })
 
 test_that("Multiple models don't interfere", {
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     expr1 = ffnn_generator(
         nn_name = "Model1",

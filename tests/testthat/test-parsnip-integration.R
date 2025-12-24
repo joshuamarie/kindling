@@ -1,6 +1,11 @@
+skip_if_no_torch = function() {
+    skip_if_not_installed("torch")
+    skip_if_not(torch::torch_is_installed(), "Torch backend not available")
+}
+
 test_that("mlp_kindling works with parsnip fit - regression", {
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = mlp_kindling(
         mode = "regression",
@@ -24,7 +29,7 @@ test_that("mlp_kindling works with parsnip fit - regression", {
 
 test_that("mlp_kindling works with parsnip fit - classification", {
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = mlp_kindling(
         mode = "classification",
@@ -48,7 +53,7 @@ test_that("mlp_kindling works with parsnip fit - classification", {
 
 test_that("rnn_kindling works with parsnip fit - classification", {
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = rnn_kindling(
         mode = "classification",
@@ -72,7 +77,7 @@ test_that("rnn_kindling works with parsnip fit - classification", {
 
 test_that("mlp predictions return correct format - regression", {
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = mlp_kindling(
         mode = "regression",
@@ -97,7 +102,7 @@ test_that("mlp predictions return correct format - regression", {
 
 test_that("mlp predictions return correct format - classification class", {
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = mlp_kindling(
         mode = "classification",
@@ -122,7 +127,7 @@ test_that("mlp predictions return correct format - classification class", {
 
 test_that("'tanh' should still throws an error from `activations` in `mlp_kindling()`", {
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     expect_error({
         mlp_kindling(
@@ -138,7 +143,7 @@ test_that("'tanh' should still throws an error from `activations` in `mlp_kindli
 
 test_that("mlp predictions return correct format - classification prob", {
     skip_if_not_installed("parsnip")
-    skip_if_not_installed("torch")
+    skip_if_no_torch()
 
     spec = mlp_kindling(
         mode = "classification",
