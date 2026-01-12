@@ -134,93 +134,104 @@ layers, neurons, RNN type, activation functions, and other parameters.
 ## Examples
 
 ``` r
-# Generate an MLP module with 3 hidden layers
-ffnn_mod = ffnn_generator(
-    nn_name = "MyFFNN",
-    hd_neurons = c(64, 32, 16),
-    no_x = 10,
-    no_y = 1,
-    activations = 'relu'
-)
-
-# Evaluate and instantiate
-model = eval(ffnn_mod)()
-
-# More complex: With different activations
-ffnn_mod2 = ffnn_generator(
-    nn_name = "MyFFNN2",
-    hd_neurons = c(128, 64, 32),
-    no_x = 20,
-    no_y = 5,
-    activations = act_funs(
-        relu,
-        selu,
-        sigmoid
+# FFNN
+if (torch::torch_is_installed()) {
+    # Generate an MLP module with 3 hidden layers
+    ffnn_mod = ffnn_generator(
+        nn_name = "MyFFNN",
+        hd_neurons = c(64, 32, 16),
+        no_x = 10,
+        no_y = 1,
+        activations = 'relu'
     )
-)
 
-# Even more complex: Different activations and customized argument
-# for the specific activation function
-ffnn_mod2 = ffnn_generator(
-    nn_name = "MyFFNN2",
-    hd_neurons = c(128, 64, 32),
-    no_x = 20,
-    no_y = 5,
-    activations = act_funs(
-        relu,
-        selu,
-        softshrink = args(lambd = 0.5)
+    # Evaluate and instantiate
+    model = eval(ffnn_mod)()
+
+    # More complex: With different activations
+    ffnn_mod2 = ffnn_generator(
+        nn_name = "MyFFNN2",
+        hd_neurons = c(128, 64, 32),
+        no_x = 20,
+        no_y = 5,
+        activations = act_funs(
+            relu,
+            selu,
+            sigmoid
+        )
     )
-)
 
-# Customize output activation (softmax is useful for classification tasks)
-ffnn_mod3 = ffnn_generator(
-    hd_neurons = c(64, 32),
-    no_x = 10,
-    no_y = 3,
-    activations = 'relu',
-    output_activation = act_funs(softmax = args(dim = 2L))
-)
+    # Even more complex: Different activations and customized argument
+    # for the specific activation function
+    ffnn_mod2 = ffnn_generator(
+        nn_name = "MyFFNN2",
+        hd_neurons = c(128, 64, 32),
+        no_x = 20,
+        no_y = 5,
+        activations = act_funs(
+            relu,
+            selu,
+            softshrink = args(lambd = 0.5)
+        )
+    )
 
-# Basic LSTM with 2 layers
-rnn_mod = rnn_generator(
-    nn_name = "MyLSTM",
-    hd_neurons = c(64, 32),
-    no_x = 10,
-    no_y = 1,
-    rnn_type = "lstm",
-    activations = 'relu'
-)
+    # Customize output activation (softmax is useful for classification tasks)
+    ffnn_mod3 = ffnn_generator(
+        hd_neurons = c(64, 32),
+        no_x = 10,
+        no_y = 3,
+        activations = 'relu',
+        output_activation = act_funs(softmax = args(dim = 2L))
+    )
+} else {
+    message("Torch not fully installed — skipping example")
+}
 
-# Evaluate and instantiate
-model = eval(rnn_mod)()
+## RNN
+if (torch::torch_is_installed()) {
+    # Basic LSTM with 2 layers
+    rnn_mod = rnn_generator(
+        nn_name = "MyLSTM",
+        hd_neurons = c(64, 32),
+        no_x = 10,
+        no_y = 1,
+        rnn_type = "lstm",
+        activations = 'relu'
+    )
 
-# GRU with different activations
-rnn_mod2 = rnn_generator(
-    nn_name = "MyGRU",
-    hd_neurons = c(128, 64, 32),
-    no_x = 20,
-    no_y = 5,
-    rnn_type = "gru",
-    activations = act_funs(relu, elu, relu),
-    bidirectional = FALSE
-)
+    # Evaluate and instantiate
+    model = eval(rnn_mod)()
+
+    # GRU with different activations
+    rnn_mod2 = rnn_generator(
+        nn_name = "MyGRU",
+        hd_neurons = c(128, 64, 32),
+        no_x = 20,
+        no_y = 5,
+        rnn_type = "gru",
+        activations = act_funs(relu, elu, relu),
+        bidirectional = FALSE
+    )
+
+} else {
+    message("Torch not fully installed — skipping example")
+}
 
 if (FALSE) { # \dontrun{
-# Parameterized activation and dropout
+## Parameterized activation and dropout
 # (Will throw an error due to `nnf_tanh()` not being available in `{torch}`)
-rnn_mod3 = rnn_generator(
-    hd_neurons = c(100, 50, 25),
-    no_x = 15,
-    no_y = 3,
-    rnn_type = "lstm",
-    activations = act_funs(
-        relu,
-        leaky_relu = args(negative_slope = 0.01),
-        tanh
-    ),
-    bidirectional = TRUE,
-    dropout = 0.3
-)
+# rnn_mod3 = rnn_generator(
+#     hd_neurons = c(100, 50, 25),
+#     no_x = 15,
+#     no_y = 3,
+#     rnn_type = "lstm",
+#     activations = act_funs(
+#         relu,
+#         leaky_relu = args(negative_slope = 0.01),
+#         tanh
+#     ),
+#     bidirectional = TRUE,
+#     dropout = 0.3
+# )
 } # }
 ```

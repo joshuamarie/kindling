@@ -117,10 +117,10 @@ if (torch::torch_is_installed()) {
     message("Torch not fully installed — skipping example")
 }
 #>        x_names y_names  rel_imp
-#> 1  Petal.Width Species 27.60086
-#> 2 Petal.Length Species 25.33493
-#> 3  Sepal.Width Species 25.20301
-#> 4 Sepal.Length Species 21.86120
+#> 1  Petal.Width Species 28.78042
+#> 2  Sepal.Width Species 27.24245
+#> 3 Petal.Length Species 23.84814
+#> 4 Sepal.Length Species 20.12899
 
 # kindling also supports `vip::vi()` / `vip::vi_model()`
 if (torch::torch_is_installed()) {

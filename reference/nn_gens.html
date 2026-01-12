@@ -168,94 +168,105 @@ and other parameters.</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Generate an MLP module with 3 hidden layers</span></span></span>
-<span class="r-in"><span><span class="va">ffnn_mod</span> <span class="op">=</span> <span class="fu">ffnn_generator</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    nn_name <span class="op">=</span> <span class="st">"MyFFNN"</span>,</span></span>
-<span class="r-in"><span>    hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>, <span class="fl">32</span>, <span class="fl">16</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    no_x <span class="op">=</span> <span class="fl">10</span>,</span></span>
-<span class="r-in"><span>    no_y <span class="op">=</span> <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>    activations <span class="op">=</span> <span class="st">'relu'</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Evaluate and instantiate</span></span></span>
-<span class="r-in"><span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="va">ffnn_mod</span><span class="op">)</span><span class="op">(</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># More complex: With different activations</span></span></span>
-<span class="r-in"><span><span class="va">ffnn_mod2</span> <span class="op">=</span> <span class="fu">ffnn_generator</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    nn_name <span class="op">=</span> <span class="st">"MyFFNN2"</span>,</span></span>
-<span class="r-in"><span>    hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">64</span>, <span class="fl">32</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    no_x <span class="op">=</span> <span class="fl">20</span>,</span></span>
-<span class="r-in"><span>    no_y <span class="op">=</span> <span class="fl">5</span>,</span></span>
-<span class="r-in"><span>    activations <span class="op">=</span> <span class="fu"><a href="act_funs.html">act_funs</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>        <span class="va">relu</span>,</span></span>
-<span class="r-in"><span>        <span class="va">selu</span>,</span></span>
-<span class="r-in"><span>        <span class="va">sigmoid</span></span></span>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># FFNN</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_is_installed.html" class="external-link">torch_is_installed</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="co"># Generate an MLP module with 3 hidden layers</span></span></span>
+<span class="r-in"><span>    <span class="va">ffnn_mod</span> <span class="op">=</span> <span class="fu">ffnn_generator</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        nn_name <span class="op">=</span> <span class="st">"MyFFNN"</span>,</span></span>
+<span class="r-in"><span>        hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>, <span class="fl">32</span>, <span class="fl">16</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        no_x <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>        no_y <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>        activations <span class="op">=</span> <span class="st">'relu'</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Even more complex: Different activations and customized argument</span></span></span>
-<span class="r-in"><span><span class="co"># for the specific activation function</span></span></span>
-<span class="r-in"><span><span class="va">ffnn_mod2</span> <span class="op">=</span> <span class="fu">ffnn_generator</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    nn_name <span class="op">=</span> <span class="st">"MyFFNN2"</span>,</span></span>
-<span class="r-in"><span>    hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">64</span>, <span class="fl">32</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    no_x <span class="op">=</span> <span class="fl">20</span>,</span></span>
-<span class="r-in"><span>    no_y <span class="op">=</span> <span class="fl">5</span>,</span></span>
-<span class="r-in"><span>    activations <span class="op">=</span> <span class="fu"><a href="act_funs.html">act_funs</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>        <span class="va">relu</span>,</span></span>
-<span class="r-in"><span>        <span class="va">selu</span>,</span></span>
-<span class="r-in"><span>        softshrink <span class="op">=</span> <span class="fu"><a href="args.html">args</a></span><span class="op">(</span>lambd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="co"># Evaluate and instantiate</span></span></span>
+<span class="r-in"><span>    <span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="va">ffnn_mod</span><span class="op">)</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="co"># More complex: With different activations</span></span></span>
+<span class="r-in"><span>    <span class="va">ffnn_mod2</span> <span class="op">=</span> <span class="fu">ffnn_generator</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        nn_name <span class="op">=</span> <span class="st">"MyFFNN2"</span>,</span></span>
+<span class="r-in"><span>        hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">64</span>, <span class="fl">32</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        no_x <span class="op">=</span> <span class="fl">20</span>,</span></span>
+<span class="r-in"><span>        no_y <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>        activations <span class="op">=</span> <span class="fu"><a href="act_funs.html">act_funs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>            <span class="va">relu</span>,</span></span>
+<span class="r-in"><span>            <span class="va">selu</span>,</span></span>
+<span class="r-in"><span>            <span class="va">sigmoid</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Customize output activation (softmax is useful for classification tasks)</span></span></span>
-<span class="r-in"><span><span class="va">ffnn_mod3</span> <span class="op">=</span> <span class="fu">ffnn_generator</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>, <span class="fl">32</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    no_x <span class="op">=</span> <span class="fl">10</span>,</span></span>
-<span class="r-in"><span>    no_y <span class="op">=</span> <span class="fl">3</span>,</span></span>
-<span class="r-in"><span>    activations <span class="op">=</span> <span class="st">'relu'</span>,</span></span>
-<span class="r-in"><span>    output_activation <span class="op">=</span> <span class="fu"><a href="act_funs.html">act_funs</a></span><span class="op">(</span>softmax <span class="op">=</span> <span class="fu"><a href="args.html">args</a></span><span class="op">(</span>dim <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="co"># Even more complex: Different activations and customized argument</span></span></span>
+<span class="r-in"><span>    <span class="co"># for the specific activation function</span></span></span>
+<span class="r-in"><span>    <span class="va">ffnn_mod2</span> <span class="op">=</span> <span class="fu">ffnn_generator</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        nn_name <span class="op">=</span> <span class="st">"MyFFNN2"</span>,</span></span>
+<span class="r-in"><span>        hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">64</span>, <span class="fl">32</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        no_x <span class="op">=</span> <span class="fl">20</span>,</span></span>
+<span class="r-in"><span>        no_y <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>        activations <span class="op">=</span> <span class="fu"><a href="act_funs.html">act_funs</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>            <span class="va">relu</span>,</span></span>
+<span class="r-in"><span>            <span class="va">selu</span>,</span></span>
+<span class="r-in"><span>            softshrink <span class="op">=</span> <span class="fu"><a href="args.html">args</a></span><span class="op">(</span>lambd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Basic LSTM with 2 layers</span></span></span>
-<span class="r-in"><span><span class="va">rnn_mod</span> <span class="op">=</span> <span class="fu">rnn_generator</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    nn_name <span class="op">=</span> <span class="st">"MyLSTM"</span>,</span></span>
-<span class="r-in"><span>    hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>, <span class="fl">32</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    no_x <span class="op">=</span> <span class="fl">10</span>,</span></span>
-<span class="r-in"><span>    no_y <span class="op">=</span> <span class="fl">1</span>,</span></span>
-<span class="r-in"><span>    rnn_type <span class="op">=</span> <span class="st">"lstm"</span>,</span></span>
-<span class="r-in"><span>    activations <span class="op">=</span> <span class="st">'relu'</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="co"># Customize output activation (softmax is useful for classification tasks)</span></span></span>
+<span class="r-in"><span>    <span class="va">ffnn_mod3</span> <span class="op">=</span> <span class="fu">ffnn_generator</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>, <span class="fl">32</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        no_x <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>        no_y <span class="op">=</span> <span class="fl">3</span>,</span></span>
+<span class="r-in"><span>        activations <span class="op">=</span> <span class="st">'relu'</span>,</span></span>
+<span class="r-in"><span>        output_activation <span class="op">=</span> <span class="fu"><a href="act_funs.html">act_funs</a></span><span class="op">(</span>softmax <span class="op">=</span> <span class="fu"><a href="args.html">args</a></span><span class="op">(</span>dim <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Torch not fully installed — skipping example"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># Evaluate and instantiate</span></span></span>
-<span class="r-in"><span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="va">rnn_mod</span><span class="op">)</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co">## RNN</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_is_installed.html" class="external-link">torch_is_installed</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="co"># Basic LSTM with 2 layers</span></span></span>
+<span class="r-in"><span>    <span class="va">rnn_mod</span> <span class="op">=</span> <span class="fu">rnn_generator</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        nn_name <span class="op">=</span> <span class="st">"MyLSTM"</span>,</span></span>
+<span class="r-in"><span>        hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>, <span class="fl">32</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        no_x <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>        no_y <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>        rnn_type <span class="op">=</span> <span class="st">"lstm"</span>,</span></span>
+<span class="r-in"><span>        activations <span class="op">=</span> <span class="st">'relu'</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co"># GRU with different activations</span></span></span>
-<span class="r-in"><span><span class="va">rnn_mod2</span> <span class="op">=</span> <span class="fu">rnn_generator</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    nn_name <span class="op">=</span> <span class="st">"MyGRU"</span>,</span></span>
-<span class="r-in"><span>    hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">64</span>, <span class="fl">32</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    no_x <span class="op">=</span> <span class="fl">20</span>,</span></span>
-<span class="r-in"><span>    no_y <span class="op">=</span> <span class="fl">5</span>,</span></span>
-<span class="r-in"><span>    rnn_type <span class="op">=</span> <span class="st">"gru"</span>,</span></span>
-<span class="r-in"><span>    activations <span class="op">=</span> <span class="fu"><a href="act_funs.html">act_funs</a></span><span class="op">(</span><span class="va">relu</span>, <span class="va">elu</span>, <span class="va">relu</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    bidirectional <span class="op">=</span> <span class="cn">FALSE</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="co"># Evaluate and instantiate</span></span></span>
+<span class="r-in"><span>    <span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval</a></span><span class="op">(</span><span class="va">rnn_mod</span><span class="op">)</span><span class="op">(</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="co"># GRU with different activations</span></span></span>
+<span class="r-in"><span>    <span class="va">rnn_mod2</span> <span class="op">=</span> <span class="fu">rnn_generator</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        nn_name <span class="op">=</span> <span class="st">"MyGRU"</span>,</span></span>
+<span class="r-in"><span>        hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">64</span>, <span class="fl">32</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        no_x <span class="op">=</span> <span class="fl">20</span>,</span></span>
+<span class="r-in"><span>        no_y <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>        rnn_type <span class="op">=</span> <span class="st">"gru"</span>,</span></span>
+<span class="r-in"><span>        activations <span class="op">=</span> <span class="fu"><a href="act_funs.html">act_funs</a></span><span class="op">(</span><span class="va">relu</span>, <span class="va">elu</span>, <span class="va">relu</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        bidirectional <span class="op">=</span> <span class="cn">FALSE</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Torch not fully installed — skipping example"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="cn">FALSE</span><span class="op">)</span> <span class="op">{</span> <span class="co"># \dontrun{</span></span></span>
-<span class="r-in"><span><span class="co"># Parameterized activation and dropout</span></span></span>
+<span class="r-in"><span><span class="co">## Parameterized activation and dropout</span></span></span>
 <span class="r-in"><span><span class="co"># (Will throw an error due to `nnf_tanh()` not being available in `{torch}`)</span></span></span>
-<span class="r-in"><span><span class="va">rnn_mod3</span> <span class="op">=</span> <span class="fu">rnn_generator</span><span class="op">(</span></span></span>
-<span class="r-in"><span>    hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">50</span>, <span class="fl">25</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>    no_x <span class="op">=</span> <span class="fl">15</span>,</span></span>
-<span class="r-in"><span>    no_y <span class="op">=</span> <span class="fl">3</span>,</span></span>
-<span class="r-in"><span>    rnn_type <span class="op">=</span> <span class="st">"lstm"</span>,</span></span>
-<span class="r-in"><span>    activations <span class="op">=</span> <span class="fu"><a href="act_funs.html">act_funs</a></span><span class="op">(</span></span></span>
-<span class="r-in"><span>        <span class="va">relu</span>,</span></span>
-<span class="r-in"><span>        leaky_relu <span class="op">=</span> <span class="fu"><a href="args.html">args</a></span><span class="op">(</span>negative_slope <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>,</span></span>
-<span class="r-in"><span>        <span class="va">tanh</span></span></span>
-<span class="r-in"><span>    <span class="op">)</span>,</span></span>
-<span class="r-in"><span>    bidirectional <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
-<span class="r-in"><span>    dropout <span class="op">=</span> <span class="fl">0.3</span></span></span>
-<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="co"># rnn_mod3 = rnn_generator(</span></span></span>
+<span class="r-in"><span><span class="co">#     hd_neurons = c(100, 50, 25),</span></span></span>
+<span class="r-in"><span><span class="co">#     no_x = 15,</span></span></span>
+<span class="r-in"><span><span class="co">#     no_y = 3,</span></span></span>
+<span class="r-in"><span><span class="co">#     rnn_type = "lstm",</span></span></span>
+<span class="r-in"><span><span class="co">#     activations = act_funs(</span></span></span>
+<span class="r-in"><span><span class="co">#         relu,</span></span></span>
+<span class="r-in"><span><span class="co">#         leaky_relu = args(negative_slope = 0.01),</span></span></span>
+<span class="r-in"><span><span class="co">#         tanh</span></span></span>
+<span class="r-in"><span><span class="co">#     ),</span></span></span>
+<span class="r-in"><span><span class="co">#     bidirectional = TRUE,</span></span></span>
+<span class="r-in"><span><span class="co">#     dropout = 0.3</span></span></span>
+<span class="r-in"><span><span class="co"># )</span></span></span>
 <span class="r-in"><span><span class="op">}</span> <span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
