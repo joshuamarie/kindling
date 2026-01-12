@@ -76,18 +76,22 @@ extract_ffnn_weights = function(mod_in) {
 #'
 #' @examples
 #' # Directly use `NeuralNetTools::garson`
-#' model_mlp = ffnn(
-#'     Species ~ .,
-#'     data = iris,
-#'     hidden_neurons = c(64, 32),
-#'     activations = "relu",
-#'     epochs = 100,
-#'     verbose = FALSE,
-#'     cache_weights = TRUE
-#' )
+#' if (torch::torch_is_installed()) {
+#'     model_mlp = ffnn(
+#'         Species ~ .,
+#'         data = iris,
+#'         hidden_neurons = c(64, 32),
+#'         activations = "relu",
+#'         epochs = 100,
+#'         verbose = FALSE,
+#'         cache_weights = TRUE
+#'     )
 #'
-#' model_mlp |>
-#'     garson()
+#'     model_mlp |>
+#'         garson()
+#' } else {
+#'     message("Torch not fully installed — skipping example")
+#' }
 #'
 #' @export
 #' @method garson ffnn_fit
@@ -257,9 +261,23 @@ olden.ffnn_fit = function(mod_in, bar_plot = TRUE, ...) {
 #'
 #' @examples
 #' # kindling also supports `vip::vi()` / `vip::vi_model()`
-#' model_mlp |>
-#'     vip::vi(type = 'garson') |>
-#'     vip::vip()
+#' if (torch::torch_is_installed()) {
+#'     model_mlp = ffnn(
+#'         Species ~ .,
+#'         data = iris,
+#'         hidden_neurons = c(64, 32),
+#'         activations = "relu",
+#'         epochs = 100,
+#'         verbose = FALSE,
+#'         cache_weights = TRUE
+#'     )
+#'
+#'     model_mlp |>
+#'         vip::vi(type = 'garson') |>
+#'         vip::vip()
+#' } else {
+#'     message("Torch not fully installed — skipping example")
+#' }
 #'
 #' @export
 #' @method vi_model ffnn_fit
