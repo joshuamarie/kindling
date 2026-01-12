@@ -100,27 +100,45 @@ networks using simulated data. Ecological Modelling. 178:389-397.
 
 ``` r
 # Directly use `NeuralNetTools::garson`
-model_mlp = ffnn(
-    Species ~ .,
-    data = iris,
-    hidden_neurons = c(64, 32),
-    activations = "relu",
-    epochs = 100,
-    verbose = FALSE,
-    cache_weights = TRUE
-)
+if (torch::torch_is_installed()) {
+    model_mlp = ffnn(
+        Species ~ .,
+        data = iris,
+        hidden_neurons = c(64, 32),
+        activations = "relu",
+        epochs = 100,
+        verbose = FALSE,
+        cache_weights = TRUE
+    )
 
-model_mlp |>
-    garson()
+    model_mlp |>
+        garson()
+} else {
+    message("Torch not fully installed — skipping example")
+}
 #>        x_names y_names  rel_imp
-#> 1 Petal.Length Species 27.49592
-#> 2  Petal.Width Species 26.35307
-#> 3  Sepal.Width Species 23.65162
-#> 4 Sepal.Length Species 22.49940
+#> 1  Petal.Width Species 27.60086
+#> 2 Petal.Length Species 25.33493
+#> 3  Sepal.Width Species 25.20301
+#> 4 Sepal.Length Species 21.86120
 
 # kindling also supports `vip::vi()` / `vip::vi_model()`
-model_mlp |>
-    vip::vi(type = 'garson') |>
-    vip::vip()
+if (torch::torch_is_installed()) {
+    model_mlp = ffnn(
+        Species ~ .,
+        data = iris,
+        hidden_neurons = c(64, 32),
+        activations = "relu",
+        epochs = 100,
+        verbose = FALSE,
+        cache_weights = TRUE
+    )
+
+    model_mlp |>
+        vip::vi(type = 'garson') |>
+        vip::vip()
+} else {
+    message("Torch not fully installed — skipping example")
+}
 
 ```
