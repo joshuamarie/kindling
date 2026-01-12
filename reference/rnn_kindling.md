@@ -145,28 +145,31 @@ The `device` parameter controls where computation occurs:
 
 ``` r
 if (FALSE) { # \dontrun{
-box::use(
-    recipes[recipe],
-    workflows[workflow, add_recipe, add_model],
-    parsnip[fit]
-)
+if (torch::torch_is_installed()) {
+    box::use(
+        recipes[recipe],
+        workflows[workflow, add_recipe, add_model],
+        parsnip[fit]
+    )
 
-# Model specs
-rnn_spec = rnn_kindling(
-    mode = "classification",
-    hidden_neurons = c(64, 32),
-    rnn_type = "lstm",
-    activation = c("relu", "elu"),
-    epochs = 100,
-    bidirectional = TRUE
-)
+    # Model specs
+    rnn_spec = rnn_kindling(
+        mode = "classification",
+        hidden_neurons = c(64, 32),
+        rnn_type = "lstm",
+        activation = c("relu", "elu"),
+        epochs = 100,
+        bidirectional = TRUE
+    )
 
-wf = workflow() |>
-    add_recipe(recipe(Species ~ ., data = iris)) |>
-    add_model(rnn_spec)
+    wf = workflow() |>
+        add_recipe(recipe(Species ~ ., data = iris)) |>
+        add_model(rnn_spec)
 
-fit_wf = fit(wf, data = iris)
-fit_wf
-
+    fit_wf = fit(wf, data = iris)
+    fit_wf
+} else {
+    message("Torch not fully installed — skipping example")
+}
 } # }
 ```

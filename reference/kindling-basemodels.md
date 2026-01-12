@@ -188,46 +188,55 @@ Train a recurrent neural network using the torch package.
 
 ``` r
 if (FALSE) { # \dontrun{
-# Regression task (auto-detect GPU)
-model_reg = ffnn(
-    Sepal.Length ~ .,
-    data = iris[, 1:4],
-    hidden_neurons = c(64, 32),
-    activations = "relu",
-    epochs = 50,
-    verbose = FALSE
-)
+if (torch::torch_is_installed()) {
+    # Regression task (auto-detect GPU)
+    model_reg = ffnn(
+        Sepal.Length ~ .,
+        data = iris[, 1:4],
+        hidden_neurons = c(64, 32),
+        activations = "relu",
+        epochs = 50,
+        verbose = FALSE
+    )
 
-# With weight caching for multiple importance calculations
-model_cached = ffnn(
-    Species ~ .,
-    data = iris,
-    hidden_neurons = c(128, 64, 32),
-    activations = "relu",
-    cache_weights = TRUE,
-    epochs = 100
-)
+    # With weight caching for multiple importance calculations
+    model_cached = ffnn(
+        Species ~ .,
+        data = iris,
+        hidden_neurons = c(128, 64, 32),
+        activations = "relu",
+        cache_weights = TRUE,
+        epochs = 100
+    )
+} else {
+    message("Torch not fully installed — skipping example")
+}
+
 } # }
 
 if (FALSE) { # \dontrun{
 # Regression with LSTM on GPU
-model_rnn = rnn(
-    Sepal.Length ~ .,
-    data = iris[, 1:4],
-    hidden_neurons = c(64, 32),
-    rnn_type = "lstm",
-    activations = "relu",
-    epochs = 50
-)
+if (torch::torch_is_installed()) {
+    model_rnn = rnn(
+        Sepal.Length ~ .,
+        data = iris[, 1:4],
+        hidden_neurons = c(64, 32),
+        rnn_type = "lstm",
+        activations = "relu",
+        epochs = 50
+    )
 
-# With weight caching
-model_cached = rnn(
-    Species ~ .,
-    data = iris,
-    hidden_neurons = c(128, 64),
-    rnn_type = "gru",
-    cache_weights = TRUE,
-    epochs = 100
-)
+    # With weight caching
+    model_cached = rnn(
+        Species ~ .,
+        data = iris,
+        hidden_neurons = c(128, 64),
+        rnn_type = "gru",
+        cache_weights = TRUE,
+        epochs = 100
+    )
+} else {
+    message("Torch not fully installed — skipping example")
+}
 } # }
 ```

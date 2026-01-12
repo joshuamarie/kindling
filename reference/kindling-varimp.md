@@ -113,10 +113,10 @@ model_mlp = ffnn(
 model_mlp |>
     garson()
 #>        x_names y_names  rel_imp
-#> 1  Sepal.Width Species 26.78129
-#> 2  Petal.Width Species 25.78785
-#> 3 Petal.Length Species 25.04967
-#> 4 Sepal.Length Species 22.38120
+#> 1 Petal.Length Species 27.49592
+#> 2  Petal.Width Species 26.35307
+#> 3  Sepal.Width Species 23.65162
+#> 4 Sepal.Length Species 22.49940
 
 # kindling also supports `vip::vi()` / `vip::vi_model()`
 model_mlp |>

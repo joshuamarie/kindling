@@ -140,34 +140,37 @@ When tuning, you can use special tune tokens:
 
 ``` r
 if (FALSE) { # \dontrun{
-box::use(
-    recipes[recipe],
-    workflows[workflow, add_recipe, add_model],
-    tune[tune],
-    parsnip[fit]
-)
+if (torch::torch_is_installed()) {
+    box::use(
+        recipes[recipe],
+        workflows[workflow, add_recipe, add_model],
+        tune[tune],
+        parsnip[fit]
+    )
 
-# Model specs
-mlp_spec = mlp_kindling(
-    mode = "classification",
-    hidden_neurons = c(128, 64, 32),
-    activation = c("relu", "relu", "relu"),
-    epochs = 100
-)
+    # Model specs
+    mlp_spec = mlp_kindling(
+        mode = "classification",
+        hidden_neurons = c(128, 64, 32),
+        activation = c("relu", "relu", "relu"),
+        epochs = 100
+    )
 
-# If you want to tune
-mlp_tune_spec = mlp_kindling(
-    mode = "classification",
-    hidden_neurons = tune(),
-    activation = tune(),
-    epochs = tune(),
-    learn_rate = tune()
-)
+    # If you want to tune
+    mlp_tune_spec = mlp_kindling(
+        mode = "classification",
+        hidden_neurons = tune(),
+        activation = tune(),
+        epochs = tune(),
+        learn_rate = tune()
+    )
+     wf = workflow() |>
+        add_recipe(recipe(Species ~ ., data = iris)) |>
+        add_model(mlp_spec)
 
-wf = workflow() |>
-    add_recipe(recipe(Species ~ ., data = iris)) |>
-    add_model(mlp_spec)
-
-fit_wf = fit(wf, data = iris)
+     fit_wf = fit(wf, data = iris)
+} else {
+    message("Torch not fully installed — skipping example")
+}
 } # }
 ```
