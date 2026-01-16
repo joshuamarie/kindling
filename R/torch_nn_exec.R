@@ -21,7 +21,8 @@
 #'   computation. Default `FALSE`. When `TRUE`, weight matrices are extracted and
 #'   stored in the returned object, avoiding repeated extraction during importance
 #'   calculations. Only enable if you plan to compute variable importance multiple times.
-#' @param ... Additional arguments passed to the optimizer.
+#' @param optimizer_args Named list. Additional arguments passed to the optimizer. Default `list()`.
+#' @param ... Not used. Reserved for future extensions.
 #'
 #' @return An object of class "ffnn_fit" containing:
 #' \item{model}{Trained torch module}
@@ -84,6 +85,7 @@ ffnn =
         device = NULL,
         verbose = FALSE,
         cache_weights = FALSE,
+        optimizer_args = list(),
         ...
     ) {
 
@@ -194,7 +196,10 @@ ffnn =
 
     # ---Optimizer and Loss Function---
     validate_optimizer(tolower(optimizer))
-    opt = eval(rlang::call2(paste0("optim_", tolower(optimizer)), model$parameters, lr = learn_rate, ..., .ns = "torch"))
+    opt = do.call(
+        eval(rlang::call2(paste0("optim_", tolower(optimizer)), .ns = "torch")),
+        c(list(params = model$parameters, lr = learn_rate), optimizer_args)
+    )
 
     loss_fn = switch(
         tolower(loss),
@@ -488,7 +493,11 @@ rnn =
 
     # ---Optimizer and Loss Function---
     validate_optimizer(tolower(optimizer))
-    opt = eval(rlang::call2(paste0("optim_", tolower(optimizer)), model$parameters, lr = learn_rate, ..., .ns = "torch"))
+    opt = do.call(
+        eval(rlang::call2(paste0("optim_", tolower(optimizer)), .ns = "torch")),
+        c(list(params = model$parameters, lr = learn_rate), optimizer_args)
+    )
+    
     loss_fn = switch(
         tolower(loss),
         mse = function(input, target) torch::nnf_mse_loss(input, target),
