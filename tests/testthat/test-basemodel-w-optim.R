@@ -4,7 +4,7 @@ skip_if_no_torch = function() {
 }
 
 test_that("ffnn works with optimizer_args", {
-    skip_if_not(torch::torch_is_installed())
+    skip_if_no_torch()
     
     model1 = ffnn(
         Sepal.Length ~ .,
@@ -51,7 +51,7 @@ test_that("ffnn works with optimizer_args", {
 })
 
 test_that("rnn works with optimizer_args", {
-    skip_if_not(torch::torch_is_installed())
+    skip_if_no_torch()
     
     # Test LSTM with weight_decay
     model1 = rnn(
@@ -86,7 +86,7 @@ test_that("rnn works with optimizer_args", {
 })
 
 test_that("optimizer_args defaults to empty list", {
-    skip_if_not(torch::torch_is_installed())
+    skip_if_no_torch()
     
     # Should work without optimizer_args
     model = ffnn(
@@ -101,7 +101,7 @@ test_that("optimizer_args defaults to empty list", {
 })
 
 test_that("invalid optimizer_args throw errors", {
-    skip_if_not(torch::torch_is_installed())
+    skip_if_no_torch()
     
     expect_error(
         ffnn(
