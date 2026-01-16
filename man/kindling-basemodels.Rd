@@ -16,6 +16,7 @@ ffnn(
   batch_size = 32,
   learn_rate = 0.001,
   optimizer = "adam",
+  optimizer_args = list(),
   loss = "mse",
   validation_split = 0,
   device = NULL,
@@ -38,10 +39,12 @@ rnn(
   batch_size = 32,
   learn_rate = 0.001,
   optimizer = "adam",
+  optimizer_args = list(),
   loss = "mse",
   validation_split = 0,
   device = NULL,
   verbose = FALSE,
+  cache_weights = FALSE,
   ...
 )
 }
@@ -66,6 +69,8 @@ rnn(
 
 \item{optimizer}{Character. Optimizer type ("adam", "sgd", "rmsprop"). Default \code{"adam"}.}
 
+\item{optimizer_args}{Named list. Additional arguments passed to the optimizer. Default \code{list()}.}
+
 \item{loss}{Character. Loss function ("mse", "mae", "cross_entropy", "bce"). Default \code{"mse"}.}
 
 \item{validation_split}{Numeric. Proportion of data for validation (0-1). Default \code{0}.}
@@ -79,7 +84,7 @@ computation. Default \code{FALSE}. When \code{TRUE}, weight matrices are extract
 stored in the returned object, avoiding repeated extraction during importance
 calculations. Only enable if you plan to compute variable importance multiple times.}
 
-\item{...}{Additional arguments passed to the optimizer.}
+\item{...}{Not used. Reserved for future extensions.}
 
 \item{rnn_type}{Character. Type of RNN ("rnn", "lstm", "gru"). Default \code{"lstm"}.}
 
@@ -136,7 +141,7 @@ if (torch::torch_is_installed()) {
         epochs = 100
     )
 } else {
-    message("Torch not fully installed — skipping example")
+    message("Torch not fully installed – skipping example")
 }
 
 }
@@ -163,7 +168,7 @@ if (torch::torch_is_installed()) {
         epochs = 100
     )
 } else {
-    message("Torch not fully installed — skipping example")
+    message("Torch not fully installed – skipping example")
 }
 }
 
