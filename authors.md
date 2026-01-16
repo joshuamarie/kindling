@@ -9,11 +9,11 @@
 Source:
 [`inst/CITATION`](https://github.com/joshuamarie/kindling/blob/main/inst/CITATION)
 
-Marie, Joshua (2026). kindling: Higher-Level Interface of Torch Package
-to Auto-Train Neural Networks https://kindling.joshuamarie.com
+Marie, Joshua (2026). kindling: Higher-Level Interface of Torch to
+Auto-Train Neural Networks https://kindling.joshuamarie.com
 
     @Manual{,
-      title = {{kindling}: Higher-Level Interface of Torch Package to Auto-Train Neural Networks},
+      title = {{kindling}: Higher-Level Interface of Torch to Auto-Train Neural Networks},
       author = {Joshua Marie},
       year = {2026},
       note = {R package version 0.1.0},

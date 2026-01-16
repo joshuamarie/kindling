@@ -16,6 +16,7 @@ ffnn(
   batch_size = 32,
   learn_rate = 0.001,
   optimizer = "adam",
+  optimizer_args = list(),
   loss = "mse",
   validation_split = 0,
   device = NULL,
@@ -38,10 +39,12 @@ rnn(
   batch_size = 32,
   learn_rate = 0.001,
   optimizer = "adam",
+  optimizer_args = list(),
   loss = "mse",
   validation_split = 0,
   device = NULL,
   verbose = FALSE,
+  cache_weights = FALSE,
   ...
 )
 ```
@@ -90,6 +93,11 @@ rnn(
   Character. Optimizer type ("adam", "sgd", "rmsprop"). Default
   `"adam"`.
 
+- optimizer_args:
+
+  Named list. Additional arguments passed to the optimizer. Default
+  [`list()`](https://rdrr.io/r/base/list.html).
+
 - loss:
 
   Character. Loss function ("mse", "mae", "cross_entropy", "bce").
@@ -118,7 +126,7 @@ rnn(
 
 - ...:
 
-  Additional arguments passed to the optimizer.
+  Not used. Reserved for future extensions.
 
 - rnn_type:
 
@@ -209,7 +217,7 @@ if (torch::torch_is_installed()) {
         epochs = 100
     )
 } else {
-    message("Torch not fully installed — skipping example")
+    message("Torch not fully installed – skipping example")
 }
 
 } # }
@@ -236,7 +244,7 @@ if (torch::torch_is_installed()) {
         epochs = 100
     )
 } else {
-    message("Torch not fully installed — skipping example")
+    message("Torch not fully installed – skipping example")
 }
 } # }
 ```
