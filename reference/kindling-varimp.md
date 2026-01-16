@@ -116,11 +116,7 @@ if (torch::torch_is_installed()) {
 } else {
     message("Torch not fully installed — skipping example")
 }
-#>        x_names y_names  rel_imp
-#> 1 Petal.Length Species 27.28381
-#> 2  Petal.Width Species 25.75817
-#> 3  Sepal.Width Species 24.35474
-#> 4 Sepal.Length Species 22.60327
+#> Error in torch::optim_adam(): argument "params" is missing, with no default
 
 # kindling also supports `vip::vi()` / `vip::vi_model()`
 if (torch::torch_is_installed()) {
@@ -140,5 +136,5 @@ if (torch::torch_is_installed()) {
 } else {
     message("Torch not fully installed — skipping example")
 }
-
+#> Error in torch::optim_adam(): argument "params" is missing, with no default
 ```
