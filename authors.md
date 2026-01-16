@@ -16,5 +16,5 @@ to Auto-Train Neural Networks https://kindling.joshuamarie.com
       title = {{kindling}: Higher-Level Interface of Torch Package to Auto-Train Neural Networks},
       author = {Joshua Marie},
       year = {2026},
-      note = {R package version 0.1.2},
+      note = {R package version 0.1.0},
     }
