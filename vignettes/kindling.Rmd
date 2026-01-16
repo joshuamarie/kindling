@@ -1,0 +1,103 @@
+---
+title: "Getting Started with kindling"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting Started with kindling}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+    collapse = TRUE,
+    comment = "#>",
+    fig.width = 7,
+    fig.height = 5
+)
+```
+
+## Introduction
+
+`{kindling}` bridges the gap between `{torch}` and `{tidymodels}`, providing a streamlined interface for building, training, and tuning deep learning models. This vignette will guide you through the basic usage.
+
+## Installation
+
+```{r eval = FALSE}
+# Install from GitHub
+pak::pak("joshuamarie/kindling")
+```
+
+```{r}
+library(kindling)
+```
+
+## Four Levels of Interaction
+
+`{kindling}` offers flexibility through four levels of abstraction:
+
+1. **Code Generation** - Generate raw `torch::nn_module` code
+2. **Direct Training** - Train models with simple function calls
+3. **tidymodels Integration** - Use with `parsnip`, `recipes`, and `workflows`
+4. **Hyperparameter Tuning** - Optimize models with `tune` and `dials`
+
+## Level 1: Code Generation
+
+Generate PyTorch-style module code:
+
+```{r eval = FALSE}
+ffnn_generator(
+    nn_name = "MyNetwork",
+    hd_neurons = c(64, 32),
+    no_x = 10,
+    no_y = 1,
+    activations = 'relu'
+)
+```
+
+## Level 2: Direct Training
+
+Train a model with one function call:
+
+```{r eval = FALSE}
+model = ffnn(
+    Species ~ .,
+    data = iris,
+    hidden_neurons = c(10, 15, 7),
+    activations = act_funs(relu, elu),
+    loss = "cross_entropy",
+    epochs = 100
+)
+
+predictions = predict(model, newdata = iris)
+```
+
+## Level 3: tidymodels Integration
+
+Work with neural networks like any other `parsnip` model:
+
+```{r eval = FALSE}
+box::use(
+    parsnip[fit, augment],
+    yardstick[metrics]
+)
+
+nn_spec = mlp_kindling(
+    mode = "classification",
+    hidden_neurons = c(10, 7),
+    activations = act_funs(relu, softshrink = args(lambd = 0.5)),
+    epochs = 100
+)
+
+nn_fit = fit(nn_spec, Species ~ ., data = iris)
+augment(nn_fit, new_data = iris) |> 
+    metrics(truth = Species, estimate = .pred_class)
+```
+
+## Learn More
+
+- Visit the package website: https://kindling.joshuamarie.com
+- Report issues: https://github.com/joshuamarie/kindling/issues
+
+<!-- - Read the [README](../index.html) for comprehensive examples -->
+<!-- - Browse the [function reference](../reference/index.html) -->
+<!-- - Visit the [blog](https://joshuamarie.com) for tutorials -->

@@ -1,0 +1,13 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+renv/
+renv.lock
+.Renviron
+.Rprofile
+
+*.Rproj
+docs
+docs/
+inst/doc

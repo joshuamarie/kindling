@@ -1,0 +1,115 @@
+url: https://kindling.joshuamarie.com
+
+template:
+  bootstrap: 5
+  bootswatch: flatly
+  bslib:
+    primary: "#0054AD"
+
+home:
+  title: "kindling • Higher-Level Interface for torch"
+  description: >
+    Train neural networks with a clean, intuitive interface built on top of torch.
+
+navbar:
+  structure:
+    left: [intro, reference, articles, tutorials, news]
+    right: [search, github, blog]
+  components:
+    intro:
+      text: Get started
+      href: articles/kindling.html
+    reference:
+      text: Reference
+      href: reference/index.html
+    articles:
+      text: Articles
+      menu:
+        - text: Getting Started
+          href: articles/kindling.html
+    tutorials:
+      text: Learn more
+      menu:
+        - text: "Regression modeling"
+          href: https://www.tidymodels.org/learn/models/parsnip-ranger-glmnet/
+        - text: "Classification modeling"
+          href: https://www.tidymodels.org/learn/models/parsnip-nnet/
+    blog:
+      text: Blog
+      icon: fa-blog
+      href: https://joshuamarie.com
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/joshuamarie/kindling
+      aria-label: GitHub
+
+reference:
+  - title: Model Specifications
+    desc: Define neural network architectures for tidymodels
+    contents:
+    - mlp_kindling
+    - rnn_kindling
+
+  - title: Training Functions
+    desc: Direct training interface (Level 2)
+    contents:
+    - ffnn
+    - rnn
+
+  - title: Code Generators
+    desc: Generate torch nn_module code (Level 1)
+    contents:
+    - ffnn_generator
+    - rnn_generator
+
+  - title: Variable Importance
+    desc: Interpret neural network models
+    contents:
+    - kindling-varimp
+
+  - title: Tuning Parameters
+    desc: Hyperparameter specifications for tidymodels
+    contents:
+    - hidden_neurons
+    - activations
+    - output_activation
+    - bias
+    - bidirectional
+    - optimizer
+    - validation_split
+    - n_hlayers
+
+  - title: Helper Functions
+    desc: Utilities for model configuration
+    contents:
+    - act_funs
+    - args
+    - grid_depth
+    - table_summary
+    - ordinal_gen
+
+  - title: Basemodels-tidymodels wrappers
+    desc: Functions for tidymodels integration (not for direct use)
+    contents:
+    - ffnn_wrapper
+    - rnn_wrapper
+
+articles:
+  - title: Get started
+    navbar: ~
+    contents:
+    - kindling
+
+footer:
+  structure:
+    left: developed_by
+    right: built_with
+  components:
+    built_with: >
+      Built with <a href="https://pkgdown.r-lib.org/">pkgdown</a>.
+      Visit my <a href="https://joshuamarie.com">blog</a> for more content.
+
+development:
+  mode: auto
+  version_label: default
+  version_tooltip: "Version"

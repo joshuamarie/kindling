@@ -1,0 +1,15 @@
+# meta = packageDescription("kindling")
+
+bibentry(
+    bibtype = "Manual",
+    title = paste0("{", meta$Package, "}", ": ", meta$Title),
+    author = person("Joshua", "Marie"),
+    year = "2026",
+    note = paste("R package version", meta$Version),
+    # url = "https://kindling.joshuamarie.com",
+    textVersion = paste(
+        "Marie, Joshua (2026).",
+        paste0(meta$Package, ": ", meta$Title),
+        "https://kindling.joshuamarie.com"
+    )
+)
