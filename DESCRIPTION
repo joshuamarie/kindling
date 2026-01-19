@@ -3,12 +3,10 @@ Type: Package
 Title: Higher-Level Interface of Torch to Auto-Train Neural Networks
 Version: 0.1.0.9000
 Authors@R: c(
-    person(
-        "Joshua", "Marie",
-        email = "joshua.marie.k@gmail.com",
-        role = c("aut", "cre")
+    person("Joshua", "Marie", 
+           email = "joshua.marie.k@gmail.com", 
+           role = c("aut", "cre"))
     )
-)
 Description: Provides a higher-level interface to the 'torch' package for defining,
     training, and tuning neural networks. This package supports feedforward 
     (multi-layer perceptron) and recurrent neural networks (RNN, LSTM, GRU), and also reduces 
