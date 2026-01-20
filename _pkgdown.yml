@@ -4,7 +4,10 @@ template:
   bootstrap: 5
   bootswatch: flatly
   bslib:
-    primary: "#0054AD"
+    primary: "#F0F0DB" # "#0054AD"
+  includes:
+    in_header: |
+      <link rel="icon" type="image/png" href="logo.png"/>
 
 home:
   title: "kindling • Higher-Level Interface for torch"
