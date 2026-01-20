@@ -2,12 +2,15 @@ url: https://kindling.joshuamarie.com
 
 template:
   bootstrap: 5
+  light-switch: true  
   bootswatch: flatly
   bslib:
-    primary: "#F0F0DB" # "#0054AD"
-  includes:
-    in_header: |
-      <link rel="icon" type="image/png" href="logo.png"/>
+    base_font: {google: "Playfair Display"}  
+    heading_font: {google: "Playfair Display"}
+    code_font: {google: "Fira Mono"}  
+    primary: "#0054AD"
+    link-color: "#0054AD"
+  math-rendering: katex 
 
 home:
   title: "kindling • Higher-Level Interface for torch"
@@ -15,9 +18,10 @@ home:
     Train neural networks with a clean, intuitive interface built on top of torch.
 
 navbar:
+  type: light
   structure:
     left: [intro, reference, articles, tutorials, news]
-    right: [search, github, blog]
+    right: [search, github, lightswitch, blog]
   components:
     intro:
       text: Get started
