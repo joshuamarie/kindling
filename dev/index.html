@@ -6,6 +6,11 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>kindling • Higher-Level Interface for torch • kindling</title>
+<!-- favicons --><link rel="icon" type="image/png" sizes="96x96" href="favicon-96x96.png">
+<link rel="icon" type="”image/svg+xml”" href="favicon.svg">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="icon" sizes="any" href="favicon.ico">
+<link rel="manifest" href="site.webmanifest">
 <!-- katex math --><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" integrity="sha384-nB0miv6/jRmo5UMMR1wu3Gz6NLsoTkbqJghGIsx//Rlm+ZU03BU6SQNC66uf4l5+" crossorigin="anonymous">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" integrity="sha384-7zkQWkzuo3B5mTepMUcHkMB5jZaolc2xDwL6VFqjFALcbeS9Ggm/Yr2r3Dy4lfFg" crossorigin="anonymous"></script><script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" integrity="sha384-43gviWU0YVjaDtb/GhzOouOXtZMP/7XUzwPTstBeZFe/+rCMvRwr4yROQP43s0Xk" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script><script src="katex-auto.js"></script><script src="lightswitch.js"></script><script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
@@ -83,9 +88,7 @@
 </div>
 <!-- badges: start -->
 
-<blockquote>
-<p><strong>Note</strong>: This package is under active development. The API may change in future versions.</p>
-</blockquote>
+<!-- > **Note**: This package is under active development. The API may change in future versions. -->
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -223,7 +226,7 @@
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         50          0         0</span></span>
 <span><span class="co">#&gt;   versicolor      0         47         3</span></span>
-<span><span class="co">#&gt;   virginica       0          1        49</span></span></code></pre></div>
+<span><span class="co">#&gt;   virginica       0          0        50</span></span></code></pre></div>
 </li>
 <li>
 <p><strong>With new data</strong> — simply pass a data frame:</p>
@@ -236,7 +239,7 @@
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         10          0         0</span></span>
 <span><span class="co">#&gt;   versicolor      0          9         1</span></span>
-<span><span class="co">#&gt;   virginica       0          1         9</span></span></code></pre></div>
+<span><span class="co">#&gt;   virginica       0          0        10</span></span></code></pre></div>
 </li>
 </ol>
 </div>
@@ -383,20 +386,20 @@
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/garson.html" class="external-link">garson</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names  rel_imp</span></span>
-<span><span class="co">#&gt; 1  Petal.Width Species 30.38174</span></span>
-<span><span class="co">#&gt; 2 Petal.Length Species 25.83497</span></span>
-<span><span class="co">#&gt; 3 Sepal.Length Species 22.78038</span></span>
-<span><span class="co">#&gt; 4  Sepal.Width Species 21.00291</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 Petal.Length Species 28.63361</span></span>
+<span><span class="co">#&gt; 2  Sepal.Width Species 27.44163</span></span>
+<span><span class="co">#&gt; 3  Petal.Width Species 23.23601</span></span>
+<span><span class="co">#&gt; 4 Sepal.Length Species 20.68875</span></span></code></pre></div>
 </li>
 <li>
 <p>Olden’s Algorithm</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/olden.html" class="external-link">olden</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        x_names y_names      rel_imp</span></span>
-<span><span class="co">#&gt; 1  Petal.Width Species  0.575948477</span></span>
-<span><span class="co">#&gt; 2  Sepal.Width Species -0.286548868</span></span>
-<span><span class="co">#&gt; 3 Sepal.Length Species -0.204277142</span></span>
-<span><span class="co">#&gt; 4 Petal.Length Species  0.006615014</span></span></code></pre></div>
+<span><span class="co">#&gt;        x_names y_names    rel_imp</span></span>
+<span><span class="co">#&gt; 1  Petal.Width Species  0.6897854</span></span>
+<span><span class="co">#&gt; 2  Sepal.Width Species -0.6666908</span></span>
+<span><span class="co">#&gt; 3 Petal.Length Species  0.3950829</span></span>
+<span><span class="co">#&gt; 4 Sepal.Length Species -0.1135594</span></span></code></pre></div>
 </li>
 </ol>
 <div class="section level3">

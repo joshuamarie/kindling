@@ -1,8 +1,5 @@
 # kindling: Higher-level interface of torch package to auto-train neural networks
 
-> **Note**: This package is under active development. The API may change
-> in future versions.
-
 ## Overview
 
 [kindling](https://kindling.joshuamarie.com) bridges the gap between
@@ -176,7 +173,7 @@ flexible prediction behavior through its `newdata` argument:
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
     #>   versicolor      0         47         3
-    #>   virginica       0          1        49
+    #>   virginica       0          0        50
     ```
 
 2.  **With new data** — simply pass a data frame:
@@ -190,7 +187,7 @@ flexible prediction behavior through its `newdata` argument:
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
     #>   versicolor      0          9         1
-    #>   virginica       0          1         9
+    #>   virginica       0          0        10
     ```
 
 ### Level 3: Full tidymodels Integration
@@ -346,21 +343,21 @@ networks. Two primary algorithms are available:
     ``` r
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1  Petal.Width Species 30.38174
-    #> 2 Petal.Length Species 25.83497
-    #> 3 Sepal.Length Species 22.78038
-    #> 4  Sepal.Width Species 21.00291
+    #> 1 Petal.Length Species 28.63361
+    #> 2  Sepal.Width Species 27.44163
+    #> 3  Petal.Width Species 23.23601
+    #> 4 Sepal.Length Species 20.68875
     ```
 
 2.  Olden’s Algorithm
 
     ``` r
     olden(model, bar_plot = FALSE)
-    #>        x_names y_names      rel_imp
-    #> 1  Petal.Width Species  0.575948477
-    #> 2  Sepal.Width Species -0.286548868
-    #> 3 Sepal.Length Species -0.204277142
-    #> 4 Petal.Length Species  0.006615014
+    #>        x_names y_names    rel_imp
+    #> 1  Petal.Width Species  0.6897854
+    #> 2  Sepal.Width Species -0.6666908
+    #> 3 Petal.Length Species  0.3950829
+    #> 4 Sepal.Length Species -0.1135594
     ```
 
 ### Integration with {vip}
