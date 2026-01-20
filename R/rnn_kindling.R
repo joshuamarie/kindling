@@ -203,7 +203,8 @@ tunable.rnn_kindling = function(x, ...) {
         name = c(
             "hidden_neurons", "activations", "output_activation",
             "bias", "bidirectional", "dropout", "epochs", "batch_size",
-            "learn_rate", "optimizer", "loss", "validation_split"
+            "penalty", "mixture", "learn_rate", "optimizer", "loss", 
+            "validation_split"
         ),
         call_info = list(
             list(pkg = "kindling", fun = "hidden_neurons"),
