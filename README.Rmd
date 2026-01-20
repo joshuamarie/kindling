@@ -23,7 +23,7 @@ desc = setNames(as.list(desc), colnames(desc))
 [![R-CMD-check](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-> **Note**: This package is under active development. The API may change in future versions.
+<!-- > **Note**: This package is under active development. The API may change in future versions. -->
 
 ## Overview
 
