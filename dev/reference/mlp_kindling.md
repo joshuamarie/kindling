@@ -16,6 +16,8 @@ mlp_kindling(
   bias = NULL,
   epochs = NULL,
   batch_size = NULL,
+  penalty = NULL,
+  mixture = NULL,
   learn_rate = NULL,
   optimizer = NULL,
   loss = NULL,
@@ -62,6 +64,24 @@ mlp_kindling(
 - batch_size:
 
   An integer for the batch size during training. Can be tuned.
+
+- penalty:
+
+  A number for the regularization penalty (lambda). Default `0` (no
+  regularization). Higher values increase regularization strength. Can
+  be tuned.
+
+- mixture:
+
+  A number between 0 and 1 for the elastic net mixing parameter. Default
+  `0` (pure L2/Ridge regularization).
+
+  - `0`: Pure L2 regularization (Ridge)
+
+  - `1`: Pure L1 regularization (Lasso)
+
+  - `0 < mixture < 1`: Elastic net (combination of L1 and L2) Only
+    relevant when `penalty > 0`. Can be tuned.
 
 - learn_rate:
 

@@ -14,6 +14,8 @@ ffnn(
   bias = TRUE,
   epochs = 100,
   batch_size = 32,
+  penalty = 0,
+  mixture = 0,
   learn_rate = 0.001,
   optimizer = "adam",
   optimizer_args = list(),
@@ -37,6 +39,8 @@ rnn(
   dropout = 0,
   epochs = 100,
   batch_size = 32,
+  penalty = 0,
+  mixture = 0,
   learn_rate = 0.001,
   optimizer = "adam",
   optimizer_args = list(),
@@ -83,6 +87,22 @@ rnn(
 - batch_size:
 
   Integer. Batch size for training. Default `32`.
+
+- penalty:
+
+  Numeric. Regularization penalty (lambda). Default `0` (no
+  regularization). Higher values increase regularization strength.
+
+- mixture:
+
+  Numeric. Elastic net mixing parameter (0-1). Default `0`.
+
+  - `0`: Pure L2 regularization (Ridge)
+
+  - `1`: Pure L1 regularization (Lasso)
+
+  - `0 < mixture < 1`: Elastic net (combination of L1 and L2) Only
+    relevant when `penalty > 0`.
 
 - learn_rate:
 

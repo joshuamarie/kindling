@@ -67,6 +67,8 @@ tidymodels ecosystem and uses the torch backend via kindling.</p>
 <span>  dropout <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  epochs <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  batch_size <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  penalty <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  mixture <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  learn_rate <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  optimizer <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  loss <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -130,6 +132,20 @@ Can be tuned.</p></dd>
 
 <dt id="arg-batch-size">batch_size<a class="anchor" aria-label="anchor" href="#arg-batch-size"></a></dt>
 <dd><p>An integer for the batch size during training. Can be tuned.</p></dd>
+
+
+<dt id="arg-penalty">penalty<a class="anchor" aria-label="anchor" href="#arg-penalty"></a></dt>
+<dd><p>A number for the regularization penalty (lambda). Default <code>0</code>
+(no regularization). Higher values increase regularization strength. Can be tuned.</p></dd>
+
+
+<dt id="arg-mixture">mixture<a class="anchor" aria-label="anchor" href="#arg-mixture"></a></dt>
+<dd><p>A number between 0 and 1 for the elastic net mixing parameter.
+Default <code>0</code> (pure L2/Ridge regularization).</p><ul><li><p><code>0</code>: Pure L2 regularization (Ridge)</p></li>
+<li><p><code>1</code>: Pure L1 regularization (Lasso)</p></li>
+<li><p><code>0 &lt; mixture &lt; 1</code>: Elastic net (combination of L1 and L2)
+Only relevant when <code>penalty &gt; 0</code>. Can be tuned.</p></li>
+</ul></dd>
 
 
 <dt id="arg-learn-rate">learn_rate<a class="anchor" aria-label="anchor" href="#arg-learn-rate"></a></dt>

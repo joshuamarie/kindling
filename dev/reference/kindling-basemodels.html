@@ -58,6 +58,8 @@
 <span>  bias <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  epochs <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  batch_size <span class="op">=</span> <span class="fl">32</span>,</span>
+<span>  penalty <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  mixture <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  learn_rate <span class="op">=</span> <span class="fl">0.001</span>,</span>
 <span>  optimizer <span class="op">=</span> <span class="st">"adam"</span>,</span>
 <span>  optimizer_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -81,6 +83,8 @@
 <span>  dropout <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  epochs <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  batch_size <span class="op">=</span> <span class="fl">32</span>,</span>
+<span>  penalty <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  mixture <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  learn_rate <span class="op">=</span> <span class="fl">0.001</span>,</span>
 <span>  optimizer <span class="op">=</span> <span class="st">"adam"</span>,</span>
 <span>  optimizer_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
@@ -127,6 +131,19 @@
 
 <dt id="arg-batch-size">batch_size<a class="anchor" aria-label="anchor" href="#arg-batch-size"></a></dt>
 <dd><p>Integer. Batch size for training. Default <code>32</code>.</p></dd>
+
+
+<dt id="arg-penalty">penalty<a class="anchor" aria-label="anchor" href="#arg-penalty"></a></dt>
+<dd><p>Numeric. Regularization penalty (lambda). Default <code>0</code> (no regularization).
+Higher values increase regularization strength.</p></dd>
+
+
+<dt id="arg-mixture">mixture<a class="anchor" aria-label="anchor" href="#arg-mixture"></a></dt>
+<dd><p>Numeric. Elastic net mixing parameter (0-1). Default <code>0</code>.</p><ul><li><p><code>0</code>: Pure L2 regularization (Ridge)</p></li>
+<li><p><code>1</code>: Pure L1 regularization (Lasso)</p></li>
+<li><p><code>0 &lt; mixture &lt; 1</code>: Elastic net (combination of L1 and L2)
+Only relevant when <code>penalty &gt; 0</code>.</p></li>
+</ul></dd>
 
 
 <dt id="arg-learn-rate">learn_rate<a class="anchor" aria-label="anchor" href="#arg-learn-rate"></a></dt>

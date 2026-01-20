@@ -43,6 +43,23 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="kindling-development-version">kindling (development version)<a class="anchor" aria-label="anchor" href="#kindling-development-version"></a></h2>
+<div class="section level3">
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li>
+<p>Added regularization support for neural network models</p>
+<ul><li>L1 regularization (Lasso) for feature selection via <code>mixture = 1</code>
+</li>
+<li>L2 regularization (Ridge) for weight decay via <code>mixture = 0</code>
+</li>
+<li>Elastic Net combining L1 and L2 penalties via <code>0 &lt; mixture &lt; 1</code>
+</li>
+<li>Controlled via <code>penalty</code> (regularization strength) and <code>mixture</code> (L1/L2 balance) parameters</li>
+<li>Follows tidymodels conventions for consistency with <code>glmnet</code> and other packages</li>
+</ul></li>
+</ul></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="kindling-010">kindling 0.1.0<a class="anchor" aria-label="anchor" href="#kindling-010"></a></h2>
 <ul><li>Initial CRAN release</li>
 <li>Higher-level interface for torch package to define, train, and tune neural networks</li>
@@ -50,7 +67,8 @@
 <li>Integration with tidymodels ecosystem (parsnip, workflows, recipes, tuning)</li>
 <li>Variable importance plots and network visualization tools</li>
 </ul></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">
