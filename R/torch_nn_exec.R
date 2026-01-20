@@ -11,6 +11,13 @@
 #' @param bias Logical. Use bias weights. Default `TRUE`.
 #' @param epochs Integer. Number of training epochs. Default `100`.
 #' @param batch_size Integer. Batch size for training. Default `32`.
+#' @param penalty Numeric. Regularization penalty (lambda). Default `0` (no regularization).
+#'   Higher values increase regularization strength.
+#' @param mixture Numeric. Elastic net mixing parameter (0-1). Default `0`.
+#'   - `0`: Pure L2 regularization (Ridge)
+#'   - `1`: Pure L1 regularization (Lasso)
+#'   - `0 < mixture < 1`: Elastic net (combination of L1 and L2)
+#'   Only relevant when `penalty > 0`.
 #' @param learn_rate Numeric. Learning rate for optimizer. Default `0.001`.
 #' @param optimizer Character. Optimizer type ("adam", "sgd", "rmsprop"). Default `"adam"`.
 #' @param optimizer_args Named list. Additional arguments passed to the optimizer. Default `list()`.
@@ -78,6 +85,8 @@ ffnn =
         bias = TRUE,
         epochs = 100,
         batch_size = 32,
+        penalty = 0, 
+        mixture = 0,  
         learn_rate = 0.001,
         optimizer = "adam",
         optimizer_args = list(),
@@ -103,6 +112,9 @@ ffnn =
         if (verbose) {
             cli::cli_alert_info("Using device: {device}")
         }
+        
+        # ---Validate regularization---
+        validate_regularization(penalty, mixture)
         
         ffnn_call = match.call()
         mf = model.frame(formula, data)
@@ -236,10 +248,13 @@ ffnn =
                 opt$zero_grad()
                 y_pred = model(x_batch)
                 loss = loss_fn(y_pred, y_batch)
-                loss$backward()
+                reg_loss = regularizer(model, penalty, mixture)
+                total_loss = loss + reg_loss
+                total_loss$backward()
                 opt$step()
                 
-                epoch_loss = epoch_loss + loss$item()
+                # epoch_loss = epoch_loss + loss$item()
+                epoch_loss = epoch_loss + total_loss$item()
             }
             
             loss_history[epoch] = epoch_loss / n_batches
@@ -313,6 +328,8 @@ ffnn =
                 hidden_neurons = hidden_neurons,
                 activations = activations,
                 output_activation = output_activation,
+                penalty = penalty, 
+                mixture = mixture,              
                 feature_names = feature_names,
                 response_name = response_name,
                 no_x = no_x,
@@ -378,6 +395,8 @@ rnn =
         dropout = 0,
         epochs = 100,
         batch_size = 32,
+        penalty = 0,                
+        mixture = 0, 
         learn_rate = 0.001,
         optimizer = "adam",
         optimizer_args = list(),
@@ -403,6 +422,9 @@ rnn =
         if (verbose) {
             cli::cli_alert_info("Using device: {device}")
         }
+        
+        # ---Validate regularization---
+        validate_regularization(penalty, mixture)
         
         rnn_call = match.call()
         mf = model.frame(formula, data)
@@ -537,10 +559,13 @@ rnn =
                 opt$zero_grad()
                 y_pred = model(x_batch)
                 loss = loss_fn(y_pred, y_batch)
-                loss$backward()
+                reg_loss = regularizer(model, penalty, mixture)
+                total_loss = loss + reg_loss
+                total_loss$backward()
                 opt$step()
                 
-                epoch_loss = epoch_loss + loss$item()
+                epoch_loss = epoch_loss + total_loss$item()
+                # epoch_loss = epoch_loss + loss$item()
             }
             
             loss_history[epoch] = epoch_loss / n_batches
@@ -599,6 +624,8 @@ rnn =
                 hidden_neurons = hidden_neurons,
                 activations = activations,
                 output_activation = output_activation,
+                penalty = penalty,          
+                mixture = mixture,              
                 feature_names = feature_names,
                 response_name = response_name,
                 bidirectional = bidirectional,

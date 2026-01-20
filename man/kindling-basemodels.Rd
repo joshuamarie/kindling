@@ -14,6 +14,8 @@ ffnn(
   bias = TRUE,
   epochs = 100,
   batch_size = 32,
+  penalty = 0,
+  mixture = 0,
   learn_rate = 0.001,
   optimizer = "adam",
   optimizer_args = list(),
@@ -37,6 +39,8 @@ rnn(
   dropout = 0,
   epochs = 100,
   batch_size = 32,
+  penalty = 0,
+  mixture = 0,
   learn_rate = 0.001,
   optimizer = "adam",
   optimizer_args = list(),
@@ -64,6 +68,17 @@ rnn(
 \item{epochs}{Integer. Number of training epochs. Default \code{100}.}
 
 \item{batch_size}{Integer. Batch size for training. Default \code{32}.}
+
+\item{penalty}{Numeric. Regularization penalty (lambda). Default \code{0} (no regularization).
+Higher values increase regularization strength.}
+
+\item{mixture}{Numeric. Elastic net mixing parameter (0-1). Default \code{0}.
+\itemize{
+\item \code{0}: Pure L2 regularization (Ridge)
+\item \code{1}: Pure L1 regularization (Lasso)
+\item \verb{0 < mixture < 1}: Elastic net (combination of L1 and L2)
+Only relevant when \code{penalty > 0}.
+}}
 
 \item{learn_rate}{Numeric. Learning rate for optimizer. Default \code{0.001}.}
 

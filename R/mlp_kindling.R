@@ -16,6 +16,14 @@
 #'   Can be tuned.
 #' @param bias Logical for whether to include bias terms. Can be tuned.
 #' @param epochs An integer for the number of training iterations. Can be tuned.
+#' @param penalty A number for the regularization penalty (lambda). Default `0` 
+#'   (no regularization). Higher values increase regularization strength. Can be tuned.
+#' @param mixture A number between 0 and 1 for the elastic net mixing parameter. 
+#'   Default `0` (pure L2/Ridge regularization).
+#'   - `0`: Pure L2 regularization (Ridge)
+#'   - `1`: Pure L1 regularization (Lasso)
+#'   - `0 < mixture < 1`: Elastic net (combination of L1 and L2)
+#'   Only relevant when `penalty > 0`. Can be tuned.
 #' @param batch_size An integer for the batch size during training. Can be tuned.
 #' @param learn_rate A number for the learning rate. Can be tuned.
 #' @param optimizer A character string for the optimizer type ("adam", "sgd",
@@ -102,6 +110,8 @@ mlp_kindling =
         bias = NULL,
         epochs = NULL,
         batch_size = NULL,
+        penalty = NULL,
+        mixture = NULL,
         learn_rate = NULL,
         optimizer = NULL,
         loss = NULL,
@@ -121,6 +131,8 @@ mlp_kindling =
         bias = rlang::enquo(bias),
         epochs = rlang::enquo(epochs),
         batch_size = rlang::enquo(batch_size),
+        penalty = rlang::enquo(penalty),
+        mixture = rlang::enquo(mixture),
         learn_rate = rlang::enquo(learn_rate),
         optimizer = rlang::enquo(optimizer),
         loss = rlang::enquo(loss),
@@ -160,6 +172,8 @@ update.mlp_kindling =
         bias = NULL,
         epochs = NULL,
         batch_size = NULL,
+        penalty = NULL,
+        mixture = NULL,
         learn_rate = NULL,
         optimizer = NULL,
         loss = NULL,
@@ -177,6 +191,8 @@ update.mlp_kindling =
         bias = rlang::enquo(bias),
         epochs = rlang::enquo(epochs),
         batch_size = rlang::enquo(batch_size),
+        penalty = rlang::enquo(penalty),
+        mixture = rlang::enquo(mixture),
         learn_rate = rlang::enquo(learn_rate),
         optimizer = rlang::enquo(optimizer),
         loss = rlang::enquo(loss),
@@ -212,8 +228,8 @@ tunable.mlp_kindling = function(x, ...) {
     tibble::tibble(
         name = c(
             "hidden_neurons", "activations", "output_activation", "bias",
-            "epochs", "batch_size", "learn_rate", "optimizer",
-            "loss", "validation_split"
+            "epochs", "batch_size", "penalty", "mixture",
+            "learn_rate", "optimizer", "loss", "validation_split"
         ),
         call_info = list(
             list(pkg = "kindling", fun = "hidden_neurons"),
@@ -222,6 +238,8 @@ tunable.mlp_kindling = function(x, ...) {
             list(pkg = "kindling", fun = "bias"),
             list(pkg = "dials", fun = "epochs"),
             list(pkg = "dials", fun = "batch_size"),
+            list(pkg = "dials", fun = "penalty"),
+            list(pkg = "dials", fun = "mixture"),
             list(pkg = "dials", fun = "learn_rate"),
             list(pkg = "kindling", fun = "optimizer"),
             list(pkg = "dials", fun = "loss"),

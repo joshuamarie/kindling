@@ -13,6 +13,8 @@ mlp_kindling(
   bias = NULL,
   epochs = NULL,
   batch_size = NULL,
+  penalty = NULL,
+  mixture = NULL,
   learn_rate = NULL,
   optimizer = NULL,
   loss = NULL,
@@ -42,6 +44,18 @@ Can be tuned.}
 \item{epochs}{An integer for the number of training iterations. Can be tuned.}
 
 \item{batch_size}{An integer for the batch size during training. Can be tuned.}
+
+\item{penalty}{A number for the regularization penalty (lambda). Default \code{0}
+(no regularization). Higher values increase regularization strength. Can be tuned.}
+
+\item{mixture}{A number between 0 and 1 for the elastic net mixing parameter.
+Default \code{0} (pure L2/Ridge regularization).
+\itemize{
+\item \code{0}: Pure L2 regularization (Ridge)
+\item \code{1}: Pure L1 regularization (Lasso)
+\item \verb{0 < mixture < 1}: Elastic net (combination of L1 and L2)
+Only relevant when \code{penalty > 0}. Can be tuned.
+}}
 
 \item{learn_rate}{A number for the learning rate. Can be tuned.}
 

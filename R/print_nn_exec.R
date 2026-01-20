@@ -2,7 +2,7 @@
 
 concat = function(x) {
     if (is.null(x)) return("No act function applied")
-
+    
     if (inherits(x, "parameterized_activation")) {
         fname = attr(x, "act_name")
         params = paste(
@@ -45,10 +45,12 @@ ordinal_gen = function(x) {
     x = as.character(x)
     regs = c(th = "^1[1:2]$|[0456789]$", st = "(?<!^1)1$", nd = "(?<!^1)2$",
              rd = "(?<!^1)3$")
+    
     for (i in seq_along(regs)) {
         locs = grepl(regs[i], x, perl = TRUE)
         x[locs] = paste0(x[locs], names(regs)[i])
     }
+    
     x
 }
 
@@ -64,15 +66,15 @@ print.ffnn_fit = function(x, ...) {
     title = "Feedforward Neural Networks (MLP)"
     title_block = rule(center = title, line = "=")
     title_block = style_bold(title_block)
-
+    
     cat_line("\n", title_block, "\n")
-
+    
     hidden_units_str = if (is.null(x$hidden_neurons)) {
         "Not specified"
     } else {
         paste(as.character(x$hidden_neurons), collapse = ", ")
     }
-
+    
     summary_data = data.frame(
         type = c(
             "NN Model Type",
@@ -82,6 +84,7 @@ print.ffnn_fit = function(x, ...) {
             "Pred. Type",
             "n_predictors",
             "n_response",
+            "reg.", 
             "Device"
         ),
         res = c(
@@ -92,11 +95,12 @@ print.ffnn_fit = function(x, ...) {
             if (x$is_classification) "classification" else "regression",
             as.character(x$no_x),
             as.character(x$no_y),
+            if (x$penalty == 0) "None" else glue("[\u03BB = {x$penalty}, \u03B1 = {x$mixture}]"), 
             x$device
         ),
         stringsAsFactors = FALSE
     )
-
+    
     inner_acts = if (is.list(x$activations)) {
         vapply(x$activations, concat, character(1))
     } else if (!is.null(x$activations)) {
@@ -106,10 +110,12 @@ print.ffnn_fit = function(x, ...) {
             as.character(x$activations)
         }
     } else {
-        "None"
+        # When no activations specified 
+        # replicate "None" for each hidden layer
+        rep("None", length(x$hidden_neurons))
     }
     outer_acts = concat(x$output_activation)
-
+    
     act_data = data.frame(
         layer = c(
             paste(
@@ -121,20 +127,20 @@ print.ffnn_fit = function(x, ...) {
         infos = c(inner_acts, outer_acts),
         stringsAsFactors = FALSE
     )
-
+    
     # ---Display summary table---
     heading1 = rule(left = "FFNN Model Summary", line = "-")
     heading1_block = style_italic(heading1)
     cat_line("\n", heading1_block, "\n\n")
     table_summary(summary_data, l = 5, center_table = TRUE, style = list(sep = ":  "))
     cat("\n\n")
-
+    
     # ---Activation function summary---
     heading2 = rule(left = "Activation function", line = "-")
     heading2_block = style_italic(heading2)
     cat_line("\n", heading2_block, "\n\n")
     table_summary(act_data, l = 5, center_table = TRUE, style = list(sep = ":  "))
-
+    
     invisible(x)
 }
 
@@ -147,7 +153,7 @@ print.ffnn_fit = function(x, ...) {
 #' @export
 print.rnn_fit = function(x, ...) {
     rnn_type = x$rnn_type
-
+    
     # ---Title section---
     title = switch(
         rnn_type,
@@ -157,15 +163,15 @@ print.rnn_fit = function(x, ...) {
     )
     title_block = rule(center = title, line = "=")
     title_block = style_bold(title_block)
-
+    
     cat_line("\n", title_block, "\n")
-
+    
     hidden_units_str = if (is.null(x$hidden_neurons)) {
         "Not specified"
     } else {
         paste(as.character(x$hidden_neurons), collapse = ", ")
     }
-
+    
     summary_data = data.frame(
         type = c(
             "NN Model Type",
@@ -177,6 +183,7 @@ print.rnn_fit = function(x, ...) {
             "Pred. Type",
             "n_predictors",
             "n_response",
+            "reg.", 
             "Device"
         ),
         res = c(
@@ -189,11 +196,12 @@ print.rnn_fit = function(x, ...) {
             if (x$is_classification) "classification" else "regression",
             as.character(x$no_x),
             as.character(x$no_y),
+            if (x$penalty == 0) "None" else glue("[\u03BB = {x$penalty}, \u03B1 = {x$mixture}]"), 
             x$device
         ),
         stringsAsFactors = FALSE
     )
-
+    
     inner_acts = if (is.list(x$activations)) {
         vapply(x$activations, concat, character(1))
     } else if (!is.null(x$activations)) {
@@ -203,10 +211,12 @@ print.rnn_fit = function(x, ...) {
             as.character(x$activations)
         }
     } else {
-        "None"
+        # When no activations specified 
+        # Replicate "None" for each hidden layer
+        rep("None", length(x$hidden_neurons))
     }
     outer_acts = concat(x$output_activation)
-
+    
     act_data = data.frame(
         layer = c(
             paste(
@@ -218,20 +228,20 @@ print.rnn_fit = function(x, ...) {
         infos = c(inner_acts, outer_acts),
         stringsAsFactors = FALSE
     )
-
+    
     # ---Display summary table---
     heading1 = rule(left = "RNN Model Summary", line = "-")
     heading1_block = style_italic(heading1)
     cat_line("\n", heading1_block, "\n\n")
     table_summary(summary_data, l = 7, center_table = TRUE, style = list(sep = ":  "))
     cat("\n\n")
-
+    
     # ---Activation function summary---
     heading2 = rule(left = "Activation function", line = "-")
     heading2_block = style_italic(heading2)
     cat_line("\n", heading2_block, "\n\n")
     table_summary(act_data, l = 5, center_table = TRUE, style = list(sep = ":  "))
     cat("\n")
-
+    
     invisible(x)
 }

@@ -83,6 +83,24 @@ make_kindling = function() {
         func = list(pkg = "dials", fun = "batch_size"),
         has_submodel = FALSE
     )
+    
+    parsnip::set_model_arg(
+        model = "mlp_kindling",
+        eng = "kindling",
+        parsnip = "penalty",
+        original = "penalty",
+        func = list(pkg = "dials", fun = "penalty"),
+        has_submodel = FALSE
+    )
+    
+    parsnip::set_model_arg(
+        model = "mlp_kindling",
+        eng = "kindling",
+        parsnip = "mixture",
+        original = "mixture",
+        func = list(pkg = "dials", fun = "mixture"),
+        has_submodel = FALSE
+    )
 
     parsnip::set_model_arg(
         model = "mlp_kindling",
@@ -354,6 +372,24 @@ make_kindling = function() {
         parsnip = "batch_size",
         original = "batch_size",
         func = list(pkg = "dials", fun = "batch_size"),
+        has_submodel = FALSE
+    )
+    
+    parsnip::set_model_arg(
+        model = "rnn_kindling",
+        eng = "kindling",
+        parsnip = "penalty",
+        original = "penalty",
+        func = list(pkg = "dials", fun = "penalty"),
+        has_submodel = FALSE
+    )
+    
+    parsnip::set_model_arg(
+        model = "rnn_kindling",
+        eng = "kindling",
+        parsnip = "mixture",
+        original = "mixture",
+        func = list(pkg = "dials", fun = "mixture"),
         has_submodel = FALSE
     )
 
