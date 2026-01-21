@@ -1,36 +1,37 @@
-# kindling: Higher-level interface of torch package to auto-train neural networks
+# kindling:
 
-## Overview
+## Package overview
+
+Title: ***Higher-Level Interface of Torch to Auto-Train Neural
+Networks***
 
 [kindling](https://kindling.joshuamarie.com) bridges the gap between
 **{torch}** and **{tidymodels}**, offering a streamlined interface for
 building, training, and tuning deep learning models within the familiar
 `tidymodels` ecosystem.
 
-Whether you’re prototyping neural architectures or deploying production
-models, [kindling](https://kindling.joshuamarie.com) minimizes
-boilerplate code while preserving the flexibility of
-[torch](https://torch.mlverse.org/docs). It works seamlessly with
-[parsnip](https://github.com/tidymodels/parsnip),
+Whether you’re generating neural network architectures expressions or
+fitting/training actual models,
+[kindling](https://kindling.joshuamarie.com) minimizes boilerplate code
+while preserving [torch](https://torch.mlverse.org/docs). It works
+seamlessly with [parsnip](https://github.com/tidymodels/parsnip),
 [recipes](https://github.com/tidymodels/recipes), and
 [workflows](https://github.com/tidymodels/workflows) to bring deep
 learning into your existing modeling pipeline.
 
-### Key Features
+### Main Features
 
-- Seamless integration with `parsnip` through `set_engine("kindling")`
+- Code generation of [torch](https://torch.mlverse.org/docs) expression
+- Multiple architectures available: feedforward networks (MLP/DNN/FFNN)
+  and recurrent variants (RNN, LSTM, GRU)
 - Native support for [tidymodels](https://tidymodels.tidymodels.org)
   workflows and pipelines
-- Multiple architectures available: feedforward networks (DNN/FFNN) and
-  recurrent variants (RNN, LSTM, GRU)
 - Fine-grained control over network depth, layer sizes, and activation
   functions
-- Full GPU acceleration via [torch](https://torch.mlverse.org/docs)
+- GPU acceleration supports via [torch](https://torch.mlverse.org/docs)
   tensors
-- Dramatically less boilerplate than raw
-  [torch](https://torch.mlverse.org/docs) implementations
 
-### Supported Architectures
+### Supported Architectures (As of now)
 
 - **Feedforward Networks (DNN/FFNN)**: Classic multi-layer perceptrons
   for tabular data and general supervised learning
@@ -56,9 +57,9 @@ Or install the development version from GitHub:
 pak::pak("joshuamarie/kindling")
 ```
 
-## Usage: Four Levels of Interaction
+## Usage: Three Levels of Interaction
 
-[kindling](https://kindling.joshuamarie.com) leverages R’s
+[kindling](https://kindling.joshuamarie.com) is powered by R’s
 metaprogramming capabilities through *code generation*. Generated
 [`torch::nn_module`](https://torch.mlverse.org/docs/reference/nn_module.html)
 expressions power the training functions, which in turn serve as engines
@@ -119,7 +120,7 @@ activation, while the output layer remains “untransformed”.
 
 Skip the code generation and train models directly with your data. This
 approach handles all the [torch](https://torch.mlverse.org/docs)
-boilerplate internally.
+boilerplate when training the models internally.
 
 Let’s classify iris species:
 
@@ -128,10 +129,11 @@ model = ffnn(
     Species ~ .,
     data = iris,
     hidden_neurons = c(10, 15, 7),
-    activations = act_funs(relu, softshrink = args(lambd = 0.5), elu),
+    activations = act_funs(relu, softshrink = args(lambd = 0.5), elu), 
     loss = "cross_entropy",
     epochs = 100
 )
+
 model
 ```
 
@@ -141,13 +143,13 @@ model
 
 -- FFNN Model Summary ----------------------------------------------------------
 
-     ----------------------------------------------------------------------
-       NN Model Type           :             FFNN    n_predictors :     4
-       Number of Epochs        :              100    n_response   :     3
-       Hidden Layer Units      :        10, 15, 7    Device       :   cpu
-       Number of Hidden Layers :                3                 :      
-       Pred. Type              :   classification                 :      
-     ----------------------------------------------------------------------
+    -----------------------------------------------------------------------
+      NN Model Type           :             FFNN    n_predictors :      4
+      Number of Epochs        :              100    n_response   :      3
+      Hidden Layer Units      :        10, 15, 7    reg.         :   None
+      Number of Hidden Layers :                3    Device       :    cpu
+      Pred. Type              :   classification                 :       
+    -----------------------------------------------------------------------
 
 
 
@@ -161,13 +163,18 @@ model
                -------------------------------------------------
 ```
 
-The [`predict()`](https://rdrr.io/r/stats/predict.html) method offers
-flexible prediction behavior through its `newdata` argument:
+Evaluate the prediction through
+[`predict()`](https://rdrr.io/r/stats/predict.html). The
+[`predict()`](https://rdrr.io/r/stats/predict.html) method is extended
+for fitted models through its `newdata` argument.
 
-1.  **Without new data** — predictions default to the training set:
+Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
+
+1.  **Without `newdata`** predictions is the default to the parent data
+    frame.
 
     ``` r
-    predict(model) |> 
+    predict(model) |>
         (\(x) table(actual = iris$Species, predicted = x))()
     #>             predicted
     #> actual       setosa versicolor virginica
@@ -176,21 +183,22 @@ flexible prediction behavior through its `newdata` argument:
     #>   virginica       0          0        50
     ```
 
-2.  **With new data** — simply pass a data frame:
+2.  **With `newdata`** simply pass the new data frame as the new
+    reference.
 
     ``` r
     sample_iris = dplyr::slice_sample(iris, n = 10, by = Species)
 
-    predict(model, newdata = sample_iris) |> 
+    predict(model, newdata = sample_iris) |>
         (\(x) table(actual = sample_iris$Species, predicted = x))()
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
-    #>   versicolor      0          9         1
+    #>   versicolor      0         10         0
     #>   virginica       0          0        10
     ```
 
-### Level 3: Full tidymodels Integration
+### Level 3: Conventional tidymodels Integration
 
 Work with neural networks just like any other
 [parsnip](https://github.com/tidymodels/parsnip) model. This unlocks the
@@ -244,21 +252,29 @@ rnn_kindling(
 #> 2 kap      binary         0
 ```
 
-### Level 4: Hyperparameter Tuning & Resampling
+## Hyperparameter Tuning & Resampling
 
-> This functionality is available, but still not fully optimized.
+The package has integration with
+[tidymodels](https://tidymodels.tidymodels.org), so it supports
+hyperparameter tuning via [tune](https://tune.tidymodels.org/) with
+searchable parameters.
 
-The roadmap includes full support for hyperparameter tuning via
-[tune](https://tune.tidymodels.org/) with searchable parameters:
+The current searchable parameters under
+[kindling](https://kindling.joshuamarie.com):
 
-- Network depth (number of hidden layers - coming soon)
 - Layer widths (neurons per layer)
+- Network depth (number of hidden layers - coming soon)
 - Activation function combinations
 - Output activation
 - Optimizer (Type of optimization algorithm)
 - Bias (choose between the presence and the absence of the bias term)
 - Validation Split Proportion
-- Bidirectional (only for RNN)
+- Bidirectional (boolean; only for RNN)
+
+The searchable parameters outside from
+[kindling](https://kindling.joshuamarie.com), i.e. under
+[dials](https://dials.tidymodels.org) package such as `learn_rate()`
+also supported.
 
 Here’s an example:
 
@@ -288,13 +304,6 @@ nn_wf = workflow() |>
     add_recipe(recipe(Species ~ ., data = iris)) |>
     add_model(mlp_tune_spec)
 
-nn_grid = grid_random(
-    hidden_neurons(c(32L, 128L)),
-    activations(c("relu", "elu")),
-    output_activation(c("sigmoid", "linear")),
-    size = 10
-)
-
 nn_grid_depth = grid_depth(
     hidden_neurons(c(32L, 128L)),
     activations(c("relu", "elu")),
@@ -303,6 +312,14 @@ nn_grid_depth = grid_depth(
     size = 10,
     type = "latin_hypercube"
 )
+
+# This is supported but limited to 1 hidden layer only
+## nn_grid = grid_random(
+##     hidden_neurons(c(32L, 128L)),
+##     activations(c("relu", "elu")),
+##     output_activation(c("sigmoid", "linear")),
+##     size = 10
+## )
 
 nn_tunes = tune::tune_grid(
     nn_wf,
@@ -343,10 +360,10 @@ networks. Two primary algorithms are available:
     ``` r
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1 Petal.Length Species 28.63361
-    #> 2  Sepal.Width Species 27.44163
-    #> 3  Petal.Width Species 23.23601
-    #> 4 Sepal.Length Species 20.68875
+    #> 1 Petal.Length Species 31.60389
+    #> 2 Sepal.Length Species 30.07018
+    #> 3  Petal.Width Species 19.76835
+    #> 4  Sepal.Width Species 18.55758
     ```
 
 2.  Olden’s Algorithm
@@ -354,10 +371,10 @@ networks. Two primary algorithms are available:
     ``` r
     olden(model, bar_plot = FALSE)
     #>        x_names y_names    rel_imp
-    #> 1  Petal.Width Species  0.6897854
-    #> 2  Sepal.Width Species -0.6666908
-    #> 3 Petal.Length Species  0.3950829
-    #> 4 Sepal.Length Species -0.1135594
+    #> 1 Petal.Length Species  0.4688993
+    #> 2  Petal.Width Species  0.2594382
+    #> 3  Sepal.Width Species -0.2189994
+    #> 4 Sepal.Length Species -0.1845522
     ```
 
 ### Integration with {vip}

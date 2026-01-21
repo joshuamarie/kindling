@@ -106,22 +106,22 @@ and tune deep learning models using the familiar <code>tidymodels</code> workflo
 <p>The following uses of this package has 3 levels:</p>
 <p>Level 1: Code generation</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/nn_gens.html">ffnn_generator</a></span><span class="op">(</span></span>
-<span>   nn_name <span class="op">=</span> <span class="st">"MyFFNN"</span>,</span>
-<span>   hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>, <span class="fl">32</span>, <span class="fl">16</span><span class="op">)</span>,</span>
-<span>   no_x <span class="op">=</span> <span class="fl">10</span>,</span>
-<span>   no_y <span class="op">=</span> <span class="fl">1</span>,</span>
-<span>   activations <span class="op">=</span> <span class="st">'relu'</span></span>
+<span>    nn_name <span class="op">=</span> <span class="st">"MyFFNN"</span>,</span>
+<span>    hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>, <span class="fl">32</span>, <span class="fl">16</span><span class="op">)</span>,</span>
+<span>    no_x <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>    no_y <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    activations <span class="op">=</span> <span class="st">'relu'</span></span>
 <span><span class="op">)</span></span></code></pre><p></p></div>
 <p>Level 2: Direct Execution</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="../reference/kindling-basemodels.html">ffnn</a></span><span class="op">(</span></span>
-<span>   <span class="va">Species</span> <span class="op">~</span> <span class="va">.</span>,</span>
-<span>   data <span class="op">=</span> <span class="va">iris</span>,</span>
-<span>   hidden_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">64</span>, <span class="fl">32</span><span class="op">)</span>,</span>
-<span>   activations <span class="op">=</span> <span class="st">'relu'</span>,</span>
-<span>   loss <span class="op">=</span> <span class="st">"cross_entropy"</span>,</span>
-<span>   epochs <span class="op">=</span> <span class="fl">100</span></span>
+<span>    <span class="va">Species</span> <span class="op">~</span> <span class="va">.</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">iris</span>,</span>
+<span>    hidden_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">64</span>, <span class="fl">32</span><span class="op">)</span>,</span>
+<span>    activations <span class="op">=</span> <span class="st">'relu'</span>,</span>
+<span>    loss <span class="op">=</span> <span class="st">"cross_entropy"</span>,</span>
+<span>    epochs <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="op">)</span></span></code></pre><p></p></div>
-<p>Level 3: tidymodels interface part 1</p>
+<p>Level 3: Conventional tidymodels interface</p>
 <p></p><div class="sourceCode r"><pre><code><span><span class="co"># library(parsnip)</span></span>
 <span><span class="co"># library(kindling)</span></span>
 <span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span></span>
@@ -136,14 +136,14 @@ and tune deep learning models using the familiar <code>tidymodels</code> workflo
 <span></span>
 <span><span class="co"># MLP example</span></span>
 <span><span class="fu"><a href="../reference/mlp_kindling.html">mlp_kindling</a></span><span class="op">(</span></span>
-<span>   mode <span class="op">=</span> <span class="st">"classification"</span>,</span>
-<span>   hidden_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">64</span><span class="op">)</span>,</span>
-<span>   activations <span class="op">=</span> <span class="fu"><a href="../reference/act_funs.html">act_funs</a></span><span class="op">(</span><span class="va">relu</span>, softshrink <span class="op">=</span> <span class="fu"><a href="../reference/args.html">args</a></span><span class="op">(</span>lambd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>   epochs <span class="op">=</span> <span class="fl">100</span></span>
+<span>    mode <span class="op">=</span> <span class="st">"classification"</span>,</span>
+<span>    hidden_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">64</span><span class="op">)</span>,</span>
+<span>    activations <span class="op">=</span> <span class="fu"><a href="../reference/act_funs.html">act_funs</a></span><span class="op">(</span><span class="va">relu</span>, softshrink <span class="op">=</span> <span class="fu"><a href="../reference/args.html">args</a></span><span class="op">(</span>lambd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    epochs <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu">fit</span><span class="op">(</span><span class="va">Class</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">ionosphere_data</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu"><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment</a></span><span class="op">(</span>new_data <span class="op">=</span> <span class="va">ionosphere_data</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu">metrics</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Class</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></span>
+<span>    <span class="fu">fit</span><span class="op">(</span><span class="va">Class</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">ionosphere_data</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment</a></span><span class="op">(</span>new_data <span class="op">=</span> <span class="va">ionosphere_data</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">metrics</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Class</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></span>
 <span><span class="co">#&gt; A tibble: 2 × 3</span></span>
 <span><span class="co">#&gt;   .metric  .estimator .estimate</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;</span></span>
@@ -152,32 +152,21 @@ and tune deep learning models using the familiar <code>tidymodels</code> workflo
 <span></span>
 <span><span class="co"># RNN example (toy usage on non-sequential data)</span></span>
 <span><span class="fu"><a href="../reference/rnn_kindling.html">rnn_kindling</a></span><span class="op">(</span></span>
-<span>   mode <span class="op">=</span> <span class="st">"classification"</span>,</span>
-<span>   hidden_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">64</span><span class="op">)</span>,</span>
-<span>   activations <span class="op">=</span> <span class="fu"><a href="../reference/act_funs.html">act_funs</a></span><span class="op">(</span><span class="va">relu</span>, <span class="va">elu</span><span class="op">)</span>,</span>
-<span>   epochs <span class="op">=</span> <span class="fl">100</span>,</span>
-<span>   rnn_type <span class="op">=</span> <span class="st">"gru"</span></span>
+<span>    mode <span class="op">=</span> <span class="st">"classification"</span>,</span>
+<span>    hidden_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">64</span><span class="op">)</span>,</span>
+<span>    activations <span class="op">=</span> <span class="fu"><a href="../reference/act_funs.html">act_funs</a></span><span class="op">(</span><span class="va">relu</span>, <span class="va">elu</span><span class="op">)</span>,</span>
+<span>    epochs <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>    rnn_type <span class="op">=</span> <span class="st">"gru"</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu">fit</span><span class="op">(</span><span class="va">Class</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">ionosphere_data</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu"><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment</a></span><span class="op">(</span>new_data <span class="op">=</span> <span class="va">ionosphere_data</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>   <span class="fu">metrics</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Class</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></span>
+<span>    <span class="fu">fit</span><span class="op">(</span><span class="va">Class</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">ionosphere_data</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment</a></span><span class="op">(</span>new_data <span class="op">=</span> <span class="va">ionosphere_data</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">metrics</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Class</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span></span>
 <span><span class="co">#&gt; A tibble: 2 × 3</span></span>
 <span><span class="co">#&gt;   .metric  .estimator .estimate</span></span>
 <span><span class="co">#&gt;   &lt;chr&gt;    &lt;chr&gt;          &lt;dbl&gt;</span></span>
 <span><span class="co">#&gt; 1 accuracy binary         0.641</span></span>
 <span><span class="co">#&gt; 2 kap      binary         0</span></span></code></pre><p></p></div>
-<p>Level 4: tidymodels interface part 2 - tuning (not yet implemented)</p>
     </div>
-    <div class="section level2">
-    <h2 id="key-features">Key Features<a class="anchor" aria-label="anchor" href="#key-features"></a></h2>
-
-
-<ul><li><p>Define neural network models using <code>parsnip::set_engine("kindling")</code></p></li>
-<li><p>Integrate deep learning into <code>{tidymodels}</code> workflows</p></li>
-<li><p>Support for multiple architectures (DNN, RNN)</p></li>
-<li><p>Hyperparameter tuning for architecture depth, units, and activation</p></li>
-<li><p>Compatible with <code>{torch}</code> tensors for GPU acceleration</p></li>
-</ul></div>
     <div class="section level2">
     <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a></h2>
 
