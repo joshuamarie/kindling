@@ -16,7 +16,7 @@ desc = read.dcf("DESCRIPTION")
 desc = setNames(as.list(desc), colnames(desc))
 ```
 
-# `r desc$Package`: Higher-level interface of torch package to auto-train neural networks <img src="man/figures/logo.png" align="right" alt="" width="120"/>
+# `r desc$Package`: <img src="man/figures/logo.png" align="right" alt="" width="120"/>
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/kindling)](https://CRAN.R-project.org/package=kindling)
@@ -25,22 +25,25 @@ desc = setNames(as.list(desc), colnames(desc))
 
 <!-- > **Note**: This package is under active development. The API may change in future versions. -->
 
-## Overview
+## Package overview
+
+Title: ***`r desc$Title`***
 
 `{kindling}` bridges the gap between **{torch}** and **{tidymodels}**, offering a streamlined interface for building, training, and tuning deep learning models within the familiar `tidymodels` ecosystem.
 
-Whether you're prototyping neural architectures or deploying production models, `{kindling}` minimizes boilerplate code while preserving the flexibility of `{torch}`. It works seamlessly with `{parsnip}`, `{recipes}`, and `{workflows}` to bring deep learning into your existing modeling pipeline.
+Whether you're generating neural network architectures expressions or fitting/training actual models, `{kindling}` minimizes boilerplate code while preserving `{torch}`. It works seamlessly with `{parsnip}`, `{recipes}`, and `{workflows}` to bring deep learning into your existing modeling pipeline.
 
-### Key Features
+### Main Features
 
--   Seamless integration with `parsnip` through `set_engine("kindling")`
+<!-- -   Seamless integration with `parsnip` through `set_engine("kindling")` -->
+-   Code generation of `{torch}` expression
+-   Multiple architectures available: feedforward networks (MLP/DNN/FFNN) and recurrent variants (RNN, LSTM, GRU)
 -   Native support for `{tidymodels}` workflows and pipelines
--   Multiple architectures available: feedforward networks (DNN/FFNN) and recurrent variants (RNN, LSTM, GRU)
 -   Fine-grained control over network depth, layer sizes, and activation functions
--   Full GPU acceleration via `{torch}` tensors
--   Dramatically less boilerplate than raw `{torch}` implementations
+-   GPU acceleration supports via `{torch}` tensors
+<!-- -   Dramatically less boilerplate than raw `{torch}` implementations -->
 
-### Supported Architectures
+### Supported Architectures (As of now)
 
 -   **Feedforward Networks (DNN/FFNN)**: Classic multi-layer perceptrons for tabular data and general supervised learning
 -   **Recurrent Neural Networks (RNN)**: Basic recurrent architecture for sequential patterns
@@ -62,9 +65,9 @@ Or install the development version from GitHub:
 pak::pak("joshuamarie/kindling")
 ```
 
-## Usage: Four Levels of Interaction
+## Usage: Three Levels of Interaction
 
-`{kindling}` leverages R's metaprogramming capabilities through *code generation*. Generated `torch::nn_module` expressions power the training functions, which in turn serve as engines for `{tidymodels}` integration. This architecture gives you flexibility to work at whatever abstraction level suits your task.
+`{kindling}` is powered by R's metaprogramming capabilities through *code generation*. Generated `torch::nn_module` expressions power the training functions, which in turn serve as engines for `{tidymodels}` integration. This architecture gives you flexibility to work at whatever abstraction level suits your task.
 
 ```{r}
 library(kindling)
@@ -90,7 +93,7 @@ This creates a three-hidden-layer network (64 - 32 - 16 neurons) that takes 10 i
 
 ### Level 2: Direct Training Interface
 
-Skip the code generation and train models directly with your data. This approach handles all the `{torch}` boilerplate internally.
+Skip the code generation and train models directly with your data. This approach handles all the `{torch}` boilerplate when training the models internally.
 
 Let's classify iris species:
 
@@ -99,32 +102,37 @@ model = ffnn(
     Species ~ .,
     data = iris,
     hidden_neurons = c(10, 15, 7),
-    activations = act_funs(relu, softshrink = args(lambd = 0.5), elu),
+    activations = act_funs(relu, softshrink = args(lambd = 0.5), elu), 
     loss = "cross_entropy",
     epochs = 100
 )
+
 model
 ```
 
-The `predict()` method offers flexible prediction behavior through its `newdata` argument:
+Evaluate the prediction through `predict()`. The `predict()` method is extended for fitted models through its `newdata` argument. 
 
-1.  **Without new data** — predictions default to the training set:
+Two kinds of `predict()` usage: 
+
+1.  **Without `newdata`** predictions is the default to the parent data frame. 
 
     ```{r}
-    predict(model) |> 
+    predict(model) |>
         (\(x) table(actual = iris$Species, predicted = x))()
     ```
 
-2.  **With new data** — simply pass a data frame:
+
+2.  **With `newdata`** simply pass the new data frame as the new reference. 
 
     ```{r}
     sample_iris = dplyr::slice_sample(iris, n = 10, by = Species)
-    
-    predict(model, newdata = sample_iris) |> 
+
+    predict(model, newdata = sample_iris) |>
         (\(x) table(actual = sample_iris$Species, predicted = x))()
     ```
 
-### Level 3: Full tidymodels Integration
+
+### Level 3: Conventional tidymodels Integration
 
 Work with neural networks just like any other `{parsnip}` model. This unlocks the entire `{tidymodels}` toolkit for preprocessing, cross-validation, and model evaluation.
 
@@ -175,20 +183,24 @@ rnn_kindling(
 #> 2 kap      binary         0
 ```
 
-### Level 4: Hyperparameter Tuning & Resampling
+## Hyperparameter Tuning & Resampling
 
-> This functionality is available, but still not fully optimized.
+<!-- > This functionality is available, but still not fully optimized. -->
 
-The roadmap includes full support for hyperparameter tuning via `{tune}` with searchable parameters:
+The package has integration with `{tidymodels}`, so it supports hyperparameter tuning via `{tune}` with searchable parameters.
 
--   Network depth (number of hidden layers - coming soon)
+The current searchable parameters under `{kindling}`: 
+
 -   Layer widths (neurons per layer)
+-   Network depth (number of hidden layers - coming soon)
 -   Activation function combinations
 -   Output activation
 -   Optimizer (Type of optimization algorithm)
 -   Bias (choose between the presence and the absence of the bias term)
 -   Validation Split Proportion
--   Bidirectional (only for RNN)
+-   Bidirectional (boolean; only for RNN)
+
+The searchable parameters outside from `{kindling}`, i.e. under `{dials}` package such as `learn_rate()` also supported. 
 
 Here's an example: 
 
@@ -218,13 +230,6 @@ nn_wf = workflow() |>
     add_recipe(recipe(Species ~ ., data = iris)) |>
     add_model(mlp_tune_spec)
 
-nn_grid = grid_random(
-    hidden_neurons(c(32L, 128L)),
-    activations(c("relu", "elu")),
-    output_activation(c("sigmoid", "linear")),
-    size = 10
-)
-
 nn_grid_depth = grid_depth(
     hidden_neurons(c(32L, 128L)),
     activations(c("relu", "elu")),
@@ -233,6 +238,14 @@ nn_grid_depth = grid_depth(
     size = 10,
     type = "latin_hypercube"
 )
+
+# This is supported but limited to 1 hidden layer only
+## nn_grid = grid_random(
+##     hidden_neurons(c(32L, 128L)),
+##     activations(c("relu", "elu")),
+##     output_activation(c("sigmoid", "linear")),
+##     size = 10
+## )
 
 nn_tunes = tune::tune_grid(
     nn_wf,
