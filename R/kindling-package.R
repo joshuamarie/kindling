@@ -31,11 +31,11 @@
 #'
 #' ``` r
 #' ffnn_generator(
-#'    nn_name = "MyFFNN",
-#'    hd_neurons = c(64, 32, 16),
-#'    no_x = 10,
-#'    no_y = 1,
-#'    activations = 'relu'
+#'     nn_name = "MyFFNN",
+#'     hd_neurons = c(64, 32, 16),
+#'     no_x = 10,
+#'     no_y = 1,
+#'     activations = 'relu'
 #' )
 #' ```
 #'
@@ -43,16 +43,16 @@
 #'
 #' ``` r
 #' ffnn(
-#'    Species ~ .,
-#'    data = iris,
-#'    hidden_neurons = c(128, 64, 32),
-#'    activations = 'relu',
-#'    loss = "cross_entropy",
-#'    epochs = 100
+#'     Species ~ .,
+#'     data = iris,
+#'     hidden_neurons = c(128, 64, 32),
+#'     activations = 'relu',
+#'     loss = "cross_entropy",
+#'     epochs = 100
 #' )
 #' ```
 #'
-#' Level 3: tidymodels interface part 1
+#' Level 3: Conventional tidymodels interface
 #'
 #' ``` r
 #' # library(parsnip)
@@ -69,14 +69,14 @@
 #'
 #' # MLP example
 #' mlp_kindling(
-#'    mode = "classification",
-#'    hidden_neurons = c(128, 64),
-#'    activations = act_funs(relu, softshrink = args(lambd = 0.5)),
-#'    epochs = 100
+#'     mode = "classification",
+#'     hidden_neurons = c(128, 64),
+#'     activations = act_funs(relu, softshrink = args(lambd = 0.5)),
+#'     epochs = 100
 #' ) |>
-#'    fit(Class ~ ., data = ionosphere_data) |>
-#'    augment(new_data = ionosphere_data) |>
-#'    metrics(truth = Class, estimate = .pred_class)
+#'     fit(Class ~ ., data = ionosphere_data) |>
+#'     augment(new_data = ionosphere_data) |>
+#'     metrics(truth = Class, estimate = .pred_class)
 #' #> A tibble: 2 × 3
 #' #>   .metric  .estimator .estimate
 #' #>   <chr>    <chr>          <dbl>
@@ -85,15 +85,15 @@
 #'
 #' # RNN example (toy usage on non-sequential data)
 #' rnn_kindling(
-#'    mode = "classification",
-#'    hidden_neurons = c(128, 64),
-#'    activations = act_funs(relu, elu),
-#'    epochs = 100,
-#'    rnn_type = "gru"
+#'     mode = "classification",
+#'     hidden_neurons = c(128, 64),
+#'     activations = act_funs(relu, elu),
+#'     epochs = 100,
+#'     rnn_type = "gru"
 #' ) |>
-#'    fit(Class ~ ., data = ionosphere_data) |>
-#'    augment(new_data = ionosphere_data) |>
-#'    metrics(truth = Class, estimate = .pred_class)
+#'     fit(Class ~ ., data = ionosphere_data) |>
+#'     augment(new_data = ionosphere_data) |>
+#'     metrics(truth = Class, estimate = .pred_class)
 #' #> A tibble: 2 × 3
 #' #>   .metric  .estimator .estimate
 #' #>   <chr>    <chr>          <dbl>
@@ -101,14 +101,12 @@
 #' #> 2 kap      binary         0
 #' ```
 #'
-#' Level 4: tidymodels interface part 2 - tuning (not yet implemented)
-#'
-#' @section Key Features:
-#' - Define neural network models using `parsnip::set_engine("kindling")`
-#' - Integrate deep learning into `{tidymodels}` workflows
-#' - Support for multiple architectures (DNN, RNN)
-#' - Hyperparameter tuning for architecture depth, units, and activation
-#' - Compatible with `{torch}` tensors for GPU acceleration
+#' @section Main Features 
+#' -   Code generation of `{torch}` expression
+#' -   Multiple architectures available: feedforward networks (MLP/DNN/FFNN) and recurrent variants (RNN, LSTM, GRU)
+#' -   Native support for `{tidymodels}` workflows and pipelines
+#' -   Fine-grained control over network depth, layer sizes, and activation functions
+#' -   GPU acceleration supports via `{torch}` tensors
 #'
 #' @references
 #'

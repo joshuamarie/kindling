@@ -38,27 +38,27 @@ The following uses of this package has 3 levels:
 Level 1: Code generation
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{ffnn_generator(
-   nn_name = "MyFFNN",
-   hd_neurons = c(64, 32, 16),
-   no_x = 10,
-   no_y = 1,
-   activations = 'relu'
+    nn_name = "MyFFNN",
+    hd_neurons = c(64, 32, 16),
+    no_x = 10,
+    no_y = 1,
+    activations = 'relu'
 )
 }\if{html}{\out{</div>}}
 
 Level 2: Direct Execution
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{ffnn(
-   Species ~ .,
-   data = iris,
-   hidden_neurons = c(128, 64, 32),
-   activations = 'relu',
-   loss = "cross_entropy",
-   epochs = 100
+    Species ~ .,
+    data = iris,
+    hidden_neurons = c(128, 64, 32),
+    activations = 'relu',
+    loss = "cross_entropy",
+    epochs = 100
 )
 }\if{html}{\out{</div>}}
 
-Level 3: tidymodels interface part 1
+Level 3: Conventional tidymodels interface
 
 \if{html}{\out{<div class="sourceCode r">}}\preformatted{# library(parsnip)
 # library(kindling)
@@ -74,14 +74,14 @@ ionosphere_data = Ionosphere[, -2]
 
 # MLP example
 mlp_kindling(
-   mode = "classification",
-   hidden_neurons = c(128, 64),
-   activations = act_funs(relu, softshrink = args(lambd = 0.5)),
-   epochs = 100
+    mode = "classification",
+    hidden_neurons = c(128, 64),
+    activations = act_funs(relu, softshrink = args(lambd = 0.5)),
+    epochs = 100
 ) |>
-   fit(Class ~ ., data = ionosphere_data) |>
-   augment(new_data = ionosphere_data) |>
-   metrics(truth = Class, estimate = .pred_class)
+    fit(Class ~ ., data = ionosphere_data) |>
+    augment(new_data = ionosphere_data) |>
+    metrics(truth = Class, estimate = .pred_class)
 #> A tibble: 2 × 3
 #>   .metric  .estimator .estimate
 #>   <chr>    <chr>          <dbl>
@@ -90,34 +90,21 @@ mlp_kindling(
 
 # RNN example (toy usage on non-sequential data)
 rnn_kindling(
-   mode = "classification",
-   hidden_neurons = c(128, 64),
-   activations = act_funs(relu, elu),
-   epochs = 100,
-   rnn_type = "gru"
+    mode = "classification",
+    hidden_neurons = c(128, 64),
+    activations = act_funs(relu, elu),
+    epochs = 100,
+    rnn_type = "gru"
 ) |>
-   fit(Class ~ ., data = ionosphere_data) |>
-   augment(new_data = ionosphere_data) |>
-   metrics(truth = Class, estimate = .pred_class)
+    fit(Class ~ ., data = ionosphere_data) |>
+    augment(new_data = ionosphere_data) |>
+    metrics(truth = Class, estimate = .pred_class)
 #> A tibble: 2 × 3
 #>   .metric  .estimator .estimate
 #>   <chr>    <chr>          <dbl>
 #> 1 accuracy binary         0.641
 #> 2 kap      binary         0
 }\if{html}{\out{</div>}}
-
-Level 4: tidymodels interface part 2 - tuning (not yet implemented)
-}
-
-\section{Key Features}{
-
-\itemize{
-\item Define neural network models using \code{parsnip::set_engine("kindling")}
-\item Integrate deep learning into \code{{tidymodels}} workflows
-\item Support for multiple architectures (DNN, RNN)
-\item Hyperparameter tuning for architecture depth, units, and activation
-\item Compatible with \code{{torch}} tensors for GPU acceleration
-}
 }
 
 \section{License}{
