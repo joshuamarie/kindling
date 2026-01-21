@@ -83,7 +83,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
 <div class="page-header">
-<img src="logo.png" class="logo" alt=""><h1 id="kindling-">kindling: <a class="anchor" aria-label="anchor" href="#kindling-"></a>
+<img src="logo.png" class="logo" alt=""><h1 id="kindling-">kindling <a class="anchor" aria-label="anchor" href="#kindling-"></a>
 </h1>
 </div>
 <!-- badges: start -->
@@ -93,8 +93,8 @@
 <h2 id="package-overview">Package overview<a class="anchor" aria-label="anchor" href="#package-overview"></a>
 </h2>
 <p>Title: <strong><em>Higher-Level Interface of Torch to Auto-Train Neural Networks</em></strong></p>
-<p><a href="https://kindling.joshuamarie.com">kindling</a> bridges the gap between <strong>{torch}</strong> and <strong>{tidymodels}</strong>, offering a streamlined interface for building, training, and tuning deep learning models within the familiar <code>tidymodels</code> ecosystem.</p>
-<p>Whether you’re generating neural network architectures expressions or fitting/training actual models, <a href="https://kindling.joshuamarie.com">kindling</a> minimizes boilerplate code while preserving <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>. It works seamlessly with <a href="https://github.com/tidymodels/parsnip" class="external-link">parsnip</a>, <a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a>, and <a href="https://github.com/tidymodels/workflows" class="external-link">workflows</a> to bring deep learning into your existing modeling pipeline.</p>
+<p>Whether you’re generating neural network architectures expressions or fitting/training actual models, <a href="https://kindling.joshuamarie.com">kindling</a> minimizes boilerplate code while preserving <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>. Since this package uses <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> as its backend, GPU/TPU devices also supported.</p>
+<p><a href="https://kindling.joshuamarie.com">kindling</a> also bridges the gap between <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> and <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>. It works seamlessly with <a href="https://github.com/tidymodels/parsnip" class="external-link">parsnip</a>, <a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a>, and <a href="https://github.com/tidymodels/workflows" class="external-link">workflows</a> to bring deep learning into your existing <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> modeling pipeline. This enables a streamlined interface for building, training, and tuning deep learning models within the familiar <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> ecosystem.</p>
 <div class="section level3">
 <h3 id="main-features">Main Features<a class="anchor" aria-label="anchor" href="#main-features"></a>
 </h3>
@@ -229,7 +229,7 @@
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         50          0         0</span></span>
 <span><span class="co">#&gt;   versicolor      0         47         3</span></span>
-<span><span class="co">#&gt;   virginica       0          0        50</span></span></code></pre></div>
+<span><span class="co">#&gt;   virginica       0          1        49</span></span></code></pre></div>
 </li>
 <li>
 <p><strong>With <code>newdata</code></strong> simply pass the new data frame as the new reference.</p>
@@ -241,7 +241,7 @@
 <span><span class="co">#&gt;             predicted</span></span>
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         10          0         0</span></span>
-<span><span class="co">#&gt;   versicolor      0         10         0</span></span>
+<span><span class="co">#&gt;   versicolor      0          9         1</span></span>
 <span><span class="co">#&gt;   virginica       0          0        10</span></span></code></pre></div>
 </li>
 </ol>
@@ -390,20 +390,20 @@
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/garson.html" class="external-link">garson</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names  rel_imp</span></span>
-<span><span class="co">#&gt; 1 Petal.Length Species 31.60389</span></span>
-<span><span class="co">#&gt; 2 Sepal.Length Species 30.07018</span></span>
-<span><span class="co">#&gt; 3  Petal.Width Species 19.76835</span></span>
-<span><span class="co">#&gt; 4  Sepal.Width Species 18.55758</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  Sepal.Width Species 28.02159</span></span>
+<span><span class="co">#&gt; 2 Petal.Length Species 26.55890</span></span>
+<span><span class="co">#&gt; 3  Petal.Width Species 24.75992</span></span>
+<span><span class="co">#&gt; 4 Sepal.Length Species 20.65959</span></span></code></pre></div>
 </li>
 <li>
 <p>Olden’s Algorithm</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/olden.html" class="external-link">olden</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names    rel_imp</span></span>
-<span><span class="co">#&gt; 1 Petal.Length Species  0.4688993</span></span>
-<span><span class="co">#&gt; 2  Petal.Width Species  0.2594382</span></span>
-<span><span class="co">#&gt; 3  Sepal.Width Species -0.2189994</span></span>
-<span><span class="co">#&gt; 4 Sepal.Length Species -0.1845522</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  Petal.Width Species  0.7488315</span></span>
+<span><span class="co">#&gt; 2  Sepal.Width Species -0.5967398</span></span>
+<span><span class="co">#&gt; 3 Petal.Length Species  0.4686559</span></span>
+<span><span class="co">#&gt; 4 Sepal.Length Species -0.3131365</span></span></code></pre></div>
 </li>
 </ol>
 <div class="section level3">

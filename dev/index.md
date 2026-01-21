@@ -1,23 +1,28 @@
-# kindling:
+# kindling
 
 ## Package overview
 
 Title: ***Higher-Level Interface of Torch to Auto-Train Neural
 Networks***
 
-[kindling](https://kindling.joshuamarie.com) bridges the gap between
-**{torch}** and **{tidymodels}**, offering a streamlined interface for
-building, training, and tuning deep learning models within the familiar
-`tidymodels` ecosystem.
-
 Whether you’re generating neural network architectures expressions or
 fitting/training actual models,
 [kindling](https://kindling.joshuamarie.com) minimizes boilerplate code
-while preserving [torch](https://torch.mlverse.org/docs). It works
-seamlessly with [parsnip](https://github.com/tidymodels/parsnip),
+while preserving [torch](https://torch.mlverse.org/docs). Since this
+package uses [torch](https://torch.mlverse.org/docs) as its backend,
+GPU/TPU devices also supported.
+
+[kindling](https://kindling.joshuamarie.com) also bridges the gap
+between [torch](https://torch.mlverse.org/docs) and
+[tidymodels](https://tidymodels.tidymodels.org). It works seamlessly
+with [parsnip](https://github.com/tidymodels/parsnip),
 [recipes](https://github.com/tidymodels/recipes), and
 [workflows](https://github.com/tidymodels/workflows) to bring deep
-learning into your existing modeling pipeline.
+learning into your existing
+[tidymodels](https://tidymodels.tidymodels.org) modeling pipeline. This
+enables a streamlined interface for building, training, and tuning deep
+learning models within the familiar
+[tidymodels](https://tidymodels.tidymodels.org) ecosystem.
 
 ### Main Features
 
@@ -180,7 +185,7 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
     #>   versicolor      0         47         3
-    #>   virginica       0          0        50
+    #>   virginica       0          1        49
     ```
 
 2.  **With `newdata`** simply pass the new data frame as the new
@@ -194,7 +199,7 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
-    #>   versicolor      0         10         0
+    #>   versicolor      0          9         1
     #>   virginica       0          0        10
     ```
 
@@ -360,10 +365,10 @@ networks. Two primary algorithms are available:
     ``` r
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1 Petal.Length Species 31.60389
-    #> 2 Sepal.Length Species 30.07018
-    #> 3  Petal.Width Species 19.76835
-    #> 4  Sepal.Width Species 18.55758
+    #> 1  Sepal.Width Species 28.02159
+    #> 2 Petal.Length Species 26.55890
+    #> 3  Petal.Width Species 24.75992
+    #> 4 Sepal.Length Species 20.65959
     ```
 
 2.  Olden’s Algorithm
@@ -371,10 +376,10 @@ networks. Two primary algorithms are available:
     ``` r
     olden(model, bar_plot = FALSE)
     #>        x_names y_names    rel_imp
-    #> 1 Petal.Length Species  0.4688993
-    #> 2  Petal.Width Species  0.2594382
-    #> 3  Sepal.Width Species -0.2189994
-    #> 4 Sepal.Length Species -0.1845522
+    #> 1  Petal.Width Species  0.7488315
+    #> 2  Sepal.Width Species -0.5967398
+    #> 3 Petal.Length Species  0.4686559
+    #> 4 Sepal.Length Species -0.3131365
     ```
 
 ### Integration with {vip}
