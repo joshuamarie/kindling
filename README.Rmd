@@ -16,7 +16,7 @@ desc = read.dcf("DESCRIPTION")
 desc = setNames(as.list(desc), colnames(desc))
 ```
 
-# `r desc$Package`: <img src="man/figures/logo.png" align="right" alt="" width="120"/>
+# `r desc$Package` <img src="man/figures/logo.png" align="right" alt="" width="120"/>
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/kindling)](https://CRAN.R-project.org/package=kindling)
@@ -29,9 +29,9 @@ desc = setNames(as.list(desc), colnames(desc))
 
 Title: ***`r desc$Title`***
 
-`{kindling}` bridges the gap between **{torch}** and **{tidymodels}**, offering a streamlined interface for building, training, and tuning deep learning models within the familiar `tidymodels` ecosystem.
+Whether you're generating neural network architectures expressions or fitting/training actual models, `{kindling}` minimizes boilerplate code while preserving `{torch}`. Since this package uses `{torch}` as its backend, GPU/TPU devices also supported. 
 
-Whether you're generating neural network architectures expressions or fitting/training actual models, `{kindling}` minimizes boilerplate code while preserving `{torch}`. It works seamlessly with `{parsnip}`, `{recipes}`, and `{workflows}` to bring deep learning into your existing modeling pipeline.
+`{kindling}` also bridges the gap between `{torch}` and `{tidymodels}`. It works seamlessly with `{parsnip}`, `{recipes}`, and `{workflows}` to bring deep learning into your existing `{tidymodels}` modeling pipeline. This enables a streamlined interface for building, training, and tuning deep learning models within the familiar `{tidymodels}` ecosystem.
 
 ### Main Features
 
