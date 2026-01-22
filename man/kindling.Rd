@@ -28,7 +28,7 @@ Note: The hyperparameter tuning support is not currently implemented.
 }
 \details{
 The \code{{kindling}} package provides a unified, high-level interface that bridges
-the \strong{{torch}} and \strong{{tidymodels}} ecosystems, making it easy to define, train,
+the \code{{torch}} and \code{{tidymodels}} ecosystems, making it easy to define, train,
 and tune deep learning models using the familiar \code{tidymodels} workflow.
 }
 \section{How to use}{
@@ -105,6 +105,17 @@ rnn_kindling(
 #> 1 accuracy binary         0.641
 #> 2 kap      binary         0
 }\if{html}{\out{</div>}}
+}
+
+\section{Main Features}{
+
+\itemize{
+\item Code generation of \code{{torch}} expression
+\item Multiple architectures available: feedforward networks (MLP/DNN/FFNN) and recurrent variants (RNN, LSTM, GRU)
+\item Native support for \code{{tidymodels}} workflows and pipelines
+\item Fine-grained control over network depth, layer sizes, and activation functions
+\item GPU acceleration supports via \code{{torch}} tensors
+}
 }
 
 \section{License}{

@@ -1,7 +1,7 @@
 #' `{kindling}`: Higher-level interface of torch package to auto-train neural networks
 #'
 #' The `{kindling}` package provides a unified, high-level interface that bridges
-#' the **{torch}** and **{tidymodels}** ecosystems, making it easy to define, train,
+#' the `{torch}` and `{tidymodels}` ecosystems, making it easy to define, train,
 #' and tune deep learning models using the familiar `tidymodels` workflow.
 #'
 #' @description
@@ -101,7 +101,7 @@
 #' #> 2 kap      binary         0
 #' ```
 #'
-#' @section Main Features 
+#' @section Main Features: 
 #' -   Code generation of `{torch}` expression
 #' -   Multiple architectures available: feedforward networks (MLP/DNN/FFNN) and recurrent variants (RNN, LSTM, GRU)
 #' -   Native support for `{tidymodels}` workflows and pipelines
