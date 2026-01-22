@@ -59,6 +59,8 @@ ordinal_gen = function(x) {
 #' @param x An object of class "ffnn_fit"
 #' @param ... Additional arguments (unused)
 #'
+#' @return No return value, called for side effects (printing model summary)
+#'
 #' @keywords internal
 #' @export
 print.ffnn_fit = function(x, ...) {
@@ -148,6 +150,8 @@ print.ffnn_fit = function(x, ...) {
 #'
 #' @param x An object of class "rnn_fit"
 #' @param ... Additional arguments (unused)
+#'
+#' @return No return value, called for side effects (printing model summary)
 #'
 #' @keywords internal
 #' @export

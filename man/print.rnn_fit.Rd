@@ -11,6 +11,9 @@
 
 \item{...}{Additional arguments (unused)}
 }
+\value{
+No return value, called for side effects (printing model summary)
+}
 \description{
 Print method for rnn_fit objects
 }

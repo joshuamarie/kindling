@@ -27,6 +27,19 @@
 #'   \item{`validation_split`}{Proportion of training data held out for validation.}
 #'   \item{`bidirectional`}{Whether RNN layers are bidirectional.}
 #' }
+#' 
+#' @return
+#' Each function returns a `dials` parameter object:
+#' \describe{
+#'     \item{`n_hlayers()`}{A quantitative parameter for the number of hidden layers}
+#'     \item{`hidden_neurons()`}{A quantitative parameter for hidden units per layer}
+#'     \item{`activations()`}{A qualitative parameter for activation function names}
+#'     \item{`output_activation()`}{A qualitative parameter for output activation}
+#'     \item{`optimizer()`}{A qualitative parameter for optimizer type}
+#'     \item{`bias()`}{A qualitative parameter for bias inclusion}
+#'     \item{`validation_split()`}{A quantitative parameter for validation proportion}
+#'     \item{`bidirectional()`}{A qualitative parameter for bidirectional RNN}
+#' }
 #'
 #' @examples
 #' \dontrun{

@@ -30,7 +30,11 @@ This must be one of the strings:
 }}
 }
 \value{
-A data frame with variable importance scores.
+A data frame for both "garson" and "olden" classes with columns:
+\item{x_names}{Character vector of predictor variable names}
+\item{y_names}{Character string of response variable name}
+\item{rel_imp}{Numeric vector of relative importance scores (percentage)}
+The data frame is sorted by importance in descending order.
 
 A tibble with columns "Variable" and "Importance"
 (via \code{vip::vi()} / \code{vip::vi_model()} only).
@@ -58,7 +62,7 @@ importance from the fitted \code{ffnn()} model.
 }
 
 \examples{
-# Directly use `NeuralNetTools::garson`
+\donttest{
 if (torch::torch_is_installed()) {
     model_mlp = ffnn(
         Species ~ .,
@@ -69,13 +73,20 @@ if (torch::torch_is_installed()) {
         verbose = FALSE,
         cache_weights = TRUE
     )
-
+    
+    # Directly use `NeuralNetTools::garson`
     model_mlp |>
         garson()
+    
+    # Directly use `NeuralNetTools::olden`    
+    model_mlp |>
+        olden()
 } else {
     message("Torch not fully installed — skipping example")
 }
+}
 
+\donttest{
 # kindling also supports `vip::vi()` / `vip::vi_model()`
 if (torch::torch_is_installed()) {
     model_mlp = ffnn(
@@ -93,6 +104,7 @@ if (torch::torch_is_installed()) {
         vip::vip()
 } else {
     message("Torch not fully installed — skipping example")
+}
 }
 
 }

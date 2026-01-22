@@ -42,6 +42,19 @@ bidirectional(values = c(TRUE, FALSE))
 
 \item{values}{Logical vector of possible values.}
 }
+\value{
+Each function returns a \code{dials} parameter object:
+\describe{
+\item{\code{n_hlayers()}}{A quantitative parameter for the number of hidden layers}
+\item{\code{hidden_neurons()}}{A quantitative parameter for hidden units per layer}
+\item{\code{activations()}}{A qualitative parameter for activation function names}
+\item{\code{output_activation()}}{A qualitative parameter for output activation}
+\item{\code{optimizer()}}{A qualitative parameter for optimizer type}
+\item{\code{bias()}}{A qualitative parameter for bias inclusion}
+\item{\code{validation_split()}}{A quantitative parameter for validation proportion}
+\item{\code{bidirectional()}}{A qualitative parameter for bidirectional RNN}
+}
+}
 \description{
 These parameters extend the \strong{dials} framework to support hyperparameter
 tuning of neural networks built with the \code{{kindling}} package. They control

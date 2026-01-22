@@ -650,6 +650,11 @@ rnn =
 #' @param newdata Data frame. New data for predictions.
 #' @param type Character. Type of prediction: "response" (default) or "prob" for classification.
 #' @param ... Additional arguments (unused).
+#' 
+#' @return For regression: A numeric vector or matrix of predictions.
+#'     For classification with type = "response": A factor vector of predicted classes.
+#'     For classification with type = "prob": A numeric matrix of class probabilities
+#'     with columns named by class levels.
 #'
 #' @keywords internal
 #' @export
@@ -720,6 +725,11 @@ predict.ffnn_fit = function(object, newdata = NULL, type = "response", ...) {
 #' @param newdata Data frame. New data for predictions.
 #' @param type Character. Type of prediction: "response" (default) or "prob" for classification.
 #' @param ... Additional arguments (unused).
+#' 
+#' @return For regression: A numeric vector or matrix of predictions.
+#'     For classification with type = "response": A factor vector of predicted classes.
+#'     For classification with type = "prob": A numeric matrix of class probabilities
+#'     with columns named by class levels.
 #'
 #' @keywords internal
 #' @export
