@@ -172,8 +172,9 @@ Whether recurrent layers should process sequences in both directions.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 library(dials)
+#> Loading required package: scales
 library(tune)
 
 # Create a tuning grid
@@ -192,5 +193,5 @@ mlp_spec = mlp_kindling(
     epochs = tune(),
     learn_rate = tune()
 )
-} # }
+# }
 ```

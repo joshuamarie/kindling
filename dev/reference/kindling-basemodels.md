@@ -215,7 +215,7 @@ Train a recurrent neural network using the torch package.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 if (torch::torch_is_installed()) {
     # Regression task (auto-detect GPU)
     model_reg = ffnn(
@@ -240,9 +240,9 @@ if (torch::torch_is_installed()) {
     message("Torch not fully installed – skipping example")
 }
 
-} # }
+# }
 
-if (FALSE) { # \dontrun{
+# \donttest{
 # Regression with LSTM on GPU
 if (torch::torch_is_installed()) {
     model_rnn = rnn(
@@ -266,5 +266,5 @@ if (torch::torch_is_installed()) {
 } else {
     message("Torch not fully installed – skipping example")
 }
-} # }
+# }
 ```

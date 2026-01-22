@@ -164,7 +164,7 @@ The `device` parameter controls where computation occurs:
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 if (torch::torch_is_installed()) {
     box::use(
         recipes[recipe],
@@ -191,5 +191,45 @@ if (torch::torch_is_installed()) {
 } else {
     message("Torch not fully installed — skipping example")
 }
-} # }
+#> ══ Workflow [trained] ══════════════════════════════════════════════════════════
+#> Preprocessor: Recipe
+#> Model: rnn_kindling()
+#> 
+#> ── Preprocessor ────────────────────────────────────────────────────────────────
+#> 0 Recipe Steps
+#> 
+#> ── Model ───────────────────────────────────────────────────────────────────────
+#> Warning: running command 'tput cols' had status 2
+#> Warning: running command 'tput cols' had status 2
+#> 
+#> ========================= Long Short-Term Memory (RNN) =========================
+#> 
+#> 
+#> -- RNN Model Summary -----------------------------------------------------------
+#> 
+#> 
+#> Warning: running command 'tput cols' had status 2
+#> -----------------------------------------------------------------------
+#>   NN Model Type           :              RNN    n_predictors :      4
+#>   RNN Type                :             LSTM    n_response   :      3
+#>   Bidirectional           :              Yes    reg.         :   None
+#>   Number of Epochs        :              100    Device       :    cpu
+#>   Hidden Layer Units      :           64, 32                 :       
+#>   Number of Hidden Layers :                2                 :       
+#>   Pred. Type              :   classification                 :       
+#> -----------------------------------------------------------------------
+#> 
+#> 
+#> 
+#> -- Activation function ---------------------------------------------------------
+#> 
+#> 
+#> Warning: running command 'tput cols' had status 2
+#> -------------------------------------------------
+#>   1st Layer {64}    :                      relu
+#>   2nd Layer {32}    :                       elu
+#>   Output Activation :   No act function applied
+#> -------------------------------------------------
+#> 
+# }
 ```

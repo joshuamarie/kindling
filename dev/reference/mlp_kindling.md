@@ -159,7 +159,7 @@ When tuning, you can use special tune tokens:
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 if (torch::torch_is_installed()) {
     box::use(
         recipes[recipe],
@@ -192,5 +192,5 @@ if (torch::torch_is_installed()) {
 } else {
     message("Torch not fully installed — skipping example")
 }
-} # }
+# }
 ```
