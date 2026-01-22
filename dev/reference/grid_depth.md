@@ -162,7 +162,10 @@ length matching the sampled depth.
 
 ``` r
 # \donttest{
+if (FALSE) { # \dontrun{
 library(dials)
+library(workflows)
+library(tune)
 
 # Method 1: Using parameters()
 params = parameters(
@@ -171,16 +174,6 @@ params = parameters(
     epochs(c(50L, 200L))
 )
 grid = grid_depth(params, n_hlayer = 2:3, type = "regular", levels = 3)
-#> Warning: `cross()` was deprecated in purrr 1.0.0.
-#> ℹ Please use `tidyr::expand_grid()` instead.
-#> ℹ See <https://github.com/tidyverse/purrr/issues/768>.
-#> ℹ The deprecated feature was likely used in the kindling package.
-#>   Please report the issue at <https://github.com/joshuamarie/kindling/issues>.
-#> Warning: `cross2()` was deprecated in purrr 1.0.0.
-#> ℹ Please use `tidyr::expand_grid()` instead.
-#> ℹ See <https://github.com/tidyverse/purrr/issues/768>.
-#> ℹ The deprecated feature was likely used in the kindling package.
-#>   Please report the issue at <https://github.com/joshuamarie/kindling/issues>.
 
 # Method 2: Direct param objects
 grid = grid_depth(
@@ -196,8 +189,7 @@ grid = grid_depth(
 wf = workflow() |>
     add_model(mlp_kindling(hidden_neurons = tune(), activations = tune())) |>
     add_formula(y ~ .)
-#> Error in add_formula(add_model(workflow(), mlp_kindling(hidden_neurons = tune(),     activations = tune())), y ~ .): could not find function "add_formula"
 grid = grid_depth(wf, n_hlayer = 2:4, type = "latin_hypercube", size = 15)
-#> Error: object 'wf' not found
+} # }
 # }
 ```
