@@ -133,7 +133,7 @@ determines network depth and creates list columns for \code{hidden_neurons} and
 \code{activations}, where each element is a vector of length matching the sampled depth.
 }
 \examples{
-\dontrun{
+\donttest{
 library(dials)
 
 # Method 1: Using parameters()

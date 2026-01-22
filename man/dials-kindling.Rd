@@ -133,7 +133,7 @@ Whether recurrent layers should process sequences in both directions.
 }
 
 \examples{
-\dontrun{
+\donttest{
 library(dials)
 library(tune)
 

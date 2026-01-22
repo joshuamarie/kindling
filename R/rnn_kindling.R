@@ -32,7 +32,7 @@
 #' @return A model specification object with class `rnn_kindling`.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (torch::torch_is_installed()) {
 #'     box::use(
 #'         recipes[recipe],

@@ -114,7 +114,7 @@ The \code{device} parameter controls where computation occurs:
 }
 }
 \examples{
-\dontrun{
+\donttest{
 if (torch::torch_is_installed()) {
     box::use(
         recipes[recipe],

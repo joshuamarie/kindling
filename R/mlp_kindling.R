@@ -64,7 +64,7 @@
 #' @return A model specification object with class `mlp_kindling`.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (torch::torch_is_installed()) {
 #'     box::use(
 #'         recipes[recipe],

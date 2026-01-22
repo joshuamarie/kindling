@@ -103,6 +103,7 @@ and other parameters.
 }
 
 \examples{
+\donttest{
 # FFNN
 if (torch::torch_is_installed()) {
     # Generate an MLP module with 3 hidden layers
@@ -155,7 +156,9 @@ if (torch::torch_is_installed()) {
 } else {
     message("Torch not fully installed — skipping example")
 }
+}
 
+\donttest{
 ## RNN
 if (torch::torch_is_installed()) {
     # Basic LSTM with 2 layers
@@ -184,6 +187,7 @@ if (torch::torch_is_installed()) {
 
 } else {
     message("Torch not fully installed — skipping example")
+}
 }
 
 \dontrun{

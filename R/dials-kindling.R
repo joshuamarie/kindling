@@ -42,7 +42,7 @@
 #' }
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(dials)
 #' library(tune)
 #'

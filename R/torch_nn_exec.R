@@ -44,7 +44,7 @@
 #' \item{cached_weights}{Weight matrices (only if cache_weights = TRUE)}
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' if (torch::torch_is_installed()) {
 #'     # Regression task (auto-detect GPU)
 #'     model_reg = ffnn(
@@ -354,7 +354,7 @@ ffnn =
 #' @param dropout Numeric. Dropout rate between layers. Default `0`.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' # Regression with LSTM on GPU
 #' if (torch::torch_is_installed()) {
 #'     model_rnn = rnn(

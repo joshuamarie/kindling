@@ -35,6 +35,7 @@
 #' polluting the global namespace.
 #'
 #' @examples
+#' \donttest{
 #' # FFNN
 #' if (torch::torch_is_installed()) {
 #'     # Generate an MLP module with 3 hidden layers
@@ -86,6 +87,7 @@
 #'     )
 #' } else {
 #'     message("Torch not fully installed — skipping example")
+#' }
 #' }
 #'
 #' @importFrom rlang new_function call2 expr sym
@@ -252,6 +254,7 @@ check_rnn_type = function(rnn_type, hd_neurons) {
 #' polluting the global namespace.
 #'
 #' @examples
+#' \donttest{
 #' ## RNN
 #' if (torch::torch_is_installed()) {
 #'     # Basic LSTM with 2 layers
@@ -280,6 +283,7 @@ check_rnn_type = function(rnn_type, hd_neurons) {
 #'
 #' } else {
 #'     message("Torch not fully installed — skipping example")
+#' }
 #' }
 #'
 #' \dontrun{

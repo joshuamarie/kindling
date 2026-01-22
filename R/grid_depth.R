@@ -28,7 +28,7 @@
 #'   where each element is a vector of length `n_hlayer`.
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' library(dials)
 #'
 #' # Method 1: Using parameters()
