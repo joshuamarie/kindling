@@ -9,6 +9,9 @@ ordinal_gen(x)
 \arguments{
 \item{x}{Vector of numbers. Could be a string equivalent}
 }
+\value{
+Returns a string vector with ordinal suffixes.
+}
 \description{
 This function is originally from \code{numform::f_ordinal()}.
 }

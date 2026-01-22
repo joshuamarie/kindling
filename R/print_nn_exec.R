@@ -23,6 +23,8 @@ concat = function(x) {
 #' This function is originally from `numform::f_ordinal()`.
 #'
 #' @param x Vector of numbers. Could be a string equivalent
+#' 
+#' @return Returns a string vector with ordinal suffixes.
 #'
 #' @references
 #'
