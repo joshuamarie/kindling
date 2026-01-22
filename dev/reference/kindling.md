@@ -25,7 +25,7 @@ Note: The hyperparameter tuning support is not currently implemented.
 ## Details
 
 The `{kindling}` package provides a unified, high-level interface that
-bridges the **torch** and **tidymodels** ecosystems, making it easy to
+bridges the `{torch}` and `{tidymodels}` ecosystems, making it easy to
 define, train, and tune deep learning models using the familiar
 `tidymodels` workflow.
 
@@ -100,6 +100,20 @@ Level 3: Conventional tidymodels interface
     #>   <chr>    <chr>          <dbl>
     #> 1 accuracy binary         0.641
     #> 2 kap      binary         0
+
+## Main Features
+
+- Code generation of `{torch}` expression
+
+- Multiple architectures available: feedforward networks (MLP/DNN/FFNN)
+  and recurrent variants (RNN, LSTM, GRU)
+
+- Native support for `{tidymodels}` workflows and pipelines
+
+- Fine-grained control over network depth, layer sizes, and activation
+  functions
+
+- GPU acceleration supports via `{torch}` tensors
 
 ## License
 

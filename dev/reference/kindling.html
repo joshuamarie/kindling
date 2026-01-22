@@ -96,7 +96,7 @@ specification, training, and evaluation.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>The <code>{kindling}</code> package provides a unified, high-level interface that bridges
-the <strong>torch</strong> and <strong>tidymodels</strong> ecosystems, making it easy to define, train,
+the <code>{torch}</code> and <code>{tidymodels}</code> ecosystems, making it easy to define, train,
 and tune deep learning models using the familiar <code>tidymodels</code> workflow.</p>
     </div>
     <div class="section level2">
@@ -167,6 +167,16 @@ and tune deep learning models using the familiar <code>tidymodels</code> workflo
 <span><span class="co">#&gt; 1 accuracy binary         0.641</span></span>
 <span><span class="co">#&gt; 2 kap      binary         0</span></span></code></pre><p></p></div>
     </div>
+    <div class="section level2">
+    <h2 id="main-features">Main Features<a class="anchor" aria-label="anchor" href="#main-features"></a></h2>
+
+
+<ul><li><p>Code generation of <code>{torch}</code> expression</p></li>
+<li><p>Multiple architectures available: feedforward networks (MLP/DNN/FFNN) and recurrent variants (RNN, LSTM, GRU)</p></li>
+<li><p>Native support for <code>{tidymodels}</code> workflows and pipelines</p></li>
+<li><p>Fine-grained control over network depth, layer sizes, and activation functions</p></li>
+<li><p>GPU acceleration supports via <code>{torch}</code> tensors</p></li>
+</ul></div>
     <div class="section level2">
     <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a></h2>
 
