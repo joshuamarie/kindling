@@ -134,7 +134,10 @@ determines network depth and creates list columns for \code{hidden_neurons} and
 }
 \examples{
 \donttest{
+\dontrun{
 library(dials)
+library(workflows)
+library(tune)
 
 # Method 1: Using parameters()
 params = parameters(
@@ -159,6 +162,7 @@ wf = workflow() |>
     add_model(mlp_kindling(hidden_neurons = tune(), activations = tune())) |>
     add_formula(y ~ .)
 grid = grid_depth(wf, n_hlayer = 2:4, type = "latin_hypercube", size = 15)
+}
 }
 
 }

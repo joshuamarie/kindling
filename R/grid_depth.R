@@ -29,7 +29,10 @@
 #'
 #' @examples
 #' \donttest{
+#' \dontrun{
 #' library(dials)
+#' library(workflows)
+#' library(tune)
 #'
 #' # Method 1: Using parameters()
 #' params = parameters(
@@ -54,6 +57,7 @@
 #'     add_model(mlp_kindling(hidden_neurons = tune(), activations = tune())) |>
 #'     add_formula(y ~ .)
 #' grid = grid_depth(wf, n_hlayer = 2:4, type = "latin_hypercube", size = 15)
+#' }
 #' }
 #'
 #' @rdname grid_depth
