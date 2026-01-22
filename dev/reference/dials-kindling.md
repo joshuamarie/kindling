@@ -46,6 +46,42 @@ bidirectional(values = c(TRUE, FALSE))
 
   Logical vector of possible values.
 
+## Value
+
+Each function returns a `dials` parameter object:
+
+- `n_hlayers()`:
+
+  A quantitative parameter for the number of hidden layers
+
+- `hidden_neurons()`:
+
+  A quantitative parameter for hidden units per layer
+
+- `activations()`:
+
+  A qualitative parameter for activation function names
+
+- `output_activation()`:
+
+  A qualitative parameter for output activation
+
+- `optimizer()`:
+
+  A qualitative parameter for optimizer type
+
+- `bias()`:
+
+  A qualitative parameter for bias inclusion
+
+- `validation_split()`:
+
+  A quantitative parameter for validation proportion
+
+- `bidirectional()`:
+
+  A qualitative parameter for bidirectional RNN
+
 ## Architecture Strategy
 
 Since tidymodels tuning works with independent parameters, we use a

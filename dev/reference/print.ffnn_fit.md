@@ -18,3 +18,7 @@ print(x, ...)
 - ...:
 
   Additional arguments (unused)
+
+## Value
+
+No return value, called for side effects (printing model summary)
