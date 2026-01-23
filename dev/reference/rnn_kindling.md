@@ -23,6 +23,7 @@ rnn_kindling(
   mixture = NULL,
   learn_rate = NULL,
   optimizer = NULL,
+  optimizer_args = NULL,
   loss = NULL,
   validation_split = NULL,
   device = NULL,
@@ -50,7 +51,7 @@ rnn_kindling(
 - rnn_type:
 
   A character string for the type of RNN cell ("rnn", "lstm", "gru").
-  Can be tuned.
+  Cannot be tuned.
 
 - activations:
 
@@ -109,10 +110,15 @@ rnn_kindling(
   A character string for the optimizer type ("adam", "sgd", "rmsprop").
   Can be tuned.
 
+- optimizer_args:
+
+  A named list of additional arguments passed to the optimizer. Cannot
+  be tuned.
+
 - loss:
 
   A character string for the loss function ("mse", "mae",
-  "cross_entropy", "bce"). Can be tuned.
+  "cross_entropy", "bce"). Cannot be tuned.
 
 - validation_split:
 
@@ -122,11 +128,12 @@ rnn_kindling(
 - device:
 
   A character string for the device to use ("cpu", "cuda", "mps"). If
-  NULL, auto-detects available GPU. Can be tuned.
+  NULL, auto-detects available GPU. Cannot be tuned.
 
 - verbose:
 
-  Logical for whether to print training progress. Default FALSE.
+  Logical for whether to print training progress. Default FALSE. Cannot
+  be tuned.
 
 ## Value
 

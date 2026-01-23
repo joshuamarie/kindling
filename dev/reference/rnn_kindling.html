@@ -77,6 +77,7 @@ tidymodels ecosystem and uses the torch backend via kindling.</p>
 <span>  mixture <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  learn_rate <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  optimizer <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  optimizer_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  loss <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  validation_split <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  device <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -105,7 +106,7 @@ layer. Can be tuned.</p></dd>
 
 <dt id="arg-rnn-type">rnn_type<a class="anchor" aria-label="anchor" href="#arg-rnn-type"></a></dt>
 <dd><p>A character string for the type of RNN cell ("rnn", "lstm",
-"gru"). Can be tuned.</p></dd>
+"gru"). Cannot be tuned.</p></dd>
 
 
 <dt id="arg-activations">activations<a class="anchor" aria-label="anchor" href="#arg-activations"></a></dt>
@@ -163,9 +164,14 @@ Only relevant when <code>penalty &gt; 0</code>. Can be tuned.</p></li>
 "rmsprop"). Can be tuned.</p></dd>
 
 
+<dt id="arg-optimizer-args">optimizer_args<a class="anchor" aria-label="anchor" href="#arg-optimizer-args"></a></dt>
+<dd><p>A named list of additional arguments passed to the optimizer.
+Cannot be tuned.</p></dd>
+
+
 <dt id="arg-loss">loss<a class="anchor" aria-label="anchor" href="#arg-loss"></a></dt>
 <dd><p>A character string for the loss function ("mse", "mae",
-"cross_entropy", "bce"). Can be tuned.</p></dd>
+"cross_entropy", "bce"). Cannot be tuned.</p></dd>
 
 
 <dt id="arg-validation-split">validation_split<a class="anchor" aria-label="anchor" href="#arg-validation-split"></a></dt>
@@ -175,11 +181,12 @@ used for validation. Can be tuned.</p></dd>
 
 <dt id="arg-device">device<a class="anchor" aria-label="anchor" href="#arg-device"></a></dt>
 <dd><p>A character string for the device to use ("cpu", "cuda", "mps").
-If NULL, auto-detects available GPU. Can be tuned.</p></dd>
+If NULL, auto-detects available GPU. Cannot be tuned.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Logical for whether to print training progress. Default FALSE.</p></dd>
+<dd><p>Logical for whether to print training progress. Default FALSE.
+Cannot be tuned.</p></dd>
 
 </dl></div>
     <div class="section level2">
