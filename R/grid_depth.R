@@ -62,7 +62,8 @@
 #'
 #' @rdname grid_depth
 #' @export
-grid_depth = function(
+grid_depth = 
+    function(
         x,
         ...,
         n_hlayer = 2L,
@@ -72,13 +73,14 @@ grid_depth = function(
         levels = 3L,
         variogram_range = 0.5,
         iter = 1000L
-) {
+    ) {
     UseMethod("grid_depth")
 }
 
 #' @export
 #' @rdname grid_depth
-grid_depth.parameters = function(
+grid_depth.parameters = 
+    function(
         x,
         ...,
         n_hlayer = 2L,
@@ -88,7 +90,8 @@ grid_depth.parameters = function(
         levels = 3L,
         variogram_range = 0.5,
         iter = 1000L
-) {
+    ) {
+        
     type = rlang::arg_match(type)
     param_list = setNames(x$object, x$name)
 
@@ -117,7 +120,8 @@ grid_depth.parameters = function(
 
 #' @export
 #' @rdname grid_depth
-grid_depth.list = function(
+grid_depth.list = 
+    function(
         x,
         ...,
         n_hlayer = 2L,
@@ -127,7 +131,7 @@ grid_depth.list = function(
         levels = 3L,
         variogram_range = 0.5,
         iter = 1000L
-) {
+    ) {
     params = rlang::exec(dials::parameters, !!!x)
     grid_depth.parameters(
         params,
@@ -143,7 +147,8 @@ grid_depth.list = function(
 
 #' @export
 #' @rdname grid_depth
-grid_depth.workflow = function(
+grid_depth.workflow = 
+    function(
         x,
         ...,
         n_hlayer = 2L,
@@ -153,7 +158,7 @@ grid_depth.workflow = function(
         levels = 3L,
         variogram_range = 0.5,
         iter = 1000L
-) {
+    ) {
     params = workflows::extract_parameter_set_dials(x)
     grid_depth.parameters(
         params,
@@ -169,7 +174,8 @@ grid_depth.workflow = function(
 
 #' @export
 #' @rdname grid_depth
-grid_depth.model_spec = function(
+grid_depth.model_spec = 
+    function(
         x,
         ...,
         n_hlayer = 2L,
@@ -179,7 +185,7 @@ grid_depth.model_spec = function(
         levels = 3L,
         variogram_range = 0.5,
         iter = 1000L
-) {
+    ) {
     tunable_params = tune::tunable(x)
     param_list = purrr::map(seq_len(nrow(tunable_params)), function(i) {
         call_info = tunable_params$call_info[[i]]
@@ -202,7 +208,8 @@ grid_depth.model_spec = function(
 
 #' @export
 #' @rdname grid_depth
-grid_depth.param = function(
+grid_depth.param = 
+    function(
         x,
         ...,
         n_hlayer = 2L,
@@ -212,7 +219,8 @@ grid_depth.param = function(
         levels = 3L,
         variogram_range = 0.5,
         iter = 1000L
-) {
+    ) {
+            
     dots = rlang::list2(...)
     all_params = c(list(x), dots)
     param_objects = purrr::keep(all_params, ~ inherits(.x, "param"))
@@ -241,7 +249,8 @@ grid_depth.param = function(
 
 #' @export
 #' @rdname grid_depth
-grid_depth.default = function(
+grid_depth.default = 
+    function(
         x,
         ...,
         n_hlayer = 2L,
@@ -251,7 +260,8 @@ grid_depth.default = function(
         levels = 3L,
         variogram_range = 0.5,
         iter = 1000L
-) {
+    ) {
+        
     cli::cli_abort(
         c(
             "No method for object of class {.cls {class(x)}}",
