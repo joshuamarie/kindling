@@ -20,6 +20,7 @@ rnn_kindling(
   mixture = NULL,
   learn_rate = NULL,
   optimizer = NULL,
+  optimizer_args = NULL,
   loss = NULL,
   validation_split = NULL,
   device = NULL,
@@ -37,7 +38,7 @@ to use for fitting. Currently only "kindling" is supported.}
 layer. Can be tuned.}
 
 \item{rnn_type}{A character string for the type of RNN cell ("rnn", "lstm",
-"gru"). Can be tuned.}
+"gru"). Cannot be tuned.}
 
 \item{activations}{A character vector of activation function names for each
 hidden layer (e.g., "relu", "tanh", "sigmoid"). Can be tuned.}
@@ -74,16 +75,20 @@ Only relevant when \code{penalty > 0}. Can be tuned.
 \item{optimizer}{A character string for the optimizer type ("adam", "sgd",
 "rmsprop"). Can be tuned.}
 
+\item{optimizer_args}{A named list of additional arguments passed to the optimizer.
+Cannot be tuned.}
+
 \item{loss}{A character string for the loss function ("mse", "mae",
-"cross_entropy", "bce"). Can be tuned.}
+"cross_entropy", "bce"). Cannot be tuned.}
 
 \item{validation_split}{A number between 0 and 1 for the proportion of data
 used for validation. Can be tuned.}
 
 \item{device}{A character string for the device to use ("cpu", "cuda", "mps").
-If NULL, auto-detects available GPU. Can be tuned.}
+If NULL, auto-detects available GPU. Cannot be tuned.}
 
-\item{verbose}{Logical for whether to print training progress. Default FALSE.}
+\item{verbose}{Logical for whether to print training progress. Default FALSE.
+Cannot be tuned.}
 }
 \value{
 A model specification object with class \code{rnn_kindling}.

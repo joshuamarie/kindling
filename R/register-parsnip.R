@@ -7,11 +7,11 @@
 #' @keywords internal
 make_kindling = function() {
     model_env = parsnip::get_model_env()
-
+    
     # =========================================
     # MLP (Multi-Layer Perceptron) Registration
     # =========================================
-
+    
     if ("mlp_kindling" %in% model_env$models) {
         if (interactive() || identical(Sys.getenv("DEVTOOLS_LOAD"), "true")) {
             if (exists("mlp_kindling", envir = model_env)) {
@@ -24,12 +24,12 @@ make_kindling = function() {
             }
         }
     }
-
+    
     parsnip::set_new_model("mlp_kindling")
-
+    
     parsnip::set_model_mode(model = "mlp_kindling", mode = "regression")
     parsnip::set_model_mode(model = "mlp_kindling", mode = "classification")
-
+    
     parsnip::set_model_arg(
         model = "mlp_kindling",
         eng = "kindling",
@@ -38,7 +38,7 @@ make_kindling = function() {
         func = list(pkg = "kindling", fun = "hidden_neurons"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "mlp_kindling",
         eng = "kindling",
@@ -47,7 +47,7 @@ make_kindling = function() {
         func = list(pkg = "kindling", fun = "activations"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "mlp_kindling",
         eng = "kindling",
@@ -56,7 +56,7 @@ make_kindling = function() {
         func = list(pkg = "kindling", fun = "output_activation"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "mlp_kindling",
         eng = "kindling",
@@ -65,7 +65,7 @@ make_kindling = function() {
         func = list(pkg = "kindling", fun = "bias"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "mlp_kindling",
         eng = "kindling",
@@ -74,7 +74,7 @@ make_kindling = function() {
         func = list(pkg = "dials", fun = "epochs"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "mlp_kindling",
         eng = "kindling",
@@ -101,7 +101,7 @@ make_kindling = function() {
         func = list(pkg = "dials", fun = "mixture"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "mlp_kindling",
         eng = "kindling",
@@ -110,7 +110,7 @@ make_kindling = function() {
         func = list(pkg = "dials", fun = "learn_rate"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "mlp_kindling",
         eng = "kindling",
@@ -119,16 +119,25 @@ make_kindling = function() {
         func = list(pkg = "kindling", fun = "optimizer"),
         has_submodel = FALSE
     )
-
+    
+    parsnip::set_model_arg(
+        model = "mlp_kindling",
+        eng = "kindling",
+        parsnip = "optimizer_args",
+        original = "optimizer_args",
+        func = list(pkg = "kindling", fun = "optimizer_args"),
+        has_submodel = FALSE
+    )
+    
     parsnip::set_model_arg(
         model = "mlp_kindling",
         eng = "kindling",
         parsnip = "loss",
         original = "loss",
-        func = list(pkg = "dials", fun = "loss"),
+        func = list(pkg = "kindling", fun = "loss"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "mlp_kindling",
         eng = "kindling",
@@ -137,49 +146,49 @@ make_kindling = function() {
         func = list(pkg = "kindling", fun = "validation_split"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "mlp_kindling",
         eng = "kindling",
         parsnip = "device",
         original = "device",
-        func = list(pkg = "dials", fun = "device"),
+        func = list(pkg = "kindling", fun = "device"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "mlp_kindling",
         eng = "kindling",
         parsnip = "verbose",
         original = "verbose",
-        func = list(pkg = "dials", fun = "verbose"),
+        func = list(pkg = "kindling", fun = "verbose"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_engine(
         model = "mlp_kindling",
         mode = "regression",
         eng = "kindling"
     )
-
+    
     parsnip::set_model_engine(
         model = "mlp_kindling",
         mode = "classification",
         eng = "kindling"
     )
-
+    
     parsnip::set_dependency(
         model = "mlp_kindling",
         eng = "kindling",
         pkg = "kindling"
     )
-
+    
     parsnip::set_dependency(
         model = "mlp_kindling",
         eng = "kindling",
         pkg = "torch"
     )
-
+    
     parsnip::set_fit(
         model = "mlp_kindling",
         mode = "regression",
@@ -191,7 +200,7 @@ make_kindling = function() {
             defaults = list()
         )
     )
-
+    
     parsnip::set_fit(
         model = "mlp_kindling",
         mode = "classification",
@@ -203,7 +212,7 @@ make_kindling = function() {
             defaults = list(loss = "cross_entropy")
         )
     )
-
+    
     parsnip::set_encoding(
         model = "mlp_kindling",
         mode = "regression",
@@ -215,7 +224,7 @@ make_kindling = function() {
             allow_sparse_x = FALSE
         )
     )
-
+    
     parsnip::set_encoding(
         model = "mlp_kindling",
         mode = "classification",
@@ -227,7 +236,7 @@ make_kindling = function() {
             allow_sparse_x = FALSE
         )
     )
-
+    
     parsnip::set_pred(
         model = "mlp_kindling",
         mode = "regression",
@@ -244,7 +253,7 @@ make_kindling = function() {
             )
         )
     )
-
+    
     parsnip::set_pred(
         model = "mlp_kindling",
         mode = "classification",
@@ -261,7 +270,7 @@ make_kindling = function() {
             )
         )
     )
-
+    
     parsnip::set_pred(
         model = "mlp_kindling",
         mode = "classification",
@@ -280,11 +289,11 @@ make_kindling = function() {
             )
         )
     )
-
+    
     # ===========================================
     # RNN (Recurrent Neural Network) Registration
     # ===========================================
-
+    
     if ("rnn_kindling" %in% model_env$models) {
         if (interactive() || identical(Sys.getenv("DEVTOOLS_LOAD"), "true")) {
             if (exists("rnn_kindling", envir = model_env)) {
@@ -297,12 +306,12 @@ make_kindling = function() {
             }
         }
     }
-
+    
     parsnip::set_new_model("rnn_kindling")
-
+    
     parsnip::set_model_mode(model = "rnn_kindling", mode = "regression")
     parsnip::set_model_mode(model = "rnn_kindling", mode = "classification")
-
+    
     parsnip::set_model_arg(
         model = "rnn_kindling",
         eng = "kindling",
@@ -311,16 +320,16 @@ make_kindling = function() {
         func = list(pkg = "kindling", fun = "hidden_neurons"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "rnn_kindling",
         eng = "kindling",
         parsnip = "rnn_type",
         original = "rnn_type",
-        func = list(pkg = "dials", fun = "rnn_type"),
+        func = list(pkg = "kindling", fun = "rnn_type"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "rnn_kindling",
         eng = "kindling",
@@ -329,7 +338,7 @@ make_kindling = function() {
         func = list(pkg = "kindling", fun = "activations"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "rnn_kindling",
         eng = "kindling",
@@ -338,7 +347,7 @@ make_kindling = function() {
         func = list(pkg = "kindling", fun = "output_activation"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "rnn_kindling",
         eng = "kindling",
@@ -347,7 +356,7 @@ make_kindling = function() {
         func = list(pkg = "kindling", fun = "bidirectional"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "rnn_kindling",
         eng = "kindling",
@@ -356,7 +365,7 @@ make_kindling = function() {
         func = list(pkg = "dials", fun = "dropout"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "rnn_kindling",
         eng = "kindling",
@@ -365,7 +374,7 @@ make_kindling = function() {
         func = list(pkg = "dials", fun = "epochs"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "rnn_kindling",
         eng = "kindling",
@@ -392,7 +401,7 @@ make_kindling = function() {
         func = list(pkg = "dials", fun = "mixture"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "rnn_kindling",
         eng = "kindling",
@@ -401,7 +410,7 @@ make_kindling = function() {
         func = list(pkg = "dials", fun = "learn_rate"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "rnn_kindling",
         eng = "kindling",
@@ -410,16 +419,25 @@ make_kindling = function() {
         func = list(pkg = "kindling", fun = "optimizer"),
         has_submodel = FALSE
     )
-
+    
+    parsnip::set_model_arg(
+        model = "rnn_kindling",
+        eng = "kindling",
+        parsnip = "optimizer_args",
+        original = "optimizer_args",
+        func = list(pkg = "kindling", fun = "optimizer_args"),
+        has_submodel = FALSE
+    )
+    
     parsnip::set_model_arg(
         model = "rnn_kindling",
         eng = "kindling",
         parsnip = "loss",
         original = "loss",
-        func = list(pkg = "dials", fun = "loss"),
+        func = list(pkg = "kindling", fun = "loss"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "rnn_kindling",
         eng = "kindling",
@@ -428,49 +446,49 @@ make_kindling = function() {
         func = list(pkg = "kindling", fun = "validation_split"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "rnn_kindling",
         eng = "kindling",
         parsnip = "device",
         original = "device",
-        func = list(pkg = "dials", fun = "device"),
+        func = list(pkg = "kindling", fun = "device"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_arg(
         model = "rnn_kindling",
         eng = "kindling",
         parsnip = "verbose",
         original = "verbose",
-        func = list(pkg = "dials", fun = "verbose"),
+        func = list(pkg = "kindling", fun = "verbose"),
         has_submodel = FALSE
     )
-
+    
     parsnip::set_model_engine(
         model = "rnn_kindling",
         mode = "regression",
         eng = "kindling"
     )
-
+    
     parsnip::set_model_engine(
         model = "rnn_kindling",
         mode = "classification",
         eng = "kindling"
     )
-
+    
     parsnip::set_dependency(
         model = "rnn_kindling",
         eng = "kindling",
         pkg = "kindling"
     )
-
+    
     parsnip::set_dependency(
         model = "rnn_kindling",
         eng = "kindling",
         pkg = "torch"
     )
-
+    
     parsnip::set_fit(
         model = "rnn_kindling",
         mode = "regression",
@@ -482,7 +500,7 @@ make_kindling = function() {
             defaults = list()
         )
     )
-
+    
     parsnip::set_fit(
         model = "rnn_kindling",
         mode = "classification",
@@ -494,7 +512,7 @@ make_kindling = function() {
             defaults = list(loss = "cross_entropy")
         )
     )
-
+    
     parsnip::set_encoding(
         model = "rnn_kindling",
         mode = "regression",
@@ -506,7 +524,7 @@ make_kindling = function() {
             allow_sparse_x = FALSE
         )
     )
-
+    
     parsnip::set_encoding(
         model = "rnn_kindling",
         mode = "classification",
@@ -518,7 +536,7 @@ make_kindling = function() {
             allow_sparse_x = FALSE
         )
     )
-
+    
     parsnip::set_pred(
         model = "rnn_kindling",
         mode = "regression",
@@ -535,7 +553,7 @@ make_kindling = function() {
             )
         )
     )
-
+    
     parsnip::set_pred(
         model = "rnn_kindling",
         mode = "classification",
@@ -552,7 +570,7 @@ make_kindling = function() {
             )
         )
     )
-
+    
     parsnip::set_pred(
         model = "rnn_kindling",
         mode = "classification",
@@ -571,7 +589,7 @@ make_kindling = function() {
             )
         )
     )
-
+    
     invisible(TRUE)
 }
 
@@ -590,7 +608,7 @@ make_kindling = function() {
 ffnn_wrapper = function(formula, data, ...) {
     dots = list(...)
     dots = prepare_kindling_args(dots)
-
+    
     do.call(
         ffnn,
         c(list(formula = formula, data = data), dots)
@@ -606,7 +624,7 @@ ffnn_wrapper = function(formula, data, ...) {
 rnn_wrapper = function(formula, data, ...) {
     dots = list(...)
     dots = prepare_kindling_args(dots)
-
+    
     do.call(
         rnn,
         c(list(formula = formula, data = data), dots)

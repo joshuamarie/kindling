@@ -6,7 +6,7 @@
 #'
 #' @inheritParams mlp_kindling
 #' @param rnn_type A character string for the type of RNN cell ("rnn", "lstm",
-#'   "gru"). Can be tuned.
+#'   "gru"). Cannot be tuned.
 #' @param bidirectional A logical indicating whether to use bidirectional RNN.
 #'   Can be tuned.
 #' @param dropout A number between 0 and 1 for dropout rate between layers.
@@ -79,47 +79,49 @@ rnn_kindling =
         mixture = NULL,
         learn_rate = NULL,
         optimizer = NULL,
+        optimizer_args = NULL,
         loss = NULL,
         validation_split = NULL,
         device = NULL,
         verbose = NULL
     ) {
-
-    if (!requireNamespace("parsnip", quietly = TRUE)) {
-        cli::cli_abort("Package {.pkg parsnip} is required but not installed.")
+        
+        if (!requireNamespace("parsnip", quietly = TRUE)) {
+            cli::cli_abort("Package {.pkg parsnip} is required but not installed.")
+        }
+        
+        args = list(
+            hidden_neurons = rlang::enquo(hidden_neurons),
+            rnn_type = rlang::enquo(rnn_type),
+            activations = rlang::enquo(activations),
+            output_activation = rlang::enquo(output_activation),
+            bias = rlang::enquo(bias),
+            bidirectional = rlang::enquo(bidirectional),
+            dropout = rlang::enquo(dropout),
+            epochs = rlang::enquo(epochs),
+            batch_size = rlang::enquo(batch_size),
+            penalty = rlang::enquo(penalty),
+            mixture = rlang::enquo(mixture),
+            learn_rate = rlang::enquo(learn_rate),
+            optimizer = rlang::enquo(optimizer),
+            optimizer_args = rlang::enquo(optimizer_args),
+            loss = rlang::enquo(loss),
+            validation_split = rlang::enquo(validation_split),
+            device = rlang::enquo(device),
+            verbose = rlang::enquo(verbose)
+        )
+        
+        parsnip::new_model_spec(
+            "rnn_kindling",
+            args = args,
+            eng_args = NULL,
+            mode = mode,
+            user_specified_mode = !missing(mode),
+            method = NULL,
+            engine = engine,
+            user_specified_engine = !missing(engine)
+        )
     }
-
-    args = list(
-        hidden_neurons = rlang::enquo(hidden_neurons),
-        rnn_type = rlang::enquo(rnn_type),
-        activations = rlang::enquo(activations),
-        output_activation = rlang::enquo(output_activation),
-        bias = rlang::enquo(bias),
-        bidirectional = rlang::enquo(bidirectional),
-        dropout = rlang::enquo(dropout),
-        epochs = rlang::enquo(epochs),
-        batch_size = rlang::enquo(batch_size),
-        penalty = rlang::enquo(penalty),
-        mixture = rlang::enquo(mixture),
-        learn_rate = rlang::enquo(learn_rate),
-        optimizer = rlang::enquo(optimizer),
-        loss = rlang::enquo(loss),
-        validation_split = rlang::enquo(validation_split),
-        device = rlang::enquo(device),
-        verbose = rlang::enquo(verbose)
-    )
-
-    parsnip::new_model_spec(
-        "rnn_kindling",
-        args = args,
-        eng_args = NULL,
-        mode = mode,
-        user_specified_mode = !missing(mode),
-        method = NULL,
-        engine = engine,
-        user_specified_engine = !missing(engine)
-    )
-}
 
 #' @export
 print.rnn_kindling = function(x, ...) {
@@ -147,6 +149,7 @@ update.rnn_kindling =
         mixture = NULL,
         learn_rate = NULL,
         optimizer = NULL,
+        optimizer_args = NULL,
         loss = NULL,
         validation_split = NULL,
         device = NULL,
@@ -154,36 +157,37 @@ update.rnn_kindling =
         fresh = FALSE,
         ...
     ) {
-
-    args = list(
-        hidden_neurons = rlang::enquo(hidden_neurons),
-        rnn_type = rlang::enquo(rnn_type),
-        activations = rlang::enquo(activations),
-        output_activation = rlang::enquo(output_activation),
-        bias = rlang::enquo(bias),
-        bidirectional = rlang::enquo(bidirectional),
-        dropout = rlang::enquo(dropout),
-        epochs = rlang::enquo(epochs),
-        batch_size = rlang::enquo(batch_size),
-        penalty = rlang::enquo(penalty),
-        mixture = rlang::enquo(mixture),
-        learn_rate = rlang::enquo(learn_rate),
-        optimizer = rlang::enquo(optimizer),
-        loss = rlang::enquo(loss),
-        validation_split = rlang::enquo(validation_split),
-        device = rlang::enquo(device),
-        verbose = rlang::enquo(verbose)
-    )
-
-    parsnip::update_spec(
-        object = object,
-        parameters = parameters,
-        args_enquo_list = args,
-        fresh = fresh,
-        cls = "rnn_kindling",
-        ...
-    )
-}
+        
+        args = list(
+            hidden_neurons = rlang::enquo(hidden_neurons),
+            rnn_type = rlang::enquo(rnn_type),
+            activations = rlang::enquo(activations),
+            output_activation = rlang::enquo(output_activation),
+            bias = rlang::enquo(bias),
+            bidirectional = rlang::enquo(bidirectional),
+            dropout = rlang::enquo(dropout),
+            epochs = rlang::enquo(epochs),
+            batch_size = rlang::enquo(batch_size),
+            penalty = rlang::enquo(penalty),
+            mixture = rlang::enquo(mixture),
+            learn_rate = rlang::enquo(learn_rate),
+            optimizer = rlang::enquo(optimizer),
+            optimizer_args = rlang::enquo(optimizer_args),
+            loss = rlang::enquo(loss),
+            validation_split = rlang::enquo(validation_split),
+            device = rlang::enquo(device),
+            verbose = rlang::enquo(verbose)
+        )
+        
+        parsnip::update_spec(
+            object = object,
+            parameters = parameters,
+            args_enquo_list = args,
+            fresh = fresh,
+            cls = "rnn_kindling",
+            ...
+        )
+    }
 
 #' @export
 #' @importFrom parsnip translate
@@ -191,7 +195,7 @@ translate.rnn_kindling = function(x, engine = x$engine, ...) {
     if (is.null(engine)) {
         cli::cli_abort("Please set an engine with `set_engine()`.")
     }
-
+    
     x = parsnip::translate.default(x, engine, ...)
     x
 }
@@ -203,7 +207,7 @@ tunable.rnn_kindling = function(x, ...) {
         name = c(
             "hidden_neurons", "activations", "output_activation",
             "bias", "bidirectional", "dropout", "epochs", "batch_size",
-            "penalty", "mixture", "learn_rate", "optimizer", "loss", 
+            "penalty", "mixture", "learn_rate", "optimizer", 
             "validation_split"
         ),
         call_info = list(
@@ -219,7 +223,6 @@ tunable.rnn_kindling = function(x, ...) {
             list(pkg = "dials", fun = "mixture"),
             list(pkg = "dials", fun = "learn_rate"),
             list(pkg = "kindling", fun = "optimizer"),
-            list(pkg = "dials", fun = "loss"),
             list(pkg = "kindling", fun = "validation_split")
         ),
         source = "model_spec",
