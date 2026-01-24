@@ -8,7 +8,7 @@ optimization, and training behavior.
 ## Usage
 
 ``` r
-n_hlayers(range = c(1L, 5L), trans = NULL)
+n_hlayers(range = c(1L, 2L), trans = NULL)
 
 hidden_neurons(range = c(8L, 512L), trans = NULL)
 
