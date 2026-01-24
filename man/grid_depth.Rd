@@ -103,7 +103,8 @@ If \code{x} is a \code{parameters} object, \code{...} is ignored. None of the ob
 have \code{unknown()} values.}
 
 \item{n_hlayer}{Integer vector specifying number of hidden layers to generate
-(e.g., \code{2:4} for 2, 3, or 4 layers). Default is 2.}
+(e.g., \code{2:4} for 2, 3, or 4 layers), or a \code{param} object created with \code{n_hlayers()}.
+Default is 2.}
 
 \item{size}{Integer. Number of parameter combinations to generate.}
 
@@ -131,6 +132,9 @@ by generating list columns for \code{hidden_neurons} and \code{activations}.
 This function is specifically for \code{{kindling}} models. The \code{n_hlayer} parameter
 determines network depth and creates list columns for \code{hidden_neurons} and
 \code{activations}, where each element is a vector of length matching the sampled depth.
+
+When \code{n_hlayer} is a parameter object (created with \code{n_hlayers()}), it will be
+treated as a tunable parameter and sampled according to its defined range.
 }
 \examples{
 \donttest{
@@ -139,20 +143,22 @@ library(dials)
 library(workflows)
 library(tune)
 
-# Method 1: Using parameters()
-params = parameters(
-    hidden_neurons(c(32L, 128L)),
-    activations(c("relu", "elu", "selu")),
-    epochs(c(50L, 200L))
-)
-grid = grid_depth(params, n_hlayer = 2:3, type = "regular", levels = 3)
-
-# Method 2: Direct param objects
+# Method 1: Fixed depth
 grid = grid_depth(
     hidden_neurons(c(32L, 128L)),
     activations(c("relu", "elu")),
     epochs(c(50L, 200L)),
     n_hlayer = 2:3,
+    type = "random",
+    size = 20
+)
+
+# Method 2: Tunable depth using parameter object
+grid = grid_depth(
+    hidden_neurons(c(32L, 128L)),
+    activations(c("relu", "elu")),
+    epochs(c(50L, 200L)),
+    n_hlayer = n_hlayers(range = c(2L, 4L)),
     type = "random",
     size = 20
 )

@@ -192,7 +192,7 @@ The package has integration with `{tidymodels}`, so it supports hyperparameter t
 The current searchable parameters under `{kindling}`: 
 
 -   Layer widths (neurons per layer)
--   Network depth (number of hidden layers - coming soon)
+-   Network depth (number of hidden layers)
 -   Activation function combinations
 -   Output activation
 -   Optimizer (Type of optimization algorithm)

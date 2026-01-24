@@ -77,7 +77,7 @@ NULL
 #'
 #' @rdname dials-kindling
 #' @export
-n_hlayers = function(range = c(1L, 5L), trans = NULL) {
+n_hlayers = function(range = c(1L, 2L), trans = NULL) {
     dials::new_quant_param(
         type = "integer",
         range = range,
