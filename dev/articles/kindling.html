@@ -44,6 +44,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/kindling.html">Getting Started</a></li>
+    <li><a class="dropdown-item" href="../articles/similar-packages.html">Similar packages and comparison</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -101,16 +102,29 @@ guide you through the basic usage.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<p>You can install <a href="https://kindling.joshuamarie.com">kindling</a> on CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Install from GitHub</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"joshuamarie/kindling"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'kindling'</span><span class="op">)</span></span></code></pre></div>
+<p>Or install the development version from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"joshuamarie/kindling"</span><span class="op">)</span></span>
+<span><span class="co">## devtools::install_github("joshuamarie/kindling") </span></span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://kindling.joshuamarie.com">kindling</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'kindling'</span></span>
 <span><span class="co">#&gt; The following object is masked from 'package:base':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     args</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="before-using-kindling">Before using {kindling}<a class="anchor" aria-label="anchor" href="#before-using-kindling"></a>
+</h2>
+<p>Before starting, you need to install LibTorch, the backend of PyTorch
+which also the backend of <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> R package:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/install_torch.html" class="external-link">install_torch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="four-levels-of-interaction">Four Levels of Interaction<a class="anchor" aria-label="anchor" href="#four-levels-of-interaction"></a>
@@ -139,7 +153,7 @@ calls</li>
 <h2 id="level-1-code-generation">Level 1: Code Generation<a class="anchor" aria-label="anchor" href="#level-1-code-generation"></a>
 </h2>
 <p>Generate PyTorch-style module code:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/nn_gens.html">ffnn_generator</a></span><span class="op">(</span></span>
 <span>    nn_name <span class="op">=</span> <span class="st">"MyNetwork"</span>,</span>
 <span>    hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>, <span class="fl">32</span><span class="op">)</span>,</span>
@@ -152,12 +166,12 @@ calls</li>
 <h2 id="level-2-direct-training">Level 2: Direct Training<a class="anchor" aria-label="anchor" href="#level-2-direct-training"></a>
 </h2>
 <p>Train a model with one function call:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="../reference/kindling-basemodels.html">ffnn</a></span><span class="op">(</span></span>
 <span>    <span class="va">Species</span> <span class="op">~</span> <span class="va">.</span>,</span>
 <span>    data <span class="op">=</span> <span class="va">iris</span>,</span>
 <span>    hidden_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">7</span><span class="op">)</span>,</span>
-<span>    activations <span class="op">=</span> <span class="fu"><a href="../reference/act_funs.html">act_funs</a></span><span class="op">(</span><span class="va">relu</span>, <span class="va">elu</span><span class="op">)</span>,</span>
+<span>    activations <span class="op">=</span> <span class="fu"><a href="../reference/act_funs.html">act_funs</a></span><span class="op">(</span><span class="va">relu</span>, <span class="va">elu</span><span class="op">)</span>, <span class="co"># c("relu", "elu")</span></span>
 <span>    loss <span class="op">=</span> <span class="st">"cross_entropy"</span>,</span>
 <span>    epochs <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="op">)</span></span>
@@ -169,7 +183,7 @@ calls</li>
 </h2>
 <p>Work with neural networks like any other <code>parsnip</code>
 model:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span></span>
 <span>    <span class="va">parsnip</span><span class="op">[</span><span class="va">fit</span>, <span class="va">augment</span><span class="op">]</span>,</span>
 <span>    <span class="va">yardstick</span><span class="op">[</span><span class="va">metrics</span><span class="op">]</span></span>

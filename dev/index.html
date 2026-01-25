@@ -49,6 +49,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="articles/kindling.html">Getting Started</a></li>
+    <li><a class="dropdown-item" href="articles/similar-packages.html">Similar packages and comparison</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
@@ -92,7 +93,7 @@
 <div class="section level2">
 <h2 id="package-overview">Package overview<a class="anchor" aria-label="anchor" href="#package-overview"></a>
 </h2>
-<p>Title: <strong><em>Higher-Level Interface of Torch to Auto-Train Neural Networks</em></strong></p>
+<p>Title: <strong><em>Higher-Level Interface of ‘torch’ Package to Auto-Train Neural Networks</em></strong></p>
 <p>Whether you’re generating neural network architectures expressions or fitting/training actual models, <a href="https://kindling.joshuamarie.com">kindling</a> minimizes boilerplate code while preserving <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>. Since this package uses <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> as its backend, GPU/TPU devices also supported.</p>
 <p><a href="https://kindling.joshuamarie.com">kindling</a> also bridges the gap between <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> and <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>. It works seamlessly with <a href="https://github.com/tidymodels/parsnip" class="external-link">parsnip</a>, <a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a>, and <a href="https://github.com/tidymodels/workflows" class="external-link">workflows</a> to bring deep learning into your existing <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> modeling pipeline. This enables a streamlined interface for building, training, and tuning deep learning models within the familiar <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> ecosystem.</p>
 <div class="section level3">
@@ -132,12 +133,13 @@
 <p>Or install the development version from GitHub:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("pak")</span></span>
-<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"joshuamarie/kindling"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"joshuamarie/kindling"</span><span class="op">)</span></span>
+<span><span class="co">## devtools::install_github("joshuamarie/kindling") </span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="usage-three-levels-of-interaction">Usage: Three Levels of Interaction<a class="anchor" aria-label="anchor" href="#usage-three-levels-of-interaction"></a>
 </h2>
-<p><a href="https://kindling.joshuamarie.com">kindling</a> is powered by R’s metaprogramming capabilities through <em>code generation</em>. Generated <code><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">torch::nn_module</a></code> expressions power the training functions, which in turn serve as engines for <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> integration. This architecture gives you flexibility to work at whatever abstraction level suits your task.</p>
+<p><a href="https://kindling.joshuamarie.com">kindling</a> is powered by R’s metaprogramming capabilities through <em>code generation</em>. Generated <code><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">torch::nn_module()</a></code> expressions power the training functions, which in turn serve as engines for <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> integration. This architecture gives you flexibility to work at whatever abstraction level suits your task.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://kindling.joshuamarie.com">kindling</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -145,13 +147,16 @@
 <span><span class="co">#&gt; The following object is masked from 'package:base':</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     args</span></span></code></pre></div>
+<p>Before starting, you need to install LibTorch, the backend of PyTorch which also the backend of <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> R package:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/install_torch.html" class="external-link">install_torch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="level-1-code-generation-for-torchnn_module">Level 1: Code Generation for <code>torch::nn_module</code>
 <a class="anchor" aria-label="anchor" href="#level-1-code-generation-for-torchnn_module"></a>
 </h3>
 <p>At the lowest level, you can generate raw <code><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">torch::nn_module</a></code> code for maximum customization. Functions ending with <code>_generator</code> return unevaluated expressions you can inspect, modify, or execute.</p>
 <p>Here’s how to generate a feedforward network specification:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="reference/nn_gens.html">ffnn_generator</a></span><span class="op">(</span></span>
 <span>    nn_name <span class="op">=</span> <span class="st">"MyFFNN"</span>,</span>
 <span>    hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>, <span class="fl">32</span>, <span class="fl">16</span><span class="op">)</span>,</span>
@@ -183,7 +188,7 @@
 </h3>
 <p>Skip the code generation and train models directly with your data. This approach handles all the <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> boilerplate when training the models internally.</p>
 <p>Let’s classify iris species:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="reference/kindling-basemodels.html">ffnn</a></span><span class="op">(</span></span>
 <span>    <span class="va">Species</span> <span class="op">~</span> <span class="va">.</span>,</span>
 <span>    data <span class="op">=</span> <span class="va">iris</span>,</span>
@@ -194,46 +199,46 @@
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">model</span></span></code></pre></div>
-<div class="sourceCode" id="cb6"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="sc">==</span><span class="er">=====================</span> Feedforward Neural <span class="fu">Networks</span> (MLP) <span class="sc">==</span><span class="er">====================</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a></span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" tabindex="-1"></a><span class="sc">--</span> FFNN Model Summary <span class="sc">----------------------------------------------------------</span></span>
-<span id="cb6-5"><a href="#cb6-5" tabindex="-1"></a></span>
-<span id="cb6-6"><a href="#cb6-6" tabindex="-1"></a>    <span class="sc">-----------------------------------------------------------------------</span></span>
-<span id="cb6-7"><a href="#cb6-7" tabindex="-1"></a>      NN Model Type           <span class="sc">:</span>             FFNN    n_predictors <span class="sc">:</span>      <span class="dv">4</span></span>
-<span id="cb6-8"><a href="#cb6-8" tabindex="-1"></a>      Number of Epochs        <span class="sc">:</span>              <span class="dv">100</span>    n_response   <span class="sc">:</span>      <span class="dv">3</span></span>
-<span id="cb6-9"><a href="#cb6-9" tabindex="-1"></a>      Hidden Layer Units      <span class="sc">:</span>        <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">7</span>    reg.         <span class="sc">:</span>   None</span>
-<span id="cb6-10"><a href="#cb6-10" tabindex="-1"></a>      Number of Hidden Layers <span class="sc">:</span>                <span class="dv">3</span>    Device       <span class="sc">:</span>    cpu</span>
-<span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a>      Pred. Type              <span class="sc">:</span>   classification                 <span class="sc">:</span>       </span>
-<span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>    <span class="sc">-----------------------------------------------------------------------</span></span>
-<span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a></span>
-<span id="cb6-14"><a href="#cb6-14" tabindex="-1"></a></span>
-<span id="cb6-15"><a href="#cb6-15" tabindex="-1"></a></span>
-<span id="cb6-16"><a href="#cb6-16" tabindex="-1"></a><span class="sc">--</span> Activation <span class="cf">function</span> <span class="sc">---------------------------------------------------------</span></span>
-<span id="cb6-17"><a href="#cb6-17" tabindex="-1"></a></span>
-<span id="cb6-18"><a href="#cb6-18" tabindex="-1"></a>               <span class="sc">-------------------------------------------------</span></span>
-<span id="cb6-19"><a href="#cb6-19" tabindex="-1"></a>                 <span class="dv">1</span>st Layer {<span class="dv">10</span>}    <span class="sc">:</span>                      relu</span>
-<span id="cb6-20"><a href="#cb6-20" tabindex="-1"></a>                 <span class="dv">2</span>nd Layer {<span class="dv">15</span>}    <span class="sc">:</span>   <span class="fu">softshrink</span>(<span class="at">lambd =</span> <span class="fl">0.5</span>)</span>
-<span id="cb6-21"><a href="#cb6-21" tabindex="-1"></a>                 <span class="dv">3</span>rd Layer {<span class="dv">7</span>}     <span class="sc">:</span>                       elu</span>
-<span id="cb6-22"><a href="#cb6-22" tabindex="-1"></a>                 Output Activation <span class="sc">:</span>   No act <span class="cf">function</span> applied</span>
-<span id="cb6-23"><a href="#cb6-23" tabindex="-1"></a>               <span class="sc">-------------------------------------------------</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="sc">==</span><span class="er">=====================</span> Feedforward Neural <span class="fu">Networks</span> (MLP) <span class="sc">==</span><span class="er">====================</span></span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="sc">--</span> FFNN Model Summary <span class="sc">----------------------------------------------------------</span></span>
+<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>    <span class="sc">-----------------------------------------------------------------------</span></span>
+<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>      NN Model Type           <span class="sc">:</span>             FFNN    n_predictors <span class="sc">:</span>      <span class="dv">4</span></span>
+<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>      Number of Epochs        <span class="sc">:</span>              <span class="dv">100</span>    n_response   <span class="sc">:</span>      <span class="dv">3</span></span>
+<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>      Hidden Layer Units      <span class="sc">:</span>        <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">7</span>    reg.         <span class="sc">:</span>   None</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>      Number of Hidden Layers <span class="sc">:</span>                <span class="dv">3</span>    Device       <span class="sc">:</span>    cpu</span>
+<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>      Pred. Type              <span class="sc">:</span>   classification                 <span class="sc">:</span>       </span>
+<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>    <span class="sc">-----------------------------------------------------------------------</span></span>
+<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a></span>
+<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a><span class="sc">--</span> Activation <span class="cf">function</span> <span class="sc">---------------------------------------------------------</span></span>
+<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a></span>
+<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>               <span class="sc">-------------------------------------------------</span></span>
+<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>                 <span class="dv">1</span>st Layer {<span class="dv">10</span>}    <span class="sc">:</span>                      relu</span>
+<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>                 <span class="dv">2</span>nd Layer {<span class="dv">15</span>}    <span class="sc">:</span>   <span class="fu">softshrink</span>(<span class="at">lambd =</span> <span class="fl">0.5</span>)</span>
+<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a>                 <span class="dv">3</span>rd Layer {<span class="dv">7</span>}     <span class="sc">:</span>                       elu</span>
+<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a>                 Output Activation <span class="sc">:</span>   No act <span class="cf">function</span> applied</span>
+<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a>               <span class="sc">-------------------------------------------------</span></span></code></pre></div>
 <p>Evaluate the prediction through <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code>. The <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> method is extended for fitted models through its <code>newdata</code> argument.</p>
 <p>Two kinds of <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> usage:</p>
 <ol style="list-style-type: decimal">
 <li>
 <p><strong>Without <code>newdata</code></strong> predictions is the default to the parent data frame.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="op">(</span>\<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span>actual <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Species</span>, predicted <span class="op">=</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;             predicted</span></span>
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         50          0         0</span></span>
-<span><span class="co">#&gt;   versicolor      0         47         3</span></span>
-<span><span class="co">#&gt;   virginica       0          1        49</span></span></code></pre></div>
+<span><span class="co">#&gt;   versicolor      0         48         2</span></span>
+<span><span class="co">#&gt;   virginica       0          0        50</span></span></code></pre></div>
 </li>
 <li>
 <p><strong>With <code>newdata</code></strong> simply pass the new data frame as the new reference.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sample_iris</span> <span class="op">=</span> <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html" class="external-link">slice_sample</a></span><span class="op">(</span><span class="va">iris</span>, n <span class="op">=</span> <span class="fl">10</span>, by <span class="op">=</span> <span class="va">Species</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model</span>, newdata <span class="op">=</span> <span class="va">sample_iris</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -250,7 +255,7 @@
 <h3 id="level-3-conventional-tidymodels-integration">Level 3: Conventional tidymodels Integration<a class="anchor" aria-label="anchor" href="#level-3-conventional-tidymodels-integration"></a>
 </h3>
 <p>Work with neural networks just like any other <a href="https://github.com/tidymodels/parsnip" class="external-link">parsnip</a> model. This unlocks the entire <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> toolkit for preprocessing, cross-validation, and model evaluation.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># library(kindling)</span></span>
 <span><span class="co"># library(parsnip)</span></span>
 <span><span class="co"># library(yardstick)</span></span>
@@ -305,7 +310,7 @@
 <p>The current searchable parameters under <a href="https://kindling.joshuamarie.com">kindling</a>:</p>
 <ul>
 <li>Layer widths (neurons per layer)</li>
-<li>Network depth (number of hidden layers - coming soon)</li>
+<li>Network depth (number of hidden layers)</li>
 <li>Activation function combinations</li>
 <li>Output activation</li>
 <li>Optimizer (Type of optimization algorithm)</li>
@@ -315,8 +320,9 @@
 </ul>
 <p>The searchable parameters outside from <a href="https://kindling.joshuamarie.com">kindling</a>, i.e. under <a href="https://dials.tidymodels.org" class="external-link">dials</a> package such as <code>learn_rate()</code> also supported.</p>
 <p>Here’s an example:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span></span>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># library(tidymodels)</span></span>
+<span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span></span>
 <span>    <span class="va">kindling</span><span class="op">[</span></span>
 <span>        <span class="va">mlp_kindling</span>, <span class="va">hidden_neurons</span>, <span class="va">activations</span>, <span class="va">output_activation</span>, <span class="va">grid_depth</span></span>
 <span>    <span class="op">]</span>,</span>
@@ -387,30 +393,30 @@
 <ol style="list-style-type: decimal">
 <li>
 <p>Garson’s Algorithm</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/garson.html" class="external-link">garson</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names  rel_imp</span></span>
-<span><span class="co">#&gt; 1  Sepal.Width Species 28.02159</span></span>
-<span><span class="co">#&gt; 2 Petal.Length Species 26.55890</span></span>
-<span><span class="co">#&gt; 3  Petal.Width Species 24.75992</span></span>
-<span><span class="co">#&gt; 4 Sepal.Length Species 20.65959</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  Petal.Width Species 27.26336</span></span>
+<span><span class="co">#&gt; 2  Sepal.Width Species 26.12539</span></span>
+<span><span class="co">#&gt; 3 Petal.Length Species 25.47823</span></span>
+<span><span class="co">#&gt; 4 Sepal.Length Species 21.13302</span></span></code></pre></div>
 </li>
 <li>
 <p>Olden’s Algorithm</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/olden.html" class="external-link">olden</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names    rel_imp</span></span>
-<span><span class="co">#&gt; 1  Petal.Width Species  0.7488315</span></span>
-<span><span class="co">#&gt; 2  Sepal.Width Species -0.5967398</span></span>
-<span><span class="co">#&gt; 3 Petal.Length Species  0.4686559</span></span>
-<span><span class="co">#&gt; 4 Sepal.Length Species -0.3131365</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  Petal.Width Species -0.5324689</span></span>
+<span><span class="co">#&gt; 2 Petal.Length Species -0.4604468</span></span>
+<span><span class="co">#&gt; 3  Sepal.Width Species  0.2924655</span></span>
+<span><span class="co">#&gt; 4 Sepal.Length Species  0.2224666</span></span></code></pre></div>
 </li>
 </ol>
 <div class="section level3">
 <h3 id="integration-with-vip">Integration with {vip}<a class="anchor" aria-label="anchor" href="#integration-with-vip"></a>
 </h3>
 <p>For users working within the <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> ecosystem, <a href="https://kindling.joshuamarie.com">kindling</a> models work seamlessly with the <a href="https://github.com/koalaverse/vip/" class="external-link">vip</a> package:</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span></span>
 <span>    <span class="va">vip</span><span class="op">[</span><span class="va">vi</span>, <span class="va">vip</span><span class="op">]</span></span>
 <span><span class="op">)</span></span>

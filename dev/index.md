@@ -2,7 +2,7 @@
 
 ## Package overview
 
-Title: ***Higher-Level Interface of Torch to Auto-Train Neural
+Title: ***Higher-Level Interface of ‘torch’ Package to Auto-Train Neural
 Networks***
 
 Whether you’re generating neural network architectures expressions or
@@ -60,13 +60,14 @@ Or install the development version from GitHub:
 ``` r
 # install.packages("pak")
 pak::pak("joshuamarie/kindling")
+## devtools::install_github("joshuamarie/kindling") 
 ```
 
 ## Usage: Three Levels of Interaction
 
 [kindling](https://kindling.joshuamarie.com) is powered by R’s
 metaprogramming capabilities through *code generation*. Generated
-[`torch::nn_module`](https://torch.mlverse.org/docs/reference/nn_module.html)
+[`torch::nn_module()`](https://torch.mlverse.org/docs/reference/nn_module.html)
 expressions power the training functions, which in turn serve as engines
 for [tidymodels](https://tidymodels.tidymodels.org) integration. This
 architecture gives you flexibility to work at whatever abstraction level
@@ -79,6 +80,14 @@ library(kindling)
 #> The following object is masked from 'package:base':
 #> 
 #>     args
+```
+
+Before starting, you need to install LibTorch, the backend of PyTorch
+which also the backend of [torch](https://torch.mlverse.org/docs) R
+package:
+
+``` r
+torch::install_torch()
 ```
 
 ### Level 1: Code Generation for `torch::nn_module`
@@ -184,8 +193,8 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
-    #>   versicolor      0         47         3
-    #>   virginica       0          1        49
+    #>   versicolor      0         48         2
+    #>   virginica       0          0        50
     ```
 
 2.  **With `newdata`** simply pass the new data frame as the new
@@ -268,7 +277,7 @@ The current searchable parameters under
 [kindling](https://kindling.joshuamarie.com):
 
 - Layer widths (neurons per layer)
-- Network depth (number of hidden layers - coming soon)
+- Network depth (number of hidden layers)
 - Activation function combinations
 - Output activation
 - Optimizer (Type of optimization algorithm)
@@ -284,6 +293,7 @@ also supported.
 Here’s an example:
 
 ``` r
+# library(tidymodels)
 box::use(
     kindling[
         mlp_kindling, hidden_neurons, activations, output_activation, grid_depth
@@ -365,10 +375,10 @@ networks. Two primary algorithms are available:
     ``` r
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1  Sepal.Width Species 28.02159
-    #> 2 Petal.Length Species 26.55890
-    #> 3  Petal.Width Species 24.75992
-    #> 4 Sepal.Length Species 20.65959
+    #> 1  Petal.Width Species 27.26336
+    #> 2  Sepal.Width Species 26.12539
+    #> 3 Petal.Length Species 25.47823
+    #> 4 Sepal.Length Species 21.13302
     ```
 
 2.  Olden’s Algorithm
@@ -376,10 +386,10 @@ networks. Two primary algorithms are available:
     ``` r
     olden(model, bar_plot = FALSE)
     #>        x_names y_names    rel_imp
-    #> 1  Petal.Width Species  0.7488315
-    #> 2  Sepal.Width Species -0.5967398
-    #> 3 Petal.Length Species  0.4686559
-    #> 4 Sepal.Length Species -0.3131365
+    #> 1  Petal.Width Species -0.5324689
+    #> 2 Petal.Length Species -0.4604468
+    #> 3  Sepal.Width Species  0.2924655
+    #> 4 Sepal.Length Species  0.2224666
     ```
 
 ### Integration with {vip}
