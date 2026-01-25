@@ -191,8 +191,8 @@ Two kinds of `predict()` usage:
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
-    #>   versicolor      0         49         1
-    #>   virginica       0          1        49
+    #>   versicolor      0         48         2
+    #>   virginica       0          0        50
     ```
 
 2.  **With `newdata`** simply pass the new data frame as the new
@@ -206,7 +206,7 @@ Two kinds of `predict()` usage:
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
-    #>   versicolor      0         10         0
+    #>   versicolor      0          9         1
     #>   virginica       0          0        10
     ```
 
@@ -367,10 +367,10 @@ networks. Two primary algorithms are available:
     ``` r
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1  Petal.Width Species 29.58124
-    #> 2 Petal.Length Species 28.17735
-    #> 3 Sepal.Length Species 21.53951
-    #> 4  Sepal.Width Species 20.70189
+    #> 1  Petal.Width Species 27.26336
+    #> 2  Sepal.Width Species 26.12539
+    #> 3 Petal.Length Species 25.47823
+    #> 4 Sepal.Length Species 21.13302
     ```
 
 2.  Olden’s Algorithm
@@ -378,10 +378,10 @@ networks. Two primary algorithms are available:
     ``` r
     olden(model, bar_plot = FALSE)
     #>        x_names y_names    rel_imp
-    #> 1  Petal.Width Species -0.2239200
-    #> 2 Petal.Length Species -0.1697019
-    #> 3 Sepal.Length Species  0.1605987
-    #> 4  Sepal.Width Species  0.1404603
+    #> 1  Petal.Width Species -0.5324689
+    #> 2 Petal.Length Species -0.4604468
+    #> 3  Sepal.Width Species  0.2924655
+    #> 4 Sepal.Length Species  0.2224666
     ```
 
 ### Integration with {vip}
