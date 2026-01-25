@@ -14,6 +14,24 @@
   - Follows tidymodels conventions for consistency with `glmnet` and
     other packages
 
+- Tuning methods and
+  [`grid_depth()`](https://kindling.joshuamarie.com/dev/reference/grid_depth.md)
+  is now fixed
+
+  - Parameter space for the number of hidden layers is now fixed and
+    active
+  - Initial implementation uses
+    [`sample()`](https://rdrr.io/r/base/sample.html) creates bug when
+    `x` \> 1 for `type` != “regular”
+  - Uses
+    [`tidyr::expand_grid()`](https://tidyr.tidyverse.org/reference/expand_grid.html),
+    not `purrr::cross*()`
+  - Fix randomization of parameter space which will produce NAs outside
+    from [kindling](https://kindling.joshuamarie.com)‘s own ’dials’
+  - No more list columns when `n_hlayers = 1`
+
+- Vignette to showcase the comparison with other similar packages
+
 ## kindling 0.1.0
 
 - Initial CRAN release

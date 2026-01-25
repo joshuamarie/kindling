@@ -64,6 +64,17 @@
 <li>Controlled via <code>penalty</code> (regularization strength) and <code>mixture</code> (L1/L2 balance) parameters</li>
 <li>Follows tidymodels conventions for consistency with <code>glmnet</code> and other packages</li>
 </ul></li>
+<li>
+<p>Tuning methods and <code><a href="../reference/grid_depth.html">grid_depth()</a></code> is now fixed</p>
+<ul><li>Parameter space for the number of hidden layers is now fixed and active</li>
+<li>Initial implementation uses <code><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample()</a></code> creates bug when <code>x</code> &gt; 1 for <code>type</code> != “regular”</li>
+<li>Uses <code><a href="https://tidyr.tidyverse.org/reference/expand_grid.html" class="external-link">tidyr::expand_grid()</a></code>, not <code>purrr::cross*()</code>
+</li>
+<li>Fix randomization of parameter space which will produce NAs outside from <a href="https://kindling.joshuamarie.com">kindling</a>‘s own ’dials’</li>
+<li>No more list columns when <code>n_hlayers = 1</code>
+</li>
+</ul></li>
+<li><p>Vignette to showcase the comparison with other similar packages</p></li>
 </ul></div>
 </div>
     <div class="section level2">
