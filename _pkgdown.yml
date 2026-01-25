@@ -34,6 +34,8 @@ navbar:
       menu:
         - text: Getting Started
           href: articles/kindling.html
+        - text: Similar packages and comparison
+          href: articles/similar-packages.html
     tutorials:
       text: Learn more
       menu:
