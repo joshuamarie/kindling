@@ -323,7 +323,7 @@ generate_grid =
         }
         
         n_hlayer = as.integer(n_hlayer)
-        switch(
+        out = switch(
             type,
             regular = generate_regular_grid(
                 neuron_param, activation_param, n_hlayer,
@@ -346,6 +346,18 @@ generate_grid =
                 scalar_params, size, "audze_eglais", variogram_range, iter, original
             )
         )
+        
+        # Force scalar, not list
+        if (all(n_hlayer == 1)) {
+            if ("hidden_neurons" %in% names(out)) {
+                out$hidden_neurons = purrr::map_int(out$hidden_neurons, 1)
+            }
+            if ("activations" %in% names(out)) {
+                out$activations = purrr::map_chr(out$activations, 1)
+            }
+        }
+        
+        out
     }
 
 generate_regular_grid =
@@ -353,7 +365,7 @@ generate_regular_grid =
         neuron_param, activation_param, n_hlayer,
         scalar_params, levels, original
     ) {
-        neuron_vals = extract_param_range(neuron_param, levels)
+        neuron_vals = extract_param_range(neuron_param, levels, original)
         activation_vals = extract_param_values(activation_param)
         
         arch_grid = purrr::map_dfr(n_hlayer, function(depth) {
@@ -383,15 +395,14 @@ generate_random_grid =
         neuron_param, activation_param, n_hlayer,
         scalar_params, size, original
     ) {
-        neuron_vals = extract_param_range(neuron_param, NULL)
         activation_vals = extract_param_values(activation_param)
         
         purrr::map_dfr(seq_len(size), function(i) {
             depth = safe_sample(n_hlayer, 1)
             row_data = list()
             
-            if (!is.null(neuron_vals)) {
-                neurons = sample(neuron_vals, depth, replace = TRUE)
+            if (!is.null(neuron_param)) {
+                neurons = sample_from_param(neuron_param, depth, original)
                 row_data$hidden_neurons = list(as.integer(neurons))
             }
             
@@ -422,11 +433,11 @@ generate_lhs_grid =
             cli::cli_abort("Package {.pkg lhs} required for Latin Hypercube sampling.")
         }
         
-        neuron_vals = extract_param_range(neuron_param, NULL)
+        has_neurons = !is.null(neuron_param)
         activation_vals = extract_param_values(activation_param)
         max_depth = max(n_hlayer)
         
-        n_numeric_arch = if (!is.null(neuron_vals)) max_depth else 0
+        n_numeric_arch = if (has_neurons) max_depth else 0
         n_numeric_scalars = count_numeric_params(scalar_params)
         n_dims = n_numeric_arch + n_numeric_scalars
         
@@ -447,10 +458,13 @@ generate_lhs_grid =
             row = design[i, ]
             row_data = list()
             
-            if (!is.null(neuron_vals)) {
+            if (has_neurons) {
                 neuron_indices = row[seq_len(n_numeric_arch)]
-                neurons = stats::quantile(neuron_vals, neuron_indices[seq_len(depth)],
-                                          type = 1, names = FALSE)
+                neurons = decode_neurons_from_design(
+                    neuron_param, 
+                    neuron_indices[seq_len(depth)],
+                    original
+                )
                 row_data$hidden_neurons = list(as.integer(neurons))
             }
             
@@ -462,9 +476,9 @@ generate_lhs_grid =
             if (length(scalar_params) > 0) {
                 if (n_numeric_scalars > 0) {
                     scalar_indices = row[(n_numeric_arch + 1):n_dims]
-                    scalars = decode_scalars(scalar_params, scalar_indices)
+                    scalars = decode_scalars(scalar_params, scalar_indices, original)
                 } else {
-                    scalars = decode_scalars(scalar_params, numeric(0))
+                    scalars = decode_scalars(scalar_params, numeric(0), original)
                 }
                 row_data = c(row_data, as.list(scalars))
             }
@@ -483,11 +497,11 @@ generate_sfd_grid = function(
         cli::cli_abort("Package {.pkg sfd} required for space-filling designs.")
     }
     
-    neuron_vals = extract_param_range(neuron_param, NULL)
+    has_neurons = !is.null(neuron_param)
     activation_vals = extract_param_values(activation_param)
     
     max_depth = max(n_hlayer)
-    n_numeric_arch = if (!is.null(neuron_vals)) max_depth else 0
+    n_numeric_arch = if (has_neurons) max_depth else 0
     n_numeric_scalars = count_numeric_params(scalar_params)
     n_dims = n_numeric_arch + n_numeric_scalars
     
@@ -531,10 +545,13 @@ generate_sfd_grid = function(
         row = design[i, ]
         row_data = list()
         
-        if (!is.null(neuron_vals)) {
+        if (has_neurons) {
             neuron_indices = row[seq_len(n_numeric_arch)]
-            neurons = stats::quantile(neuron_vals, neuron_indices[seq_len(depth)],
-                                      type = 1, names = FALSE)
+            neurons = decode_neurons_from_design(
+                neuron_param, 
+                neuron_indices[seq_len(depth)],
+                original
+            )
             row_data$hidden_neurons = list(as.integer(neurons))
         }
         
@@ -546,9 +563,9 @@ generate_sfd_grid = function(
         if (length(scalar_params) > 0) {
             if (n_numeric_scalars > 0) {
                 scalar_indices = row[(n_numeric_arch + 1):n_dims]
-                scalars = decode_scalars(scalar_params, scalar_indices)
+                scalars = decode_scalars(scalar_params, scalar_indices, original)
             } else {
-                scalars = decode_scalars(scalar_params, numeric(0))
+                scalars = decode_scalars(scalar_params, numeric(0), original)
             }
             row_data = c(row_data, as.list(scalars))
         }
@@ -559,15 +576,23 @@ generate_sfd_grid = function(
     dplyr::bind_rows(results)
 }
 
-extract_param_range = function(param, levels) {
+extract_param_range = function(param, levels, original = TRUE) {
     if (is.null(param)) return(NULL)
     
     if (param$type %in% c("integer", "double")) {
         lower = param$range$lower
         upper = param$range$upper
         
+        has_trans = !is.null(param$trans)
+        
         if (!is.null(levels)) {
-            vals = seq(lower, upper, length.out = levels)
+            if (has_trans) {
+                vals_trans = seq(lower, upper, length.out = levels)
+                vals = param$trans$inverse(vals_trans)
+            } else {
+                vals = seq(lower, upper, length.out = levels)
+            }
+            
             if (param$type == "integer") {
                 unique(as.integer(round(vals)))
             } else {
@@ -585,6 +610,16 @@ extract_param_range = function(param, levels) {
     }
 }
 
+extract_param_bounds = function(param) {
+    if (is.null(param)) return(NULL)
+    
+    if (param$type %in% c("integer", "double")) {
+        c(param$range$lower, param$range$upper)
+    } else {
+        NULL
+    }
+}
+
 extract_param_values = function(param) {
     if (is.null(param)) return(NULL)
     
@@ -595,8 +630,45 @@ extract_param_values = function(param) {
     }
 }
 
+sample_from_param = function(param, n, original = TRUE) {
+    if (is.null(param)) return(NULL)
+    
+    lower = param$range$lower
+    upper = param$range$upper
+    
+    if (!is.null(param$trans)) {
+        vals_trans = stats::runif(n, lower, upper)
+        vals = param$trans$inverse(vals_trans)
+    } else {
+        vals = stats::runif(n, lower, upper)
+    }
+    
+    if (param$type == "integer") {
+        as.integer(round(vals))
+    } else {
+        vals
+    }
+}
+
+decode_neurons_from_design = function(param, design_vals, original = TRUE) {
+    lower = param$range$lower
+    upper = param$range$upper
+    
+    if (!is.null(param$trans)) {
+        vals_trans = lower + design_vals * (upper - lower)
+        vals = param$trans$inverse(vals_trans)
+    } else {
+        vals = lower + design_vals * (upper - lower)
+    }
+    
+    if (param$type == "integer") {
+        as.integer(round(vals))
+    } else {
+        vals
+    }
+}
+
 expand_architecture = function(neuron_vals, activation_vals, depth) {
-    # Create named list for expand_grid
     neuron_cols = stats::setNames(
         rep(list(neuron_vals), depth),
         paste0("n", seq_len(depth))
@@ -675,7 +747,7 @@ count_numeric_params = function(scalar_params) {
     sum(purrr::map_lgl(scalar_params, ~ .x$type %in% c("double", "integer")))
 }
 
-decode_scalars = function(scalar_params, design_vals) {
+decode_scalars = function(scalar_params, design_vals, original = TRUE) {
     if (length(scalar_params) == 0) {
         return(tibble::tibble())
     }
@@ -684,20 +756,35 @@ decode_scalars = function(scalar_params, design_vals) {
     categorical_params = purrr::keep(scalar_params, ~ .x$type %in% c("character", "logical"))
     
     decoded_numeric = if (length(numeric_params) > 0 && length(design_vals) > 0) {
-        purrr::imap_dfc(numeric_params, function(param, idx) {
-            val = param$range$lower + design_vals[idx] * (param$range$upper - param$range$lower)
+        purrr::imap_dfc(numeric_params, function(param, param_name) {
+            idx = which(names(numeric_params) == param_name)
+            
+            # The range is already in transformed space (if trans exists)
+            lower = param$range$lower
+            upper = param$range$upper
+            
+            if (!is.null(param$trans)) {
+                # Map design value to transformed space
+                val_trans = lower + design_vals[idx] * (upper - lower)
+                # Apply inverse transform to get original value
+                val = param$trans$inverse(val_trans)
+            } else {
+                val = lower + design_vals[idx] * (upper - lower)
+            }
+            
             if (param$type == "integer") {
                 val = as.integer(round(val))
             }
-            tibble::tibble(!!names(numeric_params)[idx] := val)
+            
+            tibble::tibble(!!param_name := val)
         })
     } else {
         NULL
     }
     
     decoded_categorical = if (length(categorical_params) > 0) {
-        purrr::imap_dfc(categorical_params, function(param, nm) {
-            tibble::tibble(!!nm := sample(param$values, 1))
+        purrr::imap_dfc(categorical_params, function(param, param_name) {
+            tibble::tibble(!!param_name := sample(param$values, 1))
         })
     } else {
         NULL
