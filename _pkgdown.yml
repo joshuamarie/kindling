@@ -108,6 +108,7 @@ articles:
     navbar: ~
     contents:
     - kindling
+    - similar-packages
 
 footer:
   structure:
