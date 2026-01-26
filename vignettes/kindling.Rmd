@@ -44,7 +44,7 @@ library(kindling)
 
 Before starting, you need to install LibTorch, the backend of PyTorch which also the backend of `{torch}` R package:
 
-```{r}
+``` r
 torch::install_torch()
 ```
 
