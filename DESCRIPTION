@@ -9,8 +9,8 @@ Authors@R: c(
     )
 Description: Provides a higher-level interface to the 'torch' package for defining,
     training, and tuning neural networks. This package supports feedforward 
-    (multi-layer perceptron) and recurrent neural networks (RNN (Recurrent Neural Networks), 
-    LSTM (Long Short-Term Memory), GRU (Gated Recurrent Unit)), and also reduces 
+    (multi-layer perceptron) and recurrent neural networks (Recurrent Neural Networks (RNN), 
+    Long Short-Term Memory (LSTM), Gated Recurrent Unit (GRU)), and also reduces 
     boilerplate code while enabling seamless integration with 'torch'. The methods to train 
     neural networks from this package also bridges to titanic ML frameworks in R namely
     'tidymodels' ecosystem, enabling the 'parsnip' model specifications, workflows, recipes, 
@@ -34,7 +34,8 @@ Imports:
     vip,
     ggplot2,
     tune,
-    dials
+    dials,
+    hardhat
 Suggests: 
     testthat (>= 3.0.0),
     magrittr,
