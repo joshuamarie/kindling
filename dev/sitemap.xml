@@ -13,6 +13,7 @@
 <url><loc>https://kindling.joshuamarie.com/dev/reference/args.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/dials-kindling.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/extract_depth_param.html</loc></url>
+<url><loc>https://kindling.joshuamarie.com/dev/reference/ffnn_impl.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/grid_depth.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/index.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/kindling-basemodels.html</loc></url>
@@ -23,12 +24,12 @@
 <url><loc>https://kindling.joshuamarie.com/dev/reference/mlp_kindling.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/nn_gens.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/ordinal_gen.html</loc></url>
-<url><loc>https://kindling.joshuamarie.com/dev/reference/predict.ffnn_fit.html</loc></url>
-<url><loc>https://kindling.joshuamarie.com/dev/reference/predict.rnn_fit.html</loc></url>
+<url><loc>https://kindling.joshuamarie.com/dev/reference/predict-basemodel.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/prepare_kindling_args.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/print.ffnn_fit.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/print.rnn_fit.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/reexports.html</loc></url>
+<url><loc>https://kindling.joshuamarie.com/dev/reference/rnn_impl.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/rnn_kindling.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/safe_sample.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/table_summary.html</loc></url>
