@@ -75,6 +75,17 @@
 </li>
 </ul></li>
 <li><p>Vignette to showcase the comparison with other similar packages</p></li>
+<li>
+<p><code>hidden_neurons</code> parameter now supports discrete values specification</p>
+<ul><li>Users can specify exact neuron counts via <code>values</code> parameter (e.g., <code>hidden_neurons(values = c(32, 64, 128))</code>)</li>
+<li>Maintains backward compatibility with range-based parameters (e.g., <code>hidden_neurons(range = c(8L, 512L))</code> / <code>hidden_neurons(c(8L, 512L))</code>)</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-improvements-development-version">Documentation improvements<a class="anchor" aria-label="anchor" href="#documentation-improvements-development-version"></a></h3>
+<ul><li>Added <code>\value</code> documentation to <code>kindling-nn-wrappers</code> for CRAN compliance</li>
+<li>Documented argument handling and list-column unwrapping in tidymodels wrapper functions</li>
+<li>Clarified the relationship between <code><a href="../reference/grid_depth.html">grid_depth()</a></code> and wrapper functions</li>
 </ul></div>
 </div>
     <div class="section level2">
