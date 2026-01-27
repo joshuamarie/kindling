@@ -16,6 +16,12 @@ rnn_wrapper(formula, data, ...)
 
 \item{...}{Additional arguments passed to the underlying training function}
 }
+\value{
+\itemize{
+\item \code{ffnn_wrapper()} returns an object of class \code{"ffnn_fit"} containing the trained feedforward neural network model and metadata. See \code{\link[=ffnn]{ffnn()}} for details.
+\item \code{rnn_wrapper()} returns an object of class \code{"rnn_fit"} containing the trained recurrent neural network model and metadata. See \code{\link[=rnn]{rnn()}} for details.
+}
+}
 \description{
 Basemodels-tidymodels wrappers
 }
