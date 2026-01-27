@@ -84,6 +84,13 @@
 <li><p><code>rnn_wrapper()</code> returns an object of class <code>"rnn_fit"</code> containing the trained recurrent neural network model and metadata. See <code><a href="kindling-basemodels.html">rnn()</a></code> for details.</p></li>
 </ul></div>
     <div class="section level2">
+    <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
+    <p>These wrapper functions are designed to interface with the <code>{tidymodels}</code>
+ecosystem, particularly for use with <code><a href="https://tune.tidymodels.org/reference/tune_grid.html" class="external-link">tune::tune_grid()</a></code> and workflows.
+They handle the conversion of tuning parameters (especially list-column
+parameters from <code><a href="grid_depth.html">grid_depth()</a></code>) into the format expected by <code><a href="kindling-basemodels.html">ffnn()</a></code> and <code><a href="kindling-basemodels.html">rnn()</a></code>.</p>
+    </div>
+    <div class="section level2">
     <h2 id="ffnn-mlp-wrapper-for-tidymodels-interface">FFNN (MLP) Wrapper for <code>{tidymodels}</code> interface<a class="anchor" aria-label="anchor" href="#ffnn-mlp-wrapper-for-tidymodels-interface"></a></h2>
 
 
