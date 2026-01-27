@@ -599,6 +599,10 @@ make_kindling = function() {
 #' @param data A data frame containing the training data
 #' @param ... Additional arguments passed to the underlying training function
 #'
+#' @return
+#' * `ffnn_wrapper()` returns an object of class `"ffnn_fit"` containing the trained feedforward neural network model and metadata. See [ffnn()] for details.
+#' * `rnn_wrapper()` returns an object of class `"rnn_fit"` containing the trained recurrent neural network model and metadata. See [rnn()] for details.
+#'
 #' @rdname kindling-nn-wrappers
 #' @section FFNN (MLP) Wrapper for `{tidymodels}` interface:
 #' This is a function to interface into `{tidymodels}`
