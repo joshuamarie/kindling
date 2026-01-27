@@ -292,207 +292,206 @@ grid_depth.default =
 #' @return List with `values` component containing integer vector of depths
 #' @keywords internal
 extract_depth_param = function(n_hlayer, param_list = list(), levels = 3L) {
-    # Check if n_hlayers is in param_list (from parameters object)
     if ("n_hlayers" %in% names(param_list)) {
         depth_param = param_list[["n_hlayers"]]
         depth_vals = extract_param_range(depth_param, levels)
         return(list(values = as.integer(depth_vals)))
     }
     
-    # Check if n_hlayer is a param object
     if (inherits(n_hlayer, "param")) {
         depth_vals = extract_param_range(n_hlayer, levels)
         return(list(values = as.integer(depth_vals)))
     }
     
-    # Otherwise treat as integer vector
-    return(list(values = as.integer(n_hlayer)))
+    out = list(values = as.integer(n_hlayer))
+    out
 }
 
-generate_grid =
+generate_grid = 
     function(
         neuron_param, activation_param, n_hlayer,
         scalar_params, type, size, levels, original,
         variogram_range, iter
     ) {
-        if (is.null(neuron_param) && is.null(activation_param)) {
-            if (length(scalar_params) == 0) {
-                cli::cli_abort("No parameters provided for grid generation.")
-            }
-            return(make_scalar_grid(scalar_params, size, levels, type, original))
+    if (is.null(neuron_param) && is.null(activation_param)) {
+        if (length(scalar_params) == 0) {
+            cli::cli_abort("No parameters provided for grid generation.")
         }
-        
-        n_hlayer = as.integer(n_hlayer)
-        out = switch(
-            type,
-            regular = generate_regular_grid(
-                neuron_param, activation_param, n_hlayer,
-                scalar_params, levels, original
-            ),
-            random = generate_random_grid(
-                neuron_param, activation_param, n_hlayer,
-                scalar_params, size, original
-            ),
-            latin_hypercube = generate_lhs_grid(
-                neuron_param, activation_param, n_hlayer,
-                scalar_params, size, original
-            ),
-            max_entropy = generate_sfd_grid(
-                neuron_param, activation_param, n_hlayer,
-                scalar_params, size, "max_entropy", variogram_range, iter, original
-            ),
-            audze_eglais = generate_sfd_grid(
-                neuron_param, activation_param, n_hlayer,
-                scalar_params, size, "audze_eglais", variogram_range, iter, original
-            )
-        )
-        
-        # Force scalar, not list
-        if (all(n_hlayer == 1)) {
-            if ("hidden_neurons" %in% names(out)) {
-                out$hidden_neurons = purrr::map_int(out$hidden_neurons, 1)
-            }
-            if ("activations" %in% names(out)) {
-                out$activations = purrr::map_chr(out$activations, 1)
-            }
-        }
-        
-        out
+        return(make_scalar_grid(scalar_params, size, levels, type, original))
     }
+    
+    n_hlayer = as.integer(n_hlayer)
+    out = switch(
+        type,
+        regular = generate_regular_grid(
+            neuron_param, activation_param, n_hlayer,
+            scalar_params, levels, original
+        ),
+        random = generate_random_grid(
+            neuron_param, activation_param, n_hlayer,
+            scalar_params, size, original
+        ),
+        latin_hypercube = generate_lhs_grid(
+            neuron_param, activation_param, n_hlayer,
+            scalar_params, size, original
+        ),
+        max_entropy = generate_sfd_grid(
+            neuron_param, activation_param, n_hlayer,
+            scalar_params, size, "max_entropy", variogram_range, iter, original
+        ),
+        audze_eglais = generate_sfd_grid(
+            neuron_param, activation_param, n_hlayer,
+            scalar_params, size, "audze_eglais", variogram_range, iter, original
+        )
+    )
+    
+    # Force scalar, not list
+    if (all(n_hlayer == 1)) {
+        if ("hidden_neurons" %in% names(out)) {
+            out$hidden_neurons = purrr::map_int(out$hidden_neurons, 1)
+        }
+        if ("activations" %in% names(out)) {
+            out$activations = purrr::map_chr(out$activations, 1)
+        }
+    }
+    
+    out
+}
 
-generate_regular_grid =
+generate_regular_grid = 
     function(
         neuron_param, activation_param, n_hlayer,
         scalar_params, levels, original
     ) {
-        neuron_vals = extract_param_range(neuron_param, levels, original)
-        activation_vals = extract_param_values(activation_param)
+    neuron_vals = extract_param_range(neuron_param, levels, original)
+    activation_vals = extract_param_values(activation_param)
+    
+    arch_grid = purrr::map_dfr(n_hlayer, function(depth) {
+        if (!is.null(neuron_vals) && !is.null(activation_vals)) {
+            expand_architecture(neuron_vals, activation_vals, depth)
+        } else if (!is.null(neuron_vals)) {
+            expand_neurons_only(neuron_vals, depth)
+        } else {
+            expand_activations_only(activation_vals, depth)
+        }
+    })
+    
+    if (length(scalar_params) > 0) {
+        scalar_grid = dials::grid_regular(
+            dials::parameters(scalar_params),
+            levels = levels,
+            original = original
+        )
+        tidyr::crossing(arch_grid, scalar_grid)
+    } else {
+        arch_grid
+    }
+}
+
+generate_random_grid = 
+    function(
+        neuron_param, activation_param, n_hlayer,
+        scalar_params, size, original
+    ) {
+    activation_vals = extract_param_values(activation_param)
+    
+    purrr::map_dfr(seq_len(size), function(i) {
+        depth = safe_sample(n_hlayer, 1)
+        row_data = list()
         
-        arch_grid = purrr::map_dfr(n_hlayer, function(depth) {
-            if (!is.null(neuron_vals) && !is.null(activation_vals)) {
-                expand_architecture(neuron_vals, activation_vals, depth)
-            } else if (!is.null(neuron_vals)) {
-                expand_neurons_only(neuron_vals, depth)
-            } else {
-                expand_activations_only(activation_vals, depth)
-            }
-        })
+        if (!is.null(neuron_param)) {
+            neurons = sample_from_param(neuron_param, depth, original)
+            row_data$hidden_neurons = list(as.integer(neurons))
+        }
+        
+        if (!is.null(activation_vals)) {
+            activations = sample(activation_vals, depth, replace = TRUE)
+            row_data$activations = list(as.character(activations))
+        }
         
         if (length(scalar_params) > 0) {
-            scalar_grid = dials::grid_regular(
+            scalars = dials::grid_random(
                 dials::parameters(scalar_params),
-                levels = levels,
+                size = 1,
                 original = original
             )
-            tidyr::crossing(arch_grid, scalar_grid)
-        } else {
-            arch_grid
+            row_data = c(row_data, as.list(scalars))
         }
-    }
+        
+        tibble::as_tibble(row_data)
+    })
+}
 
-generate_random_grid =
+generate_lhs_grid = 
     function(
         neuron_param, activation_param, n_hlayer,
         scalar_params, size, original
     ) {
-        activation_vals = extract_param_values(activation_param)
-        
-        purrr::map_dfr(seq_len(size), function(i) {
-            depth = safe_sample(n_hlayer, 1)
-            row_data = list()
-            
-            if (!is.null(neuron_param)) {
-                neurons = sample_from_param(neuron_param, depth, original)
-                row_data$hidden_neurons = list(as.integer(neurons))
-            }
-            
-            if (!is.null(activation_vals)) {
-                activations = sample(activation_vals, depth, replace = TRUE)
-                row_data$activations = list(as.character(activations))
-            }
-            
-            if (length(scalar_params) > 0) {
-                scalars = dials::grid_random(
-                    dials::parameters(scalar_params),
-                    size = 1,
-                    original = original
-                )
-                row_data = c(row_data, as.list(scalars))
-            }
-            
-            tibble::as_tibble(row_data)
-        })
+    if (!requireNamespace("lhs", quietly = TRUE)) {
+        cli::cli_abort("Package {.pkg lhs} required for Latin Hypercube sampling.")
     }
+    
+    has_neurons = !is.null(neuron_param)
+    activation_vals = extract_param_values(activation_param)
+    max_depth = max(n_hlayer)
+    
+    n_numeric_arch = if (has_neurons) max_depth else 0
+    n_numeric_scalars = count_numeric_params(scalar_params)
+    n_dims = n_numeric_arch + n_numeric_scalars
+    
+    if (n_dims == 0) {
+        return(generate_random_grid(
+            neuron_param, activation_param, n_hlayer,
+            scalar_params, size, original
+        ))
+    }
+    
+    design = lhs::randomLHS(size, n_dims)
+    depths = safe_sample(n_hlayer, size, replace = TRUE)
+    
+    results = vector("list", size)
+    
+    for (i in seq_len(size)) {
+        depth = depths[i]
+        row = design[i, ]
+        row_data = list()
+        
+        if (has_neurons) {
+            neuron_indices = row[seq_len(n_numeric_arch)]
+            neurons = decode_neurons_from_design(
+                neuron_param, 
+                neuron_indices[seq_len(depth)],
+                original
+            )
+            row_data$hidden_neurons = list(as.integer(neurons))
+        }
+        
+        if (!is.null(activation_vals)) {
+            activations = sample(activation_vals, depth, replace = TRUE)
+            row_data$activations = list(as.character(activations))
+        }
+        
+        if (length(scalar_params) > 0) {
+            if (n_numeric_scalars > 0) {
+                scalar_indices = row[(n_numeric_arch + 1):n_dims]
+                scalars = decode_scalars(scalar_params, scalar_indices, original)
+            } else {
+                scalars = decode_scalars(scalar_params, numeric(0), original)
+            }
+            row_data = c(row_data, as.list(scalars))
+        }
+        
+        results[[i]] = tibble::as_tibble(row_data)
+    }
+    
+    dplyr::bind_rows(results)
+}
 
-generate_lhs_grid =
+generate_sfd_grid = 
     function(
-        neuron_param, activation_param, n_hlayer,
-        scalar_params, size, original
-    ) {
-        if (!requireNamespace("lhs", quietly = TRUE)) {
-            cli::cli_abort("Package {.pkg lhs} required for Latin Hypercube sampling.")
-        }
-        
-        has_neurons = !is.null(neuron_param)
-        activation_vals = extract_param_values(activation_param)
-        max_depth = max(n_hlayer)
-        
-        n_numeric_arch = if (has_neurons) max_depth else 0
-        n_numeric_scalars = count_numeric_params(scalar_params)
-        n_dims = n_numeric_arch + n_numeric_scalars
-        
-        if (n_dims == 0) {
-            return(generate_random_grid(
-                neuron_param, activation_param, n_hlayer,
-                scalar_params, size, original
-            ))
-        }
-        
-        design = lhs::randomLHS(size, n_dims)
-        depths = safe_sample(n_hlayer, size, replace = TRUE)
-        
-        results = vector("list", size)
-        
-        for (i in seq_len(size)) {
-            depth = depths[i]
-            row = design[i, ]
-            row_data = list()
-            
-            if (has_neurons) {
-                neuron_indices = row[seq_len(n_numeric_arch)]
-                neurons = decode_neurons_from_design(
-                    neuron_param, 
-                    neuron_indices[seq_len(depth)],
-                    original
-                )
-                row_data$hidden_neurons = list(as.integer(neurons))
-            }
-            
-            if (!is.null(activation_vals)) {
-                activations = sample(activation_vals, depth, replace = TRUE)
-                row_data$activations = list(as.character(activations))
-            }
-            
-            if (length(scalar_params) > 0) {
-                if (n_numeric_scalars > 0) {
-                    scalar_indices = row[(n_numeric_arch + 1):n_dims]
-                    scalars = decode_scalars(scalar_params, scalar_indices, original)
-                } else {
-                    scalars = decode_scalars(scalar_params, numeric(0), original)
-                }
-                row_data = c(row_data, as.list(scalars))
-            }
-            
-            results[[i]] = tibble::as_tibble(row_data)
-        }
-        
-        dplyr::bind_rows(results)
-    }
-
-generate_sfd_grid = function(
         neuron_param, activation_param, n_hlayer,
         scalar_params, size, sfd_type, variogram_range, iter, original
-) {
+    ) {
     if (!requireNamespace("sfd", quietly = TRUE)) {
         cli::cli_abort("Package {.pkg sfd} required for space-filling designs.")
     }
@@ -579,6 +578,11 @@ generate_sfd_grid = function(
 extract_param_range = function(param, levels, original = TRUE) {
     if (is.null(param)) return(NULL)
     
+    discrete_vals = attr(param, "discrete_values")
+    if (!is.null(discrete_vals)) {
+        return(discrete_vals)
+    }
+    
     if (param$type %in% c("integer", "double")) {
         lower = param$range$lower
         upper = param$range$upper
@@ -633,6 +637,11 @@ extract_param_values = function(param) {
 sample_from_param = function(param, n, original = TRUE) {
     if (is.null(param)) return(NULL)
     
+    discrete_vals = attr(param, "discrete_values")
+    if (!is.null(discrete_vals)) {
+        return(sample(discrete_vals, n, replace = TRUE))
+    }
+    
     lower = param$range$lower
     upper = param$range$upper
     
@@ -653,6 +662,15 @@ sample_from_param = function(param, n, original = TRUE) {
 decode_neurons_from_design = function(param, design_vals, original = TRUE) {
     lower = param$range$lower
     upper = param$range$upper
+    
+    discrete_vals = attr(param, "discrete_values")
+    if (!is.null(discrete_vals)) {
+        indices = pmax(
+            1, 
+            pmin(length(discrete_vals), ceiling(design_vals * length(discrete_vals)))
+        )
+        return(discrete_vals[indices])
+    }
     
     if (!is.null(param$trans)) {
         vals_trans = lower + design_vals * (upper - lower)
@@ -698,32 +716,26 @@ expand_architecture = function(neuron_vals, activation_vals, depth) {
 }
 
 expand_neurons_only = function(neuron_vals, depth) {
-    # Create named list for expand_grid
     neuron_cols = stats::setNames(
         rep(list(neuron_vals), depth),
         paste0("n", seq_len(depth))
     )
     
-    # Generate all combinations
     grid = tidyr::expand_grid(!!!neuron_cols)
     
-    # Convert to list column
     tibble::tibble(
         hidden_neurons = purrr::pmap(grid, ~ as.integer(c(...)))
     )
 }
 
 expand_activations_only = function(activation_vals, depth) {
-    # Create named list for expand_grid
     activation_cols = stats::setNames(
         rep(list(activation_vals), depth),
         paste0("a", seq_len(depth))
     )
     
-    # Generate all combinations
     grid = tidyr::expand_grid(!!!activation_cols)
     
-    # Convert to list column
     tibble::tibble(
         activations = purrr::pmap(grid, ~ as.character(c(...)))
     )
@@ -759,14 +771,11 @@ decode_scalars = function(scalar_params, design_vals, original = TRUE) {
         purrr::imap_dfc(numeric_params, function(param, param_name) {
             idx = which(names(numeric_params) == param_name)
             
-            # The range is already in transformed space (if trans exists)
             lower = param$range$lower
             upper = param$range$upper
             
             if (!is.null(param$trans)) {
-                # Map design value to transformed space
                 val_trans = lower + design_vals[idx] * (upper - lower)
-                # Apply inverse transform to get original value
                 val = param$trans$inverse(val_trans)
             } else {
                 val = lower + design_vals[idx] * (upper - lower)

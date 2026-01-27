@@ -14,7 +14,7 @@
 \usage{
 n_hlayers(range = c(1L, 2L), trans = NULL)
 
-hidden_neurons(range = c(8L, 512L), trans = NULL)
+hidden_neurons(range = c(8L, 512L), values = NULL, trans = NULL)
 
 activations(
   values = c("relu", "relu6", "elu", "selu", "celu", "leaky_relu", "gelu", "softplus",

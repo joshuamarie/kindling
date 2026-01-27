@@ -96,14 +96,29 @@ n_hlayers = function(range = c(1L, 2L), trans = NULL) {
 #'
 #' @rdname dials-kindling
 #' @export
-hidden_neurons = function(range = c(8L, 512L), trans = NULL) {
+hidden_neurons = function(range = c(8L, 512L), values = NULL, trans = NULL) {
+    if (!is.null(values)) {
+        values = as.integer(values)
+        param = dials::new_quant_param(
+            type = "integer",
+            range = c(min(values), max(values)),
+            inclusive = c(TRUE, TRUE),
+            trans = trans,
+            label = c(hidden_neurons = "Hidden Units per Layer"),
+            finalize = NULL
+        )
+        attr(param, "discrete_values") = values
+        
+        return(param)
+    }
+    
     dials::new_quant_param(
         type = "integer",
         range = range,
         inclusive = c(TRUE, TRUE),
         trans = trans,
         label = c(hidden_neurons = "Hidden Units per Layer"),
-        finalize  = NULL
+        finalize = NULL
     )
 }
 
