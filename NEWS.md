@@ -19,6 +19,16 @@
     -   No more list columns when `n_hlayers = 1` 
 
 -   Vignette to showcase the comparison with other similar packages
+-   `hidden_neurons` parameter now supports discrete values specification
+
+    -   Users can specify exact neuron counts via `values` parameter (e.g., `hidden_neurons(values = c(32, 64, 128))`)
+    -   Maintains backward compatibility with range-based parameters (e.g., `hidden_neurons(range = c(8L, 512L))` / `hidden_neurons(c(8L, 512L))`)
+
+## Documentation improvements
+
+-   Added `\value` documentation to `kindling-nn-wrappers` for CRAN compliance
+-   Documented argument handling and list-column unwrapping in tidymodels wrapper functions
+-   Clarified the relationship between `grid_depth()` and wrapper functions
 
 # kindling 0.1.0
 
