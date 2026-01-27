@@ -25,6 +25,12 @@ rnn_wrapper(formula, data, ...)
 \description{
 Basemodels-tidymodels wrappers
 }
+\details{
+These wrapper functions are designed to interface with the \code{{tidymodels}}
+ecosystem, particularly for use with \code{\link[tune:tune_grid]{tune::tune_grid()}} and workflows.
+They handle the conversion of tuning parameters (especially list-column
+parameters from \code{\link[=grid_depth]{grid_depth()}}) into the format expected by \code{\link[=ffnn]{ffnn()}} and \code{\link[=rnn]{rnn()}}.
+}
 \section{FFNN (MLP) Wrapper for \code{{tidymodels}} interface}{
 
 This is a function to interface into \code{{tidymodels}}

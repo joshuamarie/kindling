@@ -603,6 +603,12 @@ make_kindling = function() {
 #' * `ffnn_wrapper()` returns an object of class `"ffnn_fit"` containing the trained feedforward neural network model and metadata. See [ffnn()] for details.
 #' * `rnn_wrapper()` returns an object of class `"rnn_fit"` containing the trained recurrent neural network model and metadata. See [rnn()] for details.
 #'
+#' @details
+#' These wrapper functions are designed to interface with the `{tidymodels}` 
+#' ecosystem, particularly for use with [tune::tune_grid()] and workflows.
+#' They handle the conversion of tuning parameters (especially list-column 
+#' parameters from [grid_depth()]) into the format expected by [ffnn()] and [rnn()].
+#' 
 #' @rdname kindling-nn-wrappers
 #' @section FFNN (MLP) Wrapper for `{tidymodels}` interface:
 #' This is a function to interface into `{tidymodels}`
