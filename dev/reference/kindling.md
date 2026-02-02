@@ -7,10 +7,12 @@ such as:
 
 - Recurrent Neural Networks (RNN)
 
-It is designed to reduce boilerplate `{torch}` code for FFNN and RNN. It
-also integrate seamlessly with `{tidymodels}` components like
-`{parsnip}`, `{recipes}`, and `{workflows}`, allowing flexibility and a
-consistent interface for model specification, training, and evaluation.
+It is mainly designed to generate code expressions of the current
+architectures which happens to reduce boilerplate `{torch}` code for the
+said current architectures. It also integrate seamlessly with titanic ML
+frameworks - currently with `{tidymodels}`, which enables components
+like `{parsnip}`, `{recipes}`, and `{workflows}`, allowing ergonomic
+interface for model specification, training, and evaluation.
 
 Thus, the package supports hyperparameter tuning for:
 
@@ -20,7 +22,9 @@ Thus, the package supports hyperparameter tuning for:
 
 - Choice of activation functions
 
-Note: The hyperparameter tuning support is not currently implemented.
+Clarification: The hyperparameter tuning support is supported in version
+0.1.0, but `n_hlayer()` dial parameter is not supported. This changes
+after 0.2.0 release.
 
 ## Details
 

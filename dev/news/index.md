@@ -14,21 +14,43 @@
   - Follows tidymodels conventions for consistency with `glmnet` and
     other packages
 
+- [`n_hlayers()`](https://kindling.joshuamarie.com/dev/reference/dials-kindling.md)
+  now fully supports tuning the number of hidden layers
+
+- [`hidden_neurons()`](https://kindling.joshuamarie.com/dev/reference/dials-kindling.md)
+  gains support for discrete values via the `disc_values` argument
+
+  - e.g. `disc_values = c(32L, 64L, 128L, 256L)`) is now allowed
+  - This allows tuning over specific common hidden unit sizes instead of
+    (or in addition to) a continuous range
+
+### Implementation fixes
+
 - Tuning methods and
   [`grid_depth()`](https://kindling.joshuamarie.com/dev/reference/grid_depth.md)
   is now fixed
 
   - Parameter space for the number of hidden layers is now fixed and
     active
-  - Initial implementation uses
-    [`sample()`](https://rdrr.io/r/base/sample.html) creates bug when
-    `x` \> 1 for `type` != “regular”
+  - Corrected parameter space handling for `n_hlayers` (no more invalid
+    sampling when `x > 1`)
   - Uses
     [`tidyr::expand_grid()`](https://tidyr.tidyverse.org/reference/expand_grid.html),
     not `purrr::cross*()`
   - Fix randomization of parameter space which will produce NAs outside
     from [kindling](https://kindling.joshuamarie.com)‘s own ’dials’
   - No more list columns when `n_hlayers = 1`
+
+\<\<\<\<\<\<\< HEAD - The supported models now use
+[`hardhat::mold()`](https://hardhat.tidymodels.org/reference/mold.html),
+instead of [`model.frame()`](https://rdrr.io/r/stats/model.frame.html)
+and [`model.matrix()`](https://rdrr.io/r/stats/model.matrix.html).
+
+### Documentation
+
+- Add a vignette to showcase the comparison with other similar packages
+
+- ## The package description got few clarifications
 
 - Vignette to showcase the comparison with other similar packages
 
@@ -48,9 +70,12 @@
   wrapper functions
 - Clarified the relationship between
   [`grid_depth()`](https://kindling.joshuamarie.com/dev/reference/grid_depth.md)
-  and wrapper functions
+  and wrapper functions \>\>\>\>\>\>\>
+  d03b75e3092d290e8c933ba82cb6af8959686983
 
 ## kindling 0.1.0
+
+CRAN release: 2026-01-31
 
 - Initial CRAN release
 - Higher-level interface for torch package to define, train, and tune

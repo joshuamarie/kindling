@@ -64,16 +64,31 @@
 <li>Controlled via <code>penalty</code> (regularization strength) and <code>mixture</code> (L1/L2 balance) parameters</li>
 <li>Follows tidymodels conventions for consistency with <code>glmnet</code> and other packages</li>
 </ul></li>
+<li><p><code><a href="../reference/dials-kindling.html">n_hlayers()</a></code> now fully supports tuning the number of hidden layers</p></li>
 <li>
+<p><code><a href="../reference/dials-kindling.html">hidden_neurons()</a></code> gains support for discrete values via the <code>disc_values</code> argument</p>
+<ul><li>e.g. <code>disc_values = c(32L, 64L, 128L, 256L)</code>) is now allowed</li>
+<li>This allows tuning over specific common hidden unit sizes instead of (or in addition to) a continuous range</li>
+</ul></li>
+</ul></div>
+<div class="section level3">
+<h3 id="implementation-fixes-development-version">Implementation fixes<a class="anchor" aria-label="anchor" href="#implementation-fixes-development-version"></a></h3>
+<ul><li>
 <p>Tuning methods and <code><a href="../reference/grid_depth.html">grid_depth()</a></code> is now fixed</p>
 <ul><li>Parameter space for the number of hidden layers is now fixed and active</li>
-<li>Initial implementation uses <code><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample()</a></code> creates bug when <code>x</code> &gt; 1 for <code>type</code> != “regular”</li>
+<li>Corrected parameter space handling for <code>n_hlayers</code> (no more invalid sampling when <code>x &gt; 1</code>)</li>
 <li>Uses <code><a href="https://tidyr.tidyverse.org/reference/expand_grid.html" class="external-link">tidyr::expand_grid()</a></code>, not <code>purrr::cross*()</code>
 </li>
 <li>Fix randomization of parameter space which will produce NAs outside from <a href="https://kindling.joshuamarie.com">kindling</a>‘s own ’dials’</li>
 <li>No more list columns when <code>n_hlayers = 1</code>
 </li>
 </ul></li>
+</ul><p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD - The supported models now use <code><a href="https://hardhat.tidymodels.org/reference/mold.html" class="external-link">hardhat::mold()</a></code>, instead of <code><a href="https://rdrr.io/r/stats/model.frame.html" class="external-link">model.frame()</a></code> and <code><a href="https://rdrr.io/r/stats/model.matrix.html" class="external-link">model.matrix()</a></code>.</p>
+</div>
+<div class="section level3">
+<h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
+<ul><li><p>Add a vignette to showcase the comparison with other similar packages</p></li>
+<li><h2 id="the-package-description-got-few-clarifications" class="pkg-version" data-toc-text="development version">The package description got few clarifications</h2></li>
 <li><p>Vignette to showcase the comparison with other similar packages</p></li>
 <li>
 <p><code>hidden_neurons</code> parameter now supports discrete values specification</p>
@@ -85,11 +100,11 @@
 <h3 id="documentation-improvements-development-version">Documentation improvements<a class="anchor" aria-label="anchor" href="#documentation-improvements-development-version"></a></h3>
 <ul><li>Added <code>\value</code> documentation to <code>kindling-nn-wrappers</code> for CRAN compliance</li>
 <li>Documented argument handling and list-column unwrapping in tidymodels wrapper functions</li>
-<li>Clarified the relationship between <code><a href="../reference/grid_depth.html">grid_depth()</a></code> and wrapper functions</li>
+<li>Clarified the relationship between <code><a href="../reference/grid_depth.html">grid_depth()</a></code> and wrapper functions &gt;&gt;&gt;&gt;&gt;&gt;&gt; d03b75e3092d290e8c933ba82cb6af8959686983</li>
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.0" id="kindling-010">kindling 0.1.0<a class="anchor" aria-label="anchor" href="#kindling-010"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.0" id="kindling-010">kindling 0.1.0<a class="anchor" aria-label="anchor" href="#kindling-010"></a></h2><p class="text-muted">CRAN release: 2026-01-31</p>
 <ul><li>Initial CRAN release</li>
 <li>Higher-level interface for torch package to define, train, and tune neural networks</li>
 <li>Support for feedforward (multi-layer perceptron) and recurrent networks (RNN, LSTM, GRU)</li>

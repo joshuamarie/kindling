@@ -103,7 +103,7 @@
 <ul>
 <li>Code generation of <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> expression</li>
 <li>Multiple architectures available: feedforward networks (MLP/DNN/FFNN) and recurrent variants (RNN, LSTM, GRU)</li>
-<li>Native support for <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> workflows and pipelines</li>
+<li>Native support for titanic ML frameworks (currently supports <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>, <a href="https://mlr3.mlr-org.com" class="external-link">mlr3</a> for later) workflows and pipelines</li>
 <li>Fine-grained control over network depth, layer sizes, and activation functions</li>
 <li>GPU acceleration supports via <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> tensors <!-- -   Dramatically less boilerplate than raw `{torch}` implementations -->
 </li>
@@ -234,7 +234,7 @@
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         50          0         0</span></span>
 <span><span class="co">#&gt;   versicolor      0         46         4</span></span>
-<span><span class="co">#&gt;   virginica       0          0        50</span></span></code></pre></div>
+<span><span class="co">#&gt;   virginica       0          2        48</span></span></code></pre></div>
 </li>
 <li>
 <p><strong>With <code>newdata</code></strong> simply pass the new data frame as the new reference.</p>
@@ -246,8 +246,8 @@
 <span><span class="co">#&gt;             predicted</span></span>
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         10          0         0</span></span>
-<span><span class="co">#&gt;   versicolor      0          9         1</span></span>
-<span><span class="co">#&gt;   virginica       0          0        10</span></span></code></pre></div>
+<span><span class="co">#&gt;   versicolor      0         10         0</span></span>
+<span><span class="co">#&gt;   virginica       0          1         9</span></span></code></pre></div>
 </li>
 </ol>
 </div>
@@ -396,20 +396,20 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/garson.html" class="external-link">garson</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names  rel_imp</span></span>
-<span><span class="co">#&gt; 1  Petal.Width       y 28.49543</span></span>
-<span><span class="co">#&gt; 2  Sepal.Width       y 25.82405</span></span>
-<span><span class="co">#&gt; 3 Sepal.Length       y 24.21862</span></span>
-<span><span class="co">#&gt; 4 Petal.Length       y 21.46190</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  Sepal.Width       y 29.04598</span></span>
+<span><span class="co">#&gt; 2  Petal.Width       y 27.50590</span></span>
+<span><span class="co">#&gt; 3 Sepal.Length       y 24.20982</span></span>
+<span><span class="co">#&gt; 4 Petal.Length       y 19.23830</span></span></code></pre></div>
 </li>
 <li>
 <p>Olden’s Algorithm</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/olden.html" class="external-link">olden</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names     rel_imp</span></span>
-<span><span class="co">#&gt; 1  Petal.Width       y -0.26225266</span></span>
-<span><span class="co">#&gt; 2  Sepal.Width       y  0.20693472</span></span>
-<span><span class="co">#&gt; 3 Petal.Length       y -0.15842190</span></span>
-<span><span class="co">#&gt; 4 Sepal.Length       y -0.09426378</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  Sepal.Width       y  0.56231712</span></span>
+<span><span class="co">#&gt; 2  Petal.Width       y -0.51113650</span></span>
+<span><span class="co">#&gt; 3 Petal.Length       y -0.29761552</span></span>
+<span><span class="co">#&gt; 4 Sepal.Length       y -0.06857191</span></span></code></pre></div>
 </li>
 </ol>
 <div class="section level3">
@@ -425,113 +425,88 @@
 <span>    <span class="fu">vip</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="reference/figures/README-example-1.png" alt="Variable Importance Plot" width="100%"></p>
 <p><em>Note: Weight caching increases memory usage proportional to network size. Only enable it when you plan to compute variable importance multiple times on the same model.</em></p>
+<!-- ## Comparison with other packages -->
+<!-- ```{r, echo=FALSE} -->
+<!-- comparison = data.frame( -->
+<!--     Feature = c( -->
+<!--         "**Primary Focus**", -->
+<!--         "**Design Philosophy**", -->
+<!--         "**Architectures**", -->
+<!--         "**Code Generation**", -->
+<!--         "**tidymodels Integration**", -->
+<!--         "**Formula Syntax**", -->
+<!--         "**Layer-specific Activations**", -->
+<!--         "**GPU Support**", -->
+<!--         "**Explainability/xAI**", -->
+<!--         "**Statistical Inference**", -->
+<!--         "**Custom Loss Functions**", -->
+<!--         "**For whom?**" -->
+<!--     ), -->
+<!--     kindling = c( -->
+<!--         "Architectural versatility & flexibility, statistical modelling, and code generation", -->
+<!--         "Three-level API (code gen, training, ML framework (currently tidymodels) integration)", -->
+<!--         "Versatile — Feedforward Neural Networks (DNN/FFNN/MLP), Recurrent Neural Networks (RNN, LSTM, GRU), and more (in the future)", -->
+<!--         "Yes (inspect & modify torch code)", -->
+<!--         "Full (parsnip models & tuning)", -->
+<!--         "Yes", -->
+<!--         "Yes", -->
+<!--         "Yes", -->
+<!--         "Garson's & Olden's algorithms, vip integration, and more in the future", -->
+<!--         "Not yet implemented", -->
+<!--         "Yes", -->
+<!--         "Wants versatile architectures (more in the future), fine-grained control, tidymodels users" -->
+<!--     ), -->
+<!--     brulee = c( -->
+<!--         "Production-ready statistical models", -->
+<!--         "Batteries-included with sensible defaults", -->
+<!--         "MLP, Linear/Logistic/Multinomial regression", -->
+<!--         "No", -->
+<!--         "Full (official tidymodels package)", -->
+<!--         "Yes", -->
+<!--         "No", -->
+<!--         "Yes", -->
+<!--         "Limited", -->
+<!--         "No", -->
+<!--         "No", -->
+<!--         "Wants standard supervised learning, stable production models" -->
+<!--     ), -->
+<!--     cito = c( -->
+<!--         "Statistical inference & interpretation", -->
+<!--         "User-friendly with comprehensive xAI pipeline", -->
+<!--         "Fully-connected networks, CNNs", -->
+<!--         "No", -->
+<!--         "No (standalone package)", -->
+<!--         "Yes", -->
+<!--         "No", -->
+<!--         "Yes (CPU, GPU, MacOS)", -->
+<!--         "Extensive (PDP, ALE, variable importance, etc.)", -->
+<!--         "Yes (confidence intervals, p-values via bootstrap)", -->
+<!--         "Yes", -->
+<!--         "Do ecological modeling, interpretable models, statistical inference" -->
+<!--     ), -->
+<!--     luz = c( -->
+<!--         "Training loop abstraction", -->
+<!--         "High-level API reducing boilerplate", -->
+<!--         "Any torch nn_module", -->
+<!--         "No", -->
+<!--         "No (standalone package)", -->
+<!--         "No (uses torch modules directly)", -->
+<!--         "No (also uses torch modules directly)", -->
+<!--         "Yes (automatic device placement)", -->
+<!--         "No", -->
+<!--         "No", -->
+<!--         "Yes", -->
+<!--         "Wants custom architectures, users needing human-friendly training loop control" -->
+<!--     ), -->
+<!--     stringsAsFactors = FALSE -->
+<!-- ) -->
+<!-- knitr::kable( -->
+<!--     comparison,  -->
+<!--     col.names = c("Feature", "kindling", "brulee", "cito", "luz"), -->
+<!--     label = "Table of comparison" -->
+<!-- ) -->
+<!-- ``` -->
 </div>
-</div>
-<div class="section level2">
-<h2 id="comparison-with-other-packages">Comparison with other packages<a class="anchor" aria-label="anchor" href="#comparison-with-other-packages"></a>
-</h2>
-<table class="table">
-<colgroup>
-<col width="20%">
-<col width="20%">
-<col width="20%">
-<col width="20%">
-<col width="20%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">Feature</th>
-<th align="left">kindling</th>
-<th align="left">brulee</th>
-<th align="left">cito</th>
-<th align="left">luz</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left"><strong>Primary Focus</strong></td>
-<td align="left">Architectural versatility &amp; flexibility, statistical modelling, and code generation</td>
-<td align="left">Production-ready statistical models</td>
-<td align="left">Statistical inference &amp; interpretation</td>
-<td align="left">Training loop abstraction</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Design Philosophy</strong></td>
-<td align="left">Three-level API (code gen, training, ML framework (currently tidymodels) integration)</td>
-<td align="left">Batteries-included with sensible defaults</td>
-<td align="left">User-friendly with comprehensive xAI pipeline</td>
-<td align="left">High-level API reducing boilerplate</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Architectures</strong></td>
-<td align="left">Versatile — Feedforward Neural Networks (DNN/FFNN/MLP), Recurrent Neural Networks (RNN, LSTM, GRU), and more (in the future)</td>
-<td align="left">MLP, Linear/Logistic/Multinomial regression</td>
-<td align="left">Fully-connected networks, CNNs</td>
-<td align="left">Any torch nn_module</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Code Generation</strong></td>
-<td align="left">Yes (inspect &amp; modify torch code)</td>
-<td align="left">No</td>
-<td align="left">No</td>
-<td align="left">No</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>tidymodels Integration</strong></td>
-<td align="left">Full (parsnip models &amp; tuning)</td>
-<td align="left">Full (official tidymodels package)</td>
-<td align="left">No (standalone package)</td>
-<td align="left">No (standalone package)</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Formula Syntax</strong></td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">No (uses torch modules directly)</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Layer-specific Activations</strong></td>
-<td align="left">Yes</td>
-<td align="left">No</td>
-<td align="left">No</td>
-<td align="left">No (also uses torch modules directly)</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>GPU Support</strong></td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes (CPU, GPU, MacOS)</td>
-<td align="left">Yes (automatic device placement)</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Explainability/xAI</strong></td>
-<td align="left">Garson’s &amp; Olden’s algorithms, vip integration, and more in the future</td>
-<td align="left">Limited</td>
-<td align="left">Extensive (PDP, ALE, variable importance, etc.)</td>
-<td align="left">No</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>Statistical Inference</strong></td>
-<td align="left">Not yet implemented</td>
-<td align="left">No</td>
-<td align="left">Yes (confidence intervals, p-values via bootstrap)</td>
-<td align="left">No</td>
-</tr>
-<tr class="odd">
-<td align="left"><strong>Custom Loss Functions</strong></td>
-<td align="left">Yes</td>
-<td align="left">No</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-</tr>
-<tr class="even">
-<td align="left"><strong>For whom?</strong></td>
-<td align="left">Wants versatile architectures (more in the future), fine-grained control, tidymodels users</td>
-<td align="left">Wants standard supervised learning, stable production models</td>
-<td align="left">Do ecological modeling, interpretable models, statistical inference</td>
-<td align="left">Wants custom architectures, users needing human-friendly training loop control</td>
-</tr>
-</tbody>
-</table>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -554,6 +529,7 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=kindling" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/joshuamarie/kindling/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/joshuamarie/kindling/issues" class="external-link">Report a bug</a></li>
 </ul>
