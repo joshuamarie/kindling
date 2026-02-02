@@ -27,7 +27,7 @@ test_that("hidden_neurons() with discrete values works in tuning workflow", {
     folds = rsample::vfold_cv(iris, v = 2)
     
     grid = grid_depth(
-        hidden_neurons(values = c(32, 64, 128)),
+        hidden_neurons(disc_values = c(32, 64, 128)),
         activations(c("relu", "elu")),
         n_hlayer = 2,
         size = 6,

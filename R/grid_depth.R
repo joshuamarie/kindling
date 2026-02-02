@@ -578,9 +578,8 @@ generate_sfd_grid =
 extract_param_range = function(param, levels, original = TRUE) {
     if (is.null(param)) return(NULL)
     
-    discrete_vals = attr(param, "discrete_values")
-    if (!is.null(discrete_vals)) {
-        return(discrete_vals)
+    if (!is.null(param$values)) {
+        return(param$values)
     }
     
     if (param$type %in% c("integer", "double")) {
@@ -636,10 +635,8 @@ extract_param_values = function(param) {
 
 sample_from_param = function(param, n, original = TRUE) {
     if (is.null(param)) return(NULL)
-    
-    discrete_vals = attr(param, "discrete_values")
-    if (!is.null(discrete_vals)) {
-        return(sample(discrete_vals, n, replace = TRUE))
+    if (!is.null(param$values)) {
+        return(sample(param$values, n, replace = TRUE))
     }
     
     lower = param$range$lower
@@ -663,14 +660,22 @@ decode_neurons_from_design = function(param, design_vals, original = TRUE) {
     lower = param$range$lower
     upper = param$range$upper
     
-    discrete_vals = attr(param, "discrete_values")
-    if (!is.null(discrete_vals)) {
+    if (!is.null(param$values)) {
+        values = param$values
         indices = pmax(
-            1, 
-            pmin(length(discrete_vals), ceiling(design_vals * length(discrete_vals)))
+            1L, 
+            pmin(length(values), ceiling(design_vals * length(values)))
         )
-        return(discrete_vals[indices])
+        return(values[indices])
     }
+    # discrete_vals = attr(param, "discrete_values")
+    # if (!is.null(discrete_vals)) {
+    #     indices = pmax(
+    #         1, 
+    #         pmin(length(discrete_vals), ceiling(design_vals * length(discrete_vals)))
+    #     )
+    #     return(discrete_vals[indices])
+    # }
     
     if (!is.null(param$trans)) {
         vals_trans = lower + design_vals * (upper - lower)

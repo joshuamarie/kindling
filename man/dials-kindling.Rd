@@ -14,7 +14,7 @@
 \usage{
 n_hlayers(range = c(1L, 2L), trans = NULL)
 
-hidden_neurons(range = c(8L, 512L), values = NULL, trans = NULL)
+hidden_neurons(range = c(8L, 512L), disc_values = NULL, trans = NULL)
 
 activations(
   values = c("relu", "relu6", "elu", "selu", "celu", "leaky_relu", "gelu", "softplus",
@@ -39,6 +39,11 @@ bidirectional(values = c(TRUE, FALSE))
 \item{range}{A two-element numeric vector with the default lower and upper bounds.}
 
 \item{trans}{An optional transformation; \code{NULL} for none.}
+
+\item{disc_values}{\code{NULL} (default) or an integer vector of specific possible disc_values
+(e.g., \code{c(32L, 64L, 128L, 256L)}). When provided, tuning will be restricted to
+these discrete values. The range is automatically derived from these values if not explicitly given.
+The \code{trans} parameter would still be ignored by this parameter when supplied.}
 
 \item{values}{Logical vector of possible values.}
 }
