@@ -35,7 +35,8 @@ deep learning models within the familiar `{tidymodels}` ecosystem.
 - Code generation of `{torch}` expression
 - Multiple architectures available: feedforward networks (MLP/DNN/FFNN)
   and recurrent variants (RNN, LSTM, GRU)
-- Native support for `{tidymodels}` workflows and pipelines
+- Native support for titanic ML frameworks (currently supports
+  `{tidymodels}`, `{mlr3}` for later) workflows and pipelines
 - Fine-grained control over network depth, layer sizes, and activation
   functions
 - GPU acceleration supports via `{torch}` tensors
@@ -192,7 +193,7 @@ Two kinds of `predict()` usage:
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
     #>   versicolor      0         46         4
-    #>   virginica       0          0        50
+    #>   virginica       0          2        48
     ```
 
 2.  **With `newdata`** simply pass the new data frame as the new
@@ -206,8 +207,8 @@ Two kinds of `predict()` usage:
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
-    #>   versicolor      0          9         1
-    #>   virginica       0          0        10
+    #>   versicolor      0         10         0
+    #>   virginica       0          1         9
     ```
 
 ### Level 3: Conventional tidymodels Integration
@@ -367,10 +368,10 @@ networks. Two primary algorithms are available:
     ``` r
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1  Petal.Width       y 28.49543
-    #> 2  Sepal.Width       y 25.82405
-    #> 3 Sepal.Length       y 24.21862
-    #> 4 Petal.Length       y 21.46190
+    #> 1  Sepal.Width       y 29.04598
+    #> 2  Petal.Width       y 27.50590
+    #> 3 Sepal.Length       y 24.20982
+    #> 4 Petal.Length       y 19.23830
     ```
 
 2.  Olden’s Algorithm
@@ -378,10 +379,10 @@ networks. Two primary algorithms are available:
     ``` r
     olden(model, bar_plot = FALSE)
     #>        x_names y_names     rel_imp
-    #> 1  Petal.Width       y -0.26225266
-    #> 2  Sepal.Width       y  0.20693472
-    #> 3 Petal.Length       y -0.15842190
-    #> 4 Sepal.Length       y -0.09426378
+    #> 1  Sepal.Width       y  0.56231712
+    #> 2  Petal.Width       y -0.51113650
+    #> 3 Petal.Length       y -0.29761552
+    #> 4 Sepal.Length       y -0.06857191
     ```
 
 ### Integration with {vip}
@@ -404,22 +405,167 @@ vi(model) |>
 size. Only enable it when you plan to compute variable importance
 multiple times on the same model.*
 
-## Comparison with other packages
+<!-- ## Comparison with other packages -->
 
-| Feature | kindling | brulee | cito | luz |
-|:---|:---|:---|:---|:---|
-| **Primary Focus** | Architectural versatility & flexibility, statistical modelling, and code generation | Production-ready statistical models | Statistical inference & interpretation | Training loop abstraction |
-| **Design Philosophy** | Three-level API (code gen, training, ML framework (currently tidymodels) integration) | Batteries-included with sensible defaults | User-friendly with comprehensive xAI pipeline | High-level API reducing boilerplate |
-| **Architectures** | Versatile — Feedforward Neural Networks (DNN/FFNN/MLP), Recurrent Neural Networks (RNN, LSTM, GRU), and more (in the future) | MLP, Linear/Logistic/Multinomial regression | Fully-connected networks, CNNs | Any torch nn_module |
-| **Code Generation** | Yes (inspect & modify torch code) | No | No | No |
-| **tidymodels Integration** | Full (parsnip models & tuning) | Full (official tidymodels package) | No (standalone package) | No (standalone package) |
-| **Formula Syntax** | Yes | Yes | Yes | No (uses torch modules directly) |
-| **Layer-specific Activations** | Yes | No | No | No (also uses torch modules directly) |
-| **GPU Support** | Yes | Yes | Yes (CPU, GPU, MacOS) | Yes (automatic device placement) |
-| **Explainability/xAI** | Garson’s & Olden’s algorithms, vip integration, and more in the future | Limited | Extensive (PDP, ALE, variable importance, etc.) | No |
-| **Statistical Inference** | Not yet implemented | No | Yes (confidence intervals, p-values via bootstrap) | No |
-| **Custom Loss Functions** | Yes | No | Yes | Yes |
-| **For whom?** | Wants versatile architectures (more in the future), fine-grained control, tidymodels users | Wants standard supervised learning, stable production models | Do ecological modeling, interpretable models, statistical inference | Wants custom architectures, users needing human-friendly training loop control |
+<!-- ```{r, echo=FALSE} -->
+
+<!-- comparison = data.frame( -->
+
+<!--     Feature = c( -->
+
+<!--         "**Primary Focus**", -->
+
+<!--         "**Design Philosophy**", -->
+
+<!--         "**Architectures**", -->
+
+<!--         "**Code Generation**", -->
+
+<!--         "**tidymodels Integration**", -->
+
+<!--         "**Formula Syntax**", -->
+
+<!--         "**Layer-specific Activations**", -->
+
+<!--         "**GPU Support**", -->
+
+<!--         "**Explainability/xAI**", -->
+
+<!--         "**Statistical Inference**", -->
+
+<!--         "**Custom Loss Functions**", -->
+
+<!--         "**For whom?**" -->
+
+<!--     ), -->
+
+<!--     kindling = c( -->
+
+<!--         "Architectural versatility & flexibility, statistical modelling, and code generation", -->
+
+<!--         "Three-level API (code gen, training, ML framework (currently tidymodels) integration)", -->
+
+<!--         "Versatile — Feedforward Neural Networks (DNN/FFNN/MLP), Recurrent Neural Networks (RNN, LSTM, GRU), and more (in the future)", -->
+
+<!--         "Yes (inspect & modify torch code)", -->
+
+<!--         "Full (parsnip models & tuning)", -->
+
+<!--         "Yes", -->
+
+<!--         "Yes", -->
+
+<!--         "Yes", -->
+
+<!--         "Garson's & Olden's algorithms, vip integration, and more in the future", -->
+
+<!--         "Not yet implemented", -->
+
+<!--         "Yes", -->
+
+<!--         "Wants versatile architectures (more in the future), fine-grained control, tidymodels users" -->
+
+<!--     ), -->
+
+<!--     brulee = c( -->
+
+<!--         "Production-ready statistical models", -->
+
+<!--         "Batteries-included with sensible defaults", -->
+
+<!--         "MLP, Linear/Logistic/Multinomial regression", -->
+
+<!--         "No", -->
+
+<!--         "Full (official tidymodels package)", -->
+
+<!--         "Yes", -->
+
+<!--         "No", -->
+
+<!--         "Yes", -->
+
+<!--         "Limited", -->
+
+<!--         "No", -->
+
+<!--         "No", -->
+
+<!--         "Wants standard supervised learning, stable production models" -->
+
+<!--     ), -->
+
+<!--     cito = c( -->
+
+<!--         "Statistical inference & interpretation", -->
+
+<!--         "User-friendly with comprehensive xAI pipeline", -->
+
+<!--         "Fully-connected networks, CNNs", -->
+
+<!--         "No", -->
+
+<!--         "No (standalone package)", -->
+
+<!--         "Yes", -->
+
+<!--         "No", -->
+
+<!--         "Yes (CPU, GPU, MacOS)", -->
+
+<!--         "Extensive (PDP, ALE, variable importance, etc.)", -->
+
+<!--         "Yes (confidence intervals, p-values via bootstrap)", -->
+
+<!--         "Yes", -->
+
+<!--         "Do ecological modeling, interpretable models, statistical inference" -->
+
+<!--     ), -->
+
+<!--     luz = c( -->
+
+<!--         "Training loop abstraction", -->
+
+<!--         "High-level API reducing boilerplate", -->
+
+<!--         "Any torch nn_module", -->
+
+<!--         "No", -->
+
+<!--         "No (standalone package)", -->
+
+<!--         "No (uses torch modules directly)", -->
+
+<!--         "No (also uses torch modules directly)", -->
+
+<!--         "Yes (automatic device placement)", -->
+
+<!--         "No", -->
+
+<!--         "No", -->
+
+<!--         "Yes", -->
+
+<!--         "Wants custom architectures, users needing human-friendly training loop control" -->
+
+<!--     ), -->
+
+<!--     stringsAsFactors = FALSE -->
+
+<!-- ) -->
+
+<!-- knitr::kable( -->
+
+<!--     comparison,  -->
+
+<!--     col.names = c("Feature", "kindling", "brulee", "cito", "luz"), -->
+
+<!--     label = "Table of comparison" -->
+
+<!-- ) -->
+
+<!-- ``` -->
 
 ## References
 
