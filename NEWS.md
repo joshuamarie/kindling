@@ -27,12 +27,26 @@
     -   Fix randomization of parameter space which will produce NAs outside from `{kindling}`'s own 'dials'
     -   No more list columns when `n_hlayers = 1`
 
+<<<<<<< HEAD
 -   The supported models now use `hardhat::mold()`, instead of `model.frame()` and `model.matrix()`.
 
 ## Documentation
 
 -   Add a vignette to showcase the comparison with other similar packages
 -   The package description got few clarifications
+=======
+-   Vignette to showcase the comparison with other similar packages
+-   `hidden_neurons` parameter now supports discrete values specification
+
+    -   Users can specify exact neuron counts via `values` parameter (e.g., `hidden_neurons(values = c(32, 64, 128))`)
+    -   Maintains backward compatibility with range-based parameters (e.g., `hidden_neurons(range = c(8L, 512L))` / `hidden_neurons(c(8L, 512L))`)
+
+## Documentation improvements
+
+-   Added `\value` documentation to `kindling-nn-wrappers` for CRAN compliance
+-   Documented argument handling and list-column unwrapping in tidymodels wrapper functions
+-   Clarified the relationship between `grid_depth()` and wrapper functions
+>>>>>>> d03b75e3092d290e8c933ba82cb6af8959686983
 
 # kindling 0.1.0
 
