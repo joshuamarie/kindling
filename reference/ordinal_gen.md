@@ -14,6 +14,10 @@ ordinal_gen(x)
 
   Vector of numbers. Could be a string equivalent
 
+## Value
+
+Returns a string vector with ordinal suffixes.
+
 ## This is how you use it
 
     kindling:::ordinal_gen(1:10)

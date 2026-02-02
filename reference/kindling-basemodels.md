@@ -6,14 +6,16 @@ Base models for Neural Network Training in kindling
 
 ``` r
 ffnn(
-  formula,
-  data,
+  formula = NULL,
+  data = NULL,
   hidden_neurons,
   activations = NULL,
   output_activation = NULL,
   bias = TRUE,
   epochs = 100,
   batch_size = 32,
+  penalty = 0,
+  mixture = 0,
   learn_rate = 0.001,
   optimizer = "adam",
   optimizer_args = list(),
@@ -22,12 +24,14 @@ ffnn(
   device = NULL,
   verbose = FALSE,
   cache_weights = FALSE,
-  ...
+  ...,
+  x = NULL,
+  y = NULL
 )
 
 rnn(
-  formula,
-  data,
+  formula = NULL,
+  data = NULL,
   hidden_neurons,
   rnn_type = "lstm",
   activations = NULL,
@@ -37,6 +41,8 @@ rnn(
   dropout = 0,
   epochs = 100,
   batch_size = 32,
+  penalty = 0,
+  mixture = 0,
   learn_rate = 0.001,
   optimizer = "adam",
   optimizer_args = list(),
@@ -45,7 +51,9 @@ rnn(
   device = NULL,
   verbose = FALSE,
   cache_weights = FALSE,
-  ...
+  ...,
+  x = NULL,
+  y = NULL
 )
 ```
 
@@ -84,6 +92,15 @@ rnn(
 
   Integer. Batch size for training. Default `32`.
 
+- penalty:
+
+  Numeric. Regularization penalty (lambda). Default `0` (no
+  regularization).
+
+- mixture:
+
+  Numeric. Elastic net mixing parameter (0-1). Default `0`.
+
 - learn_rate:
 
   Numeric. Learning rate for optimizer. Default `0.001`.
@@ -118,15 +135,21 @@ rnn(
 
 - cache_weights:
 
-  Logical. Cache weight matrices for faster variable importance
-  computation. Default `FALSE`. When `TRUE`, weight matrices are
-  extracted and stored in the returned object, avoiding repeated
-  extraction during importance calculations. Only enable if you plan to
-  compute variable importance multiple times.
+  Logical. Cache weight matrices for faster variable importance. Default
+  `FALSE`.
 
 - ...:
 
-  Not used. Reserved for future extensions.
+  Additional arguments. Can be used to pass `x` and `y` for direct
+  interface.
+
+- x:
+
+  When not using formula: predictor data (data.frame or matrix).
+
+- y:
+
+  When not using formula: outcome data (vector, factor, or matrix).
 
 - rnn_type:
 
@@ -142,47 +165,7 @@ rnn(
 
 ## Value
 
-An object of class "ffnn_fit" containing:
-
-- model:
-
-  Trained torch module
-
-- formula:
-
-  Model formula
-
-- fitted.values:
-
-  Fitted values on training data
-
-- loss_history:
-
-  Training loss per epoch
-
-- val_loss_history:
-
-  Validation loss per epoch (if validation_split \> 0)
-
-- n_epochs:
-
-  Number of epochs trained
-
-- feature_names:
-
-  Names of predictor variables
-
-- response_name:
-
-  Name of response variable
-
-- device:
-
-  Device used for training
-
-- cached_weights:
-
-  Weight matrices (only if cache_weights = TRUE)
+An object of class "ffnn_fit" containing the trained model and metadata.
 
 ## FFNN
 
@@ -195,36 +178,31 @@ Train a recurrent neural network using the torch package.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 if (torch::torch_is_installed()) {
-    # Regression task (auto-detect GPU)
+    # Formula interface (original)
     model_reg = ffnn(
         Sepal.Length ~ .,
         data = iris[, 1:4],
         hidden_neurons = c(64, 32),
         activations = "relu",
-        epochs = 50,
-        verbose = FALSE
+        epochs = 50
     )
 
-    # With weight caching for multiple importance calculations
-    model_cached = ffnn(
-        Species ~ .,
-        data = iris,
-        hidden_neurons = c(128, 64, 32),
+    # XY interface (new)
+    model_xy = ffnn(
+        hidden_neurons = c(64, 32),
         activations = "relu",
-        cache_weights = TRUE,
-        epochs = 100
+        epochs = 50,
+        x = iris[, 2:4],
+        y = iris$Sepal.Length
     )
-} else {
-    message("Torch not fully installed – skipping example")
 }
+# }
 
-} # }
-
-if (FALSE) { # \dontrun{
-# Regression with LSTM on GPU
+# \donttest{
 if (torch::torch_is_installed()) {
+    # Formula interface (original)
     model_rnn = rnn(
         Sepal.Length ~ .,
         data = iris[, 1:4],
@@ -234,17 +212,14 @@ if (torch::torch_is_installed()) {
         epochs = 50
     )
 
-    # With weight caching
-    model_cached = rnn(
-        Species ~ .,
-        data = iris,
-        hidden_neurons = c(128, 64),
+    # XY interface (new)
+    model_xy = rnn(
+        hidden_neurons = c(64, 32),
         rnn_type = "gru",
-        cache_weights = TRUE,
-        epochs = 100
+        epochs = 50,
+        x = iris[, 2:4],
+        y = iris$Sepal.Length
     )
-} else {
-    message("Torch not fully installed – skipping example")
 }
-} # }
+# }
 ```

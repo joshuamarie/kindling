@@ -10,9 +10,18 @@ vignette will guide you through the basic usage.
 
 ## Installation
 
+You can install [kindling](https://kindling.joshuamarie.com) on CRAN:
+
 ``` r
-# Install from GitHub
+install.packages('kindling')
+```
+
+Or install the development version from GitHub:
+
+``` r
+# install.packages("pak")
 pak::pak("joshuamarie/kindling")
+## devtools::install_github("joshuamarie/kindling") 
 ```
 
 ``` r
@@ -22,6 +31,16 @@ library(kindling)
 #> The following object is masked from 'package:base':
 #> 
 #>     args
+```
+
+## Before using {kindling}
+
+Before starting, you need to install LibTorch, the backend of PyTorch
+which also the backend of [torch](https://torch.mlverse.org/docs) R
+package:
+
+``` r
+torch::install_torch()
 ```
 
 ## Four Levels of Interaction
@@ -60,7 +79,7 @@ model = ffnn(
     Species ~ .,
     data = iris,
     hidden_neurons = c(10, 15, 7),
-    activations = act_funs(relu, elu),
+    activations = act_funs(relu, elu), # c("relu", "elu")
     loss = "cross_entropy",
     epochs = 100
 )

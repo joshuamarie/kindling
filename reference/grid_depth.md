@@ -119,7 +119,9 @@ grid_depth(
 - n_hlayer:
 
   Integer vector specifying number of hidden layers to generate (e.g.,
-  `2:4` for 2, 3, or 4 layers). Default is 2.
+  `2:4` for 2, 3, or 4 layers), or a `param` object created with
+  [`n_hlayers()`](https://kindling.joshuamarie.com/reference/dials-kindling.md).
+  Default is 2.
 
 - size:
 
@@ -158,26 +160,36 @@ parameter determines network depth and creates list columns for
 `hidden_neurons` and `activations`, where each element is a vector of
 length matching the sampled depth.
 
+When `n_hlayer` is a parameter object (created with
+[`n_hlayers()`](https://kindling.joshuamarie.com/reference/dials-kindling.md)),
+it will be treated as a tunable parameter and sampled according to its
+defined range.
+
 ## Examples
 
 ``` r
+# \donttest{
 if (FALSE) { # \dontrun{
 library(dials)
+library(workflows)
+library(tune)
 
-# Method 1: Using parameters()
-params = parameters(
-    hidden_neurons(c(32L, 128L)),
-    activations(c("relu", "elu", "selu")),
-    epochs(c(50L, 200L))
-)
-grid = grid_depth(params, n_hlayer = 2:3, type = "regular", levels = 3)
-
-# Method 2: Direct param objects
+# Method 1: Fixed depth
 grid = grid_depth(
     hidden_neurons(c(32L, 128L)),
     activations(c("relu", "elu")),
     epochs(c(50L, 200L)),
     n_hlayer = 2:3,
+    type = "random",
+    size = 20
+)
+
+# Method 2: Tunable depth using parameter object
+grid = grid_depth(
+    hidden_neurons(c(32L, 128L)),
+    activations(c("relu", "elu")),
+    epochs(c(50L, 200L)),
+    n_hlayer = n_hlayers(range = c(2L, 4L)),
     type = "random",
     size = 20
 )
@@ -188,4 +200,5 @@ wf = workflow() |>
     add_formula(y ~ .)
 grid = grid_depth(wf, n_hlayer = 2:4, type = "latin_hypercube", size = 15)
 } # }
+# }
 ```

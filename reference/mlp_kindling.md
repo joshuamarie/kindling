@@ -16,8 +16,11 @@ mlp_kindling(
   bias = NULL,
   epochs = NULL,
   batch_size = NULL,
+  penalty = NULL,
+  mixture = NULL,
   learn_rate = NULL,
   optimizer = NULL,
+  optimizer_args = NULL,
   loss = NULL,
   validation_split = NULL,
   device = NULL,
@@ -63,6 +66,24 @@ mlp_kindling(
 
   An integer for the batch size during training. Can be tuned.
 
+- penalty:
+
+  A number for the regularization penalty (lambda). Default `0` (no
+  regularization). Higher values increase regularization strength. Can
+  be tuned.
+
+- mixture:
+
+  A number between 0 and 1 for the elastic net mixing parameter. Default
+  `0` (pure L2/Ridge regularization).
+
+  - `0`: Pure L2 regularization (Ridge)
+
+  - `1`: Pure L1 regularization (Lasso)
+
+  - `0 < mixture < 1`: Elastic net (combination of L1 and L2) Only
+    relevant when `penalty > 0`. Can be tuned.
+
 - learn_rate:
 
   A number for the learning rate. Can be tuned.
@@ -72,10 +93,15 @@ mlp_kindling(
   A character string for the optimizer type ("adam", "sgd", "rmsprop").
   Can be tuned.
 
+- optimizer_args:
+
+  A named list of additional arguments passed to the optimizer. Cannot
+  be tuned.
+
 - loss:
 
   A character string for the loss function ("mse", "mae",
-  "cross_entropy", "bce"). Can be tuned.
+  "cross_entropy", "bce"). Cannot be tuned.
 
 - validation_split:
 
@@ -85,11 +111,12 @@ mlp_kindling(
 - device:
 
   A character string for the device to use ("cpu", "cuda", "mps"). If
-  NULL, auto-detects available GPU. Can be tuned.
+  NULL, auto-detects available GPU. Cannot be tuned.
 
 - verbose:
 
-  Logical for whether to print training progress. Default FALSE.
+  Logical for whether to print training progress. Default FALSE. Cannot
+  be tuned.
 
 ## Value
 
@@ -134,12 +161,10 @@ When tuning, you can use special tune tokens:
 - For `activation`: use `tune("activation")` with values like "relu",
   "tanh"
 
-- For `device`: use `tune("device")` to compare CPU vs GPU performance
-
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 if (torch::torch_is_installed()) {
     box::use(
         recipes[recipe],
@@ -172,5 +197,5 @@ if (torch::torch_is_installed()) {
 } else {
     message("Torch not fully installed — skipping example")
 }
-} # }
+# }
 ```

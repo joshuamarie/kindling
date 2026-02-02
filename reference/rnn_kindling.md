@@ -19,8 +19,11 @@ rnn_kindling(
   dropout = NULL,
   epochs = NULL,
   batch_size = NULL,
+  penalty = NULL,
+  mixture = NULL,
   learn_rate = NULL,
   optimizer = NULL,
+  optimizer_args = NULL,
   loss = NULL,
   validation_split = NULL,
   device = NULL,
@@ -48,7 +51,7 @@ rnn_kindling(
 - rnn_type:
 
   A character string for the type of RNN cell ("rnn", "lstm", "gru").
-  Can be tuned.
+  Cannot be tuned.
 
 - activations:
 
@@ -80,6 +83,24 @@ rnn_kindling(
 
   An integer for the batch size during training. Can be tuned.
 
+- penalty:
+
+  A number for the regularization penalty (lambda). Default `0` (no
+  regularization). Higher values increase regularization strength. Can
+  be tuned.
+
+- mixture:
+
+  A number between 0 and 1 for the elastic net mixing parameter. Default
+  `0` (pure L2/Ridge regularization).
+
+  - `0`: Pure L2 regularization (Ridge)
+
+  - `1`: Pure L1 regularization (Lasso)
+
+  - `0 < mixture < 1`: Elastic net (combination of L1 and L2) Only
+    relevant when `penalty > 0`. Can be tuned.
+
 - learn_rate:
 
   A number for the learning rate. Can be tuned.
@@ -89,10 +110,15 @@ rnn_kindling(
   A character string for the optimizer type ("adam", "sgd", "rmsprop").
   Can be tuned.
 
+- optimizer_args:
+
+  A named list of additional arguments passed to the optimizer. Cannot
+  be tuned.
+
 - loss:
 
   A character string for the loss function ("mse", "mae",
-  "cross_entropy", "bce"). Can be tuned.
+  "cross_entropy", "bce"). Cannot be tuned.
 
 - validation_split:
 
@@ -102,11 +128,12 @@ rnn_kindling(
 - device:
 
   A character string for the device to use ("cpu", "cuda", "mps"). If
-  NULL, auto-detects available GPU. Can be tuned.
+  NULL, auto-detects available GPU. Cannot be tuned.
 
 - verbose:
 
-  Logical for whether to print training progress. Default FALSE.
+  Logical for whether to print training progress. Default FALSE. Cannot
+  be tuned.
 
 ## Value
 
@@ -144,7 +171,7 @@ The `device` parameter controls where computation occurs:
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 if (torch::torch_is_installed()) {
     box::use(
         recipes[recipe],
@@ -171,5 +198,45 @@ if (torch::torch_is_installed()) {
 } else {
     message("Torch not fully installed — skipping example")
 }
-} # }
+#> ══ Workflow [trained] ══════════════════════════════════════════════════════════
+#> Preprocessor: Recipe
+#> Model: rnn_kindling()
+#> 
+#> ── Preprocessor ────────────────────────────────────────────────────────────────
+#> 0 Recipe Steps
+#> 
+#> ── Model ───────────────────────────────────────────────────────────────────────
+#> Warning: running command 'tput cols' had status 2
+#> Warning: running command 'tput cols' had status 2
+#> 
+#> ========================= Long Short-Term Memory (RNN) =========================
+#> 
+#> 
+#> -- RNN Model Summary -----------------------------------------------------------
+#> 
+#> 
+#> Warning: running command 'tput cols' had status 2
+#> -----------------------------------------------------------------------
+#>   NN Model Type           :              RNN    n_predictors :      4
+#>   RNN Type                :             LSTM    n_response   :      3
+#>   Bidirectional           :              Yes    reg.         :   None
+#>   Number of Epochs        :              100    Device       :    cpu
+#>   Hidden Layer Units      :           64, 32                 :       
+#>   Number of Hidden Layers :                2                 :       
+#>   Pred. Type              :   classification                 :       
+#> -----------------------------------------------------------------------
+#> 
+#> 
+#> 
+#> -- Activation function ---------------------------------------------------------
+#> 
+#> 
+#> Warning: running command 'tput cols' had status 2
+#> -------------------------------------------------
+#>   1st Layer {64}    :                      relu
+#>   2nd Layer {32}    :                       elu
+#>   Output Activation :   No act function applied
+#> -------------------------------------------------
+#> 
+# }
 ```

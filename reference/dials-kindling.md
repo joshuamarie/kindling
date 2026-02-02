@@ -8,9 +8,9 @@ optimization, and training behavior.
 ## Usage
 
 ``` r
-n_hlayers(range = c(1L, 5L), trans = NULL)
+n_hlayers(range = c(1L, 2L), trans = NULL)
 
-hidden_neurons(range = c(8L, 512L), trans = NULL)
+hidden_neurons(range = c(8L, 512L), disc_values = NULL, trans = NULL)
 
 activations(
   values = c("relu", "relu6", "elu", "selu", "celu", "leaky_relu", "gelu", "softplus",
@@ -42,9 +42,53 @@ bidirectional(values = c(TRUE, FALSE))
 
   An optional transformation; `NULL` for none.
 
+- disc_values:
+
+  `NULL` (default) or an integer vector of specific possible disc_values
+  (e.g., `c(32L, 64L, 128L, 256L)`). When provided, tuning will be
+  restricted to these discrete values. The range is automatically
+  derived from these values if not explicitly given. The `trans`
+  parameter would still be ignored by this parameter when supplied.
+
 - values:
 
   Logical vector of possible values.
+
+## Value
+
+Each function returns a `dials` parameter object:
+
+- `n_hlayers()`:
+
+  A quantitative parameter for the number of hidden layers
+
+- `hidden_neurons()`:
+
+  A quantitative parameter for hidden units per layer
+
+- `activations()`:
+
+  A qualitative parameter for activation function names
+
+- `output_activation()`:
+
+  A qualitative parameter for output activation
+
+- `optimizer()`:
+
+  A qualitative parameter for optimizer type
+
+- `bias()`:
+
+  A qualitative parameter for bias inclusion
+
+- `validation_split()`:
+
+  A quantitative parameter for validation proportion
+
+- `bidirectional()`:
+
+  A qualitative parameter for bidirectional RNN
 
 ## Architecture Strategy
 
@@ -136,8 +180,9 @@ Whether recurrent layers should process sequences in both directions.
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
+# \donttest{
 library(dials)
+#> Loading required package: scales
 library(tune)
 
 # Create a tuning grid
@@ -156,5 +201,5 @@ mlp_spec = mlp_kindling(
     epochs = tune(),
     learn_rate = tune()
 )
-} # }
+# }
 ```

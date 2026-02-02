@@ -45,7 +45,21 @@ vi_model(object, type = c("olden", "garson"), ...)
 
 ## Value
 
-A data frame with variable importance scores.
+A data frame for both "garson" and "olden" classes with columns:
+
+- x_names:
+
+  Character vector of predictor variable names
+
+- y_names:
+
+  Character string of response variable name
+
+- rel_imp:
+
+  Numeric vector of relative importance scores (percentage)
+
+The data frame is sorted by importance in descending order.
 
 A tibble with columns "Variable" and "Importance" (via
 [`vip::vi()`](https://koalaverse.github.io/vip/reference/vi.html) /
@@ -99,7 +113,7 @@ networks using simulated data. Ecological Modelling. 178:389-397.
 ## Examples
 
 ``` r
-# Directly use `NeuralNetTools::garson`
+# \donttest{
 if (torch::torch_is_installed()) {
     model_mlp = ffnn(
         Species ~ .,
@@ -110,18 +124,26 @@ if (torch::torch_is_installed()) {
         verbose = FALSE,
         cache_weights = TRUE
     )
-
+    
+    # Directly use `NeuralNetTools::garson`
     model_mlp |>
         garson()
+    
+    # Directly use `NeuralNetTools::olden`    
+    model_mlp |>
+        olden()
 } else {
     message("Torch not fully installed — skipping example")
 }
-#>        x_names y_names  rel_imp
-#> 1  Petal.Width Species 26.44158
-#> 2 Petal.Length Species 26.02430
-#> 3  Sepal.Width Species 24.79505
-#> 4 Sepal.Length Species 22.73907
 
+#>        x_names y_names     rel_imp
+#> 1 Sepal.Length       y -0.11604490
+#> 2  Petal.Width       y  0.03564795
+#> 3 Petal.Length       y  0.02774481
+#> 4  Sepal.Width       y  0.02440405
+# }
+
+# \donttest{
 # kindling also supports `vip::vi()` / `vip::vi_model()`
 if (torch::torch_is_installed()) {
     model_mlp = ffnn(
@@ -141,4 +163,5 @@ if (torch::torch_is_installed()) {
     message("Torch not fully installed — skipping example")
 }
 
+# }
 ```
