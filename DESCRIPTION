@@ -1,7 +1,7 @@
 Package: kindling
 Type: Package
 Title: Higher-Level Interface of 'torch' Package to Auto-Train Neural Networks
-Version: 0.2.0
+Version: 0.2.0.9000
 Authors@R: c(
     person("Joshua", "Marie", 
            email = "joshua.marie.k@gmail.com", 
@@ -19,11 +19,11 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
-    purrr, 
-    torch, 
-    rlang, 
-    cli, 
-    glue, 
+    purrr,
+    torch,
+    rlang,
+    cli,
+    glue,
     vctrs,
     parsnip (>= 1.0.0),
     tibble,
@@ -35,7 +35,8 @@ Imports:
     ggplot2,
     tune,
     dials,
-    hardhat
+    hardhat,
+    lifecycle
 Suggests: 
     testthat (>= 3.0.0),
     magrittr,
