@@ -62,14 +62,23 @@ reference:
   - title: Training Functions
     desc: Direct training interface (Level 2)
     contents:
-    - ffnn
-    - rnn
+    -  kindling-basemodels
+    # - ffnn
+    # - rnn
 
   - title: Code Generators
-    desc: Generate torch nn_module code (Level 1)
+    desc: Generate `torch::nn_module()` code (Lowest Level)
+  
+  - subtitle: General-purpose / low-level generator, including the layer utilities & pronouns
     contents:
-    - ffnn_generator
-    - rnn_generator
+      - nn_module_generator
+      - layer-attributes
+      - layer_prs
+      - print.layer_pr
+
+  - subtitle: High-level generators
+    contents:
+      - nn_gens
 
   - title: Variable Importance
     desc: Interpret neural network models
