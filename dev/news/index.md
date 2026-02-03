@@ -2,6 +2,8 @@
 
 ## kindling (development version)
 
+## kindling 0.2.0
+
 ### New features
 
 - Added regularization support for neural network models
@@ -41,16 +43,16 @@
     from [kindling](https://kindling.joshuamarie.com)‘s own ’dials’
   - No more list columns when `n_hlayers = 1`
 
-\<\<\<\<\<\<\< HEAD - The supported models now use
-[`hardhat::mold()`](https://hardhat.tidymodels.org/reference/mold.html),
-instead of [`model.frame()`](https://rdrr.io/r/stats/model.frame.html)
-and [`model.matrix()`](https://rdrr.io/r/stats/model.matrix.html).
+- The supported models now use
+  [`hardhat::mold()`](https://hardhat.tidymodels.org/reference/mold.html),
+  instead of [`model.frame()`](https://rdrr.io/r/stats/model.frame.html)
+  and [`model.matrix()`](https://rdrr.io/r/stats/model.matrix.html).
 
 ### Documentation
 
 - Add a vignette to showcase the comparison with other similar packages
 
-- ## The package description got few clarifications
+- The package description got few clarifications
 
 - Vignette to showcase the comparison with other similar packages
 
@@ -62,16 +64,15 @@ and [`model.matrix()`](https://rdrr.io/r/stats/model.matrix.html).
     `hidden_neurons(range = c(8L, 512L))` /
     `hidden_neurons(c(8L, 512L))`)
 
-### Documentation improvements
-
 - Added `\value` documentation to `kindling-nn-wrappers` for CRAN
   compliance
+
 - Documented argument handling and list-column unwrapping in tidymodels
   wrapper functions
+
 - Clarified the relationship between
   [`grid_depth()`](https://kindling.joshuamarie.com/dev/reference/grid_depth.md)
-  and wrapper functions \>\>\>\>\>\>\>
-  d03b75e3092d290e8c933ba82cb6af8959686983
+  and wrapper functions
 
 ## kindling 0.1.0
 

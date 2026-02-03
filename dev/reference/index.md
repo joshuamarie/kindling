@@ -19,7 +19,31 @@ Direct training interface (Level 2)
 
 ## Code Generators
 
-Generate torch nn_module code (Level 1)
+Generate
+[`torch::nn_module()`](https://torch.mlverse.org/docs/reference/nn_module.html)
+code (Lowest Level)
+
+### General-purpose / low-level generator, including the layer utilities & pronouns
+
+- [`nn_module_generator()`](https://kindling.joshuamarie.com/dev/reference/nn_module_generator.md)
+  **\[experimental\]** : Generalized Neural Network Module Expression
+  Generator
+- [`` `$`( ``*`<layer_pr>`*`)`](https://kindling.joshuamarie.com/dev/reference/layer-attributes.md)
+  : "Layer" attributes
+- [`.layer`](https://kindling.joshuamarie.com/dev/reference/layer_prs.md)
+  [`.i`](https://kindling.joshuamarie.com/dev/reference/layer_prs.md)
+  [`.in`](https://kindling.joshuamarie.com/dev/reference/layer_prs.md)
+  [`.out`](https://kindling.joshuamarie.com/dev/reference/layer_prs.md)
+  [`.is_output`](https://kindling.joshuamarie.com/dev/reference/layer_prs.md)
+  : Layer argument pronouns for formula-based specifications
+- [`print(`*`<layer_pr>`*`)`](https://kindling.joshuamarie.com/dev/reference/print-layer_pronoun.md)
+  [`print(`*`<layer_index_pr>`*`)`](https://kindling.joshuamarie.com/dev/reference/print-layer_pronoun.md)
+  [`print(`*`<layer_input_pr>`*`)`](https://kindling.joshuamarie.com/dev/reference/print-layer_pronoun.md)
+  [`print(`*`<layer_output_pr>`*`)`](https://kindling.joshuamarie.com/dev/reference/print-layer_pronoun.md)
+  [`print(`*`<layer_is_output_pr>`*`)`](https://kindling.joshuamarie.com/dev/reference/print-layer_pronoun.md)
+  : Print method for the pronouns
+
+### High-level generators
 
 - [`ffnn_generator()`](https://kindling.joshuamarie.com/dev/reference/nn_gens.md)
   [`rnn_generator()`](https://kindling.joshuamarie.com/dev/reference/nn_gens.md)
