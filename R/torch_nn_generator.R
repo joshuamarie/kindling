@@ -1,6 +1,6 @@
 #' Functions to generate `nn_module` (language) expression
 #'
-#' @rdname nn_gens
+#' @name nn_gens
 #'
 #' @section Feed-Forward Neural Network Module Generator:
 #' The `ffnn_generator()` function generates a feed-forward neural network (FFNN) module expression

@@ -647,7 +647,7 @@ NULL
 #' @section For `.layer`: 
 #' It displays what fields to be accessed by `$`.
 #' 
-#' @name print-layer_pronoun
+#' @rdname print-layer_pronoun
 #' @export
 print.layer_pr = function(x, ...) {
     cat("<layer pronoun>\n")

@@ -50,7 +50,7 @@
 #' }
 #' }
 #'
-#' @rdname kindling-basemodels
+#' @name kindling-basemodels
 #' @export
 ffnn = 
     function(
