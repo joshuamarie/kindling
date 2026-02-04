@@ -255,7 +255,8 @@
 nn_module_generator = 
     function(
         nn_name = "nnModule",
-        nn_layer = NULL,           
+        nn_layer = NULL,     
+        out_nn_layer = NULL,       
         nn_layer_args = list(),    
         layer_arg_fn = NULL,       
         forward_extract = NULL,
@@ -331,8 +332,10 @@ nn_module_generator =
             
             layer_args = layer_arg_fn(i, in_dim, out_dim, is_output)
             
-            current_layer = if (is_output && nn_layer %in% c("nn_gru", "nn_lstm", "nn_rnn")) {
-                "nn_linear"
+            current_layer = if (is_output && nn_layer %in% c("nn_linear", "nn_gru", "nn_lstm", "nn_rnn")) {
+                "torch::nn_linear"
+            } else if (is_output && !is.null(out_nn_layer)) {
+                out_nn_layer
             } else {
                 nn_layer
             }
@@ -349,8 +352,20 @@ nn_module_generator =
                 list()
             }
             
+            layer_expr = if (is.function(current_layer)) {
+                rlang::enexpr(current_layer)
+            } else if (is.character(current_layer)) {
+                rlang::parse_expr(current_layer)
+            } else if (rlang::is_formula(current_layer)) {
+                rlang::f_rhs(current_layer)
+            } else if (is.symbol(current_layer) || is.call(current_layer)) {
+                current_layer
+            } else { 
+                cli::cli_abort("{.arg {out_nn_layer}} must be a string, symbol, or function, got {class(current_layer)[1]}")
+            }
+            
             layer_call = call2(
-                expr(!!current_layer),
+                layer_expr,
                 !!!c(layer_args, nn_layer_args, additional_args),
                 .ns = if (rlang::is_true(use_namespace)) {
                     "torch"

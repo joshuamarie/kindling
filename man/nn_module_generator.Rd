@@ -7,6 +7,7 @@
 nn_module_generator(
   nn_name = "nnModule",
   nn_layer = NULL,
+  out_nn_layer = NULL,
   nn_layer_args = list(),
   layer_arg_fn = NULL,
   forward_extract = NULL,
