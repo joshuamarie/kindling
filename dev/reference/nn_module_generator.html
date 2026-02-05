@@ -116,12 +116,20 @@ Default is <code>"nnModule"</code>.</p></dd>
 
 <dt id="arg-nn-layer">nn_layer<a class="anchor" aria-label="anchor" href="#arg-nn-layer"></a></dt>
 <dd><p>The type of neural network layer to use. Can be specified as:</p><ul><li><p><code>NULL</code> (default): Uses <code>nn_linear()</code> from <code>{torch}</code></p></li>
-<li><p>Character string: e.g., <code>"nn_linear"</code>, <code>"nn_gru"</code>, <code>"nn_rbf"</code>, <code>"my_custom_layer"</code></p></li>
+<li><p>Character string: e.g., <code>"nn_linear"</code>, <code>"nn_gru"</code>, <code>"nn_lstm"</code>, <code>"some_custom_layer"</code></p></li>
 <li><p>Named function: A function object that constructs the layer</p></li>
 <li><p>Anonymous function: e.g., <code>\() nn_linear()</code> or <code>function() nn_linear()</code></p></li>
 </ul><p>The layer constructor is first searched in the current environment, then in parent
 environments, and finally falls back to the <code>{torch}</code> namespace. This allows you to
 use custom layer implementations alongside standard torch layers.</p></dd>
+
+
+<dt id="arg-out-nn-layer">out_nn_layer<a class="anchor" aria-label="anchor" href="#arg-out-nn-layer"></a></dt>
+<dd><p>Default <code>NULL</code>. If supplied, it forces to be the neural network layer to be used
+on the last layer. Can be specified as:</p><ul><li><p>Character string, e.g. <code>"nn_linear"</code>, <code>"nn_gru"</code>, <code>"nn_lstm"</code>, <code>"some_custom_layer"</code></p></li>
+<li><p>Named function: A function object that constructs the layer</p></li>
+<li><p>Formula interface, e.g. <code>~torch::nn_linear</code>, <code>~some_custom_layer</code></p></li>
+</ul><p>Internally, it almost works the same as <code>nn_layer</code> parameter.</p></dd>
 
 
 <dt id="arg-nn-layer-args">nn_layer_args<a class="anchor" aria-label="anchor" href="#arg-nn-layer-args"></a></dt>

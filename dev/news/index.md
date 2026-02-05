@@ -4,6 +4,8 @@
 
 ## kindling 0.2.0
 
+CRAN release: 2026-02-04
+
 ### New features
 
 - Added regularization support for neural network models

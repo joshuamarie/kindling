@@ -21,7 +21,7 @@ formula_to_function(
 
 - default_fn:
 
-  Default function if formula_or_fn is NULL
+  Default function if `formula_or_fn` is `NULL`
 
 - arg_names:
 

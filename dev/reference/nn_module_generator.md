@@ -57,8 +57,8 @@ nn_module_generator(
 
   - `NULL` (default): Uses `nn_linear()` from `{torch}`
 
-  - Character string: e.g., `"nn_linear"`, `"nn_gru"`, `"nn_rbf"`,
-    `"my_custom_layer"`
+  - Character string: e.g., `"nn_linear"`, `"nn_gru"`, `"nn_lstm"`,
+    `"some_custom_layer"`
 
   - Named function: A function object that constructs the layer
 
@@ -69,6 +69,20 @@ nn_module_generator(
   then in parent environments, and finally falls back to the `{torch}`
   namespace. This allows you to use custom layer implementations
   alongside standard torch layers.
+
+- out_nn_layer:
+
+  Default `NULL`. If supplied, it forces to be the neural network layer
+  to be used on the last layer. Can be specified as:
+
+  - Character string, e.g. `"nn_linear"`, `"nn_gru"`, `"nn_lstm"`,
+    `"some_custom_layer"`
+
+  - Named function: A function object that constructs the layer
+
+  - Formula interface, e.g. `~torch::nn_linear`, `~some_custom_layer`
+
+  Internally, it almost works the same as `nn_layer` parameter.
 
 - nn_layer_args:
 

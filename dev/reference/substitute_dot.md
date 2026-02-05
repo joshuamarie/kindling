@@ -12,11 +12,11 @@ substitute_dot(expr, replacement)
 
 - expr:
 
-  Expression containing . placeholders
+  Expression containing `.` placeholders
 
 - replacement:
 
-  Expression to substitute for .
+  Expression to substitute for `.`
 
 ## Value
 
