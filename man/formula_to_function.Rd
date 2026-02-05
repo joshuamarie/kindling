@@ -14,7 +14,7 @@ formula_to_function(
 \arguments{
 \item{formula_or_fn}{A formula or function}
 
-\item{default_fn}{Default function if formula_or_fn is NULL}
+\item{default_fn}{Default function if \code{formula_or_fn} is \code{NULL}}
 
 \item{arg_names}{Character vector of formal argument names}
 

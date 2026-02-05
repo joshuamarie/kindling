@@ -7,9 +7,9 @@
 substitute_dot(expr, replacement)
 }
 \arguments{
-\item{expr}{Expression containing . placeholders}
+\item{expr}{Expression containing \code{.} placeholders}
 
-\item{replacement}{Expression to substitute for .}
+\item{replacement}{Expression to substitute for \code{.}}
 }
 \value{
 Modified expression

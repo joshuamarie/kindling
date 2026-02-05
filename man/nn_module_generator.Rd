@@ -32,13 +32,24 @@ Default is \code{"nnModule"}.}
 \item{nn_layer}{The type of neural network layer to use. Can be specified as:
 \itemize{
 \item \code{NULL} (default): Uses \code{nn_linear()} from \code{{torch}}
-\item Character string: e.g., \code{"nn_linear"}, \code{"nn_gru"}, \code{"nn_rbf"}, \code{"my_custom_layer"}
+\item Character string: e.g., \code{"nn_linear"}, \code{"nn_gru"}, \code{"nn_lstm"}, \code{"some_custom_layer"}
 \item Named function: A function object that constructs the layer
 \item Anonymous function: e.g., \verb{\\() nn_linear()} or \code{function() nn_linear()}
 }
+
 The layer constructor is first searched in the current environment, then in parent
 environments, and finally falls back to the \code{{torch}} namespace. This allows you to
 use custom layer implementations alongside standard torch layers.}
+
+\item{out_nn_layer}{Default \code{NULL}. If supplied, it forces to be the neural network layer to be used
+on the last layer. Can be specified as:
+\itemize{
+\item Character string, e.g. \code{"nn_linear"}, \code{"nn_gru"}, \code{"nn_lstm"}, \code{"some_custom_layer"}
+\item Named function: A function object that constructs the layer
+\item Formula interface, e.g. \code{~torch::nn_linear}, \code{~some_custom_layer}
+}
+
+Internally, it almost works the same as \code{nn_layer} parameter.}
 
 \item{nn_layer_args}{Named list of additional arguments passed to the layer constructor
 specified by \code{nn_layer}. These arguments are applied to all layers. For layer-specific
@@ -50,6 +61,7 @@ Can be specified as:
 \item \strong{Formula}: \code{~ list(input_size = .in, hidden_size = .out)} where \code{.in}, \code{.out}, \code{.i}, and \code{.is_output} are available
 \item \strong{Function}: \verb{function(i, in_dim, out_dim, is_output)} with signature as before
 }
+
 The formula/function should return a named list of arguments to pass to the layer constructor.
 Available variables in formula context:
 \itemize{
@@ -58,6 +70,7 @@ Available variables in formula context:
 \item \code{.out} or \code{out_dim}: Integer, output dimension for this layer
 \item \code{.is_output} or \code{is_output}: Logical, whether this is the final output layer
 }
+
 If \code{NULL}, defaults to FFNN-style arguments: \code{list(in_dim, out_dim, bias = bias)}.}
 
 \item{forward_extract}{Optional formula or function that processes layer outputs in the forward pass.
@@ -67,12 +80,14 @@ Can be specified as:
 \item \strong{Formula}: \code{~ .[[1]]} or \code{~ .$output} where \code{.} represents the layer output
 \item \strong{Function}: \verb{function(expr)} that accepts/returns a language object
 }
+
 Common patterns:
 \itemize{
 \item Extract first element: \code{~ .[[1]]}
 \item Extract named element: \code{~ .$output}
 \item Extract with method: \code{~ .$get_output()}
 }
+
 If \code{NULL}, layer outputs are used directly.}
 
 \item{before_output_transform}{Optional formula or function that transforms input before the output layer.
@@ -82,6 +97,7 @@ Can be specified as:
 \item \strong{Formula}: \code{~ .[, .$size(2), ]} where \code{.} represents the current tensor
 \item \strong{Function}: \verb{function(expr)} that accepts/returns a language object
 }
+
 Common patterns:
 \itemize{
 \item Extract last timestep: \code{~ .[, .$size(2), ]}
@@ -89,6 +105,7 @@ Common patterns:
 \item Global pooling: \code{~ .$mean(dim = 2)}
 \item Extract token: \code{~ .[, 1, ]}
 }
+
 If \code{NULL}, no transformation is applied.}
 
 \item{after_output_transform}{Optional formula or function that transforms the output after the output layer.
@@ -98,6 +115,7 @@ Can be specified as:
 \item \strong{Formula}: \code{~ .$mean(dim = 2)} where \code{.} represents the output tensor
 \item \strong{Function}: \verb{function(expr)} that accepts/returns a language object
 }
+
 Common patterns:
 \itemize{
 \item Global average pooling: \code{~ .$mean(dim = 2)}
@@ -105,6 +123,7 @@ Common patterns:
 \item Reshape output: \code{~ .$view(c(-1, 10))}
 \item Extract specific outputs: \code{~ .[, , 1:5]}
 }
+
 If \code{NULL}, no transformation is applied.}
 
 \item{last_layer_args}{Optional named list or formula specifying additional arguments
@@ -114,6 +133,7 @@ after the arguments from \code{layer_arg_fn}. Can be specified as:
 \item \strong{Formula}: \code{~ list(kernel_size = 2L, bias = FALSE)}
 \item \strong{Named list}: \code{list(kernel_size = 2L, bias = FALSE)}
 }
+
 This is useful when you need to override or add specific parameters to the final layer
 without affecting hidden layers. For example, in CNNs you might want a different kernel
 size for the output layer, or in RNNs you might want to disable bias in the final linear
@@ -135,6 +155,7 @@ Must contain at least one element.}
 \item \code{activation_spec} object: Created using \code{act_funs()}, which allows
 specifying custom arguments. See examples.
 }
+
 If a single activation is provided, it will be replicated across all hidden layers.
 Otherwise, the length should match the number of hidden layers.}
 
@@ -159,6 +180,7 @@ the generated code:
 \item \code{FALSE}: No namespace prefix is added (functions used as-is from current environment)
 \item Character string: Custom namespace (e.g., \code{"mypackage"} produces \code{mypackage::my_layer})
 }
+
 When using custom layers from your environment, set to \code{FALSE} to avoid forcing
 torch namespace resolution.}
 
