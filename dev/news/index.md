@@ -34,6 +34,11 @@
   )
   ```
 
+  ### Documentation
+
+- Adding the base [GitHub pages
+  link](https://joshuamarie.github.io/kindling) into `DESCRIPTION`.
+
 ## kindling 0.2.0
 
 CRAN release: 2026-02-04
