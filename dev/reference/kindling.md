@@ -141,6 +141,8 @@ Useful links:
 
 - <https://kindling.joshuamarie.com>
 
+- <https://joshuamarie.github.io/kindling>
+
 - <https://github.com/joshuamarie/kindling>
 
 - Report bugs at <https://github.com/joshuamarie/kindling/issues>
