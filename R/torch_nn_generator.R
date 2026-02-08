@@ -115,6 +115,9 @@ ffnn_generator = function(nn_name = "DeepFFN",
         ), class = "nn_module_error")
     }
 
+    act_specs = eval_act_funs({{ activations }}, {{ output_activation }})
+    activations = act_specs$activations
+    output_activation = act_specs$output_activation
     activation_spec = parse_activation_spec(activations, n_hidden)
     activation_calls = process_activations(activation_spec, prefix = "nnf_")
 
@@ -326,6 +329,9 @@ rnn_generator = function(nn_name = "DeepRNN",
 
     n_rnn_layers = length(hd_neurons)
 
+    act_specs = eval_act_funs({{ activations }}, {{ output_activation }})
+    activations = act_specs$activations
+    output_activation = act_specs$output_activation
     activation_spec = parse_activation_spec(activations, n_rnn_layers)
     activation_calls = process_activations(activation_spec, prefix = "nnf_")
 

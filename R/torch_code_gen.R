@@ -287,6 +287,10 @@ nn_module_generator =
         cli::cli_abort("Both {.arg no_x} and {.arg no_y} must be specified.")
     }
     
+    act_specs = eval_act_funs({{ activations }}, {{ output_activation }})
+    activations = act_specs$activations
+    output_activation = act_specs$output_activation
+    
     # ---- INPUT PROCESSING ----
     layer_arg_fn = formula_to_function(
         layer_arg_fn,
@@ -322,7 +326,6 @@ nn_module_generator =
         output_call = NULL
     }
     
-    # Hidden activations + output activation
     all_activation_calls = c(activation_calls, list(output_call))
     
     # ---- Build initialize() ----

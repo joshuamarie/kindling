@@ -45,30 +45,32 @@ args = function(...) {
 #' @return A `vctrs` vector with class "activation_spec" containing validated
 #' activation specifications.
 #'
-#' @importFrom rlang enquos quo_get_expr is_call call_name as_string
+#' @importFrom rlang enquos quo_get_expr is_call call_name as_string eval_tidy
 #' @importFrom cli cli_abort
 #' @importFrom vctrs new_vctr
 #'
 #' @export
 act_funs = function(...) {
-    dots = enquos(...)
-
+    dots = enquos(..., .ignore_empty = "all")
+    mask = list(args = args)
+    
     out = purrr::imap(dots, function(quo, name) {
         expr = quo_get_expr(quo)
-
+        
         if (!is.null(name) && name != "") {
-            # Named parameter: softshrink = args(lambda = 0.5)
+            # Named parameter: softshrink = args(lambd = 0.5)
             validate_activation(name, prefix = "nnf_")
-
-            if (is_call(expr) && call_name(expr) == "args") {
-                params = as.list(expr)[-1]
+            extract_call = eval_tidy(quo, data = mask)
+            
+            if (inherits(extract_call, "activation_args")) {
+                params = unclass(extract_call)
                 validate_args_formals(name, params, prefix = "nnf_")
                 structure(params, act_name = name, class = "parameterized_activation")
-            } else if (is.character(expr) && expr == "") {
+            } else if (is.character(extract_call) && length(extract_call) == 1 && extract_call == "") {
                 structure(list(), act_name = name, class = "parameterized_activation")
             } else {
                 cli_abort(c(
-                    "Invalid syntax for parameterized activation at position {i}.",
+                    "Invalid syntax for parameterized activation '{name}'.",
                     i = "Use: {.code {name} = args(param = value)}."
                 ), class = "activation_syntax_error")
             }
@@ -78,10 +80,10 @@ act_funs = function(...) {
             validate_activation(act_name, prefix = "nnf_")
             act_name
         } else if (is.character(expr)) {
-            # Character string: "relu" or "softshrink(lambda = 0.1)"
+            # Character string: "relu" or "softshrink(lambd = 0.1)"
             parsed = parse_activation_string(expr)
             validate_activation(parsed$name, prefix = "nnf_")
-
+            
             if (length(parsed$params) > 0) {
                 validate_args_formals(parsed$name, parsed$params, prefix = "nnf_")
                 structure(parsed$params, act_name = parsed$name, class = "parameterized_activation")
@@ -90,14 +92,14 @@ act_funs = function(...) {
             }
         } else {
             cli_abort(c(
-                "Invalid activation specification at position {i}.",
+                "Invalid activation specification.",
                 i = "Use bare names like {.code relu}, strings like {.code 'relu'},",
-                i = "parameterized strings like {.code 'softshrink(lambda = 0.1)'},",
+                i = "parameterized strings like {.code 'softshrink(lambd = 0.1)'},",
                 i = "or DSL like {.code softmax = args(dim = 2L)}."
             ), class = "activation_syntax_error")
         }
     })
-
+    
     new_vctr(out, class = "activation_spec")
 }
 
@@ -255,7 +257,7 @@ parse_activation_spec = function(activations, n_layers) {
                 x = "You provided {length(activations)}."
             ), class = "activation_spec_length_error")
         }
-
+        
         parsed_activation =
             imap(activations, function(elem, i) {
 
@@ -383,4 +385,42 @@ process_activations = function(activation_spec, prefix = "nnf_") {
             }
         }
     })
+}
+
+#' Activation Function Specs Evaluation
+#' 
+#' Helper function for `act_funcs()` argument.
+#' 
+#' @param activations_quo Quosure containing the activations expression
+#' @param output_activation_quo Quosure containing the output_activation expression
+#' 
+#' @return A list with two elements: `activations` and `output_activation`
+#' 
+#' @importFrom rlang enquo quo_is_null eval_tidy
+#' @keywords internal
+eval_act_funs = function(activations, output_activation) {
+    activations_quo = enquo(activations)
+    output_activation_quo = enquo(output_activation)
+    
+    env_mask = list(
+        act_funs = act_funs,
+        args = args
+    )
+    
+    activations = if (!quo_is_null(activations_quo)) {
+        eval_tidy(activations_quo, data = env_mask)
+    } else {
+        NULL
+    }
+    
+    output_activation = if (!quo_is_null(output_activation_quo)) {
+        eval_tidy(output_activation_quo, data = env_mask)
+    } else {
+        NULL
+    }
+    
+    list(
+        activations = activations,
+        output_activation = output_activation
+    )
 }
