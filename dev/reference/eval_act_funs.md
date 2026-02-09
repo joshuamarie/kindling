@@ -1,7 +1,6 @@
-# Evaluate Activation Function Specifications in DSL Environment
+# Activation Function Specs Evaluation
 
-Helper function to evaluate activation specifications with act_funs()
-and args() available without namespace prefixes.
+Helper function for `act_funcs()` argument.
 
 ## Usage
 

@@ -2,15 +2,16 @@
 
 ## Introduction
 
-[kindling](https://kindling.joshuamarie.com) bridges the gap between
-[torch](https://torch.mlverse.org/docs) and
+[kindling](https://github.com/joshuamarie/kindling) bridges the gap
+between [torch](https://torch.mlverse.org/docs) and
 [tidymodels](https://tidymodels.tidymodels.org), providing a streamlined
 interface for building, training, and tuning deep learning models. This
 vignette will guide you through the basic usage.
 
 ## Installation
 
-You can install [kindling](https://kindling.joshuamarie.com) on CRAN:
+You can install [kindling](https://github.com/joshuamarie/kindling) on
+CRAN:
 
 ``` r
 install.packages('kindling')
@@ -45,8 +46,8 @@ torch::install_torch()
 
 ## Four Levels of Interaction
 
-[kindling](https://kindling.joshuamarie.com) offers flexibility through
-four levels of abstraction:
+[kindling](https://github.com/joshuamarie/kindling) offers flexibility
+through four levels of abstraction:
 
 1.  **Code Generation** - Generate raw
     [`torch::nn_module`](https://torch.mlverse.org/docs/reference/nn_module.html)
