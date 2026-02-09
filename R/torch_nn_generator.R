@@ -104,6 +104,10 @@ ffnn_generator = function(nn_name = "DeepFFN",
                           output_activation = NULL,
                           bias = TRUE) {
 
+    if (missing(hd_neurons) || is.null(hd_neurons) || length(hd_neurons) == 0L) {
+        hd_neurons = integer(0) 
+    }
+    
     nodes = c(no_x, hd_neurons, no_y)
     n_layers = length(nodes) - 1L
     n_hidden = length(hd_neurons)
@@ -324,6 +328,10 @@ rnn_generator = function(nn_name = "DeepRNN",
                          bidirectional = TRUE,
                          dropout = 0,
                          ...) {
+    
+    if (missing(hd_neurons) || is.null(hd_neurons) || length(hd_neurons) == 0L) {
+        hd_neurons = integer(0) 
+    }
 
     check_rnn_type(rnn_type, hd_neurons)
 

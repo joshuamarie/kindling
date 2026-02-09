@@ -279,8 +279,8 @@ nn_module_generator =
     ) {
     if (is.null(nn_layer)) nn_layer = "nn_linear"
     
-    if (missing(hd_neurons) || length(hd_neurons) == 0) {
-        cli::cli_abort("{.arg hd_neurons} must be a non-empty integer vector.")
+    if (missing(hd_neurons) || is.null(hd_neurons) || length(hd_neurons) == 0L) {
+        hd_neurons = integer(0) 
     }
     
     if (missing(no_x) || missing(no_y)) {
@@ -338,7 +338,7 @@ nn_module_generator =
         layer_args = layer_arg_fn(i, in_dim, out_dim, is_output)
         
         current_layer = if (is_output && nn_layer %in% c("nn_linear", "nn_gru", "nn_lstm", "nn_rnn")) {
-            "torch::nn_linear"
+            "nn_linear"
         } else if (is_output && !is.null(out_nn_layer)) {
             out_nn_layer
         } else {

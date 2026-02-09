@@ -2,7 +2,7 @@
 % Please edit documentation in R/act_fun.R
 \name{eval_act_funs}
 \alias{eval_act_funs}
-\title{Evaluate Activation Function Specifications in DSL Environment}
+\title{Activation Function Specs Evaluation}
 \usage{
 eval_act_funs(activations, output_activation)
 }
@@ -15,7 +15,6 @@ eval_act_funs(activations, output_activation)
 A list with two elements: \code{activations} and \code{output_activation}
 }
 \description{
-Helper function to evaluate activation specifications with act_funs() and args()
-available without namespace prefixes.
+Helper function for \code{act_funcs()} argument.
 }
 \keyword{internal}
