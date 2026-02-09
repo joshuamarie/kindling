@@ -29,9 +29,16 @@
         activations = "relu"
     )
     ```
+
+# kindling 0.2.1
+
+## Fixes
+
+-  `hd_neurons` for both `ffnn_generator()` and `rnn_generator()` accepts empty arguments, which implies there's no hidden layers applied. 
+
 ## Documentation
 
--  Adding the base [GitHub pages link](https://joshuamarie.github.io/kindling) into `DESCRIPTION`. 
+-  Remove the documentation page from `DESCRIPTION`. 
 
 # kindling 0.2.0
 
