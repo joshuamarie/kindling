@@ -413,8 +413,8 @@ process_activations = function(activation_spec, prefix = "nnf_") {
 #' 
 #' Helper function for `act_funcs()` argument.
 #' 
-#' @param activations_quo Quosure containing the activations expression
-#' @param output_activation_quo Quosure containing the output_activation expression
+#' @param activations Quosure containing the activations expression
+#' @param output_activation Quosure containing the output_activation expression
 #' 
 #' @return A list with two elements: `activations` and `output_activation`
 #' 

@@ -7,9 +7,9 @@
 eval_act_funs(activations, output_activation)
 }
 \arguments{
-\item{activations_quo}{Quosure containing the activations expression}
+\item{activations}{Quosure containing the activations expression}
 
-\item{output_activation_quo}{Quosure containing the output_activation expression}
+\item{output_activation}{Quosure containing the output_activation expression}
 }
 \value{
 A list with two elements: \code{activations} and \code{output_activation}
