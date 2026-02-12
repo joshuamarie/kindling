@@ -34,7 +34,7 @@
 
     <a class="navbar-brand me-2" href="index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -94,8 +94,8 @@
 <h2 id="package-overview">Package overview<a class="anchor" aria-label="anchor" href="#package-overview"></a>
 </h2>
 <p>Title: <strong><em>Higher-Level Interface of ‘torch’ Package to Auto-Train Neural Networks</em></strong></p>
-<p>Whether you’re generating neural network architectures expressions or fitting/training actual models, <a href="https://github.com/joshuamarie/kindling" class="external-link">kindling</a> minimizes boilerplate code while preserving <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>. Since this package uses <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> as its backend, GPU/TPU devices also supported.</p>
-<p><a href="https://github.com/joshuamarie/kindling" class="external-link">kindling</a> also bridges the gap between <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> and <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>. It works seamlessly with <a href="https://github.com/tidymodels/parsnip" class="external-link">parsnip</a>, <a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a>, and <a href="https://github.com/tidymodels/workflows" class="external-link">workflows</a> to bring deep learning into your existing <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> modeling pipeline. This enables a streamlined interface for building, training, and tuning deep learning models within the familiar <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> ecosystem.</p>
+<p>Whether you’re generating neural network architectures expressions or fitting/training actual models, <a href="https://kindling.joshuamarie.com">kindling</a> minimizes boilerplate code while preserving <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>. Since this package uses <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> as its backend, GPU/TPU devices also supported.</p>
+<p><a href="https://kindling.joshuamarie.com">kindling</a> also bridges the gap between <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> and <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>. It works seamlessly with <a href="https://github.com/tidymodels/parsnip" class="external-link">parsnip</a>, <a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a>, and <a href="https://github.com/tidymodels/workflows" class="external-link">workflows</a> to bring deep learning into your existing <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> modeling pipeline. This enables a streamlined interface for building, training, and tuning deep learning models within the familiar <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> ecosystem.</p>
 <div class="section level3">
 <h3 id="main-features">Main Features<a class="anchor" aria-label="anchor" href="#main-features"></a>
 </h3>
@@ -127,7 +127,7 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install <a href="https://github.com/joshuamarie/kindling" class="external-link">kindling</a> on CRAN:</p>
+<p>You can install <a href="https://kindling.joshuamarie.com">kindling</a> on CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">'kindling'</span><span class="op">)</span></span></code></pre></div>
 <p>Or install the development version from GitHub:</p>
@@ -139,9 +139,9 @@
 <div class="section level2">
 <h2 id="usage-three-levels-of-interaction">Usage: Three Levels of Interaction<a class="anchor" aria-label="anchor" href="#usage-three-levels-of-interaction"></a>
 </h2>
-<p><a href="https://github.com/joshuamarie/kindling" class="external-link">kindling</a> is powered by R’s metaprogramming capabilities through <em>code generation</em>. Generated <code><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">torch::nn_module()</a></code> expressions power the training functions, which in turn serve as engines for <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> integration. This architecture gives you flexibility to work at whatever abstraction level suits your task.</p>
+<p><a href="https://kindling.joshuamarie.com">kindling</a> is powered by R’s metaprogramming capabilities through <em>code generation</em>. Generated <code><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">torch::nn_module()</a></code> expressions power the training functions, which in turn serve as engines for <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> integration. This architecture gives you flexibility to work at whatever abstraction level suits your task.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/joshuamarie/kindling" class="external-link">kindling</a></span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://kindling.joshuamarie.com">kindling</a></span><span class="op">)</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; Attaching package: 'kindling'</span></span>
 <span><span class="co">#&gt; The following object is masked from 'package:base':</span></span>
@@ -307,7 +307,7 @@
 </h2>
 <!-- > This functionality is available, but still not fully optimized. -->
 <p>The package has integration with <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>, so it supports hyperparameter tuning via <a href="https://tune.tidymodels.org/" class="external-link">tune</a> with searchable parameters.</p>
-<p>The current searchable parameters under <a href="https://github.com/joshuamarie/kindling" class="external-link">kindling</a>:</p>
+<p>The current searchable parameters under <a href="https://kindling.joshuamarie.com">kindling</a>:</p>
 <ul>
 <li>Layer widths (neurons per layer)</li>
 <li>Network depth (number of hidden layers)</li>
@@ -318,7 +318,7 @@
 <li>Validation Split Proportion</li>
 <li>Bidirectional (boolean; only for RNN)</li>
 </ul>
-<p>The searchable parameters outside from <a href="https://github.com/joshuamarie/kindling" class="external-link">kindling</a>, i.e. under <a href="https://dials.tidymodels.org" class="external-link">dials</a> package such as <code>learn_rate()</code> also supported.</p>
+<p>The searchable parameters outside from <a href="https://kindling.joshuamarie.com">kindling</a>, i.e. under <a href="https://dials.tidymodels.org" class="external-link">dials</a> package such as <code>learn_rate()</code> also supported.</p>
 <p>Here’s an example:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># library(tidymodels)</span></span>
@@ -389,7 +389,7 @@
 <div class="section level2">
 <h2 id="variable-importance">Variable Importance<a class="anchor" aria-label="anchor" href="#variable-importance"></a>
 </h2>
-<p><a href="https://github.com/joshuamarie/kindling" class="external-link">kindling</a> integrates with established variable importance methods from <code>{NeuralNetTools}</code> and <a href="https://github.com/koalaverse/vip/" class="external-link">vip</a> to interpret trained neural networks. Two primary algorithms are available:</p>
+<p><a href="https://kindling.joshuamarie.com">kindling</a> integrates with established variable importance methods from <code>{NeuralNetTools}</code> and <a href="https://github.com/koalaverse/vip/" class="external-link">vip</a> to interpret trained neural networks. Two primary algorithms are available:</p>
 <ol style="list-style-type: decimal">
 <li>
 <p>Garson’s Algorithm</p>
@@ -415,7 +415,7 @@
 <div class="section level3">
 <h3 id="integration-with-vip">Integration with {vip}<a class="anchor" aria-label="anchor" href="#integration-with-vip"></a>
 </h3>
-<p>For users working within the <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> ecosystem, <a href="https://github.com/joshuamarie/kindling" class="external-link">kindling</a> models work seamlessly with the <a href="https://github.com/koalaverse/vip/" class="external-link">vip</a> package:</p>
+<p>For users working within the <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> ecosystem, <a href="https://kindling.joshuamarie.com">kindling</a> models work seamlessly with the <a href="https://github.com/koalaverse/vip/" class="external-link">vip</a> package:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span></span>
 <span>    <span class="va">vip</span><span class="op">[</span><span class="va">vi</span>, <span class="va">vip</span><span class="op">]</span></span>

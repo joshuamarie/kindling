@@ -45,10 +45,6 @@
   accepts empty arguments, which implies there’s no hidden layers
   applied.
 
-### Documentation
-
-- Remove the documentation page from `DESCRIPTION`.
-
 ## kindling 0.2.0
 
 CRAN release: 2026-02-04
@@ -89,8 +85,7 @@ CRAN release: 2026-02-04
     [`tidyr::expand_grid()`](https://tidyr.tidyverse.org/reference/expand_grid.html),
     not `purrr::cross*()`
   - Fix randomization of parameter space which will produce NAs outside
-    from [kindling](https://github.com/joshuamarie/kindling)‘s own
-    ’dials’
+    from [kindling](https://kindling.joshuamarie.com)‘s own ’dials’
   - No more list columns when `n_hlayers = 1`
 
 - The supported models now use

@@ -7,13 +7,12 @@ Networks***
 
 Whether you’re generating neural network architectures expressions or
 fitting/training actual models,
-[kindling](https://github.com/joshuamarie/kindling) minimizes
-boilerplate code while preserving
-[torch](https://torch.mlverse.org/docs). Since this package uses
-[torch](https://torch.mlverse.org/docs) as its backend, GPU/TPU devices
-also supported.
+[kindling](https://kindling.joshuamarie.com) minimizes boilerplate code
+while preserving [torch](https://torch.mlverse.org/docs). Since this
+package uses [torch](https://torch.mlverse.org/docs) as its backend,
+GPU/TPU devices also supported.
 
-[kindling](https://github.com/joshuamarie/kindling) also bridges the gap
+[kindling](https://kindling.joshuamarie.com) also bridges the gap
 between [torch](https://torch.mlverse.org/docs) and
 [tidymodels](https://tidymodels.tidymodels.org). It works seamlessly
 with [parsnip](https://github.com/tidymodels/parsnip),
@@ -51,8 +50,7 @@ learning models within the familiar
 
 ## Installation
 
-You can install [kindling](https://github.com/joshuamarie/kindling) on
-CRAN:
+You can install [kindling](https://kindling.joshuamarie.com) on CRAN:
 
 ``` r
 install.packages('kindling')
@@ -68,7 +66,7 @@ pak::pak("joshuamarie/kindling")
 
 ## Usage: Three Levels of Interaction
 
-[kindling](https://github.com/joshuamarie/kindling) is powered by R’s
+[kindling](https://kindling.joshuamarie.com) is powered by R’s
 metaprogramming capabilities through *code generation*. Generated
 [`torch::nn_module()`](https://torch.mlverse.org/docs/reference/nn_module.html)
 expressions power the training functions, which in turn serve as engines
@@ -277,7 +275,7 @@ hyperparameter tuning via [tune](https://tune.tidymodels.org/) with
 searchable parameters.
 
 The current searchable parameters under
-[kindling](https://github.com/joshuamarie/kindling):
+[kindling](https://kindling.joshuamarie.com):
 
 - Layer widths (neurons per layer)
 - Network depth (number of hidden layers)
@@ -289,7 +287,7 @@ The current searchable parameters under
 - Bidirectional (boolean; only for RNN)
 
 The searchable parameters outside from
-[kindling](https://github.com/joshuamarie/kindling), i.e. under
+[kindling](https://kindling.joshuamarie.com), i.e. under
 [dials](https://dials.tidymodels.org) package such as `learn_rate()`
 also supported.
 
@@ -368,8 +366,8 @@ will enable robust cross-validation workflows, orchestrated through the
 
 ## Variable Importance
 
-[kindling](https://github.com/joshuamarie/kindling) integrates with
-established variable importance methods from `{NeuralNetTools}` and
+[kindling](https://kindling.joshuamarie.com) integrates with established
+variable importance methods from `{NeuralNetTools}` and
 [vip](https://github.com/koalaverse/vip/) to interpret trained neural
 networks. Two primary algorithms are available:
 
@@ -399,8 +397,8 @@ networks. Two primary algorithms are available:
 
 For users working within the
 [tidymodels](https://tidymodels.tidymodels.org) ecosystem,
-[kindling](https://github.com/joshuamarie/kindling) models work
-seamlessly with the [vip](https://github.com/koalaverse/vip/) package:
+[kindling](https://kindling.joshuamarie.com) models work seamlessly with
+the [vip](https://github.com/koalaverse/vip/) package:
 
 ``` r
 box::use(

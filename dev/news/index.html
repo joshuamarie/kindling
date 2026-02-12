@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -88,10 +88,6 @@
 <ul><li>
 <code>hd_neurons</code> for both <code><a href="../reference/nn_gens.html">ffnn_generator()</a></code> and <code><a href="../reference/nn_gens.html">rnn_generator()</a></code> accepts empty arguments, which implies there’s no hidden layers applied.</li>
 </ul></div>
-<div class="section level3">
-<h3 id="documentation-0-2-1">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-2-1"></a></h3>
-<ul><li>Remove the documentation page from <code>DESCRIPTION</code>.</li>
-</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="kindling-020">kindling 0.2.0<a class="anchor" aria-label="anchor" href="#kindling-020"></a></h2><p class="text-muted">CRAN release: 2026-02-04</p>
@@ -123,7 +119,7 @@
 <li>Corrected parameter space handling for <code>n_hlayers</code> (no more invalid sampling when <code>x &gt; 1</code>)</li>
 <li>Uses <code><a href="https://tidyr.tidyverse.org/reference/expand_grid.html" class="external-link">tidyr::expand_grid()</a></code>, not <code>purrr::cross*()</code>
 </li>
-<li>Fix randomization of parameter space which will produce NAs outside from <a href="https://github.com/joshuamarie/kindling" class="external-link">kindling</a>‘s own ’dials’</li>
+<li>Fix randomization of parameter space which will produce NAs outside from <a href="https://kindling.joshuamarie.com">kindling</a>‘s own ’dials’</li>
 <li>No more list columns when <code>n_hlayers = 1</code>
 </li>
 </ul></li>

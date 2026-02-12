@@ -10,11 +10,11 @@ eval_act_funs(activations, output_activation)
 
 ## Arguments
 
-- activations_quo:
+- activations:
 
   Quosure containing the activations expression
 
-- output_activation_quo:
+- output_activation:
 
   Quosure containing the output_activation expression
 
