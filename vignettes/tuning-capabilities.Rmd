@@ -1,0 +1,202 @@
+---
+title: "Tuning Capabilities"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Tuning Capabilities}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+    fig.width = 7,
+    fig.height = 5
+)
+```
+
+## Rationale
+
+How capable this package when tuning neural networks? One of the package's capabilities is the ability to fine-tune the whole architecture, and this includes the depth of the architecture — not limited to the number of hidden neurons, also includes the number of layers. Neural networks with `{torch}` natively supports different activation functions for different layers, thus `{kindling}` supports: 
+
+- The **number of hidden layers** (depth)
+- The **number of neurons per layer** (width)
+- The **activation function per layer**, including parametric variants (e.g. `softshrink(lambd = 0.2)`)
+
+## Custom grid creation
+
+`{kindling}` has its own function to define the grid which includes the depth of the architecture: `grid_depth()`, an analogue function to `dials::grid_space_filling()`, except it creates `"regular"` grid. You can tweak `n_hlayer` parameter, and you can define the grid that has the depth. This parameter can be scalar (e.g. `2`), integer vector (e.g. `1:2`), and/or using a `{dials}` function called `n_hlayer()`. When `n_hlayer` is greater than 2, the certain parameters `hidden_neurons` and `activations` creates a list-column, which contains vectors for each parameter grid, depending on `n_hlayer` you defined. 
+
+## Setup
+
+We won't stop you from using `library()` function, but we strongly recommend using `box::use()` and explicitly import the names from the namespaces you want to attach.
+
+```{r}
+# library(kindling)
+# library(tidymodels)
+# library(modeldata)
+
+box::use(
+    kindling[mlp_kindling, act_funs, args, hidden_neurons, activations, grid_depth],
+    dplyr[select, ends_with, mutate, slice_sample],
+    tidyr[drop_na],
+    rsample[initial_split, training, testing, vfold_cv],
+    recipes[
+        recipe, step_dummy, step_normalize,
+        all_nominal_predictors, all_numeric_predictors
+    ],
+    modeldata[penguins],
+    parsnip[tune, set_mode, fit, augment],
+    workflows[workflow, add_recipe, add_model],
+    dials[learn_rate],
+    tune[tune_grid, show_best, collect_metrics, select_best, finalize_workflow, last_fit],
+    yardstick[metric_set, rmse, rsq],
+    ggplot2[autoplot]
+)
+```
+
+We'll use the `penguins` dataset from `{modeldata}` to predict body mass (in kilograms) from physical measurements — a straightforward regression task that lets us focus on the tuning workflow.
+
+## Usage
+
+`{kindling}` provides the `mlp_kindling()` model spec. Parameters you want to search over are marked with `tune()`.
+
+```{r spec}
+rec = recipe(body_mass_kg ~ ., data = train) |>
+    step_dummy(all_nominal_predictors()) |>
+    step_normalize(all_numeric_predictors())
+
+spec = mlp_kindling(
+    hidden_neurons = tune(),
+    activations = tune(),
+    epochs = 50,
+    learn_rate = tune()
+) |>
+    set_mode("regression")
+```
+
+Note that `n_hlayer` is not listed here — it is handled inside `grid_depth()` rather than the model spec directly.
+
+### Data Preparation
+
+We sample 30 rows per species to keep the example lightweight, and stratify splits on `species` to preserve class balance. The target variable is `body_mass_kg`, derived from the original `body_mass_g` column.
+
+```{r data}
+penguins_clean = penguins |>
+    drop_na() |>
+    select(body_mass_g, ends_with("_mm"), sex, species) |>
+    mutate(body_mass_kg = body_mass_g / 1000) |>
+    slice_sample(n = 30, by = species)
+
+set.seed(123)
+split = initial_split(penguins_clean, prop = 0.8, strata = species)
+train = training(split)
+test = testing(split)
+folds = vfold_cv(train, v = 5, strata = body_mass_kg)
+```
+
+### Using grid_depth()
+
+You still can use standard `{dials}` grids but the limitation is that they don't know about network depth, so `{kindling}` provides `grid_depth()`. The `n_hlayer` argument controls which depths to search over. Remember, it accepts:
+
+- A scalar: `n_hlayer = 2`
+- An integer vector: `n_hlayer = 1:3`
+- A `{dials}` range object: `n_hlayer = n_hlayer(c(1, 3))`
+
+When `n_hlayer > 1`, the `hidden_neurons` and `activations` columns become list-columns, where each row holds a vector of per-layer values.
+
+```{r grid}
+set.seed(42)
+depth_grid = grid_depth(
+    hidden_neurons(c(16, 32)),
+    activations(c("relu", "elu", "softshrink(lambd = 0.2)")),
+    learn_rate(),
+    n_hlayer = 1:3,
+    size = 10,
+    type = "latin_hypercube"
+)
+
+depth_grid
+```
+
+Here we constrain `hidden_neurons` to the range `[16, 32]` and limit activations to three candidates — including the parametric `softshrink`. Latin hypercube sampling spreads the 10 candidates more evenly across the search space compared to a random grid.
+
+### Tuning
+
+What happens to the tuning part? The solution is easy: the parameters induced into list-columns and it becomes something like `list(c(1, 2))`, so internally the configured argument unlisted through `list(c(1, 2))[[1]]` (it always produces only 1 element). 
+
+```{r tune}
+wflow = workflow() |>
+    add_recipe(rec) |>
+    add_model(spec)
+
+tune_res = tune_grid(
+    wflow,
+    resamples = folds,
+    grid = depth_grid,
+    metrics = metric_set(rmse, rsq)
+)
+```
+
+### Inspect
+
+Even with the list-columns, it still normally produces the output we want to produce. Use functions to extract the metrics output after grid search, e.g. `collect_metrics()` and `show_best()`. 
+
+```{r results}
+collect_metrics(tune_res)
+show_best(tune_res, metric = "rmse", n = 5)
+```
+
+## Visualizing Results
+
+<!-- ### Metric distributions across the grid -->
+
+<!-- `autoplot()` gives a quick overview of how each hyperparameter relates to model performance across all resamples. -->
+
+<!-- ```{r autoplot} -->
+<!-- tune::autoplot(tune_res) -->
+<!-- ``` -->
+
+## Finalizing the Model
+
+Once we've identified the best configuration, we finalize the workflow and fit
+it on the full training set.
+
+```{r final}
+best_params = select_best(tune_res, metric = "rmse")
+final_wflow = wflow |>
+    finalize_workflow(best_params)
+
+final_model = fit(final_wflow, data = train)
+final_model
+```
+
+### Evaluating on the test set
+
+```{r eval}
+final_model |>
+    augment(new_data = test) |>
+    metric_set(rmse, rsq)(
+        truth = body_mass_kg,
+        estimate = .pred
+    )
+```
+
+## A Note on Parametric Activations
+
+`{kindling}` supports parametric activation functions, meaning each layer's activation can carry its own tunable parameter. When passed as a string such as `"softshrink(lambd = 0.2)"`, `{kindling}` parses and constructs the activation automatically. This means you can include them directly in the `activations()` candidate list inside `grid_depth()` without any extra setup, as shown above.
+
+For manual (non-tuned) use, you can also specify activations per layer
+explicitly:
+
+```{r parametric}
+spec_manual = mlp_kindling(
+    hidden_neurons = c(50, 15),
+    activations = act_funs(
+        softshrink[lambd = 0.5],
+        relu
+    ),
+    epochs = 150,
+    learn_rate = 0.01
+) |>
+    set_mode("regression")
+```
