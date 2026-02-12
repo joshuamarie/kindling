@@ -78,6 +78,10 @@ ffnn =
     ) {
     dots = list(...)
     
+    act_specs = eval_act_funs({{ activations }}, {{ output_activation }})
+    activations = act_specs$activations
+    output_activation = act_specs$output_activation
+    
     # Starting from 0.2.0
     # Use 'hardhat' package instead
     if (!is.null(x) || !is.null(y)) {
