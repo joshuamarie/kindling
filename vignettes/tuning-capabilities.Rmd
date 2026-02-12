@@ -61,10 +61,6 @@ We'll use the `penguins` dataset from `{modeldata}` to predict body mass (in kil
 `{kindling}` provides the `mlp_kindling()` model spec. Parameters you want to search over are marked with `tune()`.
 
 ```{r spec}
-rec = recipe(body_mass_kg ~ ., data = train) |>
-    step_dummy(all_nominal_predictors()) |>
-    step_normalize(all_numeric_predictors())
-
 spec = mlp_kindling(
     hidden_neurons = tune(),
     activations = tune(),
@@ -92,6 +88,11 @@ split = initial_split(penguins_clean, prop = 0.8, strata = species)
 train = training(split)
 test = testing(split)
 folds = vfold_cv(train, v = 5, strata = body_mass_kg)
+
+
+rec = recipe(body_mass_kg ~ ., data = train) |>
+    step_dummy(all_nominal_predictors()) |>
+    step_normalize(all_numeric_predictors())
 ```
 
 ### Using grid_depth()
