@@ -36,10 +36,6 @@
 
 -  `hd_neurons` for both `ffnn_generator()` and `rnn_generator()` accepts empty arguments, which implies there's no hidden layers applied. 
 
-## Documentation
-
--  Remove the documentation page from `DESCRIPTION`. 
-
 # kindling 0.2.0
 
 ## New features
