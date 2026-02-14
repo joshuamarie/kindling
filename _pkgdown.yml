@@ -36,6 +36,8 @@ navbar:
           href: articles/kindling.html
         - text: Similar packages and comparison
           href: articles/similar-packages.html
+        - text: Tuning Capabilities
+          href: articles/tuning-capabilities.html
     tutorials:
       text: Learn more
       menu:
