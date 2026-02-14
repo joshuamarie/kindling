@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -51,9 +51,46 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="kindling-development-version">kindling (development version)<a class="anchor" aria-label="anchor" href="#kindling-development-version"></a></h2>
+<div class="section level3">
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li>
+<p>Generalized <code>nn_module()</code> expression generator is a new “experimental” function</p>
+<ul><li>This is how you use to generate <code>nn_module()</code> for 1D-CNN (Convolutional Neural Networks) with 3 hidden layers:</li>
+</ul><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/nn_module_generator.html">nn_module_generator</a></span><span class="op">(</span></span>
+<span>    nn_name <span class="op">=</span> <span class="st">"CNN1DClassifier"</span>,</span>
+<span>    nn_layer <span class="op">=</span> <span class="st">"nn_conv1d"</span>,</span>
+<span>    layer_arg_fn <span class="op">=</span> <span class="op">~</span> <span class="kw">if</span> <span class="op">(</span><span class="va">.is_output</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">.in</span>, <span class="va">.out</span><span class="op">)</span></span>
+<span>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>            in_channels <span class="op">=</span> <span class="va">.in</span>,</span>
+<span>            out_channels <span class="op">=</span> <span class="va">.out</span>,</span>
+<span>            kernel_size <span class="op">=</span> <span class="fl">3L</span>,</span>
+<span>            stride <span class="op">=</span> <span class="fl">1L</span>,</span>
+<span>            padding <span class="op">=</span> <span class="fl">1L</span> </span>
+<span>        <span class="op">)</span></span>
+<span>    <span class="op">}</span>,</span>
+<span>    after_output_transform <span class="op">=</span> <span class="op">~</span> <span class="va">.</span><span class="op">$</span><span class="fu">mean</span><span class="op">(</span>dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>    last_layer_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>kernel_size <span class="op">=</span> <span class="fl">1</span>, stride <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>    hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">16</span>, <span class="fl">32</span>, <span class="fl">64</span><span class="op">)</span>,</span>
+<span>    no_x <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    no_y <span class="op">=</span> <span class="fl">10</span>,</span>
+<span>    activations <span class="op">=</span> <span class="st">"relu"</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+</li>
+</ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.0" id="kindling-020">kindling 0.2.0<a class="anchor" aria-label="anchor" href="#kindling-020"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.1" id="kindling-021">kindling 0.2.1<a class="anchor" aria-label="anchor" href="#kindling-021"></a></h2>
+<div class="section level3">
+<h3 id="fixes-0-2-1">Fixes<a class="anchor" aria-label="anchor" href="#fixes-0-2-1"></a></h3>
+<ul><li>
+<code>hd_neurons</code> for both <code><a href="../reference/nn_gens.html">ffnn_generator()</a></code> and <code><a href="../reference/nn_gens.html">rnn_generator()</a></code> accepts empty arguments, which implies there’s no hidden layers applied.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.0" id="kindling-020">kindling 0.2.0<a class="anchor" aria-label="anchor" href="#kindling-020"></a></h2><p class="text-muted">CRAN release: 2026-02-04</p>
 <div class="section level3">
 <h3 id="new-features-0-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-0"></a></h3>
 <ul><li>

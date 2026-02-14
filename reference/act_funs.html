@@ -13,7 +13,7 @@ function's formal arguments."><meta property="og:image" content="https://kindlin
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +77,8 @@ function's formal arguments.</p>
 <li><p>Character strings (simple): <code>"relu"</code>, <code>"tanh"</code></p></li>
 <li><p>Character strings (with params): <code>"softshrink(lambda = 0.1)"</code>, <code>"rrelu(lower = 1/5, upper = 1/4)"</code></p></li>
 <li><p>Named with parameters: <code>softmax = args(dim = 2L)</code></p></li>
+<li><p>Bracket syntax (named): <code>softshrink[lambd = 0.2]</code>, <code>rrelu[lower = 1/5, upper = 1/4]</code></p></li>
+<li><p>Bracket syntax (unnamed): <code>softshrink[0.5]</code>, <code>elu[0.5]</code></p></li>
 </ul></dd>
 
 </dl></div>

@@ -2,7 +2,52 @@
 
 ## kindling (development version)
 
+### New features
+
+- Generalized `nn_module()` expression generator is a new “experimental”
+  function
+
+  - This is how you use to generate `nn_module()` for 1D-CNN
+    (Convolutional Neural Networks) with 3 hidden layers:
+
+  ``` r
+  nn_module_generator(
+      nn_name = "CNN1DClassifier",
+      nn_layer = "nn_conv1d",
+      layer_arg_fn = ~ if (.is_output) {
+          list(.in, .out)
+      } else {
+          list(
+              in_channels = .in,
+              out_channels = .out,
+              kernel_size = 3L,
+              stride = 1L,
+              padding = 1L 
+          )
+      },
+      after_output_transform = ~ .$mean(dim = 2),
+      last_layer_args = list(kernel_size = 1, stride = 2),
+      hd_neurons = c(16, 32, 64),
+      no_x = 1,
+      no_y = 10,
+      activations = "relu"
+  )
+  ```
+
+## kindling 0.2.1
+
+### Fixes
+
+- `hd_neurons` for both
+  [`ffnn_generator()`](https://kindling.joshuamarie.com/reference/nn_gens.md)
+  and
+  [`rnn_generator()`](https://kindling.joshuamarie.com/reference/nn_gens.md)
+  accepts empty arguments, which implies there’s no hidden layers
+  applied.
+
 ## kindling 0.2.0
+
+CRAN release: 2026-02-04
 
 ### New features
 

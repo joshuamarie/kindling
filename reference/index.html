@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,7 +90,49 @@
       </dl></div><div class="section level2">
       <h2 id="code-generators">Code Generators<a class="anchor" aria-label="anchor" href="#code-generators"></a></h2>
 
-      <div class="section-desc"><p>Generate torch nn_module code (Level 1)</p></div>
+      <div class="section-desc"><p>Generate <code><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">torch::nn_module()</a></code> code (Lowest Level)</p></div>
+
+      <dl></dl></div><div class="section level2">
+
+      <h3 id="general-purpose-low-level-generator-including-the-layer-utilities-pronouns">General-purpose / low-level generator, including the layer utilities &amp; pronouns<a class="anchor" aria-label="anchor" href="#general-purpose-low-level-generator-including-the-layer-utilities-pronouns"></a></h3>
+
+
+      <dl></dl></div><div class="section level2">
+
+
+
+
+      <dl><dt>
+
+          <code><a href="nn_module_generator.html">nn_module_generator()</a></code>
+          <span class="badge lifecycle lifecycle-experimental">experimental</span>
+        </dt>
+        <dd>Generalized Neural Network Module Expression Generator</dd>
+
+        <dt>
+
+          <code><a href="layer-attributes.html">`$`(<i>&lt;layer_pr&gt;</i>)</a></code>
+
+        </dt>
+        <dd>"Layer" attributes</dd>
+
+        <dt>
+
+          <code><a href="layer_prs.html">.layer</a></code> <code><a href="layer_prs.html">.i</a></code> <code><a href="layer_prs.html">.in</a></code> <code><a href="layer_prs.html">.out</a></code> <code><a href="layer_prs.html">.is_output</a></code>
+
+        </dt>
+        <dd>Layer argument pronouns for formula-based specifications</dd>
+
+        <dt>
+
+          <code><a href="print-layer_pronoun.html">print(<i>&lt;layer_pr&gt;</i>)</a></code> <code><a href="print-layer_pronoun.html">print(<i>&lt;layer_index_pr&gt;</i>)</a></code> <code><a href="print-layer_pronoun.html">print(<i>&lt;layer_input_pr&gt;</i>)</a></code> <code><a href="print-layer_pronoun.html">print(<i>&lt;layer_output_pr&gt;</i>)</a></code> <code><a href="print-layer_pronoun.html">print(<i>&lt;layer_is_output_pr&gt;</i>)</a></code>
+
+        </dt>
+        <dd>Print method for the pronouns</dd>
+      </dl></div><div class="section level2">
+
+      <h3 id="high-level-generators">High-level generators<a class="anchor" aria-label="anchor" href="#high-level-generators"></a></h3>
+
 
       <dl></dl></div><div class="section level2">
 
