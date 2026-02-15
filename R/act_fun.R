@@ -401,9 +401,9 @@ process_activations = function(activation_spec, prefix = "nnf_") {
             fn_call = call2("::", sym("torch"), sym(fn_name))
             
             if (is.null(params) || length(params) == 0) {
-                function(x_expr) call2(fn_call, x_expr)
+                function(x_expr) rlang::call_standardise(call2(fn_call, x_expr))
             } else {
-                function(x_expr) exec(call2, fn_call, x_expr, !!!params)
+                function(x_expr) rlang::call_standardise(exec(call2, fn_call, x_expr, !!!params))
             }
         }
     })

@@ -328,18 +328,18 @@ nn_module_generator =
     
     all_activation_calls = c(activation_calls, list(output_call))
     
+    nn_layer_name = layer_to_name(nn_layer)
+    
     # ---- Build initialize() ----
     init_body = map(seq_len(n_layers), function(i) {
         is_output = (i == n_layers)
-        layer_name = if (is_output) "out" else glue("{substring(nn_layer, 4)}_{i}")
+        layer_name = if (is_output) "out" else glue("{substring(nn_layer_name, 4)}_{i}")
         in_dim = nodes[i]
         out_dim = nodes[i + 1]
         
         layer_args = layer_arg_fn(i, in_dim, out_dim, is_output)
         
-        current_layer = if (is_output && nn_layer %in% c("nn_linear", "nn_gru", "nn_lstm", "nn_rnn")) {
-            "nn_linear"
-        } else if (is_output && !is.null(out_nn_layer)) {
+        current_layer = if (is_output && !is.null(out_nn_layer)) {
             out_nn_layer
         } else {
             nn_layer
@@ -393,7 +393,7 @@ nn_module_generator =
     forward_body_exprs = map(seq_len(n_layers), function(i) {
         is_output = (i == n_layers)
         is_last_hidden = (i == n_layers - 1L)
-        layer_name = if (is_output) "out" else glue("{substring(nn_layer, 4)}_{i}")
+        layer_name = if (is_output) "out" else glue("{substring(nn_layer_name, 4)}_{i}")
         act_call_fn = all_activation_calls[[i]]
         
         layer_expr = call2(call2("$", expr(self), sym(layer_name)), expr(x))
@@ -448,7 +448,6 @@ nn_module_generator =
     
     if (eval) eval(full_call) else full_call
 }
-
 
 #' Formula to Function with Named Arguments
 #' 
@@ -699,4 +698,21 @@ print.layer_output_pr = function(x, ...) {
 print.layer_is_output_pr = function(x, ...) {
     cat("<layer is_output flag pronoun>\n")
     invisible(x)
+}
+
+layer_to_name = function(x) {
+    if (is.character(x)) return(x)
+    if (rlang::is_formula(x)) {
+        rhs = rlang::f_rhs(x)
+        if (is.symbol(rhs)) return(as.character(rhs))
+        if (is.call(rhs) && identical(rhs[[1L]], quote(`::`)))
+            return(as.character(rhs[[3L]]))
+    }
+    if (is.function(x)) {
+        nm = deparse(substitute(x))   
+        return(nm)
+    }
+    if (is.symbol(x)) return(as.character(x))
+    
+    "layer"
 }
