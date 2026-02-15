@@ -1,8 +1,8 @@
 # kindling (development version)
 
-## New features
+## New Experimental functions
 
--   Generalized `nn_module()` expression generator is a new "experimental" function
+-   Generalized `nn_module()` expression generator to generate `torch::nn_module()` expression for the same sequential NN architectures
 
     -  This is how you use to generate `nn_module()` for 1D-CNN (Convolutional Neural Networks) with 3 hidden layers:
     
@@ -29,6 +29,17 @@
         activations = "relu"
     )
     ```
+
+-   `train_nn()` to execute `nn_module_generator()`
+
+    -   `nn_arch()` must be supplied to inherit extra arguments from `nn_module_generator()` function. 
+
+## Superset
+
+-  `act_funs()` as a DSL function now supports index-style parameter specification for parametric activation functions
+
+    -   Activation functions can now be modified using `[` syntax (e.g. `softplus[beta = 0.2]`)
+    -   The current `args()` (e.g. `softplus = args(beta = 0.2)`) is now superseded by that. 
 
 # kindling 0.2.1
 
