@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.1.9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,9 +53,9 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="kindling-development-version">kindling (development version)<a class="anchor" aria-label="anchor" href="#kindling-development-version"></a></h2>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<h3 id="new-experimental-functions-development-version">New Experimental functions<a class="anchor" aria-label="anchor" href="#new-experimental-functions-development-version"></a></h3>
 <ul><li>
-<p>Generalized <code>nn_module()</code> expression generator is a new “experimental” function</p>
+<p>Generalized <code>nn_module()</code> expression generator to generate <code><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">torch::nn_module()</a></code> expression for the same sequential NN architectures</p>
 <ul><li>This is how you use to generate <code>nn_module()</code> for 1D-CNN (Convolutional Neural Networks) with 3 hidden layers:</li>
 </ul><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/nn_module_generator.html">nn_module_generator</a></span><span class="op">(</span></span>
@@ -80,7 +80,20 @@
 <span>    activations <span class="op">=</span> <span class="st">"relu"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
 </li>
+<li>
+<p><code><a href="../reference/gen-nn-train.html">train_nn()</a></code> to execute <code><a href="../reference/nn_module_generator.html">nn_module_generator()</a></code></p>
+<ul><li>
+<code><a href="../reference/nn_arch.html">nn_arch()</a></code> must be supplied to inherit extra arguments from <code><a href="../reference/nn_module_generator.html">nn_module_generator()</a></code> function.</li>
+</ul></li>
+</ul><div class="section level4">
+<h4 id="superset-development-version">Superset<a class="anchor" aria-label="anchor" href="#superset-development-version"></a></h4>
+<ul><li>
+<p><code><a href="../reference/act_funs.html">act_funs()</a></code> as a DSL function now supports index-style parameter specification for parametric activation functions</p>
+<ul><li>Activation functions can now be modified using <code>[</code> syntax (e.g. <code>softplus[beta = 0.2]</code>)</li>
+<li>The current <code><a href="../reference/args.html">args()</a></code> (e.g. <code>softplus = args(beta = 0.2)</code>) is now superseded by that.</li>
+</ul></li>
 </ul></div>
+</div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.1" id="kindling-021">kindling 0.2.1<a class="anchor" aria-label="anchor" href="#kindling-021"></a></h2>

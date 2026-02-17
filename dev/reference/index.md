@@ -13,6 +13,15 @@ Define neural network architectures for tidymodels
 
 Direct training interface (Level 2)
 
+### Generalized Neural Network Trainer
+
+- [`train_nn()`](https://kindling.joshuamarie.com/dev/reference/gen-nn-train.md)
+  **\[experimental\]** : Generalized Neural Network Trainer
+- [`nn_arch()`](https://kindling.joshuamarie.com/dev/reference/nn_arch.md)
+  : Architecture specification for train_nn()
+
+### Base Models
+
 - [`ffnn()`](https://kindling.joshuamarie.com/dev/reference/kindling-basemodels.md)
   [`rnn()`](https://kindling.joshuamarie.com/dev/reference/kindling-basemodels.md)
   : Base models for Neural Network Training in kindling
@@ -82,8 +91,8 @@ Utilities for model configuration
 
 - [`act_funs()`](https://kindling.joshuamarie.com/dev/reference/act_funs.md)
   : Activation Functions Specification Helper
-- [`args()`](https://kindling.joshuamarie.com/dev/reference/args.md) :
-  Activation Function Arguments Helper
+- [`args()`](https://kindling.joshuamarie.com/dev/reference/args.md)
+  **\[superseded\]** : Activation Function Arguments Helper
 - [`grid_depth()`](https://kindling.joshuamarie.com/dev/reference/grid_depth.md)
   : Depth-Aware Grid Generation for Neural Networks
 - [`table_summary()`](https://kindling.joshuamarie.com/dev/reference/table_summary.md)
