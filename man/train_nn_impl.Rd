@@ -2,7 +2,7 @@
 % Please edit documentation in R/generalized-nn-fit.R
 \name{train_nn_impl}
 \alias{train_nn_impl}
-\title{train_nn Implementation}
+\title{Shared core implementation}
 \usage{
 train_nn_impl(
   x,
@@ -23,10 +23,11 @@ train_nn_impl(
   device = NULL,
   verbose = FALSE,
   cache_weights = FALSE,
-  arch = NULL
+  arch = NULL,
+  tab = FALSE
 )
 }
 \description{
-train_nn Implementation
+Shared core implementation
 }
 \keyword{internal}

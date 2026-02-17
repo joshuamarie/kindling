@@ -1,115 +1,25 @@
-#' Architecture specification for train_nn()
-#'
-#' @description
-#' `r lifecycle::badge("experimental")`
-#' 
-#' `nn_arch()` is a helper that bundles `nn_module_generator()` arguments into a
-#' single object passed to `train_nn()` via the `arch` parameter. All arguments
-#' mirror those of `nn_module_generator()` exactly, including their defaults.
-#'
-#' @param nn_name Character. Name of the generated module class. Default `"nnModule"`.
-#' @param nn_layer Layer type. See `nn_module_generator()`. Default `NULL` (`nn_linear`).
-#' @param out_nn_layer Optional. Layer type forced on the last layer. Default `NULL`.
-#' @param nn_layer_args Named list. Additional arguments passed to every layer constructor.
-#'   Default `list()`.
-#' @param layer_arg_fn Formula or function. Generates per-layer constructor arguments.
-#'   Default `NULL` (FFNN-style: `list(in_dim, out_dim, bias = bias)`).
-#' @param forward_extract Formula or function. Processes layer output in the forward pass.
-#'   Default `NULL`.
-#' @param before_output_transform Formula or function. Transforms input before the output
-#'   layer. Default `NULL`.
-#' @param after_output_transform Formula or function. Transforms output after the output
-#'   layer. Default `NULL`.
-#' @param last_layer_args Named list or formula. Extra arguments for the output layer only.
-#'   Default `list()`.
-#' @param use_namespace Logical or character. Controls torch namespace prefixing.
-#'   Default `TRUE`.
-#'
-#' @return An object of class `"nn_arch"`, a named list of `nn_module_generator()` arguments.
-#'
-#' @examples
-#' \donttest{
-#' if (torch::torch_is_installed()) {
-#'     # LSTM architecture spec
-#'     lstm_arch = nn_arch(
-#'         nn_name = "LSTM",
-#'         nn_layer = "nn_lstm",
-#'         layer_arg_fn = ~ if (.is_output) {
-#'             list(.in, .out)
-#'         } else {
-#'             list(input_size = .in, hidden_size = .out, batch_first = TRUE)
-#'         },
-#'         forward_extract = ~ .[[1]],
-#'         before_output_transform = ~ .[, .$size(2), ]
-#'     )
-#'
-#'     model = train_nn(
-#'         Sepal.Length ~ .,
-#'         data = iris[, 1:4],
-#'         hidden_neurons = c(64, 32),
-#'         activations = "relu",
-#'         epochs = 50,
-#'         arch = lstm_arch
-#'     )
-#' }
-#' }
-#'
-#' @export
-nn_arch = 
-    function(
-        nn_name = "nnModule",
-        nn_layer = NULL,
-        out_nn_layer = NULL,
-        nn_layer_args = list(),
-        layer_arg_fn = NULL,
-        forward_extract = NULL,
-        before_output_transform = NULL,
-        after_output_transform = NULL,
-        last_layer_args = list(),
-        use_namespace = TRUE
-    ) {
-    structure(
-        list(
-            nn_name = nn_name,
-            nn_layer = nn_layer,
-            out_nn_layer = out_nn_layer,
-            nn_layer_args = nn_layer_args,
-            layer_arg_fn = layer_arg_fn,
-            forward_extract = forward_extract,
-            before_output_transform = before_output_transform,
-            after_output_transform = after_output_transform,
-            last_layer_args = last_layer_args,
-            use_namespace = use_namespace
-        ),
-        class = "nn_arch"
-    )
-}
-
-#' @export
-print.nn_arch = function(x, ...) {
-    cli::cli_h3("Neural Network Architecture Spec")
-    cli::cli_bullets(c(
-        "*" = "Name:      {x$nn_name}",
-        "*" = "Layer:     {x$nn_layer %||% 'nn_linear (default)'}",
-        "*" = "Out layer: {x$out_nn_layer %||% 'same as nn_layer'}",
-        "*" = "Namespace: {x$use_namespace}"
-    ))
-    invisible(x)
-}
-
-
 #' Generalized Neural Network Trainer
 #'
 #' @description
 #' `r lifecycle::badge("experimental")`
-#' 
-#' Train a neural network with a user-defined architecture supplied via `nn_arch()`.
-#' `train_nn()` handles data preprocessing, the training loop, and prediction,
-#' while the model architecture is fully controlled through the `arch` argument.
-#' When `arch = NULL`, it falls back to a plain FFNN (`nn_linear`) architecture.
 #'
-#' @param formula Formula. Model formula (e.g., `y ~ x1 + x2`).
-#' @param data Data frame. Training data.
+#' `train_nn()` is a generic function for training neural networks with a
+#' user-defined architecture via [nn_arch()]. Dispatch is based on the class
+#' of `x`, allowing different preprocessing pipelines per data type:
+#'
+#' - `train_nn.matrix()` — raw interface, no preprocessing
+#' - `train_nn.data.frame()` — tabular interface via `hardhat::mold()`
+#' - `train_nn.formula()` — formula interface via `hardhat::mold()`
+#'
+#' All methods delegate to the shared [train_nn_impl()] core after preprocessing.
+#' When `arch = NULL`, the model falls back to a plain FFNN (`nn_linear`) architecture.
+#'
+#' @param x Predictor data. Dispatch is based on its class:
+#'   - `matrix`: used directly, no preprocessing
+#'   - `data.frame`: preprocessed via `hardhat::mold()`
+#'   - `formula`: combined with `data` and preprocessed via `hardhat::mold()`
+#' @param y Outcome data (vector, factor, or matrix). Not used when `x` is a formula.
+#' @param data Data frame. Required when `x` is a formula.
 #' @param hidden_neurons Integer vector. Number of neurons in each hidden layer.
 #' @param activations Activation function specifications. See `act_funs()`.
 #' @param output_activation Optional. Activation for the output layer.
@@ -128,53 +38,53 @@ print.nn_arch = function(x, ...) {
 #' @param device Character. Device to use (`"cpu"`, `"cuda"`, `"mps"`). Default `NULL` (auto-detect).
 #' @param verbose Logical. Print training progress. Default `FALSE`.
 #' @param cache_weights Logical. Cache weight matrices. Default `FALSE`.
-#' @param ... Additional arguments. It is currently unused. 
-#' @param x When not using formula: predictor data (data.frame or matrix).
-#' @param y When not using formula: outcome data (vector, factor, or matrix).
+#' @param ... Additional arguments passed to methods.
 #'
-#' @return An object of class `"nn_fit"`.
+#' @return An object of class `"nn_fit"`, or a subclass thereof:
+#'   - `c("nn_fit_tab", "nn_fit")` when called via `data.frame` or `formula` method
 #'
 #' @examples
 #' \donttest{
 #' if (torch::torch_is_installed()) {
-#'     # Default FFNN fallback (arch = NULL)
-#'     model_ffnn = train_nn(
-#'         Sepal.Length ~ .,
-#'         data = iris[, 1:4],
+#'     # matrix method
+#'     model = train_nn(
+#'         x = as.matrix(iris[, 2:4]),
+#'         y = iris$Sepal.Length,
 #'         hidden_neurons = c(64, 32),
 #'         activations = "relu",
 #'         epochs = 50
 #'     )
 #'
-#'     # GRU via nn_arch()
-#'     gru_arch = nn_arch(
-#'         nn_name = "GRU",
-#'         nn_layer = "nn_gru",
-#'         layer_arg_fn = ~ if (.is_output) {
-#'             list(.in, .out)
-#'         } else {
-#'             list(input_size = .in, hidden_size = .out, batch_first = TRUE)
-#'         },
-#'         forward_extract = ~ .[[1]],
-#'         before_output_transform = ~ .[, .$size(2), ]
-#'     )
-#'
-#'     model_gru = train_nn(
+#'     # data.frame method
+#'     model = train_nn(
+#'         x = iris[, 2:4],
+#'         y = iris$Sepal.Length,
 #'         hidden_neurons = c(64, 32),
 #'         activations = "relu",
-#'         epochs = 50,
-#'         arch = gru_arch,
-#'         x = iris[, 2:4],
-#'         y = iris$Sepal.Length
+#'         epochs = 50
+#'     )
+#'
+#'     # formula method
+#'     model = train_nn(
+#'         x = Sepal.Length ~ .,
+#'         data = iris[, 1:4],
+#'         hidden_neurons = c(64, 32),
+#'         activations = "relu",
+#'         epochs = 50
 #'     )
 #' }
 #' }
 #'
+#' @name gen-nn-train
 #' @export
-train_nn = 
+train_nn = function(x, ...) UseMethod("train_nn")
+
+#' @rdname gen-nn-train
+#' @export
+train_nn.matrix = 
     function(
-        formula = NULL,
-        data = NULL,
+        x,
+        y,
         hidden_neurons,
         activations = NULL,
         output_activation = NULL,
@@ -192,11 +102,8 @@ train_nn =
         device = NULL,
         verbose = FALSE,
         cache_weights = FALSE,
-        ...,
-        x = NULL,
-        y = NULL
+        ...
     ) {
-    
     if (!is.null(arch) && !inherits(arch, "nn_arch")) {
         cli::cli_abort("{.arg arch} must be an {.cls nn_arch} object created with {.fn nn_arch}.")
     }
@@ -205,26 +112,187 @@ train_nn =
     activations = act_specs$activations
     output_activation = act_specs$output_activation
     
-    # ---- Data ingestion ----
-    if (!is.null(x) || !is.null(y)) {
-        if (is.null(x) || is.null(y)) {
-            cli::cli_abort("Both {.arg x} and {.arg y} must be provided when not using formula interface.")
-        }
-        if (!is.null(formula) || !is.null(data)) {
-            cli::cli_warn("Both formula/data and x/y provided. Using x/y interface.")
-        }
-        processed = hardhat::mold(x, y)
-        
-    } else if (!is.null(formula)) {
-        if (is.null(data)) {
-            cli::cli_abort("{.arg data} must be provided when using formula interface.")
-        }
-        processed = hardhat::mold(formula, data)
-        
-    } else {
-        cli::cli_abort("Must provide either {.arg formula} and {.arg data}, or {.arg x} and {.arg y}.")
+    train_nn_impl(
+        x = x,
+        y = y,
+        hidden_neurons = hidden_neurons,
+        activations = activations,
+        output_activation = output_activation,
+        bias = bias,
+        epochs = epochs,
+        batch_size = batch_size,
+        penalty = penalty,
+        mixture = mixture,
+        learn_rate = learn_rate,
+        optimizer = optimizer,
+        optimizer_args = optimizer_args,
+        loss = loss,
+        validation_split = validation_split,
+        device = device,
+        verbose = verbose,
+        cache_weights = cache_weights,
+        arch = arch,
+        fit_class = "nn_fit"
+    )
+}
+
+
+#' @rdname gen-nn-train
+#' @export
+train_nn.data.frame = 
+    function(
+        x,
+        y,
+        hidden_neurons,
+        activations = NULL,
+        output_activation = NULL,
+        bias = TRUE,
+        arch = NULL,
+        epochs = 100,
+        batch_size = 32,
+        penalty = 0,
+        mixture = 0,
+        learn_rate = 0.001,
+        optimizer = "adam",
+        optimizer_args = list(),
+        loss = "mse",
+        validation_split = 0,
+        device = NULL,
+        verbose = FALSE,
+        cache_weights = FALSE,
+        ...
+    ) {
+    if (!is.null(arch) && !inherits(arch, "nn_arch")) {
+        cli::cli_abort("{.arg arch} must be an {.cls nn_arch} object created with {.fn nn_arch}.")
     }
     
+    act_specs = eval_act_funs({{ activations }}, {{ output_activation }})
+    activations = act_specs$activations
+    output_activation = act_specs$output_activation
+    
+    processed = hardhat::mold(x, y)
+    
+    .train_nn_tab_impl(
+        processed = processed,
+        formula = NULL,
+        hidden_neurons = hidden_neurons,
+        activations = activations,
+        output_activation = output_activation,
+        bias = bias,
+        arch = arch,
+        epochs = epochs,
+        batch_size = batch_size,
+        penalty = penalty,
+        mixture = mixture,
+        learn_rate = learn_rate,
+        optimizer = optimizer,
+        optimizer_args = optimizer_args,
+        loss = loss,
+        validation_split = validation_split,
+        device = device,
+        verbose = verbose,
+        cache_weights = cache_weights
+    )
+}
+
+
+#' @rdname gen-nn-train
+#' @export
+train_nn.formula = 
+    function(
+        x,
+        data,
+        hidden_neurons,
+        activations = NULL,
+        output_activation = NULL,
+        bias = TRUE,
+        arch = NULL,
+        epochs = 100,
+        batch_size = 32,
+        penalty = 0,
+        mixture = 0,
+        learn_rate = 0.001,
+        optimizer = "adam",
+        optimizer_args = list(),
+        loss = "mse",
+        validation_split = 0,
+        device = NULL,
+        verbose = FALSE,
+        cache_weights = FALSE,
+        ...
+    ) {
+    if (!is.null(arch) && !inherits(arch, "nn_arch")) {
+        cli::cli_abort("{.arg arch} must be an {.cls nn_arch} object created with {.fn nn_arch}.")
+    }
+    
+    if (missing(data) || is.null(data)) {
+        cli::cli_abort("{.arg data} must be provided when using the formula interface.")
+    }
+    
+    act_specs = eval_act_funs({{ activations }}, {{ output_activation }})
+    activations = act_specs$activations
+    output_activation = act_specs$output_activation
+    
+    processed = hardhat::mold(x, data)
+    
+    .train_nn_tab_impl(
+        processed = processed,
+        formula = x,
+        hidden_neurons = hidden_neurons,
+        activations = activations,
+        output_activation = output_activation,
+        bias = bias,
+        arch = arch,
+        epochs = epochs,
+        batch_size = batch_size,
+        penalty = penalty,
+        mixture = mixture,
+        learn_rate = learn_rate,
+        optimizer = optimizer,
+        optimizer_args = optimizer_args,
+        loss = loss,
+        validation_split = validation_split,
+        device = device,
+        verbose = verbose,
+        cache_weights = cache_weights
+    )
+}
+
+
+#' @rdname gen-nn-train
+#' @export
+train_nn.default = function(x, ...) {
+    cli::cli_abort(c(
+        "No {.fn train_nn} method for class {.cls {class(x)}}.",
+        i = "Supported classes: {.cls matrix}, {.cls data.frame}, {.cls formula}."
+    ))
+}
+
+
+# Shared post-mold logic for data.frame and formula methods
+# @keywords internal
+.train_nn_tab_impl = 
+    function(
+        processed,
+        formula,
+        hidden_neurons,
+        activations,
+        output_activation,
+        bias,
+        arch,
+        epochs,
+        batch_size,
+        penalty,
+        mixture,
+        learn_rate,
+        optimizer,
+        optimizer_args,
+        loss,
+        validation_split,
+        device,
+        verbose,
+        cache_weights
+    ) {
     predictors = processed$predictors
     outcomes = processed$outcomes
     
@@ -255,7 +323,8 @@ train_nn =
         device = device,
         verbose = verbose,
         cache_weights = cache_weights,
-        arch = arch
+        arch = arch,
+        fit_class = "nn_fit_tab"
     )
     
     fit$blueprint = processed$blueprint
@@ -265,7 +334,7 @@ train_nn =
 }
 
 
-#' train_nn Implementation
+#' Shared core implementation
 #' @keywords internal
 train_nn_impl = 
     function(
@@ -287,7 +356,8 @@ train_nn_impl =
         device = NULL,
         verbose = FALSE,
         cache_weights = FALSE,
-        arch = NULL
+        arch = NULL,
+        fit_class = "nn_fit"
     ) {
     if (!requireNamespace("torch", quietly = TRUE)) {
         cli::cli_abort("Package {.pkg torch} is required but not installed.")
@@ -303,6 +373,13 @@ train_nn_impl =
     if (verbose) cli::cli_alert_info("Using device: {device}")
     
     validate_regularization(penalty, mixture)
+    
+    # ---- Input transform ----
+    input_fn = if (!is.null(arch) && !is.null(arch$input_transform)) {
+        rlang::as_function(arch$input_transform)
+    } else {
+        identity
+    }
     
     # ---- Metadata ----
     feature_names = colnames(x)
@@ -351,8 +428,13 @@ train_nn_impl =
     }
     
     # ---- Build model via nn_module_generator() ----
-    # arch = NULL falls back to nn_linear (FFNN-style), matching nn_module_generator() defaults
-    arch_args = if (!is.null(arch)) unclass(arch) else list()
+    arch_args = if (!is.null(arch)) {
+        args = unclass(arch)
+        args$input_transform = NULL
+        args
+    } else {
+        list()
+    }
     
     model_expr = do.call(
         nn_module_generator,
@@ -372,7 +454,9 @@ train_nn_impl =
     model$to(device = device)
     
     # ---- Tensors: training set ----
-    x_train_t = torch::torch_tensor(x_train, dtype = torch::torch_float32(), device = device)
+    x_train_t = input_fn(
+        torch::torch_tensor(x_train, dtype = torch::torch_float32(), device = device)
+    )
     
     if (is_classification) {
         y_train_t = torch::torch_tensor(y_train, dtype = torch::torch_long(), device = device)
@@ -386,7 +470,9 @@ train_nn_impl =
     
     # ---- Tensors: validation set ----
     if (!is.null(x_val)) {
-        x_val_t = torch::torch_tensor(x_val, dtype = torch::torch_float32(), device = device)
+        x_val_t = input_fn(
+            torch::torch_tensor(x_val, dtype = torch::torch_float32(), device = device)
+        )
         if (is_classification) {
             y_val_t = torch::torch_tensor(y_val, dtype = torch::torch_long(), device = device)
         } else {
@@ -467,7 +553,9 @@ train_nn_impl =
     
     # ---- Fitted values ----
     model$eval()
-    x_full_t = torch::torch_tensor(x, dtype = torch::torch_float32(), device = device)
+    x_full_t = input_fn(
+        torch::torch_tensor(x, dtype = torch::torch_float32(), device = device)
+    )
     fitted_tensor = torch::with_no_grad({ model(x_full_t) })
     
     if (is_classification) {
@@ -515,21 +603,23 @@ train_nn_impl =
             cached_weights = cached_weights,
             arch = arch
         ),
-        class = "nn_fit"
+        class = if (tab) c("nn_fit_tab", "nn_fit") else "nn_fit"
     )
 }
 
 
 #' Predict method for nn_fit objects
 #'
-#' @param object An object of class `"nn_fit"`.
-#' @param newdata Data frame. New data for predictions.
+#' @param object An object of class `"nn_fit"` or `"nn_fit_tab"`.
+#' @param newdata Data frame or matrix. New data for predictions.
 #' @param new_data Alternative to `newdata` (hardhat-style).
 #' @param type Character. `"response"` (default) or `"prob"` (classification only).
 #' @param ... Currently unused.
 #'
 #' @return Numeric vector/matrix (regression) or factor / probability matrix (classification).
 #'
+#' @name gen-nn-predict
+#' @keywords internal
 #' @export
 predict.nn_fit = function(object, newdata = NULL, new_data = NULL, type = "response", ...) {
     if (!requireNamespace("torch", quietly = TRUE)) {
@@ -540,6 +630,13 @@ predict.nn_fit = function(object, newdata = NULL, new_data = NULL, type = "respo
     
     device = object$device
     
+    # ---- Input transform ----
+    input_fn = if (!is.null(object$arch) && !is.null(object$arch$input_transform)) {
+        rlang::as_function(object$arch$input_transform)
+    } else {
+        identity
+    }
+    
     if (is.null(newdata)) {
         if (type == "prob" && object$is_classification) {
             cli::cli_abort("Cannot compute probabilities without {.arg newdata}. Use fitted values instead.")
@@ -547,16 +644,11 @@ predict.nn_fit = function(object, newdata = NULL, new_data = NULL, type = "respo
         return(object$fitted)
     }
     
-    if (!is.null(object$blueprint)) {
-        processed = hardhat::forge(newdata, object$blueprint)
-        x_new = processed$predictors
-    } else {
-        x_new = newdata
-    }
+    if (!is.matrix(newdata)) newdata = as.matrix(newdata)
     
-    if (!is.matrix(x_new)) x_new = as.matrix(x_new)
-    
-    x_new_t = torch::torch_tensor(x_new, dtype = torch::torch_float32(), device = device)
+    x_new_t = input_fn(
+        torch::torch_tensor(newdata, dtype = torch::torch_float32(), device = device)
+    )
     
     object$model$eval()
     pred_tensor = torch::with_no_grad({ object$model(x_new_t) })
@@ -581,6 +673,21 @@ predict.nn_fit = function(object, newdata = NULL, new_data = NULL, type = "respo
         if (object$no_y == 1L) predictions = as.vector(predictions)
         return(predictions)
     }
+}
+
+
+#' @rdname gen-nn-predict
+#' @keywords internal
+#' @export
+predict.nn_fit_tab = function(object, newdata = NULL, new_data = NULL, type = "response", ...) {
+    if (!is.null(new_data) && is.null(newdata)) newdata = new_data
+    
+    if (!is.null(newdata) && !is.null(object$blueprint)) {
+        processed = hardhat::forge(newdata, object$blueprint)
+        newdata = as.matrix(processed$predictors)
+    }
+    
+    NextMethod()
 }
 
 

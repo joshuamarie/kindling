@@ -1,34 +1,3 @@
-#' Activation Function Arguments Helper
-#'
-#' Type-safe helper to specify parameters for activation functions.
-#' All parameters must be named and match the formal arguments of the
-#' corresponding `torch` activation function.
-#'
-#' @param ... Named arguments for the activation function.
-#' @return A list with class "activation_args" containing the parameters.
-#'
-#' @importFrom cli cli_abort
-#'
-#' @export
-args = function(...) {
-    params = list(...)
-    
-    if (length(params) == 0) {
-        structure(list(), class = "activation_args")
-    } else {
-        param_names = names(params)
-        
-        if (is.null(param_names) || any(param_names == "")) {
-            cli_abort(c(
-                "{.fn args} requires all arguments to be named.",
-                i = "Use named arguments like {.code args(dim = 2L)}."
-            ), class = "activation_args_error")
-        }
-        
-        structure(params, class = "activation_args")
-    }
-}
-
 #' Activation Functions Specification Helper
 #'
 #' This function is a DSL function, kind of like `ggplot2::aes()`, that helps to
@@ -118,6 +87,41 @@ act_funs = function(...) {
     })
     
     new_vctr(out, class = "activation_spec")
+}
+
+#' Activation Function Arguments Helper
+#' 
+#' @description
+#' `r lifecycle::badge("superseded")`
+#' 
+#' This is superseded in v0.3.0 in favour of `<act_fn[param = 0]>` type. 
+#' Type-safe helper to specify parameters for activation functions.
+#' All parameters must be named and match the formal arguments of the
+#' corresponding `{torch}` activation function.
+#'
+#' @param ... Named arguments for the activation function.
+#' @return A list with class "activation_args" containing the parameters.
+#'
+#' @importFrom cli cli_abort
+#'
+#' @export
+args = function(...) {
+    params = list(...)
+    
+    if (length(params) == 0) {
+        structure(list(), class = "activation_args")
+    } else {
+        param_names = names(params)
+        
+        if (is.null(param_names) || any(param_names == "")) {
+            cli_abort(c(
+                "{.fn args} requires all arguments to be named.",
+                i = "Use named arguments like {.code args(dim = 2L)}."
+            ), class = "activation_args_error")
+        }
+        
+        structure(params, class = "activation_args")
+    }
 }
 
 #' Parse activation function string with parameters
@@ -401,9 +405,15 @@ process_activations = function(activation_spec, prefix = "nnf_") {
             fn_call = call2("::", sym("torch"), sym(fn_name))
             
             if (is.null(params) || length(params) == 0) {
-                function(x_expr) rlang::call_standardise(call2(fn_call, x_expr))
+                function(x_expr) {
+                    # rlang::call_standardise(call2(fn_call, x_expr))
+                    call2(fn_call, x_expr)
+                }
             } else {
-                function(x_expr) rlang::call_standardise(exec(call2, fn_call, x_expr, !!!params))
+                function(x_expr) {
+                    # rlang::call_standardise(exec(call2, fn_call, x_expr, !!!params))
+                    exec(call2, fn_call, x_expr, !!!params)
+                }
             }
         }
     })
