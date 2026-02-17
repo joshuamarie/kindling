@@ -34,7 +34,7 @@
 
     -   `nn_arch()` must be supplied to inherit extra arguments from `nn_module_generator()` function. 
 
-## Superset
+### Superset
 
 -  `act_funs()` as a DSL function now supports index-style parameter specification for parametric activation functions
 

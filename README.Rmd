@@ -21,15 +21,15 @@ desc = setNames(as.list(desc), colnames(desc))
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/kindling)](https://CRAN.R-project.org/package=kindling)
 [![R-CMD-check](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml)
+[![CRAN Downloads](https://cranlogs.r-pkg.org/badges/kindling)](https://CRAN.R-project.org/package=kindling)
+[![CRAN Downloads Total](https://cranlogs.r-pkg.org/badges/grand-total/kindling?color=brightgreen)](https://CRAN.R-project.org/package=kindling)
 <!-- badges: end -->
-
-<!-- > **Note**: This package is under active development. The API may change in future versions. -->
 
 ## Package overview
 
 Title: ***`r desc$Title`***
 
-Whether you're generating neural network architectures expressions or fitting/training actual models, `{kindling}` minimizes boilerplate code while preserving `{torch}`. Since this package uses `{torch}` as its backend, GPU/TPU devices also supported. 
+Whether you're generating neural network architectures expressions or direct fitting/training actual models, `{kindling}` minimizes boilerplate code while preserving `{torch}`. And since this package uses `{torch}` as its backend, GPU/TPU devices are supported. 
 
 `{kindling}` also bridges the gap between `{torch}` and `{tidymodels}`. It works seamlessly with `{parsnip}`, `{recipes}`, and `{workflows}` to bring deep learning into your existing `{tidymodels}` modeling pipeline. This enables a streamlined interface for building, training, and tuning deep learning models within the familiar `{tidymodels}` ecosystem.
 
@@ -37,18 +37,14 @@ Whether you're generating neural network architectures expressions or fitting/tr
 
 <!-- -   Seamless integration with `parsnip` through `set_engine("kindling")` -->
 -   Code generation of `{torch}` expression
--   Multiple architectures available: feedforward networks (MLP/DNN/FFNN) and recurrent variants (RNN, LSTM, GRU)
+-   Multiple architectures available
+
+    -  Base models interface: feedforward networks (MLP/DNN/FFNN) and recurrent variants (RNN, LSTM, GRU)
+    -  Generalized neural network trainer that has the same sequence as base models
+
 -   Native support for titanic ML frameworks (currently supports `{tidymodels}`, `{mlr3}` for later) workflows and pipelines
 -   Fine-grained control over network depth, layer sizes, and activation functions
 -   GPU acceleration supports via `{torch}` tensors
-<!-- -   Dramatically less boilerplate than raw `{torch}` implementations -->
-
-### Supported Architectures (As of now)
-
--   **Feedforward Networks (DNN/FFNN)**: Classic multi-layer perceptrons for tabular data and general supervised learning
--   **Recurrent Neural Networks (RNN)**: Basic recurrent architecture for sequential patterns
--   **Long Short-Term Memory (LSTM)**: Sophisticated recurrent networks with gating mechanisms for long-range dependencies
--   **Gated Recurrent Units (GRU)**: Streamlined alternative to LSTM with fewer parameters
 
 ## Installation
 
@@ -109,7 +105,7 @@ model = ffnn(
     Species ~ .,
     data = iris,
     hidden_neurons = c(10, 15, 7),
-    activations = act_funs(relu, softshrink = args(lambd = 0.5), elu), 
+    activations = act_funs(relu, "softshrink(lambd = 0.5)", elu), 
     loss = "cross_entropy",
     epochs = 100
 )
@@ -191,8 +187,6 @@ rnn_kindling(
 ```
 
 ## Hyperparameter Tuning & Resampling
-
-<!-- > This functionality is available, but still not fully optimized. -->
 
 The package has integration with `{tidymodels}`, so it supports hyperparameter tuning via `{tune}` with searchable parameters.
 

@@ -63,10 +63,17 @@ reference:
 
   - title: Training Functions
     desc: Direct training interface (Level 2)
+  
+  - subtitle: Generalized Neural Network Trainer
     contents:
-    -  kindling-basemodels
-    # - ffnn
-    # - rnn
+      - gen-nn-train
+      - nn_arch
+      
+  - subtitle: Base Models
+    contents:
+      - kindling-basemodels
+      # - ffnn
+      # - rnn
 
   - title: Code Generators
     desc: Generate `torch::nn_module()` code (Lowest Level)
