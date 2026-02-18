@@ -72,7 +72,7 @@ nn_arch = function(
         input_transform = NULL,
         use_namespace = TRUE
 ) {
-    structure(
+    struc = structure(
         list(
             nn_name = nn_name,
             nn_layer = nn_layer,
@@ -88,6 +88,8 @@ nn_arch = function(
         ),
         class = "nn_arch"
     )
+    attr(struc, "env") = rlang::caller_env()
+    struc
 }
 
 #' Display `nn_arch()` configuration
