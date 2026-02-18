@@ -79,6 +79,7 @@
 #' @export
 train_nn = function(x, ...) UseMethod("train_nn")
 
+
 #' @rdname gen-nn-train
 #' @export
 train_nn.matrix = 
@@ -269,8 +270,8 @@ train_nn.default = function(x, ...) {
 }
 
 
-# Shared post-mold logic for data.frame and formula methods
-# @keywords internal
+#' Pre-processing function for data.frame and formula methods
+#' @keywords internal
 .train_nn_tab_impl = 
     function(
         processed,
@@ -375,6 +376,8 @@ train_nn_impl =
     validate_regularization(penalty, mixture)
     
     # ---- Input transform ----
+    # Pulled from arch and applied to every tensor before it enters the model.
+    # Allows architectures like RNNs to reshape (batch, features) -> (batch, seq, features).
     input_fn = if (!is.null(arch) && !is.null(arch$input_transform)) {
         rlang::as_function(arch$input_transform)
     } else {
@@ -428,6 +431,8 @@ train_nn_impl =
     }
     
     # ---- Build model via nn_module_generator() ----
+    # arch = NULL falls back to nn_linear (FFNN-style), matching nn_module_generator() defaults.
+    # input_transform is excluded from arch_args as it is not a nn_module_generator() argument.
     arch_args = if (!is.null(arch)) {
         args = unclass(arch)
         args$input_transform = NULL
@@ -603,7 +608,7 @@ train_nn_impl =
             cached_weights = cached_weights,
             arch = arch
         ),
-        class = if (tab) c("nn_fit_tab", "nn_fit") else "nn_fit"
+        class = unique(c(fit_class, "nn_fit"))
     )
 }
 
