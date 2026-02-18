@@ -22,6 +22,7 @@ nn_module_generator(
   bias = TRUE,
   eval = FALSE,
   use_namespace = TRUE,
+  .env = parent.frame(),
   ...
 )
 }
@@ -183,6 +184,8 @@ the generated code:
 
 When using custom layers from your environment, set to \code{FALSE} to avoid forcing
 torch namespace resolution.}
+
+\item{.env}{Default is \code{\link[=parent.frame]{parent.frame()}}. The environment in which the generated expression is to be evaluated}
 
 \item{...}{Additional arguments passed to layer constructors or for future extensions.}
 }

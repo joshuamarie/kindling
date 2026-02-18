@@ -154,6 +154,8 @@
 #'   
 #'   When using custom layers from your environment, set to `FALSE` to avoid forcing
 #'   torch namespace resolution.
+#'  
+#' @param .env Default is [parent.frame()]. The environment in which the generated expression is to be evaluated
 #'
 #' @param ... Additional arguments passed to layer constructors or for future extensions.
 #'
@@ -275,6 +277,7 @@ nn_module_generator =
         bias = TRUE,
         eval = FALSE, 
         use_namespace = TRUE,
+        .env = parent.frame(), 
         ...
     ) {
     if (is.null(nn_layer)) nn_layer = "nn_linear"
@@ -446,7 +449,7 @@ nn_module_generator =
         .ns = "torch"
     )
     
-    if (eval) eval(full_call) else full_call
+    if (eval) eval(full_call) else rlang::new_quosure(full_call, env = .env)
 }
 
 #' Formula to Function with Named Arguments
