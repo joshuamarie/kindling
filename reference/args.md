@@ -1,8 +1,11 @@
 # Activation Function Arguments Helper
 
+**\[superseded\]**
+
+This is superseded in v0.3.0 in favour of `<act_fn[param = 0]>` type.
 Type-safe helper to specify parameters for activation functions. All
 parameters must be named and match the formal arguments of the
-corresponding `torch` activation function.
+corresponding `{torch}` activation function.
 
 ## Usage
 

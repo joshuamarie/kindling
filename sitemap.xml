@@ -14,11 +14,14 @@
 <url><loc>https://kindling.joshuamarie.com/reference/act_funs.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/args.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/dials-kindling.html</loc></url>
+<url><loc>https://kindling.joshuamarie.com/reference/dot-train_nn_tab_impl.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/eval_act_funs.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/extract_depth_param.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/ffnn_impl.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/formula_to_expr_transformer.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/formula_to_function.html</loc></url>
+<url><loc>https://kindling.joshuamarie.com/reference/gen-nn-predict.html</loc></url>
+<url><loc>https://kindling.joshuamarie.com/reference/gen-nn-train.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/grid_depth.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/index.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/kindling-basemodels.html</loc></url>
@@ -29,6 +32,7 @@
 <url><loc>https://kindling.joshuamarie.com/reference/layer_prs.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/make_kindling.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/mlp_kindling.html</loc></url>
+<url><loc>https://kindling.joshuamarie.com/reference/nn_arch.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/nn_gens.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/nn_module_generator.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/ordinal_gen.html</loc></url>
@@ -36,6 +40,8 @@
 <url><loc>https://kindling.joshuamarie.com/reference/prepare_kindling_args.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/print-layer_pronoun.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/print.ffnn_fit.html</loc></url>
+<url><loc>https://kindling.joshuamarie.com/reference/print.nn_arch.html</loc></url>
+<url><loc>https://kindling.joshuamarie.com/reference/print.nn_fit.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/print.rnn_fit.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/reexports.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/rnn_impl.html</loc></url>
@@ -43,6 +49,7 @@
 <url><loc>https://kindling.joshuamarie.com/reference/safe_sample.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/substitute_dot.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/table_summary.html</loc></url>
+<url><loc>https://kindling.joshuamarie.com/reference/train_nn_impl.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/reference/validate_device.html</loc></url>
 </urlset>
 
