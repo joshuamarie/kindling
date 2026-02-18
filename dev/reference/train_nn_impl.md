@@ -25,6 +25,6 @@ train_nn_impl(
   verbose = FALSE,
   cache_weights = FALSE,
   arch = NULL,
-  tab = FALSE
+  fit_class = "nn_fit"
 )
 ```

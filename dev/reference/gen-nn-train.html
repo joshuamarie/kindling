@@ -114,9 +114,9 @@ When <code>arch = NULL</code>, the model falls back to a plain FFNN (<code>nn_li
 <span><span class="fu">train_nn</span><span class="op">(</span></span>
 <span>  <span class="va">x</span>,</span>
 <span>  <span class="va">y</span>,</span>
+<span>  <span class="va">hidden_neurons</span>,</span>
 <span>  activations <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_activation <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">hidden_neurons</span>,</span>
 <span>  bias <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  arch <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  epochs <span class="op">=</span> <span class="fl">100</span>,</span>
@@ -290,7 +290,6 @@ Default <code>"mse"</code>.</p></dd>
 <span class="r-in"><span>        epochs <span class="op">=</span> <span class="fl">50</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in train_nn_impl(x = x, y = y, hidden_neurons = hidden_neurons,     activations = activations, output_activation = output_activation,     bias = bias, epochs = epochs, batch_size = batch_size, penalty = penalty,     mixture = mixture, learn_rate = learn_rate, optimizer = optimizer,     optimizer_args = optimizer_args, loss = loss, validation_split = validation_split,     device = device, verbose = verbose, cache_weights = cache_weights,     arch = arch, fit_class = "nn_fit"):</span> object 'tab' not found</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>

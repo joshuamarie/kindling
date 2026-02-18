@@ -54,9 +54,9 @@ train_nn(
 train_nn(
   x,
   y,
+  hidden_neurons,
   activations = NULL,
   output_activation = NULL,
-  hidden_neurons,
   bias = TRUE,
   arch = NULL,
   epochs = 100,
@@ -243,6 +243,5 @@ if (torch::torch_is_installed()) {
         epochs = 50
     )
 }
-#> Error in train_nn_impl(x = x, y = y, hidden_neurons = hidden_neurons,     activations = activations, output_activation = output_activation,     bias = bias, epochs = epochs, batch_size = batch_size, penalty = penalty,     mixture = mixture, learn_rate = learn_rate, optimizer = optimizer,     optimizer_args = optimizer_args, loss = loss, validation_split = validation_split,     device = device, verbose = verbose, cache_weights = cache_weights,     arch = arch, fit_class = "nn_fit"): object 'tab' not found
 # }
 ```
