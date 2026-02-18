@@ -37,9 +37,9 @@ train_nn(x, ...)
 \method{train_nn}{data.frame}(
   x,
   y,
+  hidden_neurons,
   activations = NULL,
   output_activation = NULL,
-  hidden_neurons,
   bias = TRUE,
   arch = NULL,
   epochs = 100,
