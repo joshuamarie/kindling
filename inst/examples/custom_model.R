@@ -6,25 +6,32 @@ box::use(
     ]
 )
 
-gaussian = function(alpha)
+rbf_gaussian = function(alpha) {
     torch_exp(-1 * alpha$pow(2))
+}
 
 rbf_layer = nn_module(
     "RBFLayer",
-    initialize = function(in_features, out_features) {
+    initialize = function(in_features, out_features, basis_func = \(alpha) torch_exp(-alpha)) {
         self$in_features = in_features
         self$out_features = out_features
-        self$centres = nn_parameter(torch_randn(out_features, in_features))
-        self$log_sigmas = nn_parameter(torch_zeros(out_features))
-        self$basis_func = gaussian
+        self$centres = nn_parameter(torch_randn(out_features, in_features) * 0.1)
+        self$log_sigma = nn_parameter(torch_zeros(out_features))
+        self$basis_func = basis_func
     },
     
     forward = function(input) {
-        size = c(input$size(1), self$out_features, self$in_features)
-        x = input$unsqueeze(2)$expand(size)
-        c = self$centres$unsqueeze(1)$expand(size)
-        distances = (x - c)$pow(2)$sum(3)$sqrt() / torch_exp(self$log_sigmas)$unsqueeze(1)
-        self$basis_func(distances)
+        batch_size = input$size(1)
+        
+        x = input$unsqueeze(2)
+        c = self$centres$unsqueeze(1)
+        distances = (x - c)$pow(2)$sum(3)
+        
+        # Use log_sigma for numerical stability
+        # beta = 1 / (2 * exp(2 * log_sigma)) = exp(-2 * log_sigma) / 2
+        beta = torch_exp(-2 * self$log_sigma)$unsqueeze(1) / 2
+        
+        self$basis_func(distances * beta)
     }
 )
 
