@@ -46,12 +46,16 @@
 #'         }
 #'     )()
 #'     
-#'     model = train_nn(
+#'     model_nn_ds = train_nn(
 #'         x = iris_cls_dataset,
 #'         hidden_neurons = c(32, 10),
 #'         activations = "relu",
 #'         epochs = 80,
-#'         n_classes = 3 # Iris dataset has only 3 species
+#'         batch_size = 16,
+#'         learn_rate = 0.01,
+#'         n_classes = 3, # Iris dataset has only 3 species
+#'         validation_split = 0.2,
+#'         verbose = TRUE
 #'     )
 #'     
 #'     pred_nn = predict(model_nn_ds, iris_cls_dataset)
