@@ -22,13 +22,43 @@
 #' \donttest{
 #' if (torch::torch_is_installed()) {
 #'     # torch dataset method — labels come from the dataset itself
+#'     iris_cls_dataset = torch::dataset(
+#'         name = "iris_cls_dataset",
+#'         
+#'         initialize = function(data = iris) {
+#'             self$x = torch::torch_tensor(
+#'                 as.matrix(data[, 1:4]),
+#'                 dtype = torch::torch_float32()
+#'             )
+#'             # Species is a factor; convert to integer (1-indexed -> keep as-is for cross_entropy)
+#'             self$y = torch::torch_tensor(
+#'                 as.integer(data$Species),
+#'                 dtype = torch::torch_long()
+#'             )
+#'         },
+#'         
+#'         .getitem = function(i) {
+#'             list(self$x[i, ], self$y[i])
+#'         },
+#'         
+#'         .length = function() {
+#'             self$x$size(1)
+#'         }
+#'     )()
+#'     
 #'     model = train_nn(
-#'         x = my_dataset,
-#'         hidden_neurons = c(128, 64),
+#'         x = iris_cls_dataset,
+#'         hidden_neurons = c(32, 10),
 #'         activations = "relu",
-#'         epochs = 50,
-#'         n_classes = 10
+#'         epochs = 80,
+#'         n_classes = 3 # Iris dataset has only 3 species
 #'     )
+#'     
+#'     pred_nn = predict(model_nn_ds, iris_cls_dataset)
+#'     class_preds = c("Setosa", "Versicolor", "Virginica")[predict(model_nn_ds, iris_cls_dataset)]
+#'     
+#'     # Confusion Matrix
+#'     table(actual = iris$Species, pred = class_preds)
 #' }
 #' }
 #'
@@ -197,6 +227,8 @@ train_nn_impl_dataset =
         list()
     }
 
+    arch_env = if (!is.null(arch)) attr(arch, "env") else parent.frame()
+    
     model_expr = do.call(
         nn_module_generator,
         c(
@@ -208,10 +240,12 @@ train_nn_impl_dataset =
                 output_activation = output_activation,
                 bias = bias
             ),
-            arch_args
+            arch_args,
+            .env = arch_env
         )
     )
-    model = eval(model_expr)()
+    # model = eval(model_expr)()
+    model = rlang::eval_tidy(model_expr)()
     model$to(device = device)
 
     # ---- Dataloaders ----

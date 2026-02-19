@@ -95,6 +95,11 @@ act_funs = function(...) {
     new_vctr(out, class = "activation_spec")
 }
 
+new_act_fn = function(x_expr) {
+    
+    structure(x_expr)
+}
+
 #' Activation Function Arguments Helper
 #' 
 #' @description
