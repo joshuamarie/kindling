@@ -132,7 +132,6 @@
 #'     model = train_nn(
 #'         x = Sepal.Length ~ .,
 #'         data = iris[, 1:4],
-#'         activations = "relu",
 #'         epochs = 50
 #'     )
 #' }
