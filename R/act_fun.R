@@ -81,6 +81,8 @@ act_funs = function(...) {
             } else {
                 parsed$name
             }
+        } else if (is_call(expr) && identical(call_name(expr), "new_act_fn")) {
+            eval_tidy(quo, data = list(new_act_fn = new_act_fn))
         } else {
             cli_abort(c(
                 "Invalid activation specification.",
@@ -93,11 +95,6 @@ act_funs = function(...) {
     })
     
     new_vctr(out, class = "activation_spec")
-}
-
-new_act_fn = function(x_expr) {
-    
-    structure(x_expr)
 }
 
 #' Activation Function Arguments Helper
@@ -303,10 +300,14 @@ parse_activation_spec = function(activations, n_layers) {
         parsed_activation =
             imap(activations, function(elem, i) {
                 
-                if (inherits(elem, "parameterized_activation")) {
+                if (inherits(elem, "custom_activation")) {
+                    list(
+                        name = "<custom>",
+                        param = list(fn = attr(elem, "act_fn"))
+                    )
+                } else if (inherits(elem, "parameterized_activation")) {
                     params = unclass(elem)
                     attr(params, "act_name") = NULL
-                    
                     list(
                         name = attr(elem, "act_name"),
                         param = params
@@ -417,6 +418,16 @@ process_activations = function(activation_spec, prefix = "nnf_") {
     map2(act_names, act_params, function(name, params) {
         if (is.na(name)) {
             NULL
+        } else if (name == "<custom>") {
+            # fn = attr(params, "act_fn")
+            # function(x_expr) call2(fn, x_expr)
+            fn = params$fn
+            local({
+                fn = fn
+                function(x_expr) {
+                    rlang::expr((!!fn)(!!x_expr))
+                }
+            })
         } else {
             fn_name = paste0(prefix, name)
             fn_call = call2("::", sym("torch"), sym(fn_name))

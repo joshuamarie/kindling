@@ -20,6 +20,7 @@ train_nn(x, ...)
   output_activation = NULL,
   bias = TRUE,
   arch = NULL,
+  early_stopping = NULL,
   epochs = 100,
   batch_size = 32,
   penalty = 0,
@@ -43,6 +44,7 @@ train_nn(x, ...)
   output_activation = NULL,
   bias = TRUE,
   arch = NULL,
+  early_stopping = NULL,
   epochs = 100,
   batch_size = 32,
   penalty = 0,
@@ -66,6 +68,7 @@ train_nn(x, ...)
   output_activation = NULL,
   bias = TRUE,
   arch = NULL,
+  early_stopping = NULL,
   epochs = 100,
   batch_size = 32,
   penalty = 0,
@@ -130,6 +133,12 @@ Defaults to \code{NULL} (no activation / linear output).}
 \item{arch}{An \code{\link[=nn_arch]{nn_arch()}} object specifying a custom architecture. Default
 \code{NULL}, which falls back to a standard feed-forward network.}
 
+\item{early_stopping}{An \code{\link[=early_stop]{early_stop()}} object specifying early stopping
+behaviour, or \code{NULL} (default) to disable early stopping. When supplied,
+training halts if the monitored metric does not improve by at least
+\code{min_delta} for \code{patience} consecutive epochs.
+Example: \code{early_stopping = early_stop(patience = 10)}.}
+
 \item{epochs}{Positive integer. Number of full passes over the training data.
 Default \code{100}.}
 
@@ -149,9 +158,11 @@ ridge (L2), \code{1} = pure lasso (L1). Default \code{0}.}
 \item{optimizer_args}{Named list of additional arguments forwarded to the
 optimizer constructor (e.g. \code{list(momentum = 0.9)} for SGD). Default \code{list()}.}
 
-\item{loss}{Character. Loss function used during training. One of \code{"mse"}
-(default), \code{"mae"}, \code{"cross_entropy"}, or \code{"bce"}. For classification tasks
-with a scalar label, \code{"cross_entropy"} is set automatically.}
+\item{loss}{Character or function. Loss function used during training. Built-in
+options: \code{"mse"} (default), \code{"mae"}, \code{"cross_entropy"}, or \code{"bce"}. For
+classification tasks with a scalar label, \code{"cross_entropy"} is set
+automatically. Alternatively, supply a custom function or formula with
+signature \verb{function(input, target)} returning a scalar \code{torch_tensor}.}
 
 \item{validation_split}{Numeric in [0, 1). Proportion of training data held
 out for validation. Default \code{0} (no validation set).}
@@ -198,9 +209,13 @@ The returned \code{"nn_fit"} object is a named list with the following component
 \itemize{
 \item \code{model} — the trained \code{torch::nn_module} object
 \item \code{fitted} — fitted values on the training data (or \code{NULL} for dataset fits)
-\item \code{loss_history} — numeric vector of per-epoch training loss
-\item \code{val_loss_history} — per-epoch validation loss, or \code{NULL} if \code{validation_split = 0}
-\item \code{n_epochs} — number of epochs trained
+\item \code{loss_history} — numeric vector of per-epoch training loss, trimmed to
+actual epochs run (relevant when early stopping is active)
+\item \code{val_loss_history} — per-epoch validation loss, or \code{NULL} if
+\code{validation_split = 0}
+\item \code{n_epochs} — number of epochs actually trained
+\item \code{stopped_epoch} — epoch at which early stopping triggered, or \code{NA} if
+training ran to completion
 \item \code{hidden_neurons}, \code{activations}, \code{output_activation} — architecture spec
 \item \code{penalty}, \code{mixture} — regularization settings
 \item \code{feature_names}, \code{response_name} — variable names (tabular methods only)
@@ -212,21 +227,20 @@ The returned \code{"nn_fit"} object is a named list with the following component
 \item \code{arch} — the \code{nn_arch} object used, or \code{NULL}
 }
 }
-\section{Matrix type}{
+\section{Matrix method}{
 
-When \code{x} is supplied as a raw numeric matrix, it directly uses the base implementation
-\code{train_nn_impl} directly. In this case, no preprocessing happens.
+When \code{x} is supplied as a raw numeric matrix, no preprocessing is applied.
+Data is passed directly to the shared \code{train_nn_impl} core.
 }
 
-\section{Tabular data (\code{data.frame} method)}{
+\section{Data frame method}{
 
 When \code{x} is a data frame, \code{y} can be either a vector / factor / matrix of
-outcomes (standard supervised learning), or a formula of the form
-\code{outcome ~ predictors} evaluated against \code{x}. In both cases preprocessing
-is handled by \code{hardhat::mold()}.
+outcomes, or a formula of the form \code{outcome ~ predictors} evaluated against
+\code{x}. Preprocessing is handled by \code{hardhat::mold()}.
 }
 
-\section{Formula interface}{
+\section{Formula method}{
 
 When \code{x} is a formula, \code{data} must be supplied as the data frame against
 which the formula is evaluated. Preprocessing is handled by \code{hardhat::mold()}.
@@ -286,11 +300,22 @@ if (torch::torch_is_installed()) {
         epochs = 50
     )
 
-    # No hidden layers — linear model (hidden_neurons omitted)
+    # No hidden layers — linear model
     model = train_nn(
         x = Sepal.Length ~ .,
         data = iris[, 1:4],
         epochs = 50
+    )
+
+    # With early stopping
+    model = train_nn(
+        x = Sepal.Length ~ .,
+        data = iris[, 1:4],
+        hidden_neurons = c(64, 32),
+        activations = "relu",
+        epochs = 200,
+        validation_split = 0.2,
+        early_stopping = early_stop(patience = 10)
     )
 }
 }
@@ -344,5 +369,5 @@ if (torch::torch_is_installed()) {
 
 }
 \seealso{
-\code{\link[=predict.nn_fit]{predict.nn_fit()}}, \code{\link[=nn_arch]{nn_arch()}}, \code{\link[=act_funs]{act_funs()}}
+\code{\link[=predict.nn_fit]{predict.nn_fit()}}, \code{\link[=nn_arch]{nn_arch()}}, \code{\link[=act_funs]{act_funs()}}, \code{\link[=early_stop]{early_stop()}}
 }
