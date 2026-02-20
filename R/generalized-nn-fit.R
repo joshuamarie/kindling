@@ -27,7 +27,9 @@
 #'     `dataset` (labels come from the dataset itself).
 #' @param data A data frame. Required when `x` is a formula.
 #' @param hidden_neurons Integer vector specifying the number of neurons in each
-#'   hidden layer, e.g. `c(128, 64)` for two hidden layers.
+#'   hidden layer, e.g. `c(128, 64)` for two hidden layers. When `NULL` or missing,
+#'   no hidden layers are used and the model reduces to a single linear mapping
+#'   from inputs to outputs.
 #' @param activations Activation function specification(s) for the hidden layers.
 #'   See [act_funs()] for supported values. Recycled if a single value is given.
 #' @param output_activation Optional activation function for the output layer.
@@ -58,10 +60,6 @@
 #'   intervals during training. Default `FALSE`.
 #' @param cache_weights Logical. If `TRUE`, stores a copy of the trained weight
 #'   matrices in the returned object under `$cached_weights`. Default `FALSE`.
-#' @param hidden_neurons Integer vector specifying the number of neurons in each
-#'   hidden layer, e.g. `c(128, 64)` for two hidden layers. When `NULL` or missing,
-#'   no hidden layers are used and the model reduces to a single linear mapping
-#'   from inputs to outputs.
 #' @param ... Additional arguments passed to specific methods.
 #'
 #' @return An object of class `"nn_fit"`, or one of its subclasses:
@@ -367,7 +365,7 @@ train_nn.formula =
 train_nn.default = function(x, ...) {
     cli::cli_abort(c(
         "No {.fn train_nn} method for class {.cls {class(x)}}.",
-        i = "Supported classes: {.cls matrix}, {.cls data.frame}, {.cls formula}."
+        i = "Supported classes: {.cls matrix}, {.cls data.frame}, {.cls formula}, {.cls dataset}."
     ))
 }
 
@@ -465,7 +463,7 @@ train_nn_impl =
     }
     
     if (missing(hidden_neurons) || is.null(hidden_neurons) || length(hidden_neurons) == 0L) {
-        hd_neurons = integer(0) 
+        hidden_neurons = integer(0L)
     }
         
     # ---- Device ----
@@ -765,6 +763,10 @@ predict.nn_fit = function(object, newdata = NULL, new_data = NULL, type = "respo
     if (!requireNamespace("torch", quietly = TRUE)) {
         cli::cli_abort("Package {.pkg torch} is required but not installed.")
     }
+
+    if (!type %in% c("response", "prob")) {
+        cli::cli_abort("{.arg type} must be one of {.val response} or {.val prob}.")
+    }
     
     if (!is.null(new_data) && is.null(newdata)) newdata = new_data
     
@@ -780,6 +782,9 @@ predict.nn_fit = function(object, newdata = NULL, new_data = NULL, type = "respo
     if (is.null(newdata)) {
         if (type == "prob" && object$is_classification) {
             cli::cli_abort("Cannot compute probabilities without {.arg newdata}. Use fitted values instead.")
+        }
+        if (type == "prob" && !object$is_classification) {
+            cli::cli_abort("{.arg type = 'prob'} is only available for classification models.")
         }
         return(object$fitted)
     }
@@ -809,6 +814,9 @@ predict.nn_fit = function(object, newdata = NULL, new_data = NULL, type = "respo
             return(predictions)
         }
     } else {
+        if (type == "prob") {
+            cli::cli_abort("{.arg type = 'prob'} is only available for classification models.")
+        }
         predictions = as.matrix(pred_tensor$cpu())
         if (object$no_y == 1L) predictions = as.vector(predictions)
         return(predictions)

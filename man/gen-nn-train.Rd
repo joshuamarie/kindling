@@ -86,7 +86,7 @@ train_nn(x, ...)
 \method{train_nn}{dataset}(
   x,
   y = NULL,
-  hidden_neurons,
+  hidden_neurons = NULL,
   activations = NULL,
   output_activation = NULL,
   bias = TRUE,
@@ -108,11 +108,27 @@ train_nn(x, ...)
 )
 }
 \arguments{
-\item{x}{A torch dataset object.}
+\item{x}{Dispatch is based on its current class:
+\itemize{
+\item \code{matrix}: used directly, no preprocessing applied.
+\item \code{data.frame}: preprocessed via \code{hardhat::mold()}. \code{y} may be a vector /
+factor / matrix of outcomes, or a formula describing the outcome–predictor
+relationship within \code{x}.
+\item \code{formula}: combined with \code{data} and preprocessed via \code{hardhat::mold()}.
+\item \code{dataset}: a \code{torch} dataset object; batched via \code{torch::dataloader()}.
+}}
 
 \item{...}{Additional arguments passed to specific methods.}
 
-\item{y}{Ignored. Labels come from the dataset itself.}
+\item{y}{Outcome data. Interpretation depends on the method:
+\itemize{
+\item For the \code{matrix} and \code{data.frame} methods: a numeric vector, factor, or
+matrix of outcomes.
+\item For the \code{data.frame} method only: alternatively a formula of the form
+\code{outcome ~ predictors}, evaluated against \code{x}.
+\item Ignored when \code{x} is a formula (outcome is taken from the formula) or a
+\code{dataset} (labels come from the dataset itself).
+}}
 
 \item{hidden_neurons}{Integer vector specifying the number of neurons in each
 hidden layer, e.g. \code{c(128, 64)} for two hidden layers. When \code{NULL} or missing,
