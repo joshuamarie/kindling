@@ -69,8 +69,7 @@ nn_arch = function(
         before_output_transform = NULL,
         after_output_transform = NULL,
         last_layer_args = list(),
-        input_transform = NULL,
-        use_namespace = TRUE
+        input_transform = NULL
 ) {
     struc = structure(
         list(
