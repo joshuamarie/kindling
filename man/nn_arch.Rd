@@ -43,13 +43,12 @@ layer. Default \code{NULL}.}
 \item{last_layer_args}{Named list or formula. Extra arguments for the output layer only.
 Default \code{list()}.}
 
-\item{input_transform}{Formula or function. Transforms the input tensor before it enters
-the model. Applied to all tensors (train, validation, inference). Useful for architectures
-that require a specific input shape, e.g. RNNs needing a sequence dimension:
-\code{~ .$unsqueeze(2)}. Default \code{NULL}.}
-
-\item{use_namespace}{Logical or character. Controls torch namespace prefixing.
-Default \code{TRUE}.}
+\item{input_transform}{Formula or function. Transforms the entire input tensor
+before training begins. Applied once to the full dataset tensor, not per-batch.
+Transforms must therefore be independent of batch size. Safe examples:
+\code{~ .$unsqueeze(2)} (RNN sequence dim), \code{~ .$unsqueeze(1)} (CNN channel dim).
+Avoid transforms that reshape based on \code{.$size(1)} as this will reflect the
+full dataset size, not the mini-batch size.}
 }
 \value{
 An object of class \code{"nn_arch"}, a named list of \code{nn_module_generator()} arguments.

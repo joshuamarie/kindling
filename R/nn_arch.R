@@ -20,12 +20,12 @@
 #'   layer. Default `NULL`.
 #' @param last_layer_args Named list or formula. Extra arguments for the output layer only.
 #'   Default `list()`.
-#' @param input_transform Formula or function. Transforms the input tensor before it enters
-#'   the model. Applied to all tensors (train, validation, inference). Useful for architectures
-#'   that require a specific input shape, e.g. RNNs needing a sequence dimension:
-#'   `~ .$unsqueeze(2)`. Default `NULL`.
-#' @param use_namespace Logical or character. Controls torch namespace prefixing.
-#'   Default `TRUE`.
+#' @param input_transform Formula or function. Transforms the entire input tensor
+#'   before training begins. Applied once to the full dataset tensor, not per-batch.
+#'   Transforms must therefore be independent of batch size. Safe examples:
+#'   `~ .$unsqueeze(2)` (RNN sequence dim), `~ .$unsqueeze(1)` (CNN channel dim).
+#'   Avoid transforms that reshape based on `.$size(1)` as this will reflect the
+#'   full dataset size, not the mini-batch size.
 #'
 #' @return An object of class `"nn_arch"`, a named list of `nn_module_generator()` arguments.
 #'
@@ -83,8 +83,7 @@ nn_arch = function(
             before_output_transform = before_output_transform,
             after_output_transform = after_output_transform,
             last_layer_args = last_layer_args,
-            input_transform = input_transform,
-            use_namespace = use_namespace
+            input_transform = input_transform
         ),
         class = "nn_arch"
     )
