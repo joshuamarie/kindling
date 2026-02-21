@@ -371,7 +371,7 @@ train_nn.formula =
 train_nn.default = function(x, ...) {
     cli::cli_abort(c(
         "No {.fn train_nn} method for class {.cls {class(x)}}.",
-        i = "Supported classes: {.cls matrix}, {.cls data.frame}, {.cls formula}."
+        i = "Supported classes: {.cls matrix}, {.cls data.frame}, {.cls formula}, {.cls dataset}."
     ))
 }
 
@@ -474,7 +474,7 @@ train_nn_impl =
     }
 
     if (missing(hidden_neurons) || is.null(hidden_neurons) || length(hidden_neurons) == 0L) {
-        hidden_neurons = integer(0)
+        hidden_neurons = integer(0L)
     }
 
     # ---- Device ----
@@ -861,6 +861,10 @@ predict.nn_fit =
         cli::cli_abort("Package {.pkg torch} is required but not installed.")
     }
 
+    if (!type %in% c("response", "prob")) {
+        cli::cli_abort("{.arg type} must be one of {.val response} or {.val prob}.")
+    }
+    
     if (!is.null(new_data) && is.null(newdata)) newdata = new_data
 
     device = object$device
@@ -873,6 +877,9 @@ predict.nn_fit =
     if (is.null(newdata)) {
         if (type == "prob" && object$is_classification) {
             cli::cli_abort("Cannot compute probabilities without {.arg newdata}. Use fitted values instead.")
+        }
+        if (type == "prob" && !object$is_classification) {
+            cli::cli_abort("{.arg type = 'prob'} is only available for classification models.")
         }
         return(object$fitted)
     }
@@ -898,6 +905,9 @@ predict.nn_fit =
             labels = object$y_levels
         )
     } else {
+        if (type == "prob") {
+            cli::cli_abort("{.arg type = 'prob'} is only available for classification models.")
+        }
         predictions = as.matrix(pred_tensor$cpu())
         if (object$no_y == 1L) predictions = as.vector(predictions)
     }

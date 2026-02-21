@@ -1,5 +1,3 @@
-#' @param x A torch dataset object.
-#' @param y Ignored. Labels come from the dataset itself.
 #' @param n_classes Positive integer. Number of output classes. Required when
 #'   `x` is a `dataset` with scalar (classification) labels; ignored otherwise.
 #'
@@ -72,7 +70,7 @@ train_nn.dataset =
     function(
         x,
         y = NULL,
-        hidden_neurons,
+        hidden_neurons = NULL,
         activations = NULL,
         output_activation = NULL,
         bias = TRUE,
@@ -190,6 +188,10 @@ train_nn_impl_dataset =
         fit_class = "nn_fit_ds"
     ) 
 {
+    if (missing(hidden_neurons) || is.null(hidden_neurons) || length(hidden_neurons) == 0L) {
+        hidden_neurons = integer(0L)
+    }
+
     # ---- Device ----
     if (is.null(device)) {
         device = get_default_device()
@@ -385,15 +387,7 @@ train_nn_impl_dataset =
 }
 
 
-#' Predict method for nn_fit_ds objects
-#'
-#' @param object An object of class `"nn_fit_ds"`.
-#' @param newdata Dataset or matrix. New data for predictions.
-#' @param new_data Alternative to `newdata` (hardhat-style).
-#' @param type Character. `"response"` (default) or `"prob"` (classification only).
-#' @param ... Currently unused.
-#'
-#' @return Numeric vector/matrix (regression) or factor / probability matrix (classification).
+#' Predict method for dataset-trained neural networks
 #'
 #' @rdname gen-nn-predict
 #' @keywords internal
@@ -408,6 +402,14 @@ predict.nn_fit_ds =
     ) 
 {
     if (!is.null(new_data) && is.null(newdata)) newdata = new_data
+
+    if (!type %in% c("response", "prob")) {
+        cli::cli_abort("{.arg type} must be one of {.val response} or {.val prob}.")
+    }
+
+    if (!object$is_classification && type == "prob") {
+        cli::cli_abort("{.arg type = 'prob'} is only available for classification models.")
+    }
 
     if (is.null(newdata)) {
         cli::cli_abort("Cannot compute fitted values for dataset fits. Provide {.arg newdata}.")
