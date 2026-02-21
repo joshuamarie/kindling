@@ -63,13 +63,13 @@ if (torch::torch_is_installed()) {
     # GRU architecture spec
     gru_arch = nn_arch(
         nn_name = "GRU",
-        nn_layer = "nn_gru",
+        nn_layer = "torch::nn_gru",
         layer_arg_fn = ~ if (.is_output) {
             list(.in, .out)
         } else {
             list(input_size = .in, hidden_size = .out, batch_first = TRUE)
         },
-        out_nn_layer = "nn_linear",
+        out_nn_layer = "torch::nn_linear",
         forward_extract = ~ .[[1]],
         before_output_transform = ~ .[, .$size(2), ],
         input_transform = ~ .$unsqueeze(2)

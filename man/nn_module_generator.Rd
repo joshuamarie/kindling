@@ -21,7 +21,6 @@ nn_module_generator(
   output_activation = NULL,
   bias = TRUE,
   eval = FALSE,
-  use_namespace = TRUE,
   .env = parent.frame(),
   ...
 )
