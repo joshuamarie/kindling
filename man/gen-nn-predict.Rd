@@ -55,13 +55,10 @@ Generate predictions from an \code{"nn_fit"} object produced by \code{\link[=tra
 
 Three S3 methods are registered:
 \itemize{
-\item \code{predict.nn_fit()} — base method for \code{matrix}-trained models; handles raw
-numeric input directly.
-\item \code{predict.nn_fit_tab()} — extends the base method for tabular (\code{data.frame} /
-\code{formula}) fits; runs new data through \code{hardhat::forge()} before predicting.
-\item \code{predict.nn_fit_ds()} — extends the base method for torch \code{dataset} fits;
-accepts either a \code{dataset} object (batched prediction) or a plain matrix /
-data frame.
+\item \code{predict.nn_fit()} — base method for \code{matrix}-trained models.
+\item \code{predict.nn_fit_tab()} — extends the base method for tabular fits; runs new
+data through \code{hardhat::forge()} before predicting.
+\item \code{predict.nn_fit_ds()} — extends the base method for torch \code{dataset} fits.
 }
 }
 \seealso{

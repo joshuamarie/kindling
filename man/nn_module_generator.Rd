@@ -21,7 +21,6 @@ nn_module_generator(
   output_activation = NULL,
   bias = TRUE,
   eval = FALSE,
-  use_namespace = TRUE,
   .env = parent.frame(),
   ...
 )
@@ -173,17 +172,6 @@ so custom layer argument functions should handle this parameter appropriately.}
 If \code{TRUE}, returns an instantiated \code{nn_module} class that can be called directly
 (e.g., \code{model()}). If \code{FALSE} (default), returns the unevaluated language expression
 that can be inspected or evaluated later with \code{eval()}. Default is \code{FALSE}.}
-
-\item{use_namespace}{Logical or character. Controls how layer functions are namespaced in
-the generated code:
-\itemize{
-\item \code{TRUE} (default): Functions are namespaced to \code{{torch}} (e.g., \code{torch::nn_linear})
-\item \code{FALSE}: No namespace prefix is added (functions used as-is from current environment)
-\item Character string: Custom namespace (e.g., \code{"mypackage"} produces \code{mypackage::my_layer})
-}
-
-When using custom layers from your environment, set to \code{FALSE} to avoid forcing
-torch namespace resolution.}
 
 \item{.env}{Default is \code{\link[=parent.frame]{parent.frame()}}. The environment in which the generated expression is to be evaluated}
 

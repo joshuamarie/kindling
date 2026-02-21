@@ -11,6 +11,8 @@ train_nn_impl(
   activations = NULL,
   output_activation = NULL,
   bias = TRUE,
+  arch = NULL,
+  early_stopping = NULL,
   epochs = 100,
   batch_size = 32,
   penalty = 0,
@@ -23,7 +25,6 @@ train_nn_impl(
   device = NULL,
   verbose = FALSE,
   cache_weights = FALSE,
-  arch = NULL,
   fit_class = "nn_fit"
 )
 }

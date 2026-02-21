@@ -20,12 +20,12 @@
 #'   layer. Default `NULL`.
 #' @param last_layer_args Named list or formula. Extra arguments for the output layer only.
 #'   Default `list()`.
-#' @param input_transform Formula or function. Transforms the input tensor before it enters
-#'   the model. Applied to all tensors (train, validation, inference). Useful for architectures
-#'   that require a specific input shape, e.g. RNNs needing a sequence dimension:
-#'   `~ .$unsqueeze(2)`. Default `NULL`.
-#' @param use_namespace Logical or character. Controls torch namespace prefixing.
-#'   Default `TRUE`.
+#' @param input_transform Formula or function. Transforms the entire input tensor
+#'   before training begins. Applied once to the full dataset tensor, not per-batch.
+#'   Transforms must therefore be independent of batch size. Safe examples:
+#'   `~ .$unsqueeze(2)` (RNN sequence dim), `~ .$unsqueeze(1)` (CNN channel dim).
+#'   Avoid transforms that reshape based on `.$size(1)` as this will reflect the
+#'   full dataset size, not the mini-batch size.
 #'
 #' @return An object of class `"nn_arch"`, a named list of `nn_module_generator()` arguments.
 #'
@@ -35,13 +35,13 @@
 #'     # GRU architecture spec
 #'     gru_arch = nn_arch(
 #'         nn_name = "GRU",
-#'         nn_layer = "nn_gru",
+#'         nn_layer = "torch::nn_gru",
 #'         layer_arg_fn = ~ if (.is_output) {
 #'             list(.in, .out)
 #'         } else {
 #'             list(input_size = .in, hidden_size = .out, batch_first = TRUE)
 #'         },
-#'         out_nn_layer = "nn_linear",
+#'         out_nn_layer = "torch::nn_linear",
 #'         forward_extract = ~ .[[1]],
 #'         before_output_transform = ~ .[, .$size(2), ],
 #'         input_transform = ~ .$unsqueeze(2)
@@ -69,8 +69,7 @@ nn_arch = function(
         before_output_transform = NULL,
         after_output_transform = NULL,
         last_layer_args = list(),
-        input_transform = NULL,
-        use_namespace = TRUE
+        input_transform = NULL
 ) {
     struc = structure(
         list(
@@ -83,8 +82,7 @@ nn_arch = function(
             before_output_transform = before_output_transform,
             after_output_transform = after_output_transform,
             last_layer_args = last_layer_args,
-            input_transform = input_transform,
-            use_namespace = use_namespace
+            input_transform = input_transform
         ),
         class = "nn_arch"
     )
