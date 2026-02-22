@@ -59,7 +59,8 @@
 #' }
 #'
 #' @export
-nn_arch = function(
+nn_arch = 
+    function(
         nn_name = "nnModule",
         nn_layer = NULL,
         out_nn_layer = NULL,
@@ -70,8 +71,24 @@ nn_arch = function(
         after_output_transform = NULL,
         last_layer_args = list(),
         input_transform = NULL
-) {
-    struc = structure(
+    ) {
+    
+    .check_nn_args(nn_layer, is.character, "nn_layer", "must be a character string")
+    .check_nn_args(out_nn_layer, is.character, "out_nn_layer", "must be a character string")
+    .check_nn_args(layer_arg_fn, is_fn_or_formula, "layer_arg_fn", "must be a function or formula")
+    .check_nn_args(forward_extract, is_fn_or_formula, "forward_extract", "must be a function or formula")
+    .check_nn_args(before_output_transform, is_fn_or_formula, "before_output_transform", "must be a function or formula")
+    .check_nn_args(after_output_transform, is_fn_or_formula, "after_output_transform", "must be a function or formula")
+    .check_nn_args(input_transform, is_fn_or_formula, "input_transform", "must be a function or formula")
+    
+    if (!rlang::is_list(nn_layer_args)) {
+        cli::cli_abort("{.arg `nn_layer_args`} must be a list.")
+    }
+    if (!rlang::is_list(last_layer_args) && !rlang::is_formula(last_layer_args)) {
+        cli::cli_abort("{.arg `last_layer_args`} must be a list or formula.")
+    }
+    
+    struc = vctrs::new_vctr(
         list(
             nn_name = nn_name,
             nn_layer = nn_layer,
@@ -105,8 +122,17 @@ print.nn_arch = function(x, ...) {
         "*" = "Name:            {x$nn_name}",
         "*" = "Layer:           {x$nn_layer %||% 'nn_linear (default)'}",
         "*" = "Out layer:       {x$out_nn_layer %||% 'same as nn_layer'}",
-        "*" = "Input transform: {if (is.null(x$input_transform)) 'none' else 'yes'}",
-        "*" = "Namespace:       {x$use_namespace}"
+        "*" = "Input transform: {if (is.null(x$input_transform)) 'none' else 'yes'}"
     ))
     invisible(x)
+}
+
+.check_nn_args = function(x, pred, arg, msg) {
+    if (!is.null(x) && !pred(x)) {
+        cli::cli_abort("{.arg {arg}} {msg}.")
+    }
+}
+
+is_fn_or_formula = function(x) {
+    rlang::is_function(x) || rlang::is_formula(x)
 }

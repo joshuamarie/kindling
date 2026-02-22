@@ -19,17 +19,21 @@ early_stop =
     ) 
 {
     monitor = rlang::arg_match(monitor, c("val_loss", "train_loss"))
+    patience = vctrs::vec_cast(patience, integer())
     
-    if (!is.numeric(patience) || patience < 1L) {
-        cli::cli_abort("{.arg patience} must be a positive integer.")
+    if (length(patience) != 1L || patience < 1L) {
+        cli::cli_abort("{.arg patience} must be a single positive integer.")
     }
-    if (!is.numeric(min_delta) || min_delta < 0) {
-        cli::cli_abort("{.arg min_delta} must be non-negative.")
+    if (!vctrs::vec_is(min_delta, double()) || length(min_delta) != 1L || min_delta < 0) {
+        cli::cli_abort("{.arg min_delta} must be a single non-negative number.")
+    }
+    if (!vctrs::vec_is(restore_best_weights, logical()) || length(restore_best_weights) != 1L) {
+        cli::cli_abort("{.arg restore_best_weights} must be a single logical value.")
     }
     
-    structure(
+    vctrs::new_vctr(
         list(
-            patience = as.integer(patience),
+            patience = patience,
             min_delta = min_delta,
             restore_best_weights = restore_best_weights,
             monitor = monitor
