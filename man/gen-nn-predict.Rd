@@ -14,19 +14,15 @@
 \method{predict}{nn_fit_ds}(object, newdata = NULL, new_data = NULL, type = "response", ...)
 }
 \arguments{
-\item{object}{A fitted model object returned by \code{\link[=train_nn]{train_nn()}}. For
-\code{predict.nn_fit_ds()}, this must be of class \code{"nn_fit_ds"}.}
+\item{object}{A fitted model object returned by \code{\link[=train_nn]{train_nn()}}.}
 
 \item{newdata}{New predictor data. Accepted forms depend on the method:
 \itemize{
 \item \code{predict.nn_fit()}: a numeric \code{matrix} or coercible object.
 \item \code{predict.nn_fit_tab()}: a \code{data.frame} with the same columns used during
 training; preprocessing is applied automatically via \code{hardhat::forge()}.
-\item \code{predict.nn_fit_ds()}: a \code{torch} \code{dataset} object or a numeric matrix /
-data frame. When \code{NULL}, an error is raised (fitted values are not cached
-for dataset fits).
-If \code{NULL} for \code{predict.nn_fit()} / \code{predict.nn_fit_tab()}, the cached fitted
-values from training are returned (not available for \code{type = "prob"}).
+If \code{NULL}, the cached fitted values from training are returned (not
+available for \code{type = "prob"}).
 }}
 
 \item{new_data}{Alternative spelling of \code{newdata} following the \code{hardhat}
@@ -34,8 +30,8 @@ convention. Ignored when \code{newdata} is supplied.}
 
 \item{type}{Character. Output type:
 \itemize{
-\item \code{"response"} (default): predicted class labels (factor) for classification,
-or a numeric vector / matrix for regression.
+\item \code{"response"} (default): predicted class labels (factor) for
+classification, or a numeric vector / matrix for regression.
 \item \code{"prob"}: a numeric matrix of class probabilities (classification only).
 }}
 
