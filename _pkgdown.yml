@@ -74,6 +74,11 @@ reference:
       - kindling-basemodels
       # - ffnn
       # - rnn
+      
+  - subtitle: Utility Functions
+    contents:
+      - nn_arch
+      - early_stop
 
   - title: Code Generators
     desc: Generate `torch::nn_module()` code (Lowest Level)
@@ -111,6 +116,7 @@ reference:
     contents:
     - act_funs
     - args
+    - new_act_fn
     - grid_depth
     - table_summary
     - ordinal_gen

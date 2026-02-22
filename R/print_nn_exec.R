@@ -3,7 +3,9 @@
 concat = function(x) {
     if (is.null(x)) return("No act function applied")
     
-    if (inherits(x, "parameterized_activation")) {
+    if (inherits(x, "custom_activation")) {
+        attr(x, "act_name") 
+    } else if (inherits(x, "parameterized_activation")) {
         fname = attr(x, "act_name")
         params = paste(
             names(x),

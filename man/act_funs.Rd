@@ -13,8 +13,8 @@ act_funs(...)
 \item Character strings (simple): \code{"relu"}, \code{"tanh"}
 \item Character strings (with params): \code{"softshrink(lambda = 0.1)"}, \code{"rrelu(lower = 1/5, upper = 1/4)"}
 \item Named with parameters: \code{softmax = args(dim = 2L)}
-\item Bracket syntax (named): \code{softshrink[lambd = 0.2]}, \code{rrelu[lower = 1/5, upper = 1/4]}
-\item Bracket syntax (unnamed): \code{softshrink[0.5]}, \code{elu[0.5]}
+\item Indexed syntax (named): \code{softshrink[lambd = 0.2]}, \code{rrelu[lower = 1/5, upper = 1/4]}
+\item Indexed syntax (unnamed): \code{softshrink[0.5]}, \code{elu[0.5]}
 }}
 }
 \value{

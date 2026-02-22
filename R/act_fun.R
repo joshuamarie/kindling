@@ -10,8 +10,8 @@
 #' - Character strings (simple): `"relu"`, `"tanh"`
 #' - Character strings (with params): `"softshrink(lambda = 0.1)"`, `"rrelu(lower = 1/5, upper = 1/4)"`
 #' - Named with parameters: `softmax = args(dim = 2L)`
-#' - Bracket syntax (named): `softshrink[lambd = 0.2]`, `rrelu[lower = 1/5, upper = 1/4]`
-#' - Bracket syntax (unnamed): `softshrink[0.5]`, `elu[0.5]`
+#' - Indexed syntax (named): `softshrink[lambd = 0.2]`, `rrelu[lower = 1/5, upper = 1/4]`
+#' - Indexed syntax (unnamed): `softshrink[0.5]`, `elu[0.5]`
 #'
 #' @return A `vctrs` vector with class "activation_spec" containing validated
 #' activation specifications.
@@ -28,7 +28,8 @@ act_funs = function(...) {
     out = purrr::imap(dots, function(quo, name) {
         expr = quo_get_expr(quo)
         
-        # Indexed syntax (softshrink[lambd = 0.2] or softshrink[0.5])
+        # ---- Indexed syntax ----
+        # Ex. softshrink[lambd = 0.2] or softshrink[0.5]
         if (is_call(expr) && identical(call_name(expr), "[")) {
             calls = as.list(expr)
             act_name = as_string(calls[[2]])
@@ -43,7 +44,9 @@ act_funs = function(...) {
             structure(params, act_name = act_name, class = "parameterized_activation")
             
         } else if (!is.null(name) && name != "") {
-            # Named parameter (softshrink = args(lambd = 0.5))
+            # ---- Named parameter ---- 
+            # This is a superseded behavior after v0.3.x, in favor of indexed syntax
+            # Ex. softshrink = args(lambd = 0.5)
             validate_activation(name, prefix = "nnf_")
             extract_call = eval_tidy(quo, data = mask)
             
@@ -60,12 +63,15 @@ act_funs = function(...) {
                 ), class = "activation_syntax_error")
             }
         } else if (is.symbol(expr)) {
-            # Bare symbol (relu, tanh)
+            # ---- Bare symbol ----
+            # Ex. relu, tanh
             act_name = as_string(expr)
             validate_activation(act_name, prefix = "nnf_")
             act_name
         } else if (is.character(expr)) {
-            # Character string ("relu" or "softshrink(lambd = 0.1)")
+            # ---- Character string ----
+            # Note: Stringly typed expression is a bad practice, but tolerable
+            # Ex. "relu" or "softshrink(lambd = 0.1)"
             parsed = parse_activation_string(expr)
             validate_activation(parsed$name, prefix = "nnf_")
             
@@ -75,6 +81,8 @@ act_funs = function(...) {
             } else {
                 parsed$name
             }
+        } else if (is_call(expr) && identical(call_name(expr), "new_act_fn")) {
+            eval_tidy(quo, data = list(new_act_fn = new_act_fn))
         } else {
             cli_abort(c(
                 "Invalid activation specification.",
@@ -94,7 +102,7 @@ act_funs = function(...) {
 #' @description
 #' `r lifecycle::badge("superseded")`
 #' 
-#' This is superseded in v0.3.0 in favour of `<act_fn[param = 0]>` type. 
+#' This is superseded in v0.3.0 in favour of indexed syntax, e.g. `<act_fn[param = 0]>` type. 
 #' Type-safe helper to specify parameters for activation functions.
 #' All parameters must be named and match the formal arguments of the
 #' corresponding `{torch}` activation function.
@@ -106,6 +114,12 @@ act_funs = function(...) {
 #'
 #' @export
 args = function(...) {
+    lifecycle::deprecate_soft(
+        when = "0.3.0",
+        what = "args()",
+        details = "Use indexed syntax for parametric activation functions, e.g. `<softplus[beta = 0.5]>`."
+    )
+    
     params = list(...)
     
     if (length(params) == 0) {
@@ -286,10 +300,14 @@ parse_activation_spec = function(activations, n_layers) {
         parsed_activation =
             imap(activations, function(elem, i) {
                 
-                if (inherits(elem, "parameterized_activation")) {
+                if (inherits(elem, "custom_activation")) {
+                    list(
+                        name = "<custom>",
+                        param = list(fn = attr(elem, "act_fn"))
+                    )
+                } else if (inherits(elem, "parameterized_activation")) {
                     params = unclass(elem)
                     attr(params, "act_name") = NULL
-                    
                     list(
                         name = attr(elem, "act_name"),
                         param = params
@@ -400,6 +418,16 @@ process_activations = function(activation_spec, prefix = "nnf_") {
     map2(act_names, act_params, function(name, params) {
         if (is.na(name)) {
             NULL
+        } else if (name == "<custom>") {
+            # fn = attr(params, "act_fn")
+            # function(x_expr) call2(fn, x_expr)
+            fn = params$fn
+            local({
+                fn = fn
+                function(x_expr) {
+                    rlang::expr((!!fn)(!!x_expr))
+                }
+            })
         } else {
             fn_name = paste0(prefix, name)
             fn_call = call2("::", sym("torch"), sym(fn_name))
