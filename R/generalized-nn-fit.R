@@ -485,7 +485,11 @@ train_nn_impl =
 
     # ---- Input transform ----
     input_fn = if (!is.null(arch) && !is.null(arch$input_transform)) {
-        rlang::as_function(arch$input_transform)
+        if (rlang::is_function(arch$input_transform)) {
+            arch$input_transform
+        } else {
+            rlang::as_function(arch$input_transform)
+        }
     } else {
         identity
     }
@@ -584,25 +588,28 @@ train_nn_impl =
     }
 
     # ---- Tensors ----
-    .make_tensor = function(mat, is_y = FALSE) {
+    make_tensor = function(mat, is_y = FALSE) {
         t = torch::torch_tensor(
             mat,
             device = device,
-            dtype = if (is_y && is_classification) torch::torch_long()
-                    else torch::torch_float32()
+            dtype = if (is_y && is_classification) {
+                torch::torch_long()
+            } else {
+                torch::torch_float32()
+            }
         )
         if (!is_y) input_fn(t) else t
     }
 
-    x_train_t = .make_tensor(x_train)
-    y_train_t = .make_tensor(
+    x_train_t = make_tensor(x_train)
+    y_train_t = make_tensor(
         if (is_classification || is.matrix(y_train)) y_train else matrix(y_train, ncol = 1L),
         is_y = TRUE
     )
 
     if (!is.null(x_val)) {
-        x_val_t = .make_tensor(x_val)
-        y_val_t = .make_tensor(
+        x_val_t = make_tensor(x_val)
+        y_val_t = make_tensor(
             if (is_classification || is.matrix(y_val)) y_val else matrix(y_val, ncol = 1L),
             is_y = TRUE
         )
@@ -752,7 +759,7 @@ train_nn_impl =
 
     # ---- Fitted values ----
     model$eval()
-    x_full_t = .make_tensor(x)
+    x_full_t = make_tensor(x)
     fitted_tensor = torch::with_no_grad(model(x_full_t))
 
     if (is_classification) {
@@ -808,9 +815,6 @@ train_nn_impl =
         class = unique(c(fit_class, "nn_fit"))
     )
 }
-
-
-# ---- Predict methods ----
 
 #' Predict from a trained neural network
 #'
@@ -869,7 +873,11 @@ predict.nn_fit =
 
     device = object$device
     input_fn = if (!is.null(object$arch) && !is.null(object$arch$input_transform)) {
-        rlang::as_function(object$arch$input_transform)
+        if (rlang::is_function(object$arch$input_transform)) {
+            object$arch$input_transform
+        } else {
+            rlang::as_function(object$arch$input_transform)
+        }
     } else {
         identity
     }
