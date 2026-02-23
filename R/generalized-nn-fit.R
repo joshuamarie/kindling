@@ -689,9 +689,12 @@ train_nn_impl =
 
         # ---- Verbose ----
         if (verbose && (epoch %% max(1L, epochs %/% 10L) == 0L || epoch == epochs)) {
-            msg = sprintf("Epoch %d/%d - Loss: %.4f", epoch, epochs, loss_history[epoch])
+            msg = glue::glue(
+                "Epoch {epoch}/{epochs} - Loss: {round(loss_history[epoch], 4)}"
+            )
             if (!is.null(val_loss_history))
-                msg = paste0(msg, sprintf(" - Val Loss: %.4f", val_loss_history[epoch]))
+                msg = glue::glue("{msg} - Val Loss: {round(val_loss_history[epoch], 4)}")
+            
             message(msg)
         }
 
@@ -719,6 +722,7 @@ train_nn_impl =
                     if (verbose) cli::cli_alert_warning(
                         "Early stopping at epoch {epoch}. Best {es_state$spec$monitor}: {round(es_state$best_loss, 4)}."
                     )
+                    
                     break
                 }
             }

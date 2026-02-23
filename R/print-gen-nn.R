@@ -106,7 +106,7 @@ print.nn_fit = function(x, ...) {
             "input_transform"
         ),
         res = if (is.null(arch)) {
-            rep("N/A", 10L)
+            rep("N/A", 9L)
         } else {
             c(
                 arch$nn_layer %||% "nn_linear (default)",
