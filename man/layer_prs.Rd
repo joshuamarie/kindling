@@ -51,6 +51,11 @@ These pronouns can be used in formulas passed to:
 \item \code{layer_arg_fn} parameter
 \item Custom layer configuration functions
 }
+
+They are \strong{not exported} to avoid namespace conflicts (\code{.in}, \code{.out}, and \code{.i}
+are short names that could easily clash with user or package objects). Inside
+formulas, substitution happens at the expression level via \code{substitute_dot()},
+so the pronoun objects themselves never need to be on the search path.
 }
 \section{Usage}{
 
@@ -72,3 +77,4 @@ layer_arg_fn = ~ list(
 }
 
 \keyword{datasets}
+\keyword{internal}
