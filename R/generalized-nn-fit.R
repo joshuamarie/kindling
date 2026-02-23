@@ -59,6 +59,8 @@
 #'   classification tasks with a scalar label, `"cross_entropy"` is set
 #'   automatically. Alternatively, supply a custom function or formula with
 #'   signature `function(input, target)` returning a scalar `torch_tensor`.
+#'   Note: `loss_history` records the task loss only (without regularization),
+#'   so curves remain comparable across different `penalty` values.
 #' @param validation_split Numeric in \[0, 1). Proportion of training data held
 #'   out for validation. Default `0` (no validation set).
 #' @param device Character. Compute device: `"cpu"`, `"cuda"`, or `"mps"`.
@@ -523,9 +525,9 @@ train_nn_impl =
         train_idx = setdiff(seq_len(n_obs), val_idx)
 
         x_train = x[train_idx, , drop = FALSE]
-        y_train = y_numeric[train_idx]
+        y_train = if (is.matrix(y_numeric)) y_numeric[train_idx, , drop = FALSE] else y_numeric[train_idx]
         x_val = x[val_idx, , drop = FALSE]
-        y_val = y_numeric[val_idx]
+        y_val = if (is.matrix(y_numeric)) y_numeric[val_idx, , drop = FALSE] else y_numeric[val_idx]
     } else {
         x_train = x
         y_train = y_numeric
@@ -672,7 +674,7 @@ train_nn_impl =
             total_loss$backward()
             opt$step()
 
-            epoch_loss = epoch_loss + total_loss$item()
+            epoch_loss = epoch_loss + batch_loss$item()
         }
 
         loss_history[epoch] = epoch_loss / n_batches
@@ -890,7 +892,7 @@ predict.nn_fit =
 
     if (is.null(newdata)) {
         if (type == "prob" && object$is_classification) {
-            cli::cli_abort("Cannot compute probabilities without {.arg newdata}. Use fitted values instead.")
+            cli::cli_abort("Fitted probabilities are not cached. Supply {.arg newdata} to compute class probabilities.")
         }
         if (type == "prob" && !object$is_classification) {
             cli::cli_abort("{.arg type = 'prob'} is only available for classification models.")

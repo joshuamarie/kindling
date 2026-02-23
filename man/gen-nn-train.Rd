@@ -153,7 +153,9 @@ optimizer constructor (e.g. \code{list(momentum = 0.9)} for SGD). Default \code{
 options: \code{"mse"} (default), \code{"mae"}, \code{"cross_entropy"}, or \code{"bce"}. For
 classification tasks with a scalar label, \code{"cross_entropy"} is set
 automatically. Alternatively, supply a custom function or formula with
-signature \verb{function(input, target)} returning a scalar \code{torch_tensor}.}
+signature \verb{function(input, target)} returning a scalar \code{torch_tensor}.
+Note: \code{loss_history} records the task loss only (without regularization),
+so curves remain comparable across different \code{penalty} values.}
 
 \item{validation_split}{Numeric in [0, 1). Proportion of training data held
 out for validation. Default \code{0} (no validation set).}
