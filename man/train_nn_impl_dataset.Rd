@@ -25,6 +25,7 @@ train_nn_impl_dataset(
   device = NULL,
   verbose = FALSE,
   cache_weights = FALSE,
+  flatten_input = TRUE,
   arch = NULL,
   fit_class = "nn_fit_ds"
 )

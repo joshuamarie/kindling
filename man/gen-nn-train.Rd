@@ -98,6 +98,7 @@ train_nn(x, ...)
   bias = TRUE,
   arch = NULL,
   architecture = NULL,
+  flatten_input = NULL,
   epochs = 100,
   batch_size = 32,
   penalty = 0,
@@ -123,6 +124,7 @@ factor / matrix of outcomes, or a formula describing the outcome–predictor
 relationship within \code{x}.
 \item \code{formula}: combined with \code{data} and preprocessed via \code{hardhat::mold()}.
 \item \code{dataset}: a \code{torch} dataset object; batched via \code{torch::dataloader()}.
+This is the recommended interface for sequence/time-series and image data.
 }}
 
 \item{...}{Additional arguments passed to specific methods.}
@@ -201,6 +203,10 @@ matrices in the returned object under \verb{$cached_weights}. Default \code{FALS
 
 \item{data}{A data frame. Required when \code{x} is a formula.}
 
+\item{flatten_input}{Logical or \code{NULL} (dataset method only). Controls whether
+each batch/sample is flattened to 2D before entering the model. \code{NULL}
+(default) auto-selects: \code{TRUE} when \code{architecture = NULL}, otherwise \code{FALSE}.}
+
 \item{n_classes}{Positive integer. Number of output classes. Required when
 \code{x} is a \code{dataset} with scalar (classification) labels; ignored otherwise.}
 }
@@ -255,6 +261,22 @@ training ran to completion
 \item \code{arch} — the \code{nn_arch} object used, or \code{NULL}
 }
 }
+\section{Supported tasks and input formats}{
+
+\code{train_nn()} is task-agnostic by design (no explicit \code{task} argument).
+Task behavior is determined by your input interface and architecture:
+\itemize{
+\item \strong{Tabular data}: use \code{matrix}, \code{data.frame}, or \code{formula} methods.
+\item \strong{Time series}: use the \code{dataset} method with per-item tensors shaped as
+\verb{[time, features]} (or your preferred convention) and a recurrent
+architecture via \code{\link[=nn_arch]{nn_arch()}}.
+\item \strong{Image classification}: use the \code{dataset} method with per-item tensors
+shaped for your first layer (commonly \verb{[channels, height, width]} for
+\code{torch::nn_conv2d}). If your source arrays are channel-last, reorder in the
+dataset or via \code{input_transform}.
+}
+}
+
 \section{Matrix method}{
 
 When \code{x} is supplied as a raw numeric matrix, no preprocessing is applied.
@@ -282,6 +304,8 @@ well-suited for large datasets that do not fit entirely in memory.
 
 Architecture configuration follows the same contract as other \code{train_nn()}
 methods via \code{architecture = nn_arch(...)} (or legacy \code{arch = ...}).
+For non-tabular inputs (time series, images), set \code{flatten_input = FALSE} to
+preserve tensor dimensions expected by recurrent or convolutional layers.
 
 Labels are taken from the second element of each dataset item (i.e.
 \code{dataset[[i]][[2]]}), so \code{y} is ignored. When the label is a scalar tensor,

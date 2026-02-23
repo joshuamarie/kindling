@@ -21,12 +21,13 @@
 \item \code{predict.nn_fit()}: a numeric \code{matrix} or coercible object.
 \item \code{predict.nn_fit_tab()}: a \code{data.frame} with the same columns used during
 training; preprocessing is applied automatically via \code{hardhat::forge()}.
+\item \code{predict.nn_fit_ds()}: a \code{torch} \code{dataset}, numeric \code{array}, \code{matrix}, or
+\code{data.frame}.
 If \code{NULL}, the cached fitted values from training are returned (not
 available for \code{type = "prob"}).
 }}
 
-\item{new_data}{Alternative spelling of \code{newdata} following the \code{hardhat}
-convention. Ignored when \code{newdata} is supplied.}
+\item{new_data}{Legacy alias for \code{newdata}. Retained for compatibility.}
 
 \item{type}{Character. Output type:
 \itemize{

@@ -23,6 +23,7 @@
 #'     relationship within `x`.
 #'   - `formula`: combined with `data` and preprocessed via `hardhat::mold()`.
 #'   - `dataset`: a `torch` dataset object; batched via `torch::dataloader()`.
+#'     This is the recommended interface for sequence/time-series and image data.
 #' @param y Outcome data. Interpretation depends on the method:
 #'   - For the `matrix` and `data.frame` methods: a numeric vector, factor, or
 #'     matrix of outcomes.
@@ -44,6 +45,9 @@
 #'   `NULL`, which falls back to a standard feed-forward network.
 #' @param arch Backward-compatible alias for `architecture`. If both are supplied,
 #'   they must be identical.
+#' @param flatten_input Logical or `NULL` (dataset method only). Controls whether
+#'   each batch/sample is flattened to 2D before entering the model. `NULL`
+#'   (default) auto-selects: `TRUE` when `architecture = NULL`, otherwise `FALSE`.
 #' @param early_stopping An [early_stop()] object specifying early stopping
 #'   behaviour, or `NULL` (default) to disable early stopping. When supplied,
 #'   training halts if the monitored metric does not improve by at least
@@ -104,6 +108,18 @@
 #' - `device` — device the model is on
 #' - `cached_weights` — list of weight matrices, or `NULL`
 #' - `arch` — the `nn_arch` object used, or `NULL`
+#'
+#' @section Supported tasks and input formats:
+#' `train_nn()` is task-agnostic by design (no explicit `task` argument).
+#' Task behavior is determined by your input interface and architecture:
+#' - **Tabular data**: use `matrix`, `data.frame`, or `formula` methods.
+#' - **Time series**: use the `dataset` method with per-item tensors shaped as
+#'   `[time, features]` (or your preferred convention) and a recurrent
+#'   architecture via [nn_arch()].
+#' - **Image classification**: use the `dataset` method with per-item tensors
+#'   shaped for your first layer (commonly `[channels, height, width]` for
+#'   `torch::nn_conv2d`). If your source arrays are channel-last, reorder in the
+#'   dataset or via `input_transform`.
 #'
 #' @examples
 #' \donttest{
@@ -222,6 +238,18 @@ train_nn = function(x, ...) {
     }
 
     out
+}
+
+
+#' Normalize predict newdata argument
+#' @noRd
+.resolve_predict_newdata = function(newdata = NULL, new_data = NULL) {
+    if (!is.null(new_data) && is.null(newdata)) {
+        cli::cli_warn("{.arg new_data} is a legacy alias. Prefer {.arg newdata}.")
+        return(new_data)
+    }
+
+    newdata
 }
 
 #' @rdname gen-nn-train
@@ -886,10 +914,11 @@ train_nn_impl =
 #'   - `predict.nn_fit()`: a numeric `matrix` or coercible object.
 #'   - `predict.nn_fit_tab()`: a `data.frame` with the same columns used during
 #'     training; preprocessing is applied automatically via `hardhat::forge()`.
+#'   - `predict.nn_fit_ds()`: a `torch` `dataset`, numeric `array`, `matrix`, or
+#'     `data.frame`.
 #'   If `NULL`, the cached fitted values from training are returned (not
 #'   available for `type = "prob"`).
-#' @param new_data Alternative spelling of `newdata` following the `hardhat`
-#'   convention. Ignored when `newdata` is supplied.
+#' @param new_data Legacy alias for `newdata`. Retained for compatibility.
 #' @param type Character. Output type:
 #'   - `"response"` (default): predicted class labels (factor) for
 #'     classification, or a numeric vector / matrix for regression.
@@ -922,7 +951,7 @@ predict.nn_fit =
         cli::cli_abort("{.arg type} must be one of {.val response} or {.val prob}.")
     }
     
-    if (!is.null(new_data) && is.null(newdata)) newdata = new_data
+    newdata = .resolve_predict_newdata(newdata = newdata, new_data = new_data)
 
     device = object$device
     input_fn = if (!is.null(object$arch) && !is.null(object$arch$input_transform)) {
@@ -983,7 +1012,7 @@ predict.nn_fit_tab =
         type = "response",
         ...
     ) {
-    if (!is.null(new_data) && is.null(newdata)) newdata = new_data
+    newdata = .resolve_predict_newdata(newdata = newdata, new_data = new_data)
 
     if (!is.null(newdata) && !is.null(object$blueprint)) {
         processed = hardhat::forge(newdata, object$blueprint)

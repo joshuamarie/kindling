@@ -8,6 +8,8 @@
 #'
 #' Architecture configuration follows the same contract as other `train_nn()`
 #' methods via `architecture = nn_arch(...)` (or legacy `arch = ...`).
+#' For non-tabular inputs (time series, images), set `flatten_input = FALSE` to
+#' preserve tensor dimensions expected by recurrent or convolutional layers.
 #'
 #' Labels are taken from the second element of each dataset item (i.e.
 #' `dataset[[i]][[2]]`), so `y` is ignored. When the label is a scalar tensor,
@@ -77,6 +79,7 @@ train_nn.dataset =
         bias = TRUE,
         arch = NULL,
         architecture = NULL,
+        flatten_input = NULL,
         epochs = 100,
         batch_size = 32,
         penalty = 0,
@@ -98,6 +101,14 @@ train_nn.dataset =
     }
 
     arch = .resolve_train_architecture(architecture = architecture, arch = arch)
+    flatten_input = .resolve_flatten_input(flatten_input = flatten_input, arch = arch)
+
+    if (!flatten_input && is.null(arch)) {
+        cli::cli_abort(c(
+            "{.arg flatten_input = FALSE} requires a custom {.cls nn_arch}.",
+            i = "Use {.arg architecture} to provide a layer stack that supports non-flattened tensors."
+        ))
+    }
 
     if (!is.null(y)) {
         cli::cli_warn("{.arg y} is ignored when {.arg x} is a dataset. Labels come from the dataset itself.")
@@ -154,9 +165,25 @@ train_nn.dataset =
         device = device,
         verbose = verbose,
         cache_weights = cache_weights,
+        flatten_input = flatten_input,
         arch = arch,
         fit_class = "nn_fit_ds"
     )
+}
+
+
+#' Normalize flatten_input argument for dataset training
+#' @noRd
+.resolve_flatten_input = function(flatten_input = NULL, arch = NULL) {
+    if (is.null(flatten_input)) {
+        return(is.null(arch))
+    }
+
+    if (!is.logical(flatten_input) || length(flatten_input) != 1L || is.na(flatten_input)) {
+        cli::cli_abort("{.arg flatten_input} must be a single TRUE or FALSE value.")
+    }
+
+    flatten_input
 }
 
 
@@ -184,6 +211,7 @@ train_nn_impl_dataset =
         device = NULL,
         verbose = FALSE,
         cache_weights = FALSE,
+        flatten_input = TRUE,
         arch = NULL,
         fit_class = "nn_fit_ds"
     ) 
@@ -289,7 +317,7 @@ train_nn_impl_dataset =
             x_batch = batch[[1]]$to(device = device)
             y_batch = batch[[2]]$to(device = device)
 
-            if (length(x_batch$size()) > 2) {
+            if (flatten_input && length(x_batch$size()) > 2) {
                 x_batch = x_batch$view(c(x_batch$size(1), -1))
             }
 
@@ -319,7 +347,7 @@ train_nn_impl_dataset =
                     x_batch = batch[[1]]$to(device = device)
                     y_batch = batch[[2]]$to(device = device)
 
-                    if (length(x_batch$size()) > 2) {
+                    if (flatten_input && length(x_batch$size()) > 2) {
                         x_batch = x_batch$view(c(x_batch$size(1), -1))
                     }
 
@@ -380,6 +408,7 @@ train_nn_impl_dataset =
             n_classes = if (is_classification) no_y else NULL,
             device = device,
             cached_weights = cached_weights,
+            flatten_input = flatten_input,
             arch = arch
         ),
         class = unique(c(fit_class, "nn_fit"))
@@ -401,7 +430,7 @@ predict.nn_fit_ds =
         ...
     ) 
 {
-    if (!is.null(new_data) && is.null(newdata)) newdata = new_data
+    newdata = .resolve_predict_newdata(newdata = newdata, new_data = new_data)
 
     if (!type %in% c("response", "prob")) {
         cli::cli_abort("{.arg type} must be one of {.val response} or {.val prob}.")
@@ -415,14 +444,15 @@ predict.nn_fit_ds =
         cli::cli_abort("Cannot compute fitted values for dataset fits. Provide {.arg newdata}.")
     }
 
-    if (inherits(newdata, "dataset")) {
-        device = object$device
-        input_fn = if (!is.null(object$arch) && !is.null(object$arch$input_transform)) {
-            rlang::as_function(object$arch$input_transform)
-        } else {
-            identity
-        }
+    flatten_input = object$flatten_input %||% TRUE
+    device = object$device
+    input_fn = if (!is.null(object$arch) && !is.null(object$arch$input_transform)) {
+        rlang::as_function(object$arch$input_transform)
+    } else {
+        identity
+    }
 
+    if (inherits(newdata, "dataset")) {
         dl = torch::dataloader(newdata, batch_size = 32, shuffle = FALSE)
         all_preds = list()
 
@@ -431,7 +461,7 @@ predict.nn_fit_ds =
             coro::loop(for (batch in dl) {
                 x_batch = batch[[1]]$to(device = device)
 
-                if (length(x_batch$size()) > 2) {
+                if (flatten_input && length(x_batch$size()) > 2) {
                     x_batch = x_batch$view(c(x_batch$size(1), -1))
                 }
 
@@ -470,7 +500,46 @@ predict.nn_fit_ds =
             if (object$no_y == 1L) predictions = as.vector(predictions)
             return(predictions)
         }
-    } else {
-        NextMethod()
     }
+
+    if (is.data.frame(newdata)) {
+        x_in = as.matrix(newdata)
+    } else if (is.matrix(newdata) || is.array(newdata)) {
+        x_in = newdata
+    } else {
+        cli::cli_abort(c(
+            "Unsupported {.arg newdata} type for {.fn predict.nn_fit_ds}.",
+            i = "Use a {.cls dataset}, matrix, array, or data.frame."
+        ))
+    }
+
+    x_new_t = torch::torch_tensor(x_in, dtype = torch::torch_float32(), device = device)
+    if (flatten_input && length(x_new_t$size()) > 2) {
+        x_new_t = x_new_t$view(c(x_new_t$size(1), -1))
+    }
+    x_new_t = input_fn(x_new_t)
+
+    object$model$eval()
+    pred_tensor = torch::with_no_grad(object$model(x_new_t))
+
+    if (object$is_classification) {
+        probs = torch::nnf_softmax(pred_tensor, dim = 2L)
+
+        if (type == "prob") {
+            prob_matrix = as.matrix(probs$cpu())
+            colnames(prob_matrix) = object$y_levels
+            return(prob_matrix)
+        }
+
+        pred_classes = torch::torch_argmax(probs, dim = 2L)
+        predictions = as.integer(pred_classes$cpu())
+        predictions = factor(predictions,
+            levels = seq_along(object$y_levels),
+            labels = object$y_levels)
+        return(predictions)
+    }
+
+    predictions = as.matrix(pred_tensor$cpu())
+    if (object$no_y == 1L) predictions = as.vector(predictions)
+    predictions
 }

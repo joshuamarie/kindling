@@ -34,8 +34,8 @@ print.nn_fit = function(x, ...) {
             "Hidden Layer Units",
             "Number of Hidden Layers",
             "Pred. Type",
-            "n_predictors",
-            "n_response",
+            "n_inputs",
+            "n_outputs",
             "reg.",
             "Device"
         ),
@@ -103,7 +103,8 @@ print.nn_fit = function(x, ...) {
             "before_output_transform",
             "after_output_transform",
             "last_layer_args",
-            "input_transform"
+            "input_transform",
+            "use_namespace"
         ),
         res = if (is.null(arch)) {
             rep("N/A", 10L)
@@ -117,7 +118,8 @@ print.nn_fit = function(x, ...) {
                 flag(arch$before_output_transform),
                 flag(arch$after_output_transform),
                 if (length(arch$last_layer_args) > 0) "yes" else "N/A",
-                flag(arch$input_transform)
+                flag(arch$input_transform),
+                as.character(isTRUE(arch$use_namespace))
             )
         },
         stringsAsFactors = FALSE
