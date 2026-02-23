@@ -20,6 +20,7 @@ train_nn(x, ...)
   output_activation = NULL,
   bias = TRUE,
   arch = NULL,
+  architecture = NULL,
   early_stopping = NULL,
   epochs = 100,
   batch_size = 32,
@@ -44,6 +45,7 @@ train_nn(x, ...)
   output_activation = NULL,
   bias = TRUE,
   arch = NULL,
+  architecture = NULL,
   early_stopping = NULL,
   epochs = 100,
   batch_size = 32,
@@ -68,6 +70,7 @@ train_nn(x, ...)
   output_activation = NULL,
   bias = TRUE,
   arch = NULL,
+  architecture = NULL,
   early_stopping = NULL,
   epochs = 100,
   batch_size = 32,
@@ -94,6 +97,7 @@ train_nn(x, ...)
   output_activation = NULL,
   bias = TRUE,
   arch = NULL,
+  architecture = NULL,
   epochs = 100,
   batch_size = 32,
   penalty = 0,
@@ -146,7 +150,10 @@ Defaults to \code{NULL} (no activation / linear output).}
 
 \item{bias}{Logical. Whether to include bias terms in each layer. Default \code{TRUE}.}
 
-\item{arch}{An \code{\link[=nn_arch]{nn_arch()}} object specifying a custom architecture. Default
+\item{arch}{Backward-compatible alias for \code{architecture}. If both are supplied,
+they must be identical.}
+
+\item{architecture}{An \code{\link[=nn_arch]{nn_arch()}} object specifying a custom architecture. Default
 \code{NULL}, which falls back to a standard feed-forward network.}
 
 \item{early_stopping}{An \code{\link[=early_stop]{early_stop()}} object specifying early stopping
@@ -206,8 +213,6 @@ An object of class \code{"nn_fit"}, or one of its subclasses:
 
 All subclasses share a common structure. See \strong{Details} for the list of
 components.
-
-An object of class \code{c("nn_fit_ds", "nn_fit")}.
 }
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
@@ -216,8 +221,15 @@ An object of class \code{c("nn_fit_ds", "nn_fit")}.
 user-defined architecture via \code{\link[=nn_arch]{nn_arch()}}. Dispatch is based on the class
 of \code{x}.
 
+Recommended workflow:
+\enumerate{
+\item Define architecture with \code{\link[=nn_arch]{nn_arch()}} (optional).
+\item Train with \code{train_nn()}.
+\item Predict with \code{\link[=predict.nn_fit]{predict.nn_fit()}}.
+}
+
 All methods delegate to a shared implementation core after preprocessing.
-When \code{arch = NULL}, the model falls back to a plain feed-forward neural network
+When \code{architecture = NULL}, the model falls back to a plain feed-forward neural network
 (\code{nn_linear}) architecture.
 }
 \details{
@@ -267,6 +279,9 @@ which the formula is evaluated. Preprocessing is handled by \code{hardhat::mold(
 Trains a neural network directly on a \code{torch} dataset object. Batching and
 lazy loading are handled by \code{torch::dataloader()}, making this method
 well-suited for large datasets that do not fit entirely in memory.
+
+Architecture configuration follows the same contract as other \code{train_nn()}
+methods via \code{architecture = nn_arch(...)} (or legacy \code{arch = ...}).
 
 Labels are taken from the second element of each dataset item (i.e.
 \code{dataset[[i]][[2]]}), so \code{y} is ignored. When the label is a scalar tensor,
@@ -320,6 +335,39 @@ if (torch::torch_is_installed()) {
     model = train_nn(
         x = Sepal.Length ~ .,
         data = iris[, 1:4],
+        epochs = 50
+    )
+
+    # Architecture object (nn_arch -> train_nn)
+    mlp_arch = nn_arch(nn_name = "mlp_model")
+    model = train_nn(
+        x = Sepal.Length ~ .,
+        data = iris[, 1:4],
+        hidden_neurons = c(64, 32),
+        activations = "relu",
+        architecture = mlp_arch,
+        epochs = 50
+    )
+
+    # Custom layer architecture
+    custom_linear = torch::nn_module(
+        "CustomLinear",
+        initialize = function(in_features, out_features, bias = TRUE) {
+            self$layer = torch::nn_linear(in_features, out_features, bias = bias)
+        },
+        forward = function(x) self$layer(x)
+    )
+    custom_arch = nn_arch(
+        nn_name = "custom_linear_mlp",
+        nn_layer = "custom_linear",
+        use_namespace = FALSE
+    )
+    model = train_nn(
+        x = Sepal.Length ~ .,
+        data = iris[, 1:4],
+        hidden_neurons = c(16, 8),
+        activations = "relu",
+        architecture = custom_arch,
         epochs = 50
     )
 

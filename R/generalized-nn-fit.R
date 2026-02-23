@@ -7,8 +7,13 @@
 #' user-defined architecture via [nn_arch()]. Dispatch is based on the class
 #' of `x`.
 #'
+#' Recommended workflow:
+#' 1. Define architecture with [nn_arch()] (optional).
+#' 2. Train with `train_nn()`.
+#' 3. Predict with [predict.nn_fit()].
+#'
 #' All methods delegate to a shared implementation core after preprocessing.
-#' When `arch = NULL`, the model falls back to a plain feed-forward neural network
+#' When `architecture = NULL`, the model falls back to a plain feed-forward neural network
 #' (`nn_linear`) architecture.
 #'
 #' @param x Dispatch is based on its current class:
@@ -35,8 +40,10 @@
 #' @param output_activation Optional activation function for the output layer.
 #'   Defaults to `NULL` (no activation / linear output).
 #' @param bias Logical. Whether to include bias terms in each layer. Default `TRUE`.
-#' @param arch An [nn_arch()] object specifying a custom architecture. Default
+#' @param architecture An [nn_arch()] object specifying a custom architecture. Default
 #'   `NULL`, which falls back to a standard feed-forward network.
+#' @param arch Backward-compatible alias for `architecture`. If both are supplied,
+#'   they must be identical.
 #' @param early_stopping An [early_stop()] object specifying early stopping
 #'   behaviour, or `NULL` (default) to disable early stopping. When supplied,
 #'   training halts if the monitored metric does not improve by at least
@@ -144,6 +151,39 @@
 #'         epochs = 50
 #'     )
 #'
+#'     # Architecture object (nn_arch -> train_nn)
+#'     mlp_arch = nn_arch(nn_name = "mlp_model")
+#'     model = train_nn(
+#'         x = Sepal.Length ~ .,
+#'         data = iris[, 1:4],
+#'         hidden_neurons = c(64, 32),
+#'         activations = "relu",
+#'         architecture = mlp_arch,
+#'         epochs = 50
+#'     )
+#'
+#'     # Custom layer architecture
+#'     custom_linear = torch::nn_module(
+#'         "CustomLinear",
+#'         initialize = function(in_features, out_features, bias = TRUE) {
+#'             self$layer = torch::nn_linear(in_features, out_features, bias = bias)
+#'         },
+#'         forward = function(x) self$layer(x)
+#'     )
+#'     custom_arch = nn_arch(
+#'         nn_name = "custom_linear_mlp",
+#'         nn_layer = "custom_linear",
+#'         use_namespace = FALSE
+#'     )
+#'     model = train_nn(
+#'         x = Sepal.Length ~ .,
+#'         data = iris[, 1:4],
+#'         hidden_neurons = c(16, 8),
+#'         activations = "relu",
+#'         architecture = custom_arch,
+#'         epochs = 50
+#'     )
+#'
 #'     # With early stopping
 #'     model = train_nn(
 #'         x = Sepal.Length ~ .,
@@ -164,6 +204,26 @@ train_nn = function(x, ...) {
     UseMethod("train_nn")
 }
 
+
+#' Normalize architecture argument for train_nn()
+#' @noRd
+.resolve_train_architecture = function(architecture = NULL, arch = NULL) {
+    if (!is.null(architecture) && !is.null(arch) && !identical(architecture, arch)) {
+        cli::cli_abort(c(
+            "{.arg architecture} and {.arg arch} were both supplied with different values.",
+            i = "Supply only {.arg architecture}, or provide identical values for both."
+        ))
+    }
+
+    out = architecture %||% arch
+
+    if (!is.null(out) && !inherits(out, "nn_arch")) {
+        cli::cli_abort("{.arg architecture} must be an {.cls nn_arch} object created with {.fn nn_arch}.")
+    }
+
+    out
+}
+
 #' @rdname gen-nn-train
 #'
 #' @section Matrix method:
@@ -180,6 +240,7 @@ train_nn.matrix =
         output_activation = NULL,
         bias = TRUE,
         arch = NULL,
+        architecture = NULL,
         early_stopping = NULL,
         epochs = 100,
         batch_size = 32,
@@ -195,9 +256,7 @@ train_nn.matrix =
         cache_weights = FALSE,
         ...
     ) {
-    if (!is.null(arch) && !inherits(arch, "nn_arch")) {
-        cli::cli_abort("{.arg arch} must be an {.cls nn_arch} object created with {.fn nn_arch}.")
-    }
+    arch = .resolve_train_architecture(architecture = architecture, arch = arch)
 
     act_specs = eval_act_funs({{ activations }}, {{ output_activation }})
     activations = act_specs$activations
@@ -246,6 +305,7 @@ train_nn.data.frame =
         output_activation = NULL,
         bias = TRUE,
         arch = NULL,
+        architecture = NULL,
         early_stopping = NULL,
         epochs = 100,
         batch_size = 32,
@@ -261,9 +321,7 @@ train_nn.data.frame =
         cache_weights = FALSE,
         ...
     ) {
-    if (!is.null(arch) && !inherits(arch, "nn_arch")) {
-        cli::cli_abort("{.arg arch} must be an {.cls nn_arch} object created with {.fn nn_arch}.")
-    }
+    arch = .resolve_train_architecture(architecture = architecture, arch = arch)
 
     act_specs = eval_act_funs({{ activations }}, {{ output_activation }})
     activations = act_specs$activations
@@ -312,6 +370,7 @@ train_nn.formula =
         output_activation = NULL,
         bias = TRUE,
         arch = NULL,
+        architecture = NULL,
         early_stopping = NULL,
         epochs = 100,
         batch_size = 32,
@@ -327,9 +386,7 @@ train_nn.formula =
         cache_weights = FALSE,
         ...
     ) {
-    if (!is.null(arch) && !inherits(arch, "nn_arch")) {
-        cli::cli_abort("{.arg arch} must be an {.cls nn_arch} object created with {.fn nn_arch}.")
-    }
+    arch = .resolve_train_architecture(architecture = architecture, arch = arch)
 
     if (missing(data) || is.null(data)) {
         cli::cli_abort("{.arg data} must be provided when using the formula interface.")

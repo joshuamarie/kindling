@@ -6,6 +6,9 @@
 #' lazy loading are handled by `torch::dataloader()`, making this method
 #' well-suited for large datasets that do not fit entirely in memory.
 #'
+#' Architecture configuration follows the same contract as other `train_nn()`
+#' methods via `architecture = nn_arch(...)` (or legacy `arch = ...`).
+#'
 #' Labels are taken from the second element of each dataset item (i.e.
 #' `dataset[[i]][[2]]`), so `y` is ignored. When the label is a scalar tensor,
 #' a classification task is assumed and `n_classes` must be supplied. The loss
@@ -13,8 +16,6 @@
 #'
 #' Fitted values are **not** cached in the returned object. Use
 #' [predict.nn_fit_ds()] with `newdata` to obtain predictions after training.
-#'
-#' @return An object of class `c("nn_fit_ds", "nn_fit")`.
 #'
 #' @examples
 #' \donttest{
@@ -75,6 +76,7 @@ train_nn.dataset =
         output_activation = NULL,
         bias = TRUE,
         arch = NULL,
+        architecture = NULL,
         epochs = 100,
         batch_size = 32,
         penalty = 0,
@@ -95,9 +97,7 @@ train_nn.dataset =
         cli::cli_abort("Package {.pkg torch} is required but not installed.")
     }
 
-    if (!is.null(arch) && !inherits(arch, "nn_arch")) {
-        cli::cli_abort("{.arg arch} must be an {.cls nn_arch} object created with {.fn nn_arch}.")
-    }
+    arch = .resolve_train_architecture(architecture = architecture, arch = arch)
 
     if (!is.null(y)) {
         cli::cli_warn("{.arg y} is ignored when {.arg x} is a dataset. Labels come from the dataset itself.")

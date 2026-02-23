@@ -1,9 +1,16 @@
 #' Architecture specification for train_nn()
 #'
 #' @description
-#' `nn_arch()` is a helper that bundles `nn_module_generator()` arguments into a
-#' single object passed to `train_nn()` via the `arch` parameter. All arguments
-#' mirror those of `nn_module_generator()` exactly, including their defaults.
+#' `nn_arch()` defines an architecture specification object consumed by
+#' [train_nn()] via `architecture` (or legacy `arch`).
+#'
+#' Conceptual workflow:
+#' 1. Define architecture with `nn_arch()`.
+#' 2. Train with `train_nn(..., architecture = <nn_arch>)`.
+#' 3. Predict with `predict()`.
+#'
+#' Architecture fields mirror `nn_module_generator()` and are passed through
+#' without additional branching logic.
 #'
 #' @param nn_name Character. Name of the generated module class. Default `"nnModule"`.
 #' @param nn_layer Layer type. See `nn_module_generator()`. Default `NULL` (`nn_linear`).
@@ -26,12 +33,20 @@
 #'   `~ .$unsqueeze(2)` (RNN sequence dim), `~ .$unsqueeze(1)` (CNN channel dim).
 #'   Avoid transforms that reshape based on `.$size(1)` as this will reflect the
 #'   full dataset size, not the mini-batch size.
+#' @param use_namespace Logical. If `TRUE` (default), layer symbols are resolved
+#'   with explicit `torch::` namespace when applicable. Set to `FALSE` when using
+#'   custom layers defined in the calling environment.
 #'
-#' @return An object of class `"nn_arch"`, a named list of `nn_module_generator()` arguments.
+#' @return An object of class `c("nn_arch", "kindling_arch")`, implemented as a
+#'   named list of `nn_module_generator()` arguments with an `"env"` attribute
+#'   capturing the calling environment for custom layer resolution.
 #'
 #' @examples
 #' \donttest{
 #' if (torch::torch_is_installed()) {
+#'     # Standard architecture object for train_nn()
+#'     std_arch = nn_arch(nn_name = "mlp_model")
+#'
 #'     # GRU architecture spec
 #'     gru_arch = nn_arch(
 #'         nn_name = "GRU",
@@ -47,13 +62,27 @@
 #'         input_transform = ~ .$unsqueeze(2)
 #'     )
 #'
+#'     # Custom layer architecture (resolved from calling environment)
+#'     custom_linear = torch::nn_module(
+#'         "CustomLinear",
+#'         initialize = function(in_features, out_features, bias = TRUE) {
+#'             self$layer = torch::nn_linear(in_features, out_features, bias = bias)
+#'         },
+#'         forward = function(x) self$layer(x)
+#'     )
+#'     custom_arch = nn_arch(
+#'         nn_name = "CustomMLP",
+#'         nn_layer = "custom_linear",
+#'         use_namespace = FALSE
+#'     )
+#'
 #'     model = train_nn(
 #'         Sepal.Length ~ .,
 #'         data = iris[, 1:4],
 #'         hidden_neurons = c(64, 32),
 #'         activations = "relu",
 #'         epochs = 50,
-#'         arch = gru_arch
+#'         architecture = gru_arch
 #'     )
 #' }
 #' }
@@ -69,7 +98,8 @@ nn_arch = function(
         before_output_transform = NULL,
         after_output_transform = NULL,
         last_layer_args = list(),
-        input_transform = NULL
+        input_transform = NULL,
+        use_namespace = TRUE
 ) {
     struc = structure(
         list(
@@ -82,9 +112,10 @@ nn_arch = function(
             before_output_transform = before_output_transform,
             after_output_transform = after_output_transform,
             last_layer_args = last_layer_args,
-            input_transform = input_transform
+            input_transform = input_transform,
+            use_namespace = use_namespace
         ),
-        class = "nn_arch"
+        class = c("nn_arch", "kindling_arch")
     )
     attr(struc, "env") = rlang::caller_env()
     struc
