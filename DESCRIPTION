@@ -36,8 +36,7 @@ Imports:
     tune,
     dials,
     hardhat,
-    lifecycle, 
-    coro
+    lifecycle
 Suggests: 
     testthat (>= 3.0.0),
     magrittr,
