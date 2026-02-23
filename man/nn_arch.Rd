@@ -14,8 +14,7 @@ nn_arch(
   before_output_transform = NULL,
   after_output_transform = NULL,
   last_layer_args = list(),
-  input_transform = NULL,
-  use_namespace = TRUE
+    input_transform = NULL
 )
 }
 \arguments{
@@ -50,9 +49,6 @@ Transforms must therefore be independent of batch size. Safe examples:
 Avoid transforms that reshape based on \code{.$size(1)} as this will reflect the
 full dataset size, not the mini-batch size.}
 
-\item{use_namespace}{Logical. If \code{TRUE} (default), layer symbols are resolved
-with explicit \verb{torch::} namespace when applicable. Set to \code{FALSE} when using
-custom layers defined in the calling environment.}
 }
 \value{
 An object of class \code{c("nn_arch", "kindling_arch")}, implemented as a
@@ -104,8 +100,7 @@ if (torch::torch_is_installed()) {
     )
     custom_arch = nn_arch(
         nn_name = "CustomMLP",
-        nn_layer = "custom_linear",
-        use_namespace = FALSE
+        nn_layer = ~ custom_linear
     )
 
     model = train_nn(

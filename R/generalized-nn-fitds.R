@@ -100,6 +100,10 @@ train_nn.dataset =
         cli::cli_abort("Package {.pkg torch} is required but not installed.")
     }
 
+    if (length(x) < 1L) {
+        cli::cli_abort("{.arg x} dataset is empty. Provide a dataset with at least one observation.")
+    }
+
     arch = .resolve_train_architecture(architecture = architecture, arch = arch)
     flatten_input = .resolve_flatten_input(flatten_input = flatten_input, arch = arch)
 
@@ -119,21 +123,44 @@ train_nn.dataset =
     output_activation = act_specs$output_activation
 
     # ---- Infer dimensions from first batch ----
-    first_item = x[1]
+    first_item = .dataset_get_item(x, 1L)
     x_sample = first_item[[1]]
     y_sample = first_item[[2]]
+
+    if (!inherits(x_sample, "torch_tensor") || !inherits(y_sample, "torch_tensor")) {
+        cli::cli_abort(c(
+            "Dataset items must be lists of two torch tensors: {.code list(x, y)}.",
+            i = "Found an incompatible structure at {.code dataset[[1]]}."
+        ))
+    }
+
     no_x = as.integer(prod(x_sample$size()))
 
     is_classification = FALSE
     if (inherits(y_sample, "torch_tensor")) {
-        if (y_sample$dtype == torch::torch_long()) {
+        y_dims = as.integer(y_sample$size())
+        is_scalar_label = length(y_dims) == 0L || prod(y_dims) == 1L
+
+        if (y_sample$dtype == torch::torch_long() && is_scalar_label) {
             is_classification = TRUE
-            if (is.null(n_classes)) {
-                cli::cli_abort("{.arg n_classes} must be provided for classification datasets.")
+            if (
+                is.null(n_classes) ||
+                    !is.numeric(n_classes) ||
+                    length(n_classes) != 1L ||
+                    is.na(n_classes) ||
+                    n_classes < 2L ||
+                    (n_classes %% 1L) != 0
+            ) {
+                cli::cli_abort("{.arg n_classes} must be a single integer >= 2 for classification datasets.")
             }
-            no_y = n_classes
+
+            no_y = as.integer(n_classes)
         } else {
-            no_y = as.integer(prod(y_sample$size()))
+            no_y = as.integer(if (length(y_dims) == 0L) 1L else prod(y_dims))
+
+            if (!is.null(n_classes)) {
+                cli::cli_warn("{.arg n_classes} is ignored when dataset labels are not scalar integer class IDs.")
+            }
         }
     } else {
         cli::cli_abort("Dataset labels must be torch tensors.")
@@ -169,6 +196,31 @@ train_nn.dataset =
         arch = arch,
         fit_class = "nn_fit_ds"
     )
+}
+
+
+#' Retrieve and validate one item from a torch dataset
+#' @noRd
+.dataset_get_item = function(dataset, i) {
+    item = tryCatch(
+        dataset[i],
+        error = function(e) {
+            cli::cli_abort(c(
+                "Failed to read item {.val {i}} from dataset.",
+                i = "Ensure {.arg x} implements {.code .getitem(i)} and {.code .length()}.",
+                x = conditionMessage(e)
+            ))
+        }
+    )
+
+    if (!is.list(item) || length(item) < 2L) {
+        cli::cli_abort(c(
+            "Each dataset item must be a list with at least two elements: {.code list(x, y)}.",
+            i = "Found {.cls {class(item)[1]}} at {.code dataset[[{i}]]}."
+        ))
+    }
+
+    item
 }
 
 
@@ -231,6 +283,11 @@ train_nn_impl_dataset =
 
     validate_regularization(penalty, mixture)
 
+    if (!is.numeric(validation_split) || length(validation_split) != 1L || is.na(validation_split) ||
+        validation_split < 0 || validation_split >= 1) {
+        cli::cli_abort("{.arg validation_split} must be a single number in [0, 1).")
+    }
+
     # ---- Input transform ----
     input_fn = if (!is.null(arch) && !is.null(arch$input_transform)) {
         rlang::as_function(arch$input_transform)
@@ -240,8 +297,20 @@ train_nn_impl_dataset =
 
     # ---- Validation split ----
     n_obs = length(dataset)
+    if (n_obs < 1L) {
+        cli::cli_abort("{.arg dataset} is empty. Provide at least one observation.")
+    }
+
     if (validation_split > 0 && validation_split < 1) {
         n_val = floor(n_obs * validation_split)
+
+        if (n_val < 1L || n_val >= n_obs) {
+            cli::cli_abort(c(
+                "{.arg validation_split} yields an empty train/validation partition.",
+                i = "Use more observations or a different split ratio."
+            ))
+        }
+
         val_idx = sample(n_obs, n_val)
         train_idx = setdiff(seq_len(n_obs), val_idx)
 
@@ -295,14 +364,16 @@ train_nn_impl_dataset =
     )
 
     # ---- Loss function ----
+    loss_name = tolower(loss)
     loss_fn = switch(
-        tolower(loss),
+        loss_name,
         mse = function(input, target) torch::nnf_mse_loss(input, target),
         mae = function(input, target) torch::nnf_l1_loss(input, target),
         cross_entropy = function(input, target) torch::nnf_cross_entropy(input, target),
         bce = function(input, target) torch::nnf_binary_cross_entropy_with_logits(input, target),
         cli::cli_abort("Unknown loss function: {loss}")
     )
+    is_cross_entropy = identical(loss_name, "cross_entropy")
 
     # ---- Training loop ----
     loss_history = numeric(epochs)
@@ -316,6 +387,10 @@ train_nn_impl_dataset =
         coro::loop(for (batch in train_dl) {
             x_batch = batch[[1]]$to(device = device)
             y_batch = batch[[2]]$to(device = device)
+
+            if (is_classification && is_cross_entropy) {
+                y_batch = y_batch$to(dtype = torch::torch_long())$view(c(-1))
+            }
 
             if (flatten_input && length(x_batch$size()) > 2) {
                 x_batch = x_batch$view(c(x_batch$size(1), -1))
@@ -346,6 +421,10 @@ train_nn_impl_dataset =
                 coro::loop(for (batch in val_dl) {
                     x_batch = batch[[1]]$to(device = device)
                     y_batch = batch[[2]]$to(device = device)
+
+                    if (is_classification && is_cross_entropy) {
+                        y_batch = y_batch$to(dtype = torch::torch_long())$view(c(-1))
+                    }
 
                     if (flatten_input && length(x_batch$size()) > 2) {
                         x_batch = x_batch$view(c(x_batch$size(1), -1))

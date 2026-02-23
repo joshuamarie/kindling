@@ -383,8 +383,7 @@ if (torch::torch_is_installed()) {
     )
     custom_arch = nn_arch(
         nn_name = "custom_linear_mlp",
-        nn_layer = "custom_linear",
-        use_namespace = FALSE
+        nn_layer = ~ custom_linear
     )
     model = train_nn(
         x = Sepal.Length ~ .,

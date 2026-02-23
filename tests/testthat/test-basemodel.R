@@ -31,7 +31,7 @@ test_that("RNN generator uses torch namespace explicitly", {
         no_x = 5,
         no_y = 2,
         rnn_type = "lstm",
-        activations = act_funs(relu, selu, softshrink = args(lambd = 0.5), gelu)
+        activations = act_funs(relu, selu, softshrink[lambd = 0.5], gelu)
     )
 
     code_str = paste(deparse(expr), collapse = " ")
@@ -95,7 +95,7 @@ test_that("Activation functions are properly namespaced", {
     skip_if_no_torch()
 
     spec = parse_activation_spec(
-        act_funs(relu, selu, leaky_relu = args(negative_slope = 0.01)),
+        act_funs(relu, selu, leaky_relu[negative_slope = 0.01]),
         n_layers = 3
     )
 
@@ -116,9 +116,9 @@ test_that("Complex activations maintain namespace", {
         no_y = 10,
         activations = act_funs(
             relu,
-            leaky_relu = args(negative_slope = 0.01),
-            elu = args(alpha = 1.0),
-            softshrink = args(lambd = 0.5)
+            leaky_relu[negative_slope = 0.01],
+            elu[alpha = 1.0],
+            softshrink[lambd = 0.5]
         )
     )
 

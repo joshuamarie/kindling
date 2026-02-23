@@ -33,9 +33,6 @@
 #'   `~ .$unsqueeze(2)` (RNN sequence dim), `~ .$unsqueeze(1)` (CNN channel dim).
 #'   Avoid transforms that reshape based on `.$size(1)` as this will reflect the
 #'   full dataset size, not the mini-batch size.
-#' @param use_namespace Logical. If `TRUE` (default), layer symbols are resolved
-#'   with explicit `torch::` namespace when applicable. Set to `FALSE` when using
-#'   custom layers defined in the calling environment.
 #'
 #' @return An object of class `c("nn_arch", "kindling_arch")`, implemented as a
 #'   named list of `nn_module_generator()` arguments with an `"env"` attribute
@@ -72,8 +69,7 @@
 #'     )
 #'     custom_arch = nn_arch(
 #'         nn_name = "CustomMLP",
-#'         nn_layer = "custom_linear",
-#'         use_namespace = FALSE
+#'         nn_layer = ~ custom_linear
 #'     )
 #'
 #'     model = train_nn(
@@ -98,8 +94,7 @@ nn_arch = function(
         before_output_transform = NULL,
         after_output_transform = NULL,
         last_layer_args = list(),
-        input_transform = NULL,
-        use_namespace = TRUE
+        input_transform = NULL
 ) {
     struc = structure(
         list(
@@ -112,8 +107,7 @@ nn_arch = function(
             before_output_transform = before_output_transform,
             after_output_transform = after_output_transform,
             last_layer_args = last_layer_args,
-            input_transform = input_transform,
-            use_namespace = use_namespace
+            input_transform = input_transform
         ),
         class = c("nn_arch", "kindling_arch")
     )
@@ -136,8 +130,7 @@ print.nn_arch = function(x, ...) {
         "*" = "Name:            {x$nn_name}",
         "*" = "Layer:           {x$nn_layer %||% 'nn_linear (default)'}",
         "*" = "Out layer:       {x$out_nn_layer %||% 'same as nn_layer'}",
-        "*" = "Input transform: {if (is.null(x$input_transform)) 'none' else 'yes'}",
-        "*" = "Namespace:       {x$use_namespace}"
+        "*" = "Input transform: {if (is.null(x$input_transform)) 'none' else 'yes'}"
     ))
     invisible(x)
 }

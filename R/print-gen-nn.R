@@ -103,11 +103,10 @@ print.nn_fit = function(x, ...) {
             "before_output_transform",
             "after_output_transform",
             "last_layer_args",
-            "input_transform",
-            "use_namespace"
+            "input_transform"
         ),
         res = if (is.null(arch)) {
-            rep("N/A", 10L)
+            rep("N/A", 9L)
         } else {
             c(
                 arch$nn_layer %||% "nn_linear (default)",
@@ -118,8 +117,7 @@ print.nn_fit = function(x, ...) {
                 flag(arch$before_output_transform),
                 flag(arch$after_output_transform),
                 if (length(arch$last_layer_args) > 0) "yes" else "N/A",
-                flag(arch$input_transform),
-                as.character(isTRUE(arch$use_namespace))
+                flag(arch$input_transform)
             )
         },
         stringsAsFactors = FALSE

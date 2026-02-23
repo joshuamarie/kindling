@@ -52,8 +52,7 @@ model_rbf = train_nn(
             list(.in, .out)
         } else {
             list(in_features = .in, out_features = .out)
-        },
-        use_namespace = FALSE 
+        }
     )
 )
 

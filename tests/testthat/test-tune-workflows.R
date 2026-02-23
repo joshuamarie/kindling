@@ -272,10 +272,10 @@ test_that("finalize_workflow works with grid_depth results", {
     expect_s3_class(final_wf, "workflow")
     
     # ---Final parameters stores into a list—expect no failures---
-    testthat::expect_no_failure({
+    expect_error({
         final_nn_model = parsnip::fit(final_wf, data = iris)
         final_nn_model
-    })
+    }, NA)
 })
 
 # ============================================================================
