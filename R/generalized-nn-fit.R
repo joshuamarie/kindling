@@ -856,6 +856,8 @@ train_nn_impl =
 #'
 #' @seealso [train_nn()]
 #' @name gen-nn-predict
+#' @importFrom stats predict
+#' @keywords internal
 #' @export
 predict.nn_fit =
     function(

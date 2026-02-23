@@ -57,3 +57,4 @@ data through \code{hardhat::forge()} before predicting.
 \seealso{
 \code{\link[=train_nn]{train_nn()}}
 }
+\keyword{internal}
