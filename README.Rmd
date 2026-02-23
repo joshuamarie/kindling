@@ -23,6 +23,7 @@ desc = setNames(as.list(desc), colnames(desc))
 [![R-CMD-check](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml)
 [![CRAN Downloads](https://cranlogs.r-pkg.org/badges/kindling)](https://CRAN.R-project.org/package=kindling)
 [![CRAN Downloads Total](https://cranlogs.r-pkg.org/badges/grand-total/kindling?color=brightgreen)](https://CRAN.R-project.org/package=kindling)
+[![Codecov test coverage](https://codecov.io/gh/joshuamarie/kindling/graph/badge.svg)](https://app.codecov.io/gh/joshuamarie/kindling)
 <!-- badges: end -->
 
 ## Package overview
