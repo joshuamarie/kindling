@@ -34,3 +34,4 @@ Print method for the pronouns
 It displays what fields to be accessed by \code{$}.
 }
 
+\keyword{internal}

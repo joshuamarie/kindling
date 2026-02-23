@@ -558,6 +558,11 @@ substitute_dot = function(expr, replacement) {
 #' - `layer_arg_fn` parameter
 #' - Custom layer configuration functions
 #' 
+#' They are **not exported** to avoid namespace conflicts (`.in`, `.out`, and `.i`
+#' are short names that could easily clash with user or package objects). Inside
+#' formulas, substitution happens at the expression level via `substitute_dot()`,
+#' so the pronoun objects themselves never need to be on the search path.
+#' 
 #' @section Usage:
 #' 
 #' ``` r
@@ -578,6 +583,7 @@ substitute_dot = function(expr, replacement) {
 #' 
 #' @name layer_prs
 #' @aliases .layer .i .in .out .is_output
+#' @keywords internal
 NULL
 
 #' @rdname layer_prs
@@ -627,6 +633,7 @@ NULL
 #' @return A pronoun, it returns nothing
 #' 
 #' @name layer-attributes
+#' @keywords internal
 #' @export
 `$.layer_pr` = function(x, name) {
     if (inherits(x, "layer_index_pr"))  return(quote(i))
@@ -662,6 +669,7 @@ NULL
 #' It displays what fields to be accessed by `$`.
 #' 
 #' @rdname print-layer_pronoun
+#' @keywords internal
 #' @export
 print.layer_pr = function(x, ...) {
     cat("<layer pronoun>\n")

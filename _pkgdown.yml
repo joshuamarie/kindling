@@ -86,9 +86,6 @@ reference:
   - subtitle: General-purpose / low-level generator, including the layer utilities & pronouns
     contents:
       - nn_module_generator
-      - layer-attributes
-      - layer_prs
-      - print.layer_pr
 
   - subtitle: High-level generators
     contents:
