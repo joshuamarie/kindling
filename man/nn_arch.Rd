@@ -20,9 +20,16 @@ nn_arch(
 \arguments{
 \item{nn_name}{Character. Name of the generated module class. Default \code{"nnModule"}.}
 
-\item{nn_layer}{Layer type. See \code{nn_module_generator()}. Default \code{NULL} (\code{nn_linear}).}
+\item{nn_layer}{Layer type for hidden layers. Accepted forms:
+\itemize{
+\item \code{NULL} (default): uses \code{nn_linear} from \code{{torch}}
+\item Character string: e.g. \code{"torch::nn_gru"}, \code{"my_custom_layer"}
+\item Formula: e.g. \code{~ rbf_layer}, \code{~ torch::nn_linear} (the RHS is used as the constructor)
+\item Function object: a layer constructor function
+}}
 
-\item{out_nn_layer}{Optional. Layer type forced on the last layer. Default \code{NULL}.}
+\item{out_nn_layer}{Optional. Layer type forced on the output layer. Accepts the same forms
+as \code{nn_layer}. Default \code{NULL} (uses the same layer as \code{nn_layer}).}
 
 \item{nn_layer_args}{Named list. Additional arguments passed to every layer constructor.
 Default \code{list()}.}
@@ -42,12 +49,11 @@ layer. Default \code{NULL}.}
 \item{last_layer_args}{Named list or formula. Extra arguments for the output layer only.
 Default \code{list()}.}
 
-\item{input_transform}{Formula or function. Transforms the entire input tensor
-before training begins. Applied once to the full dataset tensor, not per-batch.
-Transforms must therefore be independent of batch size. Safe examples:
-\code{~ .$unsqueeze(2)} (RNN sequence dim), \code{~ .$unsqueeze(1)} (CNN channel dim).
-Avoid transforms that reshape based on \code{.$size(1)} as this will reflect the
-full dataset size, not the mini-batch size.}
+\item{input_transform}{Formula or function. Applied to each input tensor before it is
+passed to the model — both during training (per-batch) and prediction. Use this for
+structural reshaping that must happen every forward pass, such as adding a sequence
+dimension for RNNs (\code{~ .$unsqueeze(2)}) or a channel dimension for CNNs
+(\code{~ .$unsqueeze(1)}).}
 }
 \value{
 An object of class \code{"nn_arch"}, a named list of \code{nn_module_generator()} arguments.
@@ -56,6 +62,15 @@ An object of class \code{"nn_arch"}, a named list of \code{nn_module_generator()
 \code{nn_arch()} is a helper that bundles \code{nn_module_generator()} arguments into a
 single object passed to \code{train_nn()} via the \code{arch} parameter. All arguments
 mirror those of \code{nn_module_generator()} exactly, including their defaults.
+}
+\note{
+The \code{nn_arch} object captures the caller environment at construction time so that
+user-defined layer constructors (e.g. a custom \code{rbf_layer}) remain accessible when the
+model is built. This means saving the \code{nn_arch} or the resulting \code{nn_fit} object to disk
+with \code{saveRDS()} will embed that environment, which can produce large files and will
+\strong{not} restore the layer constructor when reloaded in a fresh session. If you plan to
+serialize fitted models, ensure the custom layer is defined in a package or sourced
+before calling \code{predict()}.
 }
 \examples{
 \donttest{
