@@ -38,6 +38,8 @@ navbar:
           href: articles/similar-packages.html
         - text: Tuning Capabilities
           href: articles/tuning-capabilities.html
+        - text: Linear and Logistic Regression (Special Cases)
+          href: articles/special-cases.html
     tutorials:
       text: Learn more
       menu:
@@ -86,9 +88,7 @@ reference:
   - subtitle: General-purpose / low-level generator, including the layer utilities & pronouns
     contents:
       - nn_module_generator
-      - layer-attributes
       - layer_prs
-      - print.layer_pr
 
   - subtitle: High-level generators
     contents:
@@ -121,11 +121,11 @@ reference:
     - table_summary
     - ordinal_gen
 
-  - title: Basemodels-tidymodels wrappers
-    desc: Functions for tidymodels integration (not for direct use)
-    contents:
-    - ffnn_wrapper
-    - rnn_wrapper
+  # - title: Basemodels-tidymodels wrappers
+  #   desc: Functions for tidymodels integration (not for direct use)
+  #   contents:
+  #   - ffnn_wrapper
+  #   - rnn_wrapper
 
 articles:
   - title: Get started
@@ -134,6 +134,7 @@ articles:
     - kindling
     - similar-packages
     - tuning-capabilities
+    - special-cases
 
 footer:
   structure:
