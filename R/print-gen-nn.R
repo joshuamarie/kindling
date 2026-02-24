@@ -21,6 +21,9 @@ print.nn_fit = function(x, ...) {
     
     nn_model_type = if (!is.null(x$arch)) {
         nn_layer = x$arch$nn_layer %||% "nn_linear"
+        if (inherits(nn_layer, "formula")) {
+            nn_layer = paste(deparse(nn_layer), collapse = " ")
+        }
         glue("{x$arch$nn_name} ({nn_layer})")
     } else {
         "FFNN"
@@ -34,8 +37,8 @@ print.nn_fit = function(x, ...) {
             "Hidden Layer Units",
             "Number of Hidden Layers",
             "Pred. Type",
-            "n_inputs",
-            "n_outputs",
+            "n_predictors",
+            "n_response",
             "reg.",
             "Device"
         ),
@@ -91,7 +94,12 @@ print.nn_fit = function(x, ...) {
     
     # ---- Table 3: Architecture Spec ----
     flag = function(val) if (!is.null(val)) "yes" else "N/A"
-    
+    arch_str = function(val, default = "N/A") {
+        if (is.null(val)) return(default)
+        if (inherits(val, "formula")) return(paste(deparse(val), collapse = " "))
+        if (is.function(val) || is.list(val)) return("yes")
+        paste(as.character(val), collapse = ", ")
+    }
     arch = x$arch
     arch_data = data.frame(
         type = c(
@@ -109,8 +117,8 @@ print.nn_fit = function(x, ...) {
             rep("N/A", 9L)
         } else {
             c(
-                arch$nn_layer %||% "nn_linear (default)",
-                arch$out_nn_layer %||% "N/A",
+                arch_str(arch$nn_layer, default = "nn_linear (default)"),
+                arch_str(arch$out_nn_layer),
                 if (length(arch$nn_layer_args) > 0) "yes" else "N/A",
                 flag(arch$layer_arg_fn),
                 flag(arch$forward_extract),
