@@ -4,6 +4,8 @@
 
 - **Joshua Marie**. Author, maintainer.
 
+- **Antoine Soetewey**. Author.
+
 ## Citation
 
 Source:
