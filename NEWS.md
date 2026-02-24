@@ -42,6 +42,10 @@
     -   Activation functions can now be modified using `[` syntax (e.g. `softplus[beta = 0.2]`)
     -   The current `args()` (e.g. `softplus = args(beta = 0.2)`) is now superseded by that. 
 
+### Bug Fixes
+
+-  No suffix generated for `13` by `ordinal_gen()`. Now fixed.  
+
 # kindling 0.2.1
 
 ## Fixes
