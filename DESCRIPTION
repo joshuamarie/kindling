@@ -5,8 +5,11 @@ Version: 0.2.0.9000
 Authors@R: c(
     person("Joshua", "Marie", 
            email = "joshua.marie.k@gmail.com", 
-           role = c("aut", "cre"))
-    )
+           role = c("aut", "cre")),
+    person("Antoine", "Soetewey", 
+           email = "ant.soetewey@gmail.com", 
+           role = "aut")
+  )
 Description: Provides a higher-level interface to the 'torch' package for defining,
     training, and fine-tuning neural networks, including its depth, powered by code generation. 
     This package currently supports few to several architectures, namely feedforward (multi-layer perceptron) 
