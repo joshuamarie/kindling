@@ -33,6 +33,7 @@
 -   `train_nn()` to execute `nn_module_generator()`
 
     -   `nn_arch()` must be supplied to inherit extra arguments from `nn_module_generator()` function. 
+    -   Allows early stopping if `early_stopping` is supplied with `early_stop()`. 
 
 ### Superset
 

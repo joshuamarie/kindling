@@ -14,8 +14,7 @@ nn_arch(
   before_output_transform = NULL,
   after_output_transform = NULL,
   last_layer_args = list(),
-  input_transform = NULL,
-  use_namespace = TRUE
+    input_transform = NULL
 )
 }
 \arguments{
@@ -43,38 +42,65 @@ layer. Default \code{NULL}.}
 \item{last_layer_args}{Named list or formula. Extra arguments for the output layer only.
 Default \code{list()}.}
 
-\item{input_transform}{Formula or function. Transforms the input tensor before it enters
-the model. Applied to all tensors (train, validation, inference). Useful for architectures
-that require a specific input shape, e.g. RNNs needing a sequence dimension:
-\code{~ .$unsqueeze(2)}. Default \code{NULL}.}
+\item{input_transform}{Formula or function. Transforms the entire input tensor
+before training begins. Applied once to the full dataset tensor, not per-batch.
+Transforms must therefore be independent of batch size. Safe examples:
+\code{~ .$unsqueeze(2)} (RNN sequence dim), \code{~ .$unsqueeze(1)} (CNN channel dim).
+Avoid transforms that reshape based on \code{.$size(1)} as this will reflect the
+full dataset size, not the mini-batch size.}
 
-\item{use_namespace}{Logical or character. Controls torch namespace prefixing.
-Default \code{TRUE}.}
 }
 \value{
-An object of class \code{"nn_arch"}, a named list of \code{nn_module_generator()} arguments.
+An object of class \code{c("nn_arch", "kindling_arch")}, implemented as a
+named list of \code{nn_module_generator()} arguments with an \code{"env"} attribute
+capturing the calling environment for custom layer resolution.
 }
 \description{
-\code{nn_arch()} is a helper that bundles \code{nn_module_generator()} arguments into a
-single object passed to \code{train_nn()} via the \code{arch} parameter. All arguments
-mirror those of \code{nn_module_generator()} exactly, including their defaults.
+\code{nn_arch()} defines an architecture specification object consumed by
+\code{\link[=train_nn]{train_nn()}} via \code{architecture} (or legacy \code{arch}).
+
+Conceptual workflow:
+\enumerate{
+\item Define architecture with \code{nn_arch()}.
+\item Train with \verb{train_nn(..., architecture = <nn_arch>)}.
+\item Predict with \code{predict()}.
+}
+
+Architecture fields mirror \code{nn_module_generator()} and are passed through
+without additional branching logic.
 }
 \examples{
 \donttest{
 if (torch::torch_is_installed()) {
+    # Standard architecture object for train_nn()
+    std_arch = nn_arch(nn_name = "mlp_model")
+
     # GRU architecture spec
     gru_arch = nn_arch(
         nn_name = "GRU",
-        nn_layer = "nn_gru",
+        nn_layer = "torch::nn_gru",
         layer_arg_fn = ~ if (.is_output) {
             list(.in, .out)
         } else {
             list(input_size = .in, hidden_size = .out, batch_first = TRUE)
         },
-        out_nn_layer = "nn_linear",
+        out_nn_layer = "torch::nn_linear",
         forward_extract = ~ .[[1]],
         before_output_transform = ~ .[, .$size(2), ],
         input_transform = ~ .$unsqueeze(2)
+    )
+
+    # Custom layer architecture (resolved from calling environment)
+    custom_linear = torch::nn_module(
+        "CustomLinear",
+        initialize = function(in_features, out_features, bias = TRUE) {
+            self$layer = torch::nn_linear(in_features, out_features, bias = bias)
+        },
+        forward = function(x) self$layer(x)
+    )
+    custom_arch = nn_arch(
+        nn_name = "CustomMLP",
+        nn_layer = ~ custom_linear
     )
 
     model = train_nn(
@@ -83,7 +109,7 @@ if (torch::torch_is_installed()) {
         hidden_neurons = c(64, 32),
         activations = "relu",
         epochs = 50,
-        arch = gru_arch
+        architecture = gru_arch
     )
 }
 }

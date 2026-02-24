@@ -2,7 +2,7 @@
 % Please edit documentation in R/generalized-nn-fit.R
 \name{.train_nn_tab_impl}
 \alias{.train_nn_tab_impl}
-\title{Pre-processing function for data.frame and formula methods}
+\title{Preprocessing bridge for data.frame and formula methods}
 \usage{
 .train_nn_tab_impl(
   processed,
@@ -12,6 +12,7 @@
   output_activation,
   bias,
   arch,
+  early_stopping,
   epochs,
   batch_size,
   penalty,
@@ -27,6 +28,6 @@
 )
 }
 \description{
-Pre-processing function for data.frame and formula methods
+Preprocessing bridge for data.frame and formula methods
 }
 \keyword{internal}
