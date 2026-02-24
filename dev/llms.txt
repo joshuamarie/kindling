@@ -6,11 +6,11 @@ Title: ***Higher-Level Interface of ‘torch’ Package to Auto-Train Neural
 Networks***
 
 Whether you’re generating neural network architectures expressions or
-fitting/training actual models,
+direct fitting/training actual models,
 [kindling](https://kindling.joshuamarie.com) minimizes boilerplate code
-while preserving [torch](https://torch.mlverse.org/docs). Since this
+while preserving [torch](https://torch.mlverse.org/docs). And since this
 package uses [torch](https://torch.mlverse.org/docs) as its backend,
-GPU/TPU devices also supported.
+GPU/TPU devices are supported.
 
 [kindling](https://kindling.joshuamarie.com) also bridges the gap
 between [torch](https://torch.mlverse.org/docs) and
@@ -27,26 +27,23 @@ learning models within the familiar
 ### Main Features
 
 - Code generation of [torch](https://torch.mlverse.org/docs) expression
-- Multiple architectures available: feedforward networks (MLP/DNN/FFNN)
-  and recurrent variants (RNN, LSTM, GRU)
+
+- Multiple architectures available
+
+  - Base models interface: feedforward networks (MLP/DNN/FFNN) and
+    recurrent variants (RNN, LSTM, GRU)
+  - Generalized neural network trainer that has the same sequence as
+    base models
+
 - Native support for titanic ML frameworks (currently supports
   [tidymodels](https://tidymodels.tidymodels.org),
   [mlr3](https://mlr3.mlr-org.com) for later) workflows and pipelines
+
 - Fine-grained control over network depth, layer sizes, and activation
   functions
+
 - GPU acceleration supports via [torch](https://torch.mlverse.org/docs)
   tensors
-
-### Supported Architectures (As of now)
-
-- **Feedforward Networks (DNN/FFNN)**: Classic multi-layer perceptrons
-  for tabular data and general supervised learning
-- **Recurrent Neural Networks (RNN)**: Basic recurrent architecture for
-  sequential patterns
-- **Long Short-Term Memory (LSTM)**: Sophisticated recurrent networks
-  with gating mechanisms for long-range dependencies
-- **Gated Recurrent Units (GRU)**: Streamlined alternative to LSTM with
-  fewer parameters
 
 ## Installation
 
@@ -144,7 +141,7 @@ model = ffnn(
     Species ~ .,
     data = iris,
     hidden_neurons = c(10, 15, 7),
-    activations = act_funs(relu, softshrink = args(lambd = 0.5), elu), 
+    activations = act_funs(relu, "softshrink(lambd = 0.5)", elu), 
     loss = "cross_entropy",
     epochs = 100
 )
@@ -194,7 +191,7 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
-    #>   versicolor      0         46         4
+    #>   versicolor      0         48         2
     #>   virginica       0          2        48
     ```
 
@@ -210,7 +207,7 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
     #>   versicolor      0         10         0
-    #>   virginica       0          1         9
+    #>   virginica       0          0        10
     ```
 
 ### Level 3: Conventional tidymodels Integration
@@ -376,10 +373,10 @@ networks. Two primary algorithms are available:
     ``` r
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1  Sepal.Width       y 29.04598
-    #> 2  Petal.Width       y 27.50590
-    #> 3 Sepal.Length       y 24.20982
-    #> 4 Petal.Length       y 19.23830
+    #> 1  Petal.Width       y 30.28746
+    #> 2 Sepal.Length       y 25.89413
+    #> 3 Petal.Length       y 24.97980
+    #> 4  Sepal.Width       y 18.83861
     ```
 
 2.  Olden’s Algorithm
@@ -387,10 +384,10 @@ networks. Two primary algorithms are available:
     ``` r
     olden(model, bar_plot = FALSE)
     #>        x_names y_names     rel_imp
-    #> 1  Sepal.Width       y  0.56231712
-    #> 2  Petal.Width       y -0.51113650
-    #> 3 Petal.Length       y -0.29761552
-    #> 4 Sepal.Length       y -0.06857191
+    #> 1  Petal.Width       y -0.22785314
+    #> 2 Sepal.Length       y  0.19276435
+    #> 3 Petal.Length       y -0.11285313
+    #> 4  Sepal.Width       y  0.05431408
     ```
 
 ### Integration with {vip}

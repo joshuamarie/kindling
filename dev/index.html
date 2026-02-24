@@ -91,38 +91,28 @@
 </div>
 <!-- badges: start -->
 
-<!-- > **Note**: This package is under active development. The API may change in future versions. -->
 <div class="section level2">
 <h2 id="package-overview">Package overview<a class="anchor" aria-label="anchor" href="#package-overview"></a>
 </h2>
 <p>Title: <strong><em>Higher-Level Interface of ‘torch’ Package to Auto-Train Neural Networks</em></strong></p>
-<p>Whether you’re generating neural network architectures expressions or fitting/training actual models, <a href="https://kindling.joshuamarie.com">kindling</a> minimizes boilerplate code while preserving <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>. Since this package uses <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> as its backend, GPU/TPU devices also supported.</p>
+<p>Whether you’re generating neural network architectures expressions or direct fitting/training actual models, <a href="https://kindling.joshuamarie.com">kindling</a> minimizes boilerplate code while preserving <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>. And since this package uses <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> as its backend, GPU/TPU devices are supported.</p>
 <p><a href="https://kindling.joshuamarie.com">kindling</a> also bridges the gap between <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> and <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>. It works seamlessly with <a href="https://github.com/tidymodels/parsnip" class="external-link">parsnip</a>, <a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a>, and <a href="https://github.com/tidymodels/workflows" class="external-link">workflows</a> to bring deep learning into your existing <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> modeling pipeline. This enables a streamlined interface for building, training, and tuning deep learning models within the familiar <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> ecosystem.</p>
 <div class="section level3">
 <h3 id="main-features">Main Features<a class="anchor" aria-label="anchor" href="#main-features"></a>
 </h3>
 <!-- -   Seamless integration with `parsnip` through `set_engine("kindling")` -->
 <ul>
-<li>Code generation of <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> expression</li>
-<li>Multiple architectures available: feedforward networks (MLP/DNN/FFNN) and recurrent variants (RNN, LSTM, GRU)</li>
-<li>Native support for titanic ML frameworks (currently supports <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>, <a href="https://mlr3.mlr-org.com" class="external-link">mlr3</a> for later) workflows and pipelines</li>
-<li>Fine-grained control over network depth, layer sizes, and activation functions</li>
-<li>GPU acceleration supports via <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> tensors <!-- -   Dramatically less boilerplate than raw `{torch}` implementations -->
-</li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="supported-architectures-as-of-now">Supported Architectures (As of now)<a class="anchor" aria-label="anchor" href="#supported-architectures-as-of-now"></a>
-</h3>
+<li><p>Code generation of <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> expression</p></li>
+<li>
+<p>Multiple architectures available</p>
 <ul>
-<li>
-<strong>Feedforward Networks (DNN/FFNN)</strong>: Classic multi-layer perceptrons for tabular data and general supervised learning</li>
-<li>
-<strong>Recurrent Neural Networks (RNN)</strong>: Basic recurrent architecture for sequential patterns</li>
-<li>
-<strong>Long Short-Term Memory (LSTM)</strong>: Sophisticated recurrent networks with gating mechanisms for long-range dependencies</li>
-<li>
-<strong>Gated Recurrent Units (GRU)</strong>: Streamlined alternative to LSTM with fewer parameters</li>
+<li>Base models interface: feedforward networks (MLP/DNN/FFNN) and recurrent variants (RNN, LSTM, GRU)</li>
+<li>Generalized neural network trainer that has the same sequence as base models</li>
+</ul>
+</li>
+<li><p>Native support for titanic ML frameworks (currently supports <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>, <a href="https://mlr3.mlr-org.com" class="external-link">mlr3</a> for later) workflows and pipelines</p></li>
+<li><p>Fine-grained control over network depth, layer sizes, and activation functions</p></li>
+<li><p>GPU acceleration supports via <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> tensors</p></li>
 </ul>
 </div>
 </div>
@@ -195,7 +185,7 @@
 <span>    <span class="va">Species</span> <span class="op">~</span> <span class="va">.</span>,</span>
 <span>    data <span class="op">=</span> <span class="va">iris</span>,</span>
 <span>    hidden_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">15</span>, <span class="fl">7</span><span class="op">)</span>,</span>
-<span>    activations <span class="op">=</span> <span class="fu"><a href="reference/act_funs.html">act_funs</a></span><span class="op">(</span><span class="va">relu</span>, softshrink <span class="op">=</span> <span class="fu"><a href="reference/args.html">args</a></span><span class="op">(</span>lambd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span>, <span class="va">elu</span><span class="op">)</span>, </span>
+<span>    activations <span class="op">=</span> <span class="fu"><a href="reference/act_funs.html">act_funs</a></span><span class="op">(</span><span class="va">relu</span>, <span class="st">"softshrink(lambd = 0.5)"</span>, <span class="va">elu</span><span class="op">)</span>, </span>
 <span>    loss <span class="op">=</span> <span class="st">"cross_entropy"</span>,</span>
 <span>    epochs <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="op">)</span></span>
@@ -235,7 +225,7 @@
 <span><span class="co">#&gt;             predicted</span></span>
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         50          0         0</span></span>
-<span><span class="co">#&gt;   versicolor      0         46         4</span></span>
+<span><span class="co">#&gt;   versicolor      0         48         2</span></span>
 <span><span class="co">#&gt;   virginica       0          2        48</span></span></code></pre></div>
 </li>
 <li>
@@ -249,7 +239,7 @@
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         10          0         0</span></span>
 <span><span class="co">#&gt;   versicolor      0         10         0</span></span>
-<span><span class="co">#&gt;   virginica       0          1         9</span></span></code></pre></div>
+<span><span class="co">#&gt;   virginica       0          0        10</span></span></code></pre></div>
 </li>
 </ol>
 </div>
@@ -307,7 +297,6 @@
 <div class="section level2">
 <h2 id="hyperparameter-tuning--resampling">Hyperparameter Tuning &amp; Resampling<a class="anchor" aria-label="anchor" href="#hyperparameter-tuning--resampling"></a>
 </h2>
-<!-- > This functionality is available, but still not fully optimized. -->
 <p>The package has integration with <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>, so it supports hyperparameter tuning via <a href="https://tune.tidymodels.org/" class="external-link">tune</a> with searchable parameters.</p>
 <p>The current searchable parameters under <a href="https://kindling.joshuamarie.com">kindling</a>:</p>
 <ul>
@@ -398,20 +387,20 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/garson.html" class="external-link">garson</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names  rel_imp</span></span>
-<span><span class="co">#&gt; 1  Sepal.Width       y 29.04598</span></span>
-<span><span class="co">#&gt; 2  Petal.Width       y 27.50590</span></span>
-<span><span class="co">#&gt; 3 Sepal.Length       y 24.20982</span></span>
-<span><span class="co">#&gt; 4 Petal.Length       y 19.23830</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  Petal.Width       y 30.28746</span></span>
+<span><span class="co">#&gt; 2 Sepal.Length       y 25.89413</span></span>
+<span><span class="co">#&gt; 3 Petal.Length       y 24.97980</span></span>
+<span><span class="co">#&gt; 4  Sepal.Width       y 18.83861</span></span></code></pre></div>
 </li>
 <li>
 <p>Olden’s Algorithm</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/olden.html" class="external-link">olden</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names     rel_imp</span></span>
-<span><span class="co">#&gt; 1  Sepal.Width       y  0.56231712</span></span>
-<span><span class="co">#&gt; 2  Petal.Width       y -0.51113650</span></span>
-<span><span class="co">#&gt; 3 Petal.Length       y -0.29761552</span></span>
-<span><span class="co">#&gt; 4 Sepal.Length       y -0.06857191</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  Petal.Width       y -0.22785314</span></span>
+<span><span class="co">#&gt; 2 Sepal.Length       y  0.19276435</span></span>
+<span><span class="co">#&gt; 3 Petal.Length       y -0.11285313</span></span>
+<span><span class="co">#&gt; 4  Sepal.Width       y  0.05431408</span></span></code></pre></div>
 </li>
 </ol>
 <div class="section level3">
@@ -573,6 +562,7 @@
 <ul class="list-unstyled">
 <li><a href="https://CRAN.R-project.org/package=kindling" class="external-link"><img src="https://www.r-pkg.org/badges/version/kindling" alt="CRAN status"></a></li>
 <li><a href="https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://app.codecov.io/gh/joshuamarie/kindling" class="external-link"><img src="https://codecov.io/gh/joshuamarie/kindling/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
 </div>
 
