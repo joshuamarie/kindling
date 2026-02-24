@@ -1,0 +1,21 @@
+---
+title: "Special Cases: Linear and Logistic Regression"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Special Cases: Linear and Logistic Regression}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+    fig.width = 7,
+    fig.height = 5
+)
+```
+
+## What's so special about {kindling}
+
+This package is planned to make it compatible for any machine learning task. Yes, you can do both linear regression and logistic regression with extra steps: heavily customized optimizer and loss functions. The `train_nn()` function (available on >v0.3.x) supports this { `optimizer` $\leftrightarrow$ `optimizer_args` } and { `loss` }
+
+
