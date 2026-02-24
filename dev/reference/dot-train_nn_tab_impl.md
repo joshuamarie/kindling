@@ -1,6 +1,6 @@
-# Pre-processing function for data.frame and formula methods
+# Preprocessing bridge for data.frame and formula methods
 
-Pre-processing function for data.frame and formula methods
+Preprocessing bridge for data.frame and formula methods
 
 ## Usage
 
@@ -13,6 +13,7 @@ Pre-processing function for data.frame and formula methods
   output_activation,
   bias,
   arch,
+  early_stopping,
   epochs,
   batch_size,
   penalty,

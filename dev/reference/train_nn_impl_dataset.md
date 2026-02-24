@@ -1,19 +1,19 @@
-# Shared core implementation
+# train_nn implementation for torch datasets
 
-Shared core implementation
+train_nn implementation for torch datasets
 
 ## Usage
 
 ``` r
-train_nn_impl(
-  x,
-  y,
+train_nn_impl_dataset(
+  dataset,
+  no_x,
+  no_y,
+  is_classification,
   hidden_neurons,
   activations = NULL,
   output_activation = NULL,
   bias = TRUE,
-  arch = NULL,
-  early_stopping = NULL,
   epochs = 100,
   batch_size = 32,
   penalty = 0,
@@ -26,6 +26,8 @@ train_nn_impl(
   device = NULL,
   verbose = FALSE,
   cache_weights = FALSE,
-  fit_class = "nn_fit"
+  flatten_input = TRUE,
+  arch = NULL,
+  fit_class = "nn_fit_ds"
 )
 ```

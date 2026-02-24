@@ -14,6 +14,7 @@
 <url><loc>https://kindling.joshuamarie.com/dev/reference/args.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/dials-kindling.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/dot-train_nn_tab_impl.html</loc></url>
+<url><loc>https://kindling.joshuamarie.com/dev/reference/early_stop.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/eval_act_funs.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/extract_depth_param.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/ffnn_impl.html</loc></url>
@@ -31,6 +32,7 @@
 <url><loc>https://kindling.joshuamarie.com/dev/reference/layer_prs.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/make_kindling.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/mlp_kindling.html</loc></url>
+<url><loc>https://kindling.joshuamarie.com/dev/reference/new_act_fn.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/nn_arch.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/nn_gens.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/nn_module_generator.html</loc></url>
@@ -49,6 +51,7 @@
 <url><loc>https://kindling.joshuamarie.com/dev/reference/substitute_dot.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/table_summary.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/train_nn_impl.html</loc></url>
+<url><loc>https://kindling.joshuamarie.com/dev/reference/train_nn_impl_dataset.html</loc></url>
 <url><loc>https://kindling.joshuamarie.com/dev/reference/validate_device.html</loc></url>
 </urlset>
 

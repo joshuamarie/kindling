@@ -43,6 +43,8 @@
     must be supplied to inherit extra arguments from
     [`nn_module_generator()`](https://kindling.joshuamarie.com/dev/reference/nn_module_generator.md)
     function.
+  - Allows early stopping if `early_stopping` is supplied with
+    [`early_stop()`](https://kindling.joshuamarie.com/dev/reference/early_stop.md).
 
 #### Superset
 

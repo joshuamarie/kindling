@@ -466,6 +466,13 @@ Direct training interface (Level 2)
   [`rnn()`](https://kindling.joshuamarie.com/dev/reference/kindling-basemodels.md)
   : Base models for Neural Network Training in kindling
 
+### Utility Functions
+
+- [`nn_arch()`](https://kindling.joshuamarie.com/dev/reference/nn_arch.md)
+  : Architecture specification for train_nn()
+- [`early_stop()`](https://kindling.joshuamarie.com/dev/reference/early_stop.md)
+  : Early Stopping Specification
+
 ## Code Generators
 
 Generate
@@ -533,6 +540,8 @@ Utilities for model configuration
   : Activation Functions Specification Helper
 - [`args()`](https://kindling.joshuamarie.com/dev/reference/args.md)
   **\[superseded\]** : Activation Function Arguments Helper
+- [`new_act_fn()`](https://kindling.joshuamarie.com/dev/reference/new_act_fn.md)
+  : Custom Activation Function Constructor
 - [`grid_depth()`](https://kindling.joshuamarie.com/dev/reference/grid_depth.md)
   : Depth-Aware Grid Generation for Neural Networks
 - [`table_summary()`](https://kindling.joshuamarie.com/dev/reference/table_summary.md)
