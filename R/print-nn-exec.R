@@ -44,11 +44,17 @@ concat = function(x) {
 #'
 #' @rdname ordinal_gen
 ordinal_gen = function(x) {
-    if (is.numeric(x) & any(x < 1))
+    if (is.numeric(x) && any(x < 1))
         warning("Values below 1 found.\nMay yield incorrect results")
+    
     x = as.character(x)
-    regs = c(th = "^1[1:2]$|[0456789]$", st = "(?<!^1)1$", nd = "(?<!^1)2$",
-             rd = "(?<!^1)3$")
+    
+    regs = c(
+        th = "^1[1-9]$|[0456789]$",
+        st = "(?<!^1)1$",
+        nd = "(?<!^1)2$",
+        rd = "(?<!^1)3$"
+    )
     
     for (i in seq_along(regs)) {
         locs = grepl(regs[i], x, perl = TRUE)
