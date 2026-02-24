@@ -627,6 +627,7 @@ NULL
 #' @return A pronoun, it returns nothing
 #' 
 #' @name layer-attributes
+#' @keywords internal
 #' @export
 `$.layer_pr` = function(x, name) {
     if (inherits(x, "layer_index_pr"))  return(quote(i))
@@ -662,6 +663,7 @@ NULL
 #' It displays what fields to be accessed by `$`.
 #' 
 #' @rdname print-layer_pronoun
+#' @keywords internal
 #' @export
 print.layer_pr = function(x, ...) {
     cat("<layer pronoun>\n")
@@ -670,6 +672,7 @@ print.layer_pr = function(x, ...) {
 }
 
 #' @rdname print-layer_pronoun
+#' @keywords internal
 #' @export
 print.layer_index_pr = function(x, ...) {
     cat("<layer index pronoun>\n")
@@ -677,6 +680,7 @@ print.layer_index_pr = function(x, ...) {
 }
 
 #' @rdname print-layer_pronoun
+#' @keywords internal
 #' @export
 print.layer_input_pr = function(x, ...) {
     cat("<layer input dimension pronoun>\n")
@@ -684,6 +688,7 @@ print.layer_input_pr = function(x, ...) {
 }
 
 #' @rdname print-layer_pronoun
+#' @keywords internal
 #' @export
 print.layer_output_pr = function(x, ...) {
     cat("<layer output dimension pronoun>\n")
@@ -691,6 +696,7 @@ print.layer_output_pr = function(x, ...) {
 }
 
 #' @rdname print-layer_pronoun
+#' @keywords internal
 #' @export
 print.layer_is_output_pr = function(x, ...) {
     cat("<layer is_output flag pronoun>\n")

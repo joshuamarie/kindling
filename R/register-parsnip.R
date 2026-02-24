@@ -613,7 +613,8 @@ make_kindling = function() {
 #' @section FFNN (MLP) Wrapper for `{tidymodels}` interface:
 #' This is a function to interface into `{tidymodels}`
 #' (do not use this, use `kindling::ffnn()` instead).
-#'
+#' 
+#' @keywords internal
 #' @export
 ffnn_wrapper = function(formula, data, ...) {
     dots = list(...)
@@ -629,7 +630,8 @@ ffnn_wrapper = function(formula, data, ...) {
 #' @section RNN Wrapper for `{tidymodels}` interface:
 #' This is a function to interface into `{tidymodels}`
 #' (do not use this, use `kindling::rnn()` instead).
-#'
+#' 
+#' @keywords internal
 #' @export
 rnn_wrapper = function(formula, data, ...) {
     dots = list(...)

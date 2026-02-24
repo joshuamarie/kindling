@@ -43,3 +43,4 @@ This is a function to interface into \code{{tidymodels}}
 (do not use this, use \code{kindling::rnn()} instead).
 }
 
+\keyword{internal}

@@ -14,7 +14,7 @@ nn_arch(
   before_output_transform = NULL,
   after_output_transform = NULL,
   last_layer_args = list(),
-    input_transform = NULL
+  input_transform = NULL
 )
 }
 \arguments{
@@ -48,7 +48,6 @@ Transforms must therefore be independent of batch size. Safe examples:
 \code{~ .$unsqueeze(2)} (RNN sequence dim), \code{~ .$unsqueeze(1)} (CNN channel dim).
 Avoid transforms that reshape based on \code{.$size(1)} as this will reflect the
 full dataset size, not the mini-batch size.}
-
 }
 \value{
 An object of class \code{c("nn_arch", "kindling_arch")}, implemented as a
