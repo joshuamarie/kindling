@@ -5,6 +5,7 @@
 - **Joshua Marie**. Author, maintainer.
 
 - **Antoine Soetewey**. Author.
+  [](https://orcid.org/0000-0001-8159-0804)
 
 ## Citation
 

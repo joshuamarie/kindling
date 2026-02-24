@@ -58,6 +58,12 @@
     [`args()`](https://kindling.joshuamarie.com/dev/reference/args.md)
     (e.g. `softplus = args(beta = 0.2)`) is now superseded by that.
 
+#### Bug Fixes
+
+- No suffix generated for `13` by
+  [`ordinal_gen()`](https://kindling.joshuamarie.com/dev/reference/ordinal_gen.md).
+  Now fixed.
+
 ## kindling 0.2.1
 
 ### Fixes
