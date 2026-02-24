@@ -44,20 +44,12 @@ code (Lowest Level)
 - [`nn_module_generator()`](https://kindling.joshuamarie.com/dev/reference/nn_module_generator.md)
   **\[experimental\]** : Generalized Neural Network Module Expression
   Generator
-- [`` `$`( ``*`<layer_pr>`*`)`](https://kindling.joshuamarie.com/dev/reference/layer-attributes.md)
-  : "Layer" attributes
 - [`.layer`](https://kindling.joshuamarie.com/dev/reference/layer_prs.md)
   [`.i`](https://kindling.joshuamarie.com/dev/reference/layer_prs.md)
   [`.in`](https://kindling.joshuamarie.com/dev/reference/layer_prs.md)
   [`.out`](https://kindling.joshuamarie.com/dev/reference/layer_prs.md)
   [`.is_output`](https://kindling.joshuamarie.com/dev/reference/layer_prs.md)
   : Layer argument pronouns for formula-based specifications
-- [`print(`*`<layer_pr>`*`)`](https://kindling.joshuamarie.com/dev/reference/print-layer_pronoun.md)
-  [`print(`*`<layer_index_pr>`*`)`](https://kindling.joshuamarie.com/dev/reference/print-layer_pronoun.md)
-  [`print(`*`<layer_input_pr>`*`)`](https://kindling.joshuamarie.com/dev/reference/print-layer_pronoun.md)
-  [`print(`*`<layer_output_pr>`*`)`](https://kindling.joshuamarie.com/dev/reference/print-layer_pronoun.md)
-  [`print(`*`<layer_is_output_pr>`*`)`](https://kindling.joshuamarie.com/dev/reference/print-layer_pronoun.md)
-  : Print method for the pronouns
 
 ### High-level generators
 
@@ -108,11 +100,3 @@ Utilities for model configuration
   : Summarize and Display a Two-Column Data Frame as a Formatted Table
 - [`ordinal_gen()`](https://kindling.joshuamarie.com/dev/reference/ordinal_gen.md)
   : Ordinal Suffixes Generator
-
-## Basemodels-tidymodels wrappers
-
-Functions for tidymodels integration (not for direct use)
-
-- [`ffnn_wrapper()`](https://kindling.joshuamarie.com/dev/reference/kindling-nn-wrappers.md)
-  [`rnn_wrapper()`](https://kindling.joshuamarie.com/dev/reference/kindling-nn-wrappers.md)
-  : Basemodels-tidymodels wrappers

@@ -40,6 +40,7 @@ without additional branching logic."><meta property="og:image" content="https://
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/kindling.html">Getting Started</a></li>
     <li><a class="dropdown-item" href="../articles/similar-packages.html">Similar packages and comparison</a></li>
     <li><a class="dropdown-item" href="../articles/tuning-capabilities.html">Tuning Capabilities</a></li>
+    <li><a class="dropdown-item" href="../articles/special-cases.html">Linear and Logistic Regression (Special Cases)</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-learn-more" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Learn more</button>
@@ -91,7 +92,7 @@ without additional branching logic.</p>
 <span>  before_output_transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  after_output_transform <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  last_layer_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="op">)</span>,</span>
-<span>    input_transform <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  input_transform <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -148,7 +149,6 @@ Transforms must therefore be independent of batch size. Safe examples:
 <code>~ .$unsqueeze(2)</code> (RNN sequence dim), <code>~ .$unsqueeze(1)</code> (CNN channel dim).
 Avoid transforms that reshape based on <code>.$size(1)</code> as this will reflect the
 full dataset size, not the mini-batch size.</p></dd>
-
 
 </dl></div>
     <div class="section level2">

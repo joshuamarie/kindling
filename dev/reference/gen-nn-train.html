@@ -46,6 +46,7 @@ When architecture = NULL, the model falls back to a plain feed-forward neural ne
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/kindling.html">Getting Started</a></li>
     <li><a class="dropdown-item" href="../articles/similar-packages.html">Similar packages and comparison</a></li>
     <li><a class="dropdown-item" href="../articles/tuning-capabilities.html">Tuning Capabilities</a></li>
+    <li><a class="dropdown-item" href="../articles/special-cases.html">Linear and Logistic Regression (Special Cases)</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-learn-more" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Learn more</button>
@@ -571,16 +572,16 @@ is automatically switched to <code>"cross_entropy"</code> in that case.</p>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Auto-detected classification task. Using cross_entropy loss.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using device: cpu</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 8/80 - Loss: 0.2225 - Val Loss: 0.2683</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 16/80 - Loss: 0.0960 - Val Loss: 0.1137</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 24/80 - Loss: 0.0792 - Val Loss: 0.1586</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 32/80 - Loss: 0.1346 - Val Loss: 0.1066</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 40/80 - Loss: 0.1006 - Val Loss: 0.0858</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 48/80 - Loss: 0.0783 - Val Loss: 0.0835</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 56/80 - Loss: 0.1038 - Val Loss: 0.0839</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 64/80 - Loss: 0.0758 - Val Loss: 0.1025</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 72/80 - Loss: 0.0522 - Val Loss: 0.0810</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 80/80 - Loss: 0.0638 - Val Loss: 0.0807</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 8/80 - Loss: 0.2805 - Val Loss: 0.3216</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 16/80 - Loss: 0.0935 - Val Loss: 0.1693</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 24/80 - Loss: 0.0716 - Val Loss: 0.1481</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 32/80 - Loss: 0.0715 - Val Loss: 0.1243</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 40/80 - Loss: 0.0556 - Val Loss: 0.1103</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 48/80 - Loss: 0.0608 - Val Loss: 0.0942</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 56/80 - Loss: 0.0810 - Val Loss: 0.3081</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 64/80 - Loss: 0.0750 - Val Loss: 0.1187</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 72/80 - Loss: 0.1160 - Val Loss: 0.1543</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 80/80 - Loss: 0.0683 - Val Loss: 0.1039</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             pred</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> actual       Setosa Versicolor Virginica</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   setosa         50          0         0</span>
