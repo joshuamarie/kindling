@@ -148,3 +148,7 @@ Useful links:
 ## Author
 
 **Maintainer**: Joshua Marie <joshua.marie.k@gmail.com>
+
+Authors:
+
+- Antoine Soetewey <ant.soetewey@gmail.com>
