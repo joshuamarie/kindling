@@ -146,14 +146,8 @@
 #'   (e.g., `model()`). If `FALSE` (default), returns the unevaluated language expression
 #'   that can be inspected or evaluated later with `eval()`. Default is `FALSE`.
 #'
-#' @param use_namespace Logical or character. Controls how layer functions are namespaced in 
-#'   the generated code:
-#'   - `TRUE` (default): Functions are namespaced to `{torch}` (e.g., `torch::nn_linear`)
-#'   - `FALSE`: No namespace prefix is added (functions used as-is from current environment)
-#'   - Character string: Custom namespace (e.g., `"mypackage"` produces `mypackage::my_layer`)
-#'   
-#'   When using custom layers from your environment, set to `FALSE` to avoid forcing
-#'   torch namespace resolution.
+#'  
+#' @param .env Default is [parent.frame()]. The environment in which the generated expression is to be evaluated
 #'
 #' @param ... Additional arguments passed to layer constructors or for future extensions.
 #'
@@ -274,10 +268,10 @@ nn_module_generator =
         output_activation = NULL,
         bias = TRUE,
         eval = FALSE, 
-        use_namespace = TRUE,
+        .env = parent.frame(), 
         ...
     ) {
-    if (is.null(nn_layer)) nn_layer = "nn_linear"
+    if (is.null(nn_layer)) nn_layer = "torch::nn_linear"
     
     if (missing(hd_neurons) || is.null(hd_neurons) || length(hd_neurons) == 0L) {
         hd_neurons = integer(0) 
@@ -333,7 +327,12 @@ nn_module_generator =
     # ---- Build initialize() ----
     init_body = map(seq_len(n_layers), function(i) {
         is_output = (i == n_layers)
-        layer_name = if (is_output) "out" else glue("{substring(nn_layer_name, 4)}_{i}")
+        layer_base_name = if (startsWith(nn_layer_name, "nn_")) {
+            substring(nn_layer_name, 4)
+        } else {
+            nn_layer_name
+        }
+        layer_name = if (is_output) "out" else glue("{layer_base_name}_{i}")
         in_dim = nodes[i]
         out_dim = nodes[i + 1]
         
@@ -371,14 +370,7 @@ nn_module_generator =
         
         layer_call = call2(
             layer_expr,
-            !!!c(layer_args, nn_layer_args, additional_args),
-            .ns = if (rlang::is_true(use_namespace)) {
-                "torch"
-            } else if (rlang::is_false(use_namespace)) {
-                NULL
-            } else {
-                use_namespace  
-            }
+            !!!c(layer_args, nn_layer_args, additional_args)
         )
         
         call2("=", call2("$", expr(self), sym(layer_name)), layer_call)
@@ -393,7 +385,12 @@ nn_module_generator =
     forward_body_exprs = map(seq_len(n_layers), function(i) {
         is_output = (i == n_layers)
         is_last_hidden = (i == n_layers - 1L)
-        layer_name = if (is_output) "out" else glue("{substring(nn_layer_name, 4)}_{i}")
+        layer_base_name = if (startsWith(nn_layer_name, "nn_")) {
+            substring(nn_layer_name, 4)
+        } else {
+            nn_layer_name
+        }
+        layer_name = if (is_output) "out" else glue("{layer_base_name}_{i}")
         act_call_fn = all_activation_calls[[i]]
         
         layer_expr = call2(call2("$", expr(self), sym(layer_name)), expr(x))
@@ -446,7 +443,7 @@ nn_module_generator =
         .ns = "torch"
     )
     
-    if (eval) eval(full_call) else full_call
+    if (eval) eval(full_call) else rlang::new_quosure(full_call, env = .env)
 }
 
 #' Formula to Function with Named Arguments

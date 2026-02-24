@@ -15,7 +15,7 @@ A list with class "activation_args" containing the parameters.
 \description{
 \ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}
 
-This is superseded in v0.3.0 in favour of \verb{<act_fn[param = 0]>} type.
+This is superseded in v0.3.0 in favour of indexed syntax, e.g. \verb{<act_fn[param = 0]>} type.
 Type-safe helper to specify parameters for activation functions.
 All parameters must be named and match the formal arguments of the
 corresponding \code{{torch}} activation function.
