@@ -45,6 +45,10 @@
     function.
   - Allows early stopping if `early_stopping` is supplied with
     [`early_stop()`](https://kindling.joshuamarie.com/dev/reference/early_stop.md).
+  - [`train_nnsnip()`](https://kindling.joshuamarie.com/dev/reference/train_nnsnip.md)
+    is now provided to make
+    [`train_nn()`](https://kindling.joshuamarie.com/dev/reference/gen-nn-train.md)
+    interfaced with [tidymodels](https://tidymodels.tidymodels.org)
 
 #### Superset
 
