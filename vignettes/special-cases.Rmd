@@ -1,6 +1,8 @@
 ---
 title: "Special Cases: Linear and Logistic Regression"
-output: rmarkdown::html_vignette
+output:
+    rmarkdown::html_vignette:
+        toc: true
 vignette: >
   %\VignetteIndexEntry{Special Cases: Linear and Logistic Regression}
   %\VignetteEngine{knitr::rmarkdown}
@@ -9,6 +11,7 @@ vignette: >
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
+    # eval = !identical(Sys.getenv("NOT_CRAN"), "true"), 
     fig.width = 7,
     fig.height = 5
 )
@@ -16,6 +19,215 @@ knitr::opts_chunk$set(
 
 ## What's so special about {kindling}
 
-This package is planned to make it compatible for any machine learning task. Yes, you can do both linear regression and logistic regression with extra steps: heavily customized optimizer and loss functions. The `train_nn()` function (available on >v0.3.x) supports this { `optimizer` $\leftrightarrow$ `optimizer_args` } and { `loss` }
+This package is planned to make it compatible for any machine learning task, even time series and image classification cam be supported. Yes, you can do both linear regression and logistic regression with extra steps: heavily customized optimizer and loss functions. The `train_nn()` function (available on >v0.3.x) supports this { `optimizer` $\leftrightarrow$ `optimizer_args` } and { `loss` }. For both cases, the key is to remove all hidden layers and rely entirely on the output layer and the appropriate loss function to recover the classical model's behavior.
 
+## Setup
 
+```{r}
+box::use(
+    kindling[train_nn, act_funs, args],
+    recipes[
+        recipe, step_dummy, step_normalize,
+        all_nominal_predictors, all_numeric_predictors
+    ],
+    rsample[initial_split, training, testing],
+    yardstick[metric_set, rmse, rsq, accuracy, mn_log_loss],
+    dplyr[mutate, select],
+    tibble[tibble]
+)
+```
+
+## Linear Regression as a Special Case
+
+A standard linear regression model predicts a continuous outcome as a weighted sum of inputs — no nonlinearity, no hidden layers. A neural network recovers this exactly when:
+
+- There are *no hidden layers* (`hidden_neurons = integer(0)` or simply omit it),
+- The *output activation is the identity* (i.e., no activation), and
+- The common loss function is MSE, but we can choose different loss function:  (`loss = "mse"`).
+
+Under these conditions, gradient descent minimizes the same objective as ordinary least squares, and the learned weights converge to the OLS solution given sufficient epochs and a small learning rate.
+
+### Data
+
+We use `mtcars` to predict fuel efficiency (`mpg`) from the other variables.
+
+```{r linear-data}
+set.seed(42)
+split = initial_split(mtcars, prop = 0.8)
+train = training(split)
+test = testing(split)
+
+rec = recipe(mpg ~ ., data = train) |>
+    step_normalize(all_numeric_predictors())
+```
+
+### Fitting the model
+
+To create no hidden units, the `hidden_neuron` parameter from `train_nn()` considers the following to achieve:
+
+1. `NULL`
+2.  Empty `c()`
+3.  No arguments at all
+
+In this example, the empty vector `c()` is used and will collapse the network to a single linear layer from inputs to output. The `optimizer = "rmsprop"` with a small `learn_rate` mirrors classical gradient descent for OLS.
+
+```{r linear-fit}
+lm_nn = train_nn(
+    mpg ~ .,
+    data = train,
+    hidden_neurons = c(),
+    loss = torch::nnf_l1_loss,
+    optimizer = "rmsprop", 
+    learn_rate = 0.01,
+    epochs = 200,
+    verbose = FALSE
+)
+
+lm_nn
+```
+
+### Evaluation
+
+```{r linear-eval}
+preds = predict(lm_nn, newdata = test)
+
+tibble(
+    truth = test$mpg,
+    estimate = preds
+) |>
+    metric_set(rmse, rsq)(truth = truth, estimate = estimate)
+```
+
+### Comparison with `lm()`
+
+```{r linear-compare}
+lm_fit = lm(mpg ~ ., data = train)
+
+tibble(
+    truth = test$mpg,
+    estimate = predict(lm_fit, newdata = test)
+) |>
+    metric_set(rmse, rsq)(truth = truth, estimate = estimate)
+```
+
+The two models should produce very similar RMSE and $R^2$ values. Any small gap reflects that gradient descent is an iterative approximation, while `lm()` solves for the exact OLS coefficients directly. Increasing `epochs` or switching to `optimizer = "lbfgs"` (if supported) will close the gap further.
+
+## Logistic Regression as a Special Case
+
+Logistic regression models a binary or multiclass outcome by passing a linear combination of inputs through a sigmoid or softmax activation. A neural network with:
+
+- **No hidden layers**,
+- A **sigmoid output** for binary classification (or softmax for multiclass), and
+- **Cross-entropy** (`loss = "cross_entropy"`) for the loss function
+
+is mathematically equivalent to logistic regression.
+
+### Binary Logistic Regression
+
+We use the `Sonar` dataset from `{mlbench}` to distinguish rocks from mines (binary outcome).
+
+```{r binary-data}
+data("Sonar", package = "mlbench")
+
+sonar = Sonar
+set.seed(42)
+split_s = initial_split(sonar, prop = 0.8, strata = Class)
+train_s = training(split_s)
+test_s = testing(split_s)
+
+rec_s = recipe(Class ~ ., data = train_s) |>
+    step_normalize(all_numeric_predictors())
+```
+
+```{r binary-fit}
+logit_nn = train_nn(
+    Class ~ .,
+    data = train_s,
+    hidden_neurons = c(),
+    loss = "cross_entropy",
+    optimizer = "adam",
+    learn_rate = 0.01,
+    epochs = 200,
+    verbose = FALSE
+)
+
+logit_nn
+```
+
+```{r binary-eval}
+preds_s = predict(logit_nn, newdata = test_s, type = "response")
+
+tibble(
+    truth = test_s$Class,
+    estimate = preds_s
+) |>
+    accuracy(truth = truth, estimate = estimate)
+```
+
+<!-- ### Multiclass Logistic Regression -->
+
+<!-- For more than two classes, cross-entropy loss with a softmax output generalizes logistic regression. We demonstrate on `iris` with three species. -->
+
+<!-- ```{r multiclass-data} -->
+<!-- set.seed(42) -->
+<!-- split_i = initial_split(iris, prop = 0.8, strata = Species) -->
+<!-- train_i = training(split_i) -->
+<!-- test_i = testing(split_i) -->
+
+<!-- rec_i = recipe(Species ~ ., data = train_i) |> -->
+<!--     step_normalize(all_numeric_predictors()) -->
+<!-- ``` -->
+
+<!-- ```{r multiclass-fit} -->
+<!-- softmax_nn = train_nn( -->
+<!--     Species ~ ., -->
+<!--     data = train_i, -->
+<!--     hidden_neurons = integer(0), -->
+<!--     loss = "cross_entropy", -->
+<!--     optimizer = "adam", -->
+<!--     learn_rate = 0.01, -->
+<!--     epochs = 300, -->
+<!--     verbose = FALSE -->
+<!-- ) -->
+
+<!-- softmax_nn -->
+<!-- ``` -->
+
+<!-- ```{r multiclass-eval} -->
+<!-- preds_i = predict(softmax_nn, newdata = test_i, type = "class") -->
+
+<!-- tibble( -->
+<!--     truth = test_i$Species, -->
+<!--     estimate = preds_i -->
+<!-- ) |> -->
+<!--     accuracy(truth = truth, estimate = estimate) -->
+<!-- ``` -->
+
+### Comparison with `glm()` / `nnet::multinom()`
+
+```{r logit-compare}
+box::use(nnet[multinom])
+
+glm_fit = glm(Class ~ ., data = train_s, family = binomial())
+
+tibble(
+    truth = test_s$Class,
+    estimate = {
+        predict(glm_fit, newdata = test_s, type = "response") |> 
+        x => as.factor(ifelse(x < 0.5, "M", "R"))
+    }
+) |>
+    accuracy(truth = truth, estimate = estimate)
+```
+
+Again, accuracy should be comparable between the two approaches. The neural network version converges iteratively, so the match is not guaranteed to be exact, but both are optimizing the same cross-entropy objective over a linear model.
+
+## Summary
+
+| Task | `hidden_neurons` | `loss` | Output activation | Classical equivalent |
+|---|---|---|---|---|
+| Linear regression | `integer(0)` | `"mse"` | Identity (none) | `lm()` |
+| Binary logistic regression | `integer(0)` | `"bce"` | Sigmoid | `glm(..., family = binomial)` |
+| Multiclass logistic regression | `integer(0)` | `"cross_entropy"` | Softmax | `nnet::multinom()` |
+
+The ability to strip away hidden layers turns `train_nn()` into a drop-in gradient-descent solver for classical GLMs. This is less computationally efficient than their closed-form counterparts, but it makes `{kindling}` a consistent interface for both linear and deep architectures, letting you gradually increase capacity by adding hidden layers without switching functions or frameworks.
