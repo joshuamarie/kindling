@@ -1,8 +1,9 @@
-#' Multi-Layer Perceptron (Feedforward Neural Network) via kindling
+#' Parsnip Interface of `train_nn()`
 #'
-#' `mlp_kindling()` defines a feedforward neural network model that can be used
+#' `train_nnsnip()` defines a neural network model specification that can be used
 #' for classification or regression. It integrates with the tidymodels ecosystem
-#' and uses the torch backend via kindling.
+#' and uses [train_nn()] as the fitting backend, supporting any architecture
+#' expressible via [nn_arch()] — feedforward, recurrent, convolutional, and beyond.
 #'
 #' @param mode A single character string for the type of model. Possible values
 #'   are "unknown", "regression", or "classification".
@@ -41,28 +42,44 @@
 #'   tuned — pass via `set_engine()`.
 #' @param early_stopping An [early_stop()] object or `NULL`. Cannot be tuned —
 #'   pass via `set_engine()`.
-#' @param device A character string for the device ("cpu", "cuda", "mps").
+#' @param device A character string for the device to use ("cpu", "cuda", "mps").
+#'   If `NULL`, auto-detects the best available device. Cannot be tuned — pass
+#'   via `set_engine()`.
+#' @param verbose Logical for whether to print training progress. Default `FALSE`.
 #'   Cannot be tuned — pass via `set_engine()`.
-#' @param verbose Logical for whether to print training progress. Cannot be
-#'   tuned — pass via `set_engine()`.
 #' @param cache_weights Logical. If `TRUE`, stores trained weight matrices in
 #'   the returned object. Cannot be tuned — pass via `set_engine()`.
 #'
 #' @details
-#' This function creates a model specification for a feedforward neural network
-#' that can be used within tidymodels workflows. The model supports:
+#' This function creates a model specification for a neural network that can be
+#' used within tidymodels workflows. The underlying engine is [train_nn()], which
+#' is architecture-agnostic: when `architecture = NULL` it falls back to a
+#' standard feed-forward network, but any architecture expressible via [nn_arch()]
+#' can be used instead. The model supports:
 #'
-#' - Multiple hidden layers with configurable units
-#' - Various activation functions per layer
+#' - Configurable hidden layers and activation functions (default MLP path)
+#' - Custom architectures via [nn_arch()] (recurrent, convolutional, etc.)
 #' - GPU acceleration (CUDA, MPS, or CPU)
 #' - Hyperparameter tuning integration
 #' - Both regression and classification tasks
 #'
-#' Parameters that cannot be tuned (`architecture`, `flatten_input`,
-#' `early_stopping`, `device`, `verbose`, `cache_weights`, `optimizer_args`,
-#' `loss`) must be set via `set_engine()`, not as arguments to `mlp_kindling()`.
+#' When using the default MLP path (no custom `architecture`), `hidden_neurons`
+#' accepts an integer vector where each element represents the number of neurons
+#' in that hidden layer. For example, `hidden_neurons = c(128, 64, 32)` creates
+#' a network with three hidden layers. Pass an [nn_arch()] object via
+#' `set_engine()` to use a custom architecture instead.
 #'
-#' @return A model specification object with class `mlp_kindling`.
+#' The `device` parameter controls where computation occurs:
+#' - `NULL` (default): Auto-detect best available device (CUDA > MPS > CPU)
+#' - `"cuda"`: Use NVIDIA GPU
+#' - `"mps"`: Use Apple Silicon GPU
+#' - `"cpu"`: Use CPU only
+#'
+#' When tuning, you can use special tune tokens:
+#' - For `hidden_neurons`: use `tune("hidden_neurons")` with a custom range
+#' - For `activation`: use `tune("activation")` with values like "relu", "tanh"
+#'
+#' @return A model specification object with class `train_nnsnip`.
 #'
 #' @examples
 #' \donttest{
@@ -74,39 +91,26 @@
 #'         parsnip[fit]
 #'     )
 #'
-#'     # library(recipes)
-#'     # library(workflows)
-#'     # library(parsnip)
-#'     # library(tune)
-#'
-#'     # Model specs
-#'     mlp_spec = mlp_kindling(
+#'     # Model spec
+#'     nn_spec = train_nnsnip(
 #'         mode = "classification",
-#'         hidden_neurons = c(128, 64, 32),
-#'         activation = c("relu", "relu", "relu"),
+#'         hidden_neurons = c(30, 5),
+#'         activations = c("relu", "elu"),
 #'         epochs = 100
 #'     )
 #'
-#'     # If you want to tune
-#'     mlp_tune_spec = mlp_kindling(
-#'         mode = "classification",
-#'         hidden_neurons = tune(),
-#'         activation = tune(),
-#'         epochs = tune(),
-#'         learn_rate = tune()
-#'     )
-#'      wf = workflow() |>
+#'     wf = workflow() |>
 #'         add_recipe(recipe(Species ~ ., data = iris)) |>
-#'         add_model(mlp_spec)
+#'         add_model(nn_spec)
 #'
-#'      fit_wf = fit(wf, data = iris)
+#'     fit_wf = fit(wf, data = iris)
 #' } else {
 #'     message("Torch not fully installed — skipping example")
 #' }
 #' }
 #'
 #' @export
-mlp_kindling = 
+train_nnsnip = 
     function(
         mode = "unknown",
         engine = "kindling",
@@ -166,7 +170,7 @@ mlp_kindling =
     )
     
     parsnip::new_model_spec(
-        "mlp_kindling",
+        "train_nnsnip",
         args = args,
         eng_args = eng_args,
         mode = mode,
@@ -179,8 +183,8 @@ mlp_kindling =
 
 
 #' @export
-print.mlp_kindling = function(x, ...) {
-    cat("Kindling Multi-Layer Perceptron Model Specification (", x$mode, ")\n\n", sep = "")
+print.train_nnsnip = function(x, ...) {
+    cat("Kindling Neural Network Model Specification (", x$mode, ")\n\n", sep = "")
     parsnip::model_printer(x, ...)
     invisible(x)
 }
@@ -188,7 +192,7 @@ print.mlp_kindling = function(x, ...) {
 
 #' @export
 #' @importFrom stats update
-update.mlp_kindling = 
+update.train_nnsnip = 
     function(
         object,
         parameters = NULL,
@@ -202,15 +206,11 @@ update.mlp_kindling =
         mixture = NULL,
         learn_rate = NULL,
         optimizer = NULL,
-        validation_split = NULL,
         optimizer_args = NULL,
         loss = NULL,
-        architecture = NULL,
-        flatten_input = NULL,
-        early_stopping = NULL,
+        validation_split = NULL,
         device = NULL,
         verbose = NULL,
-        cache_weights = NULL,
         fresh = FALSE,
         ...
     )
@@ -227,7 +227,11 @@ update.mlp_kindling =
         mixture = rlang::enquo(mixture),
         learn_rate = rlang::enquo(learn_rate),
         optimizer = rlang::enquo(optimizer),
-        validation_split = rlang::enquo(validation_split)
+        optimizer_args = rlang::enquo(optimizer_args),
+        loss = rlang::enquo(loss),
+        validation_split = rlang::enquo(validation_split),
+        device = rlang::enquo(device),
+        verbose = rlang::enquo(verbose)
     )
     
     parsnip::update_spec(
@@ -235,7 +239,7 @@ update.mlp_kindling =
         parameters = parameters,
         args_enquo_list = args,
         fresh = fresh,
-        cls = "mlp_kindling",
+        cls = "train_nnsnip",
         ...
     )
 }
@@ -243,10 +247,11 @@ update.mlp_kindling =
 
 #' @export
 #' @importFrom parsnip translate
-translate.mlp_kindling = function(x, engine = x$engine, ...) {
+translate.train_nnsnip = function(x, engine = x$engine, ...) {
     if (is.null(engine)) {
         cli::cli_abort("Please set an engine with `set_engine()`.")
     }
+    
     x = parsnip::translate.default(x, engine, ...)
     x
 }
@@ -254,7 +259,7 @@ translate.mlp_kindling = function(x, engine = x$engine, ...) {
 
 #' @export
 #' @importFrom tune tunable
-tunable.mlp_kindling = function(x, ...) {
+tunable.train_nnsnip = function(x, ...) {
     tibble::tibble(
         name = c(
             "hidden_neurons", "activations", "output_activation", "bias",
@@ -275,40 +280,38 @@ tunable.mlp_kindling = function(x, ...) {
             list(pkg = "kindling", fun = "validation_split")
         ),
         source = "model_spec",
-        component = "mlp_kindling",
+        component = "train_nnsnip",
         component_id = "main"
     )
 }
 
-#' Basemodels-tidymodels wrappers
+#' kindling-tidymodels wrapper
 #'
 #' @param formula A formula specifying the model (e.g., `y ~ x1 + x2`)
 #' @param data A data frame containing the training data
 #' @param ... Additional arguments passed to the underlying training function
 #'
 #' @return
-#' * `ffnn_wrapper()` returns an object of class `"ffnn_fit"` containing the trained feedforward neural network model and metadata. See [ffnn()] for details.
-#' * `rnn_wrapper()` returns an object of class `"rnn_fit"` containing the trained recurrent neural network model and metadata. See [rnn()] for details.
+#' `train_nn_wrapper()` returns an `"nn_fit_tab"` object. See [train_nn()] for details.
 #'
 #' @details
-#' These wrapper functions are designed to interface with the `{tidymodels}` 
+#' This wrapper function is designed to interface with the `{tidymodels}`
 #' ecosystem, particularly for use with [tune::tune_grid()] and workflows.
-#' They handle the conversion of tuning parameters (especially list-column 
-#' parameters from [grid_depth()]) into the format expected by [ffnn()] and [rnn()].
-#' 
+#' It handles the conversion of tuning parameters (especially list-column
+#' parameters from [grid_depth()]) into the format expected by [train_nn()].
+#'
 #' @rdname kindling-nn-wrappers
-#' @section FFNN (MLP) Wrapper for `{tidymodels}` interface:
-#' This is a function to interface into `{tidymodels}`
-#' (do not use this, use `kindling::ffnn()` instead).
-#' 
+#' @section MLP Wrapper for `{tidymodels}` interface:
+#' Internal wrapper — use `mlp_kindling()` + `fit()` instead.
+#'
 #' @keywords internal
 #' @export
-ffnn_wrapper = function(formula, data, ...) {
+train_nn_wrapper = function(formula, data, ...) {
     dots = list(...)
     dots = prepare_kindling_args(dots)
     
     do.call(
-        ffnn,
-        c(list(formula = formula, data = data), dots)
+        train_nn,
+        c(list(x = formula, data = data), dots)
     )
 }
