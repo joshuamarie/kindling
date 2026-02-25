@@ -152,7 +152,7 @@ if (torch::torch_is_installed()) {
     nn_spec = train_nnsnip(
         mode = "classification",
         hidden_neurons = c(30, 5),
-        activations = c("relu", "relu", "relu"),
+        activations = c("relu", "elu"),
         epochs = 100
     )
 
