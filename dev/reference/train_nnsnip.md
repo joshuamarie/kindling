@@ -1,13 +1,17 @@
-# Multi-Layer Perceptron (Feedforward Neural Network) via kindling
+# Parsnip Interface of `train_nn()`
 
-`mlp_kindling()` defines a feedforward neural network model that can be
-used for classification or regression. It integrates with the tidymodels
-ecosystem and uses the torch backend via kindling.
+`train_nnsnip()` defines a neural network model specification that can
+be used for classification or regression. It integrates with the
+tidymodels ecosystem and uses
+[`train_nn()`](https://kindling.joshuamarie.com/dev/reference/gen-nn-train.md)
+as the fitting backend, supporting any architecture expressible via
+[`nn_arch()`](https://kindling.joshuamarie.com/dev/reference/nn_arch.md)
+— feedforward, recurrent, convolutional, and beyond.
 
 ## Usage
 
 ``` r
-mlp_kindling(
+train_nnsnip(
   mode = "unknown",
   engine = "kindling",
   hidden_neurons = NULL,
@@ -132,13 +136,14 @@ mlp_kindling(
 
 - device:
 
-  A character string for the device ("cpu", "cuda", "mps"). Cannot be
-  tuned — pass via `set_engine()`.
+  A character string for the device to use ("cpu", "cuda", "mps"). If
+  `NULL`, auto-detects the best available device. Cannot be tuned — pass
+  via `set_engine()`.
 
 - verbose:
 
-  Logical for whether to print training progress. Cannot be tuned — pass
-  via `set_engine()`.
+  Logical for whether to print training progress. Default `FALSE`.
+  Cannot be tuned — pass via `set_engine()`.
 
 - cache_weights:
 
@@ -147,17 +152,23 @@ mlp_kindling(
 
 ## Value
 
-A model specification object with class `mlp_kindling`.
+A model specification object with class `train_nnsnip`.
 
 ## Details
 
-This function creates a model specification for a feedforward neural
-network that can be used within tidymodels workflows. The model
-supports:
+This function creates a model specification for a neural network that
+can be used within tidymodels workflows. The underlying engine is
+[`train_nn()`](https://kindling.joshuamarie.com/dev/reference/gen-nn-train.md),
+which is architecture-agnostic: when `architecture = NULL` it falls back
+to a standard feed-forward network, but any architecture expressible via
+[`nn_arch()`](https://kindling.joshuamarie.com/dev/reference/nn_arch.md)
+can be used instead. The model supports:
 
-- Multiple hidden layers with configurable units
+- Configurable hidden layers and activation functions (default MLP path)
 
-- Various activation functions per layer
+- Custom architectures via
+  [`nn_arch()`](https://kindling.joshuamarie.com/dev/reference/nn_arch.md)
+  (recurrent, convolutional, etc.)
 
 - GPU acceleration (CUDA, MPS, or CPU)
 
@@ -165,10 +176,31 @@ supports:
 
 - Both regression and classification tasks
 
-Parameters that cannot be tuned (`architecture`, `flatten_input`,
-`early_stopping`, `device`, `verbose`, `cache_weights`,
-`optimizer_args`, `loss`) must be set via `set_engine()`, not as
-arguments to `mlp_kindling()`.
+When using the default MLP path (no custom `architecture`),
+`hidden_neurons` accepts an integer vector where each element represents
+the number of neurons in that hidden layer. For example,
+`hidden_neurons = c(128, 64, 32)` creates a network with three hidden
+layers. Pass an
+[`nn_arch()`](https://kindling.joshuamarie.com/dev/reference/nn_arch.md)
+object via `set_engine()` to use a custom architecture instead.
+
+The `device` parameter controls where computation occurs:
+
+- `NULL` (default): Auto-detect best available device (CUDA \> MPS \>
+  CPU)
+
+- `"cuda"`: Use NVIDIA GPU
+
+- `"mps"`: Use Apple Silicon GPU
+
+- `"cpu"`: Use CPU only
+
+When tuning, you can use special tune tokens:
+
+- For `hidden_neurons`: use `tune("hidden_neurons")` with a custom range
+
+- For `activation`: use `tune("activation")` with values like "relu",
+  "tanh"
 
 ## Examples
 
@@ -182,32 +214,19 @@ if (torch::torch_is_installed()) {
         parsnip[fit]
     )
 
-    # library(recipes)
-    # library(workflows)
-    # library(parsnip)
-    # library(tune)
-
-    # Model specs
-    mlp_spec = mlp_kindling(
+    # Model spec
+    nn_spec = train_nnsnip(
         mode = "classification",
-        hidden_neurons = c(128, 64, 32),
-        activation = c("relu", "relu", "relu"),
+        hidden_neurons = c(30, 5),
+        activations = c("relu", "elu"),
         epochs = 100
     )
 
-    # If you want to tune
-    mlp_tune_spec = mlp_kindling(
-        mode = "classification",
-        hidden_neurons = tune(),
-        activation = tune(),
-        epochs = tune(),
-        learn_rate = tune()
-    )
-     wf = workflow() |>
+    wf = workflow() |>
         add_recipe(recipe(Species ~ ., data = iris)) |>
-        add_model(mlp_spec)
+        add_model(nn_spec)
 
-     fit_wf = fit(wf, data = iris)
+    fit_wf = fit(wf, data = iris)
 } else {
     message("Torch not fully installed — skipping example")
 }

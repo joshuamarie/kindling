@@ -77,11 +77,15 @@ and uses the torch backend via kindling.</p>
 <span>  mixture <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  learn_rate <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  optimizer <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  validation_split <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  optimizer_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  loss <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  validation_split <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  architecture <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  flatten_input <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  early_stopping <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  device <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cache_weights <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -149,29 +153,49 @@ Only relevant when <code>penalty &gt; 0</code>. Can be tuned.</p></li>
 "rmsprop"). Can be tuned.</p></dd>
 
 
-<dt id="arg-optimizer-args">optimizer_args<a class="anchor" aria-label="anchor" href="#arg-optimizer-args"></a></dt>
-<dd><p>A named list of additional arguments passed to the optimizer.
-Cannot be tuned.</p></dd>
-
-
-<dt id="arg-loss">loss<a class="anchor" aria-label="anchor" href="#arg-loss"></a></dt>
-<dd><p>A character string for the loss function ("mse", "mae",
-"cross_entropy", "bce"). Cannot be tuned.</p></dd>
-
-
 <dt id="arg-validation-split">validation_split<a class="anchor" aria-label="anchor" href="#arg-validation-split"></a></dt>
 <dd><p>A number between 0 and 1 for the proportion of data
 used for validation. Can be tuned.</p></dd>
 
 
+<dt id="arg-optimizer-args">optimizer_args<a class="anchor" aria-label="anchor" href="#arg-optimizer-args"></a></dt>
+<dd><p>A named list of additional arguments passed to the
+optimizer. Cannot be tuned — pass via <code>set_engine()</code>.</p></dd>
+
+
+<dt id="arg-loss">loss<a class="anchor" aria-label="anchor" href="#arg-loss"></a></dt>
+<dd><p>A character string for the loss function ("mse", "mae",
+"cross_entropy", "bce"). Cannot be tuned — pass via <code>set_engine()</code>.</p></dd>
+
+
+<dt id="arg-architecture">architecture<a class="anchor" aria-label="anchor" href="#arg-architecture"></a></dt>
+<dd><p>An <code><a href="nn_arch.html">nn_arch()</a></code> object for a custom architecture. Cannot
+be tuned — pass via <code>set_engine()</code>.</p></dd>
+
+
+<dt id="arg-flatten-input">flatten_input<a class="anchor" aria-label="anchor" href="#arg-flatten-input"></a></dt>
+<dd><p>Logical or <code>NULL</code>. Controls input flattening. Cannot be
+tuned — pass via <code>set_engine()</code>.</p></dd>
+
+
+<dt id="arg-early-stopping">early_stopping<a class="anchor" aria-label="anchor" href="#arg-early-stopping"></a></dt>
+<dd><p>An <code><a href="early_stop.html">early_stop()</a></code> object or <code>NULL</code>. Cannot be tuned —
+pass via <code>set_engine()</code>.</p></dd>
+
+
 <dt id="arg-device">device<a class="anchor" aria-label="anchor" href="#arg-device"></a></dt>
-<dd><p>A character string for the device to use ("cpu", "cuda", "mps").
-If NULL, auto-detects available GPU. Cannot be tuned.</p></dd>
+<dd><p>A character string for the device ("cpu", "cuda", "mps").
+Cannot be tuned — pass via <code>set_engine()</code>.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Logical for whether to print training progress. Default FALSE.
-Cannot be tuned.</p></dd>
+<dd><p>Logical for whether to print training progress. Cannot be
+tuned — pass via <code>set_engine()</code>.</p></dd>
+
+
+<dt id="arg-cache-weights">cache_weights<a class="anchor" aria-label="anchor" href="#arg-cache-weights"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, stores trained weight matrices in
+the returned object. Cannot be tuned — pass via <code>set_engine()</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -186,16 +210,10 @@ that can be used within tidymodels workflows. The model supports:</p><ul><li><p>
 <li><p>GPU acceleration (CUDA, MPS, or CPU)</p></li>
 <li><p>Hyperparameter tuning integration</p></li>
 <li><p>Both regression and classification tasks</p></li>
-</ul><p>The <code>hidden_neurons</code> parameter accepts an integer vector where each element
-represents the number of neurons in that hidden layer. For example,
-<code>hidden_neurons = c(128, 64, 32)</code> creates a network with three hidden layers.</p>
-<p>The <code>device</code> parameter controls where computation occurs:</p><ul><li><p><code>NULL</code> (default): Auto-detect best available device (CUDA &gt; MPS &gt; CPU)</p></li>
-<li><p><code>"cuda"</code>: Use NVIDIA GPU</p></li>
-<li><p><code>"mps"</code>: Use Apple Silicon GPU</p></li>
-<li><p><code>"cpu"</code>: Use CPU only</p></li>
-</ul><p>When tuning, you can use special tune tokens:</p><ul><li><p>For <code>hidden_neurons</code>: use <code>tune("hidden_neurons")</code> with a custom range</p></li>
-<li><p>For <code>activation</code>: use <code>tune("activation")</code> with values like "relu", "tanh"</p></li>
-</ul></div>
+</ul><p>Parameters that cannot be tuned (<code>architecture</code>, <code>flatten_input</code>,
+<code>early_stopping</code>, <code>device</code>, <code>verbose</code>, <code>cache_weights</code>, <code>optimizer_args</code>,
+<code>loss</code>) must be set via <code>set_engine()</code>, not as arguments to <code>mlp_kindling()</code>.</p>
+    </div>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
@@ -207,6 +225,11 @@ represents the number of neurons in that hidden layer. For example,
 <span class="r-in"><span>        <span class="va">tune</span><span class="op">[</span><span class="va">tune</span><span class="op">]</span>,</span></span>
 <span class="r-in"><span>        <span class="va">parsnip</span><span class="op">[</span><span class="va">fit</span><span class="op">]</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="co"># library(recipes)</span></span></span>
+<span class="r-in"><span>    <span class="co"># library(workflows)</span></span></span>
+<span class="r-in"><span>    <span class="co"># library(parsnip)</span></span></span>
+<span class="r-in"><span>    <span class="co"># library(tune)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span>    <span class="co"># Model specs</span></span></span>
 <span class="r-in"><span>    <span class="va">mlp_spec</span> <span class="op">=</span> <span class="fu">mlp_kindling</span><span class="op">(</span></span></span>

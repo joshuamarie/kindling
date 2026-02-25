@@ -6,8 +6,15 @@ Define neural network architectures for tidymodels
 
 - [`mlp_kindling()`](https://kindling.joshuamarie.com/dev/reference/mlp_kindling.md)
   : Multi-Layer Perceptron (Feedforward Neural Network) via kindling
+
 - [`rnn_kindling()`](https://kindling.joshuamarie.com/dev/reference/rnn_kindling.md)
   : Recurrent Neural Network via kindling
+
+- [`train_nnsnip()`](https://kindling.joshuamarie.com/dev/reference/train_nnsnip.md)
+  :
+
+  Parsnip Interface of
+  [`train_nn()`](https://kindling.joshuamarie.com/dev/reference/gen-nn-train.md)
 
 ## Training Functions
 
