@@ -8,7 +8,6 @@ rnn_kindling(
   mode = "unknown",
   engine = "kindling",
   hidden_neurons = NULL,
-  rnn_type = NULL,
   activations = NULL,
   output_activation = NULL,
   bias = NULL,
@@ -20,11 +19,14 @@ rnn_kindling(
   mixture = NULL,
   learn_rate = NULL,
   optimizer = NULL,
+  validation_split = NULL,
+  rnn_type = NULL,
   optimizer_args = NULL,
   loss = NULL,
-  validation_split = NULL,
+  early_stopping = NULL,
   device = NULL,
-  verbose = NULL
+  verbose = NULL,
+  cache_weights = NULL
 )
 }
 \arguments{
@@ -36,9 +38,6 @@ to use for fitting. Currently only "kindling" is supported.}
 
 \item{hidden_neurons}{An integer vector for the number of units in each hidden
 layer. Can be tuned.}
-
-\item{rnn_type}{A character string for the type of RNN cell ("rnn", "lstm",
-"gru"). Cannot be tuned.}
 
 \item{activations}{A character vector of activation function names for each
 hidden layer (e.g., "relu", "tanh", "sigmoid"). Can be tuned.}
@@ -75,20 +74,29 @@ Only relevant when \code{penalty > 0}. Can be tuned.
 \item{optimizer}{A character string for the optimizer type ("adam", "sgd",
 "rmsprop"). Can be tuned.}
 
-\item{optimizer_args}{A named list of additional arguments passed to the optimizer.
-Cannot be tuned.}
-
-\item{loss}{A character string for the loss function ("mse", "mae",
-"cross_entropy", "bce"). Cannot be tuned.}
-
 \item{validation_split}{A number between 0 and 1 for the proportion of data
 used for validation. Can be tuned.}
 
-\item{device}{A character string for the device to use ("cpu", "cuda", "mps").
-If NULL, auto-detects available GPU. Cannot be tuned.}
+\item{rnn_type}{A character string for the type of RNN cell ("rnn", "lstm",
+"gru"). Cannot be tuned — pass via \code{set_engine()}.}
 
-\item{verbose}{Logical for whether to print training progress. Default FALSE.
-Cannot be tuned.}
+\item{optimizer_args}{A named list of additional arguments passed to the
+optimizer. Cannot be tuned — pass via \code{set_engine()}.}
+
+\item{loss}{A character string for the loss function ("mse", "mae",
+"cross_entropy", "bce"). Cannot be tuned — pass via \code{set_engine()}.}
+
+\item{early_stopping}{An \code{\link[=early_stop]{early_stop()}} object or \code{NULL}. Cannot be tuned —
+pass via \code{set_engine()}.}
+
+\item{device}{A character string for the device ("cpu", "cuda", "mps").
+Cannot be tuned — pass via \code{set_engine()}.}
+
+\item{verbose}{Logical for whether to print training progress. Cannot be
+tuned — pass via \code{set_engine()}.}
+
+\item{cache_weights}{Logical. If \code{TRUE}, stores trained weight matrices in
+the returned object. Cannot be tuned — pass via \code{set_engine()}.}
 }
 \value{
 A model specification object with class \code{rnn_kindling}.
