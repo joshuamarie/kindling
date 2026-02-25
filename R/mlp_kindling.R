@@ -79,36 +79,27 @@
 #'     # library(parsnip)
 #'     # library(tune)
 #'
-#'     # Basic model spec
+#'     # Model specs
 #'     mlp_spec = mlp_kindling(
 #'         mode = "classification",
 #'         hidden_neurons = c(128, 64, 32),
-#'         activations = c("relu", "relu", "relu"),
+#'         activation = c("relu", "relu", "relu"),
 #'         epochs = 100
 #'     )
 #'
-#'     # Engine-level non-tunable args go in set_engine()
-#'     mlp_spec_gpu = mlp_kindling(
-#'         mode = "regression",
-#'         hidden_neurons = c(64, 32),
-#'         epochs = 200
-#'     ) |>
-#'         set_engine("kindling", device = "cuda", verbose = TRUE)
-#'
-#'     # Tuning spec
+#'     # If you want to tune
 #'     mlp_tune_spec = mlp_kindling(
 #'         mode = "classification",
 #'         hidden_neurons = tune(),
-#'         activations = tune(),
+#'         activation = tune(),
 #'         epochs = tune(),
 #'         learn_rate = tune()
 #'     )
-#'
-#'     wf = workflow() |>
+#'      wf = workflow() |>
 #'         add_recipe(recipe(Species ~ ., data = iris)) |>
 #'         add_model(mlp_spec)
 #'
-#'     fit_wf = fit(wf, data = iris)
+#'      fit_wf = fit(wf, data = iris)
 #' } else {
 #'     message("Torch not fully installed — skipping example")
 #' }
