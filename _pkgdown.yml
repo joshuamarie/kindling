@@ -62,6 +62,7 @@ reference:
     contents:
     - mlp_kindling
     - rnn_kindling
+    - train_nnsnip
 
   - title: Training Functions
     desc: Direct training interface (Level 2)
