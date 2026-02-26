@@ -11,12 +11,12 @@ vignette: >
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-    # eval = !identical(Sys.getenv("NOT_CRAN"), "true"), 
+    eval = identical(Sys.getenv("NOT_CRAN"), "true"), 
     fig.width = 7,
     fig.height = 5
 )
 
-Sys.setenv("_R_USE_PIPEBIND_" = TRUE)
+# Sys.setenv("_R_USE_PIPEBIND_" = TRUE)
 ```
 
 ## What's so special about {kindling}
@@ -215,21 +215,15 @@ glm_fit = glm(Class ~ ., data = train_s, family = binomial())
 tibble(
     truth = test_s$Class,
     estimate = {
-        predict(glm_fit, newdata = test_s, type = "response") |> 
-        x => as.factor(ifelse(x < 0.5, "M", "R"))
+        as.factor({
+            preds = predict(glm_fit, newdata = test_s, type = "response")
+            ifelse(preds < 0.5, "M", "R")
+        })
     }
 ) |>
     accuracy(truth = truth, estimate = estimate)
 ```
 
+<!-- > To learn more about `=>`, it is a pipe-bind operator by running this on your R console: `Sys.setenv("_R_USE_PIPEBIND_" = TRUE)` -->
+
 Again, accuracy should be comparable between the two approaches. The neural network version converges iteratively, so the match is not guaranteed to be exact, but both are optimizing the same cross-entropy objective over a linear model.
-
-## Summary
-
-| Task | `hidden_neurons` | `loss` | Output activation | Classical equivalent |
-|---|---|---|---|---|
-| Linear regression | `integer(0)` | `"mse"` | Identity (none) | `lm()` |
-| Binary logistic regression | `integer(0)` | `"bce"` | Sigmoid | `glm(..., family = binomial)` |
-| Multiclass logistic regression | `integer(0)` | `"cross_entropy"` | Softmax | `nnet::multinom()` |
-
-The ability to strip away hidden layers turns `train_nn()` into a drop-in gradient-descent solver for classical GLMs. This is less computationally efficient than their closed-form counterparts, but it makes `{kindling}` a consistent interface for both linear and deep architectures, letting you gradually increase capacity by adding hidden layers without switching functions or frameworks.

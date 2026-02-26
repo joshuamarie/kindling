@@ -11,7 +11,8 @@ vignette: >
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(
-    eval = !identical(Sys.getenv("NOT_CRAN"), "true"), 
+    # eval = identical(Sys.getenv("BUILD_VIGNETTES"), "true"), 
+    eval = identical(Sys.getenv("NOT_CRAN"), "true"), 
     fig.width = 7,
     fig.height = 5
 )
