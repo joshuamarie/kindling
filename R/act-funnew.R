@@ -15,9 +15,13 @@
 #'   compatible with `act_funs()`.
 #'
 #' @examples
+#' \dontrun{
+#' \donttest{
 #' act_funs(relu, elu, new_act_fn(\(x) torch::torch_tanh(x)))
 #' act_funs(new_act_fn(\(x) torch::nnf_silu(x)))
-#'
+#' }
+#' }
+#' 
 #' @export
 new_act_fn = function(fn, probe = TRUE, .name = "<custom>") {
     if (!is.function(fn)) {

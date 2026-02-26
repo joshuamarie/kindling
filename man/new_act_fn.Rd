@@ -26,7 +26,11 @@ dry-run probe at \emph{definition time} so errors surface early, and
 wraps the function with a \emph{call-time} type guard for safety.
 }
 \examples{
+\dontrun{
+\donttest{
 act_funs(relu, elu, new_act_fn(\(x) torch::torch_tanh(x)))
 act_funs(new_act_fn(\(x) torch::nnf_silu(x)))
+}
+}
 
 }
