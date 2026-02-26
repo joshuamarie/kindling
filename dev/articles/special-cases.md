@@ -149,8 +149,8 @@ tibble(
     ## # A tibble: 2 × 3
     ##   .metric .estimator .estimate
     ##   <chr>   <chr>          <dbl>
-    ## 1 rmse    standard       3.45 
-    ## 2 rsq     standard       0.873
+    ## 1 rmse    standard       4.43 
+    ## 2 rsq     standard       0.944
 
 ### Comparison with `lm()`
 
@@ -279,7 +279,7 @@ tibble(
     ## # A tibble: 1 × 3
     ##   .metric  .estimator .estimate
     ##   <chr>    <chr>          <dbl>
-    ## 1 accuracy binary         0.744
+    ## 1 accuracy binary         0.767
 
 ### Comparison with `glm()` / `nnet::multinom()`
 
@@ -297,8 +297,10 @@ glm_fit = glm(Class ~ ., data = train_s, family = binomial())
 tibble(
     truth = test_s$Class,
     estimate = {
-        predict(glm_fit, newdata = test_s, type = "response") |> 
-        x => as.factor(ifelse(x < 0.5, "M", "R"))
+        as.factor({
+            preds = predict(glm_fit, newdata = test_s, type = "response")
+            ifelse(preds < 0.5, "M", "R")
+        })
     }
 ) |>
     accuracy(truth = truth, estimate = estimate)
@@ -313,20 +315,3 @@ Again, accuracy should be comparable between the two approaches. The
 neural network version converges iteratively, so the match is not
 guaranteed to be exact, but both are optimizing the same cross-entropy
 objective over a linear model.
-
-## Summary
-
-| Task                           | `hidden_neurons` | `loss`            | Output activation | Classical equivalent                                             |
-|--------------------------------|------------------|-------------------|-------------------|------------------------------------------------------------------|
-| Linear regression              | `integer(0)`     | `"mse"`           | Identity (none)   | [`lm()`](https://rdrr.io/r/stats/lm.html)                        |
-| Binary logistic regression     | `integer(0)`     | `"bce"`           | Sigmoid           | `glm(..., family = binomial)`                                    |
-| Multiclass logistic regression | `integer(0)`     | `"cross_entropy"` | Softmax           | [`nnet::multinom()`](https://rdrr.io/pkg/nnet/man/multinom.html) |
-
-The ability to strip away hidden layers turns
-[`train_nn()`](https://kindling.joshuamarie.com/dev/reference/gen-nn-train.md)
-into a drop-in gradient-descent solver for classical GLMs. This is less
-computationally efficient than their closed-form counterparts, but it
-makes [kindling](https://kindling.joshuamarie.com) a consistent
-interface for both linear and deep architectures, letting you gradually
-increase capacity by adding hidden layers without switching functions or
-frameworks.

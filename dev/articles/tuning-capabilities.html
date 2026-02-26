@@ -194,10 +194,12 @@ target variable is <code>body_mass_kg</code>, derived from the original
 <span><span class="va">split</span> <span class="op">=</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">penguins_clean</span>, prop <span class="op">=</span> <span class="fl">0.8</span>, strata <span class="op">=</span> <span class="va">species</span><span class="op">)</span></span>
 <span><span class="va">train</span> <span class="op">=</span> <span class="fu">training</span><span class="op">(</span><span class="va">split</span><span class="op">)</span></span>
 <span><span class="va">test</span> <span class="op">=</span> <span class="fu">testing</span><span class="op">(</span><span class="va">split</span><span class="op">)</span></span>
-<span><span class="va">folds</span> <span class="op">=</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">train</span>, v <span class="op">=</span> <span class="fl">5</span>, strata <span class="op">=</span> <span class="va">body_mass_kg</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="va">rec</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">body_mass_kg</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">train</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="va">folds</span> <span class="op">=</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">train</span>, v <span class="op">=</span> <span class="fl">5</span>, strata <span class="op">=</span> <span class="va">body_mass_kg</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## Warning: The number of observations in each quantile is below the recommended threshold</span></span>
+<span><span class="co">## of 20.</span></span>
+<span><span class="co">## <span style="color: #00BBBB;">•</span> Stratification will use 3 breaks instead.</span></span></code></pre>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rec</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">body_mass_kg</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">train</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">step_dummy</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -221,7 +223,7 @@ Remember, it accepts:</p>
 <p>When <code>n_hlayer &gt; 1</code>, the <code>hidden_neurons</code>
 and <code>activations</code> columns become list-columns, where each row
 holds a vector of per-layer values.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">42</span><span class="op">)</span></span>
 <span><span class="va">depth_grid</span> <span class="op">=</span> <span class="fu"><a href="../reference/grid_depth.html">grid_depth</a></span><span class="op">(</span></span>
 <span>    <span class="fu"><a href="../reference/dials-kindling.html">hidden_neurons</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">16</span>, <span class="fl">32</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -233,6 +235,19 @@ holds a vector of per-layer values.</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">depth_grid</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 10 × 3</span></span></span>
+<span><span class="co">##    hidden_neurons activations learn_rate</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     2.99<span style="color: #949494;">e</span><span style="color: #BB0000;">- 6</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> <span style="color: #949494;">&lt;int [2]&gt;</span>      <span style="color: #949494;">&lt;chr [2]&gt;</span>     9.46<span style="color: #949494;">e</span><span style="color: #BB0000;">- 5</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     4.09<span style="color: #949494;">e</span><span style="color: #BB0000;">- 4</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     2.98<span style="color: #949494;">e</span><span style="color: #BB0000;">- 8</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     3.66<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> <span style="color: #949494;">&lt;int [3]&gt;</span>      <span style="color: #949494;">&lt;chr [3]&gt;</span>     1.62<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> <span style="color: #949494;">&lt;int [3]&gt;</span>      <span style="color: #949494;">&lt;chr [3]&gt;</span>     5.56<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     1.06<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     1.40<span style="color: #949494;">e</span><span style="color: #BB0000;">- 5</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> <span style="color: #949494;">&lt;int [2]&gt;</span>      <span style="color: #949494;">&lt;chr [2]&gt;</span>     1.59<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span></span></span></code></pre>
 <p>Here we constrain <code>hidden_neurons</code> to the range
 <code>[16, 32]</code> and limit activations to three candidates —
 including the parametric <code>softshrink</code>. Latin hypercube
@@ -247,7 +262,7 @@ induced into list-columns and it becomes something like
 <code>list(c(1, 2))</code>, so internally the configured argument
 unlisted through <code>list(c(1, 2))[[1]]</code> (it always produces
 only 1 element).</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">wflow</span> <span class="op">=</span> <span class="fu"><a href="https://workflows.tidymodels.org/reference/workflow.html" class="external-link">workflow</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://workflows.tidymodels.org/reference/add_recipe.html" class="external-link">add_recipe</a></span><span class="op">(</span><span class="va">rec</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://workflows.tidymodels.org/reference/add_model.html" class="external-link">add_model</a></span><span class="op">(</span><span class="va">spec</span><span class="op">)</span></span>
@@ -266,9 +281,43 @@ only 1 element).</p>
 want to produce. Use functions to extract the metrics output after grid
 search, e.g. <code><a href="https://tune.tidymodels.org/reference/collect_predictions.html" class="external-link">collect_metrics()</a></code> and
 <code><a href="https://tune.tidymodels.org/reference/show_best.html" class="external-link">show_best()</a></code>.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://tune.tidymodels.org/reference/collect_predictions.html" class="external-link">collect_metrics</a></span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://tune.tidymodels.org/reference/show_best.html" class="external-link">show_best</a></span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rmse"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://tune.tidymodels.org/reference/collect_predictions.html" class="external-link">collect_metrics</a></span><span class="op">(</span><span class="va">tune_res</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 20 × 9</span></span></span>
+<span><span class="co">##    hidden_neurons activations learn_rate .metric .estimator   mean     n std_err</span></span>
+<span><span class="co">##    <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>           <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 1</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     2.99<span style="color: #949494;">e</span><span style="color: #BB0000;">- 6</span> rmse    standard   4.10       5 0.028<span style="text-decoration: underline;">9</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 2</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     2.99<span style="color: #949494;">e</span><span style="color: #BB0000;">- 6</span> rsq     standard   0.203      5 0.132  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 3</span> <span style="color: #949494;">&lt;int [2]&gt;</span>      <span style="color: #949494;">&lt;chr [2]&gt;</span>     9.46<span style="color: #949494;">e</span><span style="color: #BB0000;">- 5</span> rmse    standard   4.19       5 0.050<span style="text-decoration: underline;">1</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 4</span> <span style="color: #949494;">&lt;int [2]&gt;</span>      <span style="color: #949494;">&lt;chr [2]&gt;</span>     9.46<span style="color: #949494;">e</span><span style="color: #BB0000;">- 5</span> rsq     standard   0.428      5 0.138  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 5</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     4.09<span style="color: #949494;">e</span><span style="color: #BB0000;">- 4</span> rmse    standard   3.86       5 0.084<span style="text-decoration: underline;">6</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 6</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     4.09<span style="color: #949494;">e</span><span style="color: #BB0000;">- 4</span> rsq     standard   0.216      5 0.057<span style="text-decoration: underline;">2</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 7</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     2.98<span style="color: #949494;">e</span><span style="color: #BB0000;">- 8</span> rmse    standard   4.13       5 0.146  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 8</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     2.98<span style="color: #949494;">e</span><span style="color: #BB0000;">- 8</span> rsq     standard   0.433      5 0.134  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;"> 9</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     3.66<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> rmse    standard   0.098<span style="text-decoration: underline;">5</span>     5 0.013<span style="text-decoration: underline;">9</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">10</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     3.66<span style="color: #949494;">e</span><span style="color: #BB0000;">- 2</span> rsq     standard   0.984      5 0.005<span style="text-decoration: underline;">05</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">11</span> <span style="color: #949494;">&lt;int [3]&gt;</span>      <span style="color: #949494;">&lt;chr [3]&gt;</span>     1.62<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span> rmse    standard   4.25       5 0.052<span style="text-decoration: underline;">6</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">12</span> <span style="color: #949494;">&lt;int [3]&gt;</span>      <span style="color: #949494;">&lt;chr [3]&gt;</span>     1.62<span style="color: #949494;">e</span><span style="color: #BB0000;">- 7</span> rsq     standard   0.449      5 0.133  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">13</span> <span style="color: #949494;">&lt;int [3]&gt;</span>      <span style="color: #949494;">&lt;chr [3]&gt;</span>     5.56<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span> rmse    standard   4.17       5 0.021<span style="text-decoration: underline;">4</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">14</span> <span style="color: #949494;">&lt;int [3]&gt;</span>      <span style="color: #949494;">&lt;chr [3]&gt;</span>     5.56<span style="color: #949494;">e</span><span style="color: #BB0000;">-10</span> rsq     standard   0.190      5 0.101  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">15</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     1.06<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> rmse    standard   4.15       5 0.138  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">16</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     1.06<span style="color: #949494;">e</span><span style="color: #BB0000;">- 9</span> rsq     standard   0.520      5 0.179  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">17</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     1.40<span style="color: #949494;">e</span><span style="color: #BB0000;">- 5</span> rmse    standard   4.21       5 0.071<span style="text-decoration: underline;">6</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">18</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>     1.40<span style="color: #949494;">e</span><span style="color: #BB0000;">- 5</span> rsq     standard   0.253      5 0.132  </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">19</span> <span style="color: #949494;">&lt;int [2]&gt;</span>      <span style="color: #949494;">&lt;chr [2]&gt;</span>     1.59<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span> rmse    standard   0.833      5 0.096<span style="text-decoration: underline;">1</span> </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">20</span> <span style="color: #949494;">&lt;int [2]&gt;</span>      <span style="color: #949494;">&lt;chr [2]&gt;</span>     1.59<span style="color: #949494;">e</span><span style="color: #BB0000;">- 3</span> rsq     standard   0.674      5 0.054<span style="text-decoration: underline;">5</span> </span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 1 more variable: .config &lt;chr&gt;</span></span></span></code></pre>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://tune.tidymodels.org/reference/show_best.html" class="external-link">show_best</a></span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rmse"</span>, n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 5 × 9</span></span></span>
+<span><span class="co">##   hidden_neurons activations  learn_rate .metric .estimator   mean     n std_err</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>            <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>       <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span> <span style="color: #949494; font-style: italic;">&lt;int&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>       3.66<span style="color: #949494;">e</span><span style="color: #BB0000;">-2</span> rmse    standard   0.098<span style="text-decoration: underline;">5</span>     5  0.013<span style="text-decoration: underline;">9</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> <span style="color: #949494;">&lt;int [2]&gt;</span>      <span style="color: #949494;">&lt;chr [2]&gt;</span>       1.59<span style="color: #949494;">e</span><span style="color: #BB0000;">-3</span> rmse    standard   0.833      5  0.096<span style="text-decoration: underline;">1</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">3</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>       4.09<span style="color: #949494;">e</span><span style="color: #BB0000;">-4</span> rmse    standard   3.86       5  0.084<span style="text-decoration: underline;">6</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">4</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>       2.99<span style="color: #949494;">e</span><span style="color: #BB0000;">-6</span> rmse    standard   4.10       5  0.028<span style="text-decoration: underline;">9</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">5</span> <span style="color: #949494;">&lt;int [1]&gt;</span>      <span style="color: #949494;">&lt;chr [1]&gt;</span>       2.98<span style="color: #949494;">e</span><span style="color: #BB0000;">-8</span> rmse    standard   4.13       5  0.146 </span></span>
+<span><span class="co">## <span style="color: #949494;"># ℹ 1 more variable: .config &lt;chr&gt;</span></span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -285,23 +334,67 @@ search, e.g. <code><a href="https://tune.tidymodels.org/reference/collect_predi
 </h2>
 <p>Once we’ve identified the best configuration, we finalize the
 workflow and fit it on the full training set.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">best_params</span> <span class="op">=</span> <span class="fu"><a href="https://tune.tidymodels.org/reference/show_best.html" class="external-link">select_best</a></span><span class="op">(</span><span class="va">tune_res</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></span>
 <span><span class="va">final_wflow</span> <span class="op">=</span> <span class="va">wflow</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://tune.tidymodels.org/reference/finalize_model.html" class="external-link">finalize_workflow</a></span><span class="op">(</span><span class="va">best_params</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">final_model</span> <span class="op">=</span> <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html" class="external-link">fit</a></span><span class="op">(</span><span class="va">final_wflow</span>, data <span class="op">=</span> <span class="va">train</span><span class="op">)</span></span>
 <span><span class="va">final_model</span></span></code></pre></div>
+<pre><code><span><span class="co">## ══ Workflow [trained] ══════════════════════════════════════════════════════════</span></span>
+<span><span class="co">## <span style="font-style: italic;">Preprocessor:</span> Recipe</span></span>
+<span><span class="co">## <span style="font-style: italic;">Model:</span> mlp_kindling()</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ── Preprocessor ────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">## 2 Recipe Steps</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## • step_dummy()</span></span>
+<span><span class="co">## • step_normalize()</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## ── Model ───────────────────────────────────────────────────────────────────────</span></span></code></pre>
+<pre><code><span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
+<span><span class="co">## status 2</span></span>
+<span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
+<span><span class="co">## status 2</span></span></code></pre>
+<pre><code><span><span class="co">## </span></span>
+<span><span class="co">## <span style="font-weight: bold;">======================= Feedforward Neural Networks (MLP) ======================</span></span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## <span style="font-style: italic;">-- FFNN Model Summary ----------------------------------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
+<span><span class="co">## status 2</span></span></code></pre>
+<pre><code><span><span class="co">## -------------------------------------------------------------------</span></span>
+<span><span class="co">##   NN Model Type           :         FFNN    n_predictors :      7</span></span>
+<span><span class="co">##   Number of Epochs        :           50    n_response   :      1</span></span>
+<span><span class="co">##   Hidden Layer Units      :           30    reg.         :   None</span></span>
+<span><span class="co">##   Number of Hidden Layers :            1    Device       :    cpu</span></span>
+<span><span class="co">##   Pred. Type              :   regression                 :       </span></span>
+<span><span class="co">## -------------------------------------------------------------------</span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## </span></span>
+<span><span class="co">## <span style="font-style: italic;">-- Activation function ---------------------------------------------------------</span></span></span></code></pre>
+<pre><code><span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
+<span><span class="co">## status 2</span></span></code></pre>
+<pre><code><span><span class="co">## -------------------------------------------------</span></span>
+<span><span class="co">##   1st Layer {30}    :                       elu</span></span>
+<span><span class="co">##   Output Activation :   No act function applied</span></span>
+<span><span class="co">## -------------------------------------------------</span></span></code></pre>
 <div class="section level3">
 <h3 id="evaluating-on-the-test-set">Evaluating on the test set<a class="anchor" aria-label="anchor" href="#evaluating-on-the-test-set"></a>
 </h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">final_model</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu"><a href="https://generics.r-lib.org/reference/augment.html" class="external-link">augment</a></span><span class="op">(</span>new_data <span class="op">=</span> <span class="va">test</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span>, <span class="va">rsq</span><span class="op">)</span><span class="op">(</span></span>
 <span>        truth <span class="op">=</span> <span class="va">body_mass_kg</span>,</span>
 <span>        estimate <span class="op">=</span> <span class="va">.pred</span></span>
 <span>    <span class="op">)</span></span></code></pre></div>
+<pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 3</span></span></span>
+<span><span class="co">##   .metric .estimator .estimate</span></span>
+<span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> rmse    standard      0.056<span style="text-decoration: underline;">6</span></span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> rsq     standard      0.995</span></span></code></pre>
 </div>
 </div>
 <div class="section level2">
@@ -316,7 +409,7 @@ automatically. This means you can include them directly in the
 <code><a href="../reference/grid_depth.html">grid_depth()</a></code> without any extra setup, as shown above.</p>
 <p>For manual (non-tuned) use, you can also specify activations per
 layer explicitly:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">spec_manual</span> <span class="op">=</span> <span class="fu"><a href="../reference/mlp_kindling.html">mlp_kindling</a></span><span class="op">(</span></span>
 <span>    hidden_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">15</span><span class="op">)</span>,</span>
 <span>    activations <span class="op">=</span> <span class="fu"><a href="../reference/act_funs.html">act_funs</a></span><span class="op">(</span></span>

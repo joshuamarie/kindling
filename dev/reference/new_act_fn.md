@@ -34,14 +34,3 @@ compatible with
 [`act_funs()`](https://kindling.joshuamarie.com/dev/reference/act_funs.md).
 
 ## Examples
-
-``` r
-act_funs(relu, elu, new_act_fn(\(x) torch::torch_tanh(x)))
-#> <activation_spec[3]>
-#>                
-#> relu  elu NULL 
-act_funs(new_act_fn(\(x) torch::nnf_silu(x)))
-#> <activation_spec[1]>
-#>      
-#> NULL 
-```

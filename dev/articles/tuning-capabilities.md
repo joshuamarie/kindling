@@ -107,8 +107,13 @@ split = initial_split(penguins_clean, prop = 0.8, strata = species)
 train = training(split)
 test = testing(split)
 folds = vfold_cv(train, v = 5, strata = body_mass_kg)
+```
 
+    ## Warning: The number of observations in each quantile is below the recommended threshold
+    ## of 20.
+    ## • Stratification will use 3 breaks instead.
 
+``` r
 rec = recipe(body_mass_kg ~ ., data = train) |>
     step_dummy(all_nominal_predictors()) |>
     step_normalize(all_numeric_predictors())
@@ -144,6 +149,20 @@ depth_grid = grid_depth(
 
 depth_grid
 ```
+
+    ## # A tibble: 10 × 3
+    ##    hidden_neurons activations learn_rate
+    ##    <list>         <list>           <dbl>
+    ##  1 <int [1]>      <chr [1]>     2.99e- 6
+    ##  2 <int [2]>      <chr [2]>     9.46e- 5
+    ##  3 <int [1]>      <chr [1]>     4.09e- 4
+    ##  4 <int [1]>      <chr [1]>     2.98e- 8
+    ##  5 <int [1]>      <chr [1]>     3.66e- 2
+    ##  6 <int [3]>      <chr [3]>     1.62e- 7
+    ##  7 <int [3]>      <chr [3]>     5.56e-10
+    ##  8 <int [1]>      <chr [1]>     1.06e- 9
+    ##  9 <int [1]>      <chr [1]>     1.40e- 5
+    ## 10 <int [2]>      <chr [2]>     1.59e- 3
 
 Here we constrain `hidden_neurons` to the range `[16, 32]` and limit
 activations to three candidates — including the parametric `softshrink`.
@@ -181,8 +200,46 @@ and
 
 ``` r
 collect_metrics(tune_res)
+```
+
+    ## # A tibble: 20 × 9
+    ##    hidden_neurons activations learn_rate .metric .estimator   mean     n std_err
+    ##    <list>         <list>           <dbl> <chr>   <chr>       <dbl> <int>   <dbl>
+    ##  1 <int [1]>      <chr [1]>     2.99e- 6 rmse    standard   4.10       5 0.0289 
+    ##  2 <int [1]>      <chr [1]>     2.99e- 6 rsq     standard   0.203      5 0.132  
+    ##  3 <int [2]>      <chr [2]>     9.46e- 5 rmse    standard   4.19       5 0.0501 
+    ##  4 <int [2]>      <chr [2]>     9.46e- 5 rsq     standard   0.428      5 0.138  
+    ##  5 <int [1]>      <chr [1]>     4.09e- 4 rmse    standard   3.86       5 0.0846 
+    ##  6 <int [1]>      <chr [1]>     4.09e- 4 rsq     standard   0.216      5 0.0572 
+    ##  7 <int [1]>      <chr [1]>     2.98e- 8 rmse    standard   4.13       5 0.146  
+    ##  8 <int [1]>      <chr [1]>     2.98e- 8 rsq     standard   0.433      5 0.134  
+    ##  9 <int [1]>      <chr [1]>     3.66e- 2 rmse    standard   0.0985     5 0.0139 
+    ## 10 <int [1]>      <chr [1]>     3.66e- 2 rsq     standard   0.984      5 0.00505
+    ## 11 <int [3]>      <chr [3]>     1.62e- 7 rmse    standard   4.25       5 0.0526 
+    ## 12 <int [3]>      <chr [3]>     1.62e- 7 rsq     standard   0.449      5 0.133  
+    ## 13 <int [3]>      <chr [3]>     5.56e-10 rmse    standard   4.17       5 0.0214 
+    ## 14 <int [3]>      <chr [3]>     5.56e-10 rsq     standard   0.190      5 0.101  
+    ## 15 <int [1]>      <chr [1]>     1.06e- 9 rmse    standard   4.15       5 0.138  
+    ## 16 <int [1]>      <chr [1]>     1.06e- 9 rsq     standard   0.520      5 0.179  
+    ## 17 <int [1]>      <chr [1]>     1.40e- 5 rmse    standard   4.21       5 0.0716 
+    ## 18 <int [1]>      <chr [1]>     1.40e- 5 rsq     standard   0.253      5 0.132  
+    ## 19 <int [2]>      <chr [2]>     1.59e- 3 rmse    standard   0.833      5 0.0961 
+    ## 20 <int [2]>      <chr [2]>     1.59e- 3 rsq     standard   0.674      5 0.0545 
+    ## # ℹ 1 more variable: .config <chr>
+
+``` r
 show_best(tune_res, metric = "rmse", n = 5)
 ```
+
+    ## # A tibble: 5 × 9
+    ##   hidden_neurons activations  learn_rate .metric .estimator   mean     n std_err
+    ##   <list>         <list>            <dbl> <chr>   <chr>       <dbl> <int>   <dbl>
+    ## 1 <int [1]>      <chr [1]>       3.66e-2 rmse    standard   0.0985     5  0.0139
+    ## 2 <int [2]>      <chr [2]>       1.59e-3 rmse    standard   0.833      5  0.0961
+    ## 3 <int [1]>      <chr [1]>       4.09e-4 rmse    standard   3.86       5  0.0846
+    ## 4 <int [1]>      <chr [1]>       2.99e-6 rmse    standard   4.10       5  0.0289
+    ## 5 <int [1]>      <chr [1]>       2.98e-8 rmse    standard   4.13       5  0.146 
+    ## # ℹ 1 more variable: .config <chr>
 
 ## Visualizing Results
 
@@ -200,6 +257,52 @@ final_model = fit(final_wflow, data = train)
 final_model
 ```
 
+    ## ══ Workflow [trained] ══════════════════════════════════════════════════════════
+    ## Preprocessor: Recipe
+    ## Model: mlp_kindling()
+    ## 
+    ## ── Preprocessor ────────────────────────────────────────────────────────────────
+    ## 2 Recipe Steps
+    ## 
+    ## • step_dummy()
+    ## • step_normalize()
+    ## 
+    ## ── Model ───────────────────────────────────────────────────────────────────────
+
+    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
+    ## status 2
+    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
+    ## status 2
+
+    ## 
+    ## ======================= Feedforward Neural Networks (MLP) ======================
+    ## 
+    ## 
+    ## -- FFNN Model Summary ----------------------------------------------------------
+
+    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
+    ## status 2
+
+    ## -------------------------------------------------------------------
+    ##   NN Model Type           :         FFNN    n_predictors :      7
+    ##   Number of Epochs        :           50    n_response   :      1
+    ##   Hidden Layer Units      :           30    reg.         :   None
+    ##   Number of Hidden Layers :            1    Device       :    cpu
+    ##   Pred. Type              :   regression                 :       
+    ## -------------------------------------------------------------------
+    ## 
+    ## 
+    ## 
+    ## -- Activation function ---------------------------------------------------------
+
+    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
+    ## status 2
+
+    ## -------------------------------------------------
+    ##   1st Layer {30}    :                       elu
+    ##   Output Activation :   No act function applied
+    ## -------------------------------------------------
+
 ### Evaluating on the test set
 
 ``` r
@@ -210,6 +313,12 @@ final_model |>
         estimate = .pred
     )
 ```
+
+    ## # A tibble: 2 × 3
+    ##   .metric .estimator .estimate
+    ##   <chr>   <chr>          <dbl>
+    ## 1 rmse    standard      0.0566
+    ## 2 rsq     standard      0.995
 
 ## A Note on Parametric Activations
 

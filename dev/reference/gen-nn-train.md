@@ -559,20 +559,20 @@ if (torch::torch_is_installed()) {
 }
 #> → Auto-detected classification task. Using cross_entropy loss.
 #> ℹ Using device: cpu
-#> Epoch 8/80 - Loss: 0.1534 - Val Loss: 0.1958
-#> Epoch 16/80 - Loss: 0.1935 - Val Loss: 0.3148
-#> Epoch 24/80 - Loss: 0.0713 - Val Loss: 0.1177
-#> Epoch 32/80 - Loss: 0.0564 - Val Loss: 0.1056
-#> Epoch 40/80 - Loss: 0.0686 - Val Loss: 0.1016
-#> Epoch 48/80 - Loss: 0.0807 - Val Loss: 0.0997
-#> Epoch 56/80 - Loss: 0.0564 - Val Loss: 0.1116
-#> Epoch 64/80 - Loss: 0.0572 - Val Loss: 0.1159
-#> Epoch 72/80 - Loss: 0.0987 - Val Loss: 0.1011
-#> Epoch 80/80 - Loss: 0.0704 - Val Loss: 0.1077
+#> Epoch 8/80 - Loss: 0.2430 - Val Loss: 0.2618
+#> Epoch 16/80 - Loss: 0.0743 - Val Loss: 0.1010
+#> Epoch 24/80 - Loss: 0.0567 - Val Loss: 0.1291
+#> Epoch 32/80 - Loss: 0.0785 - Val Loss: 0.0974
+#> Epoch 40/80 - Loss: 0.0611 - Val Loss: 0.0987
+#> Epoch 48/80 - Loss: 0.0618 - Val Loss: 0.1038
+#> Epoch 56/80 - Loss: 0.0599 - Val Loss: 0.0965
+#> Epoch 64/80 - Loss: 0.0570 - Val Loss: 0.0934
+#> Epoch 72/80 - Loss: 0.1491 - Val Loss: 0.3945
+#> Epoch 80/80 - Loss: 0.0787 - Val Loss: 0.0801
 #>             pred
 #> actual       Setosa Versicolor Virginica
 #>   setosa         50          0         0
-#>   versicolor      0         49         1
+#>   versicolor      0         48         2
 #>   virginica       0          2        48
 # }
 ```
