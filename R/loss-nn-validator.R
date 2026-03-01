@@ -7,12 +7,12 @@
             i = "Use a lambda like {.code \\(input, target) torch::nnf_mse_loss(input, target)}."
         ), class = "loss_fn_arity_error")
     }
-    
+
     # ---- Dry-run probe ----
     if (requireNamespace("torch", quietly = TRUE)) {
         dummy_input  = torch::torch_randn(c(2L, 1L))
         dummy_target = torch::torch_randn(c(2L, 1L))
-        
+
         out = tryCatch(
             fn(dummy_input, dummy_target),
             error = function(e) {
@@ -23,7 +23,7 @@
                 ), class = "loss_fn_probe_error")
             }
         )
-        
+
         if (!inherits(out, "torch_tensor")) {
             cli::cli_abort(c(
                 "Custom loss function must return a {.cls torch_tensor}.",
@@ -31,7 +31,7 @@
                 i = "Ensure your function returns the result of a {.pkg torch} operation."
             ), class = "loss_fn_output_error")
         }
-        
+
         if (out$numel() != 1L) {
             cli::cli_warn(c(
                 "Custom loss function returned a non-scalar tensor with {out$numel()} elements.",
@@ -39,7 +39,7 @@
             ), class = "loss_fn_shape_warning")
         }
     }
-    
+
     # ---- Build the call-time type-guarded wrapper ----
     function(input, target) {
         out = fn(input, target)

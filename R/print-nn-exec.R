@@ -114,7 +114,12 @@ print.ffnn_fit = function(x, ...) {
     )
     
     inner_acts = if (is.list(x$activations)) {
-        vapply(x$activations, concat, character(1))
+        acts = vapply(x$activations, concat, character(1))
+        if (length(acts) == 1L && length(x$hidden_neurons) > 1L) {
+            rep(acts, length(x$hidden_neurons))
+        } else {
+            acts
+        }
     } else if (!is.null(x$activations)) {
         if (length(x$activations) == 1) {
             rep(as.character(x$activations), length(x$hidden_neurons))
@@ -217,7 +222,12 @@ print.rnn_fit = function(x, ...) {
     )
     
     inner_acts = if (is.list(x$activations)) {
-        vapply(x$activations, concat, character(1))
+        acts = vapply(x$activations, concat, character(1))
+        if (length(acts) == 1L && length(x$hidden_neurons) > 1L) {
+            rep(acts, length(x$hidden_neurons))
+        } else {
+            acts
+        }
     } else if (!is.null(x$activations)) {
         if (length(x$activations) == 1) {
             rep(as.character(x$activations), length(x$hidden_neurons))
@@ -225,8 +235,6 @@ print.rnn_fit = function(x, ...) {
             as.character(x$activations)
         }
     } else {
-        # When no activations specified 
-        # Replicate "None" for each hidden layer
         rep("None", length(x$hidden_neurons))
     }
     outer_acts = concat(x$output_activation)
