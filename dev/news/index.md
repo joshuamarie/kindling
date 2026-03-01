@@ -81,8 +81,6 @@
 
 ## kindling 0.2.0
 
-CRAN release: 2026-02-04
-
 ### New features
 
 - Added regularization support for neural network models
@@ -154,8 +152,6 @@ CRAN release: 2026-02-04
   and wrapper functions
 
 ## kindling 0.1.0
-
-CRAN release: 2026-01-31
 
 - Initial CRAN release
 - Higher-level interface for torch package to define, train, and tune
