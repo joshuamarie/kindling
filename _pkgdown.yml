@@ -40,6 +40,8 @@ navbar:
           href: articles/tuning-capabilities.html
         - text: Linear and Logistic Regression (Special Cases)
           href: articles/special-cases.html
+        - text: Custom Activation Function
+          href: articles/custom-act-fn.html
     tutorials:
       text: Learn more
       menu:
@@ -136,6 +138,7 @@ articles:
     - similar-packages
     - tuning-capabilities
     - special-cases
+    - custom-act-fn
 
 footer:
   structure:
