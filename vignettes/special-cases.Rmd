@@ -13,7 +13,9 @@ vignette: >
 knitr::opts_chunk$set(
     eval = identical(Sys.getenv("NOT_CRAN"), "true"), 
     fig.width = 7,
-    fig.height = 5
+    fig.height = 5,
+    warning = FALSE,
+    message = FALSE
 )
 
 # Sys.setenv("_R_USE_PIPEBIND_" = TRUE)
