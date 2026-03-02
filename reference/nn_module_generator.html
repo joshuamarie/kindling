@@ -25,7 +25,7 @@ and rnn_generator(), but can be used directly to create custom architectures."><
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,6 +40,8 @@ and rnn_generator(), but can be used directly to create custom architectures."><
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/kindling.html">Getting Started</a></li>
     <li><a class="dropdown-item" href="../articles/similar-packages.html">Similar packages and comparison</a></li>
     <li><a class="dropdown-item" href="../articles/tuning-capabilities.html">Tuning Capabilities</a></li>
+    <li><a class="dropdown-item" href="../articles/special-cases.html">Linear and Logistic Regression (Special Cases)</a></li>
+    <li><a class="dropdown-item" href="../articles/custom-act-fn.html">Custom Activation Function</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-learn-more" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Learn more</button>
@@ -65,7 +67,7 @@ and rnn_generator(), but can be used directly to create custom architectures."><
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Generalized Neural Network Module Expression Generator</h1>
-      <small class="dont-index">Source: <a href="https://github.com/joshuamarie/kindling/blob/main/R/torch_code_gen.R" class="external-link"><code>R/torch_code_gen.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/joshuamarie/kindling/blob/main/R/torch-code-gen.R" class="external-link"><code>R/torch-code-gen.R</code></a></small>
       <div class="d-none name"><code>nn_module_generator.Rd</code></div>
     </div>
 
@@ -101,7 +103,7 @@ and <code><a href="nn_gens.html">rnn_generator()</a></code>, but can be used dir
 <span>  output_activation <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  bias <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  eval <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  use_namespace <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  .env <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -241,13 +243,8 @@ If <code>TRUE</code>, returns an instantiated <code>nn_module</code> class that 
 that can be inspected or evaluated later with <code><a href="https://rdrr.io/r/base/eval.html" class="external-link">eval()</a></code>. Default is <code>FALSE</code>.</p></dd>
 
 
-<dt id="arg-use-namespace">use_namespace<a class="anchor" aria-label="anchor" href="#arg-use-namespace"></a></dt>
-<dd><p>Logical or character. Controls how layer functions are namespaced in
-the generated code:</p><ul><li><p><code>TRUE</code> (default): Functions are namespaced to <code>{torch}</code> (e.g., <code><a href="https://torch.mlverse.org/docs/reference/nn_linear.html" class="external-link">torch::nn_linear</a></code>)</p></li>
-<li><p><code>FALSE</code>: No namespace prefix is added (functions used as-is from current environment)</p></li>
-<li><p>Character string: Custom namespace (e.g., <code>"mypackage"</code> produces <code>mypackage::my_layer</code>)</p></li>
-</ul><p>When using custom layers from your environment, set to <code>FALSE</code> to avoid forcing
-torch namespace resolution.</p></dd>
+<dt id="arg--env">.env<a class="anchor" aria-label="anchor" href="#arg--env"></a></dt>
+<dd><p>Default is <code><a href="https://rdrr.io/r/base/sys.parent.html" class="external-link">parent.frame()</a></code>. The environment in which the generated expression is to be evaluated</p></dd>
 
 
 <dt id="arg--">...<a class="anchor" aria-label="anchor" href="#arg--"></a></dt>
@@ -273,7 +270,7 @@ directly to create model instances (e.g., <code>result()</code>).</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Joshua Marie.</p>
+  <p>Developed by Joshua Marie, Antoine Soetewey.</p>
 </div>
 
 <div class="pkgdown-footer-right">

@@ -148,3 +148,8 @@ Useful links:
 ## Author
 
 **Maintainer**: Joshua Marie <joshua.marie.k@gmail.com>
+
+Authors:
+
+- Antoine Soetewey <ant.soetewey@gmail.com>
+  ([ORCID](https://orcid.org/0000-0001-8159-0804))

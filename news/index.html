@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,8 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/kindling.html">Getting Started</a></li>
     <li><a class="dropdown-item" href="../articles/similar-packages.html">Similar packages and comparison</a></li>
     <li><a class="dropdown-item" href="../articles/tuning-capabilities.html">Tuning Capabilities</a></li>
+    <li><a class="dropdown-item" href="../articles/special-cases.html">Linear and Logistic Regression (Special Cases)</a></li>
+    <li><a class="dropdown-item" href="../articles/custom-act-fn.html">Custom Activation Function</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-learn-more" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Learn more</button>
@@ -84,6 +86,10 @@
 <p><code><a href="../reference/gen-nn-train.html">train_nn()</a></code> to execute <code><a href="../reference/nn_module_generator.html">nn_module_generator()</a></code></p>
 <ul><li>
 <code><a href="../reference/nn_arch.html">nn_arch()</a></code> must be supplied to inherit extra arguments from <code><a href="../reference/nn_module_generator.html">nn_module_generator()</a></code> function.</li>
+<li>Allows early stopping if <code>early_stopping</code> is supplied with <code><a href="../reference/early_stop.html">early_stop()</a></code>.</li>
+<li>
+<code><a href="../reference/train_nnsnip.html">train_nnsnip()</a></code> is now provided to make <code><a href="../reference/gen-nn-train.html">train_nn()</a></code> interfaced with <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>
+</li>
 </ul></li>
 </ul><div class="section level4">
 <h4 id="superset-development-version">Superset<a class="anchor" aria-label="anchor" href="#superset-development-version"></a></h4>
@@ -92,6 +98,10 @@
 <ul><li>Activation functions can now be modified using <code>[</code> syntax (e.g. <code>softplus[beta = 0.2]</code>)</li>
 <li>The current <code><a href="../reference/args.html">args()</a></code> (e.g. <code>softplus = args(beta = 0.2)</code>) is now superseded by that.</li>
 </ul></li>
+</ul></div>
+<div class="section level4">
+<h4 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h4>
+<ul><li>No suffix generated for <code>13</code> by <code><a href="../reference/ordinal_gen.html">ordinal_gen()</a></code>. Now fixed.</li>
 </ul></div>
 </div>
 </div>
@@ -167,7 +177,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Joshua Marie.</p>
+  <p>Developed by Joshua Marie, Antoine Soetewey.</p>
 </div>
 
 <div class="pkgdown-footer-right">

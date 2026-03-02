@@ -1,0 +1,33 @@
+# train_nn implementation for torch datasets
+
+train_nn implementation for torch datasets
+
+## Usage
+
+``` r
+train_nn_impl_dataset(
+  dataset,
+  no_x,
+  no_y,
+  is_classification,
+  hidden_neurons,
+  activations = NULL,
+  output_activation = NULL,
+  bias = TRUE,
+  epochs = 100,
+  batch_size = 32,
+  penalty = 0,
+  mixture = 0,
+  learn_rate = 0.001,
+  optimizer = "adam",
+  optimizer_args = list(),
+  loss = "mse",
+  validation_split = 0,
+  device = NULL,
+  verbose = FALSE,
+  cache_weights = FALSE,
+  flatten_input = TRUE,
+  arch = NULL,
+  fit_class = "nn_fit_ds"
+)
+```

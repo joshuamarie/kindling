@@ -13,7 +13,7 @@ function's formal arguments."><meta property="og:image" content="https://kindlin
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,6 +28,8 @@ function's formal arguments."><meta property="og:image" content="https://kindlin
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/kindling.html">Getting Started</a></li>
     <li><a class="dropdown-item" href="../articles/similar-packages.html">Similar packages and comparison</a></li>
     <li><a class="dropdown-item" href="../articles/tuning-capabilities.html">Tuning Capabilities</a></li>
+    <li><a class="dropdown-item" href="../articles/special-cases.html">Linear and Logistic Regression (Special Cases)</a></li>
+    <li><a class="dropdown-item" href="../articles/custom-act-fn.html">Custom Activation Function</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-learn-more" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Learn more</button>
@@ -53,7 +55,7 @@ function's formal arguments."><meta property="og:image" content="https://kindlin
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Activation Functions Specification Helper</h1>
-      <small class="dont-index">Source: <a href="https://github.com/joshuamarie/kindling/blob/main/R/act_fun.R" class="external-link"><code>R/act_fun.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/joshuamarie/kindling/blob/main/R/act-fun.R" class="external-link"><code>R/act-fun.R</code></a></small>
       <div class="d-none name"><code>act_funs.Rd</code></div>
     </div>
 
@@ -78,8 +80,8 @@ function's formal arguments.</p>
 <li><p>Character strings (simple): <code>"relu"</code>, <code>"tanh"</code></p></li>
 <li><p>Character strings (with params): <code>"softshrink(lambda = 0.1)"</code>, <code>"rrelu(lower = 1/5, upper = 1/4)"</code></p></li>
 <li><p>Named with parameters: <code>softmax = args(dim = 2L)</code></p></li>
-<li><p>Bracket syntax (named): <code>softshrink[lambd = 0.2]</code>, <code>rrelu[lower = 1/5, upper = 1/4]</code></p></li>
-<li><p>Bracket syntax (unnamed): <code>softshrink[0.5]</code>, <code>elu[0.5]</code></p></li>
+<li><p>Indexed syntax (named): <code>softshrink[lambd = 0.2]</code>, <code>rrelu[lower = 1/5, upper = 1/4]</code></p></li>
+<li><p>Indexed syntax (unnamed): <code>softshrink[0.5]</code>, <code>elu[0.5]</code></p></li>
 </ul></dd>
 
 </dl></div>
@@ -94,7 +96,7 @@ activation specifications.</p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Joshua Marie.</p>
+  <p>Developed by Joshua Marie, Antoine Soetewey.</p>
 </div>
 
 <div class="pkgdown-footer-right">

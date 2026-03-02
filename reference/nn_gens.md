@@ -187,6 +187,9 @@ if (torch::torch_is_installed()) {
 } else {
     message("Torch not fully installed — skipping example")
 }
+#> Warning: `args()` was deprecated in kindling 0.3.0.
+#> ℹ Use indexed syntax for parametric activation functions, e.g. `<softplus[beta
+#>   = 0.5]>`.
 # }
 
 # \donttest{

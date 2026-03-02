@@ -43,6 +43,12 @@
     must be supplied to inherit extra arguments from
     [`nn_module_generator()`](https://kindling.joshuamarie.com/reference/nn_module_generator.md)
     function.
+  - Allows early stopping if `early_stopping` is supplied with
+    [`early_stop()`](https://kindling.joshuamarie.com/reference/early_stop.md).
+  - [`train_nnsnip()`](https://kindling.joshuamarie.com/reference/train_nnsnip.md)
+    is now provided to make
+    [`train_nn()`](https://kindling.joshuamarie.com/reference/gen-nn-train.md)
+    interfaced with [tidymodels](https://tidymodels.tidymodels.org)
 
 #### Superset
 
@@ -55,6 +61,12 @@
   - The current
     [`args()`](https://kindling.joshuamarie.com/reference/args.md)
     (e.g. `softplus = args(beta = 0.2)`) is now superseded by that.
+
+#### Bug Fixes
+
+- No suffix generated for `13` by
+  [`ordinal_gen()`](https://kindling.joshuamarie.com/reference/ordinal_gen.md).
+  Now fixed.
 
 ## kindling 0.2.1
 

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,8 @@
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/kindling.html">Getting Started</a></li>
     <li><a class="dropdown-item" href="../articles/similar-packages.html">Similar packages and comparison</a></li>
     <li><a class="dropdown-item" href="../articles/tuning-capabilities.html">Tuning Capabilities</a></li>
+    <li><a class="dropdown-item" href="../articles/special-cases.html">Linear and Logistic Regression (Special Cases)</a></li>
+    <li><a class="dropdown-item" href="../articles/custom-act-fn.html">Custom Activation Function</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-learn-more" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Learn more</button>
@@ -64,6 +66,8 @@
 <span>  activations <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_activation <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  bias <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  arch <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  early_stopping <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  epochs <span class="op">=</span> <span class="fl">100</span>,</span>
 <span>  batch_size <span class="op">=</span> <span class="fl">32</span>,</span>
 <span>  penalty <span class="op">=</span> <span class="fl">0</span>,</span>
@@ -76,7 +80,6 @@
 <span>  device <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cache_weights <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  arch <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  fit_class <span class="op">=</span> <span class="st">"nn_fit"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -86,7 +89,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Joshua Marie.</p>
+  <p>Developed by Joshua Marie, Antoine Soetewey.</p>
 </div>
 
 <div class="pkgdown-footer-right">

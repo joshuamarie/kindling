@@ -39,7 +39,7 @@ nn_module_generator(
   output_activation = NULL,
   bias = TRUE,
   eval = FALSE,
-  use_namespace = TRUE,
+  .env = parent.frame(),
   ...
 )
 ```
@@ -259,22 +259,10 @@ nn_module_generator(
   evaluated later with [`eval()`](https://rdrr.io/r/base/eval.html).
   Default is `FALSE`.
 
-- use_namespace:
+- .env:
 
-  Logical or character. Controls how layer functions are namespaced in
-  the generated code:
-
-  - `TRUE` (default): Functions are namespaced to `{torch}` (e.g.,
-    [`torch::nn_linear`](https://torch.mlverse.org/docs/reference/nn_linear.html))
-
-  - `FALSE`: No namespace prefix is added (functions used as-is from
-    current environment)
-
-  - Character string: Custom namespace (e.g., `"mypackage"` produces
-    `mypackage::my_layer`)
-
-  When using custom layers from your environment, set to `FALSE` to
-  avoid forcing torch namespace resolution.
+  Default is [`parent.frame()`](https://rdrr.io/r/base/sys.parent.html).
+  The environment in which the generated expression is to be evaluated
 
 - ...:
 

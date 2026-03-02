@@ -11,7 +11,7 @@ tidymodels ecosystem and uses the torch backend via kindling."><meta property="o
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,6 +26,8 @@ tidymodels ecosystem and uses the torch backend via kindling."><meta property="o
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/kindling.html">Getting Started</a></li>
     <li><a class="dropdown-item" href="../articles/similar-packages.html">Similar packages and comparison</a></li>
     <li><a class="dropdown-item" href="../articles/tuning-capabilities.html">Tuning Capabilities</a></li>
+    <li><a class="dropdown-item" href="../articles/special-cases.html">Linear and Logistic Regression (Special Cases)</a></li>
+    <li><a class="dropdown-item" href="../articles/custom-act-fn.html">Custom Activation Function</a></li>
   </ul></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-learn-more" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Learn more</button>
@@ -67,7 +69,6 @@ tidymodels ecosystem and uses the torch backend via kindling.</p>
 <span>  mode <span class="op">=</span> <span class="st">"unknown"</span>,</span>
 <span>  engine <span class="op">=</span> <span class="st">"kindling"</span>,</span>
 <span>  hidden_neurons <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  rnn_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  activations <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  output_activation <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  bias <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -79,11 +80,14 @@ tidymodels ecosystem and uses the torch backend via kindling.</p>
 <span>  mixture <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  learn_rate <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  optimizer <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  validation_split <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  rnn_type <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  optimizer_args <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  loss <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  validation_split <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  early_stopping <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  device <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  verbose <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  verbose <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  cache_weights <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -104,11 +108,6 @@ to use for fitting. Currently only "kindling" is supported.</p></dd>
 <dt id="arg-hidden-neurons">hidden_neurons<a class="anchor" aria-label="anchor" href="#arg-hidden-neurons"></a></dt>
 <dd><p>An integer vector for the number of units in each hidden
 layer. Can be tuned.</p></dd>
-
-
-<dt id="arg-rnn-type">rnn_type<a class="anchor" aria-label="anchor" href="#arg-rnn-type"></a></dt>
-<dd><p>A character string for the type of RNN cell ("rnn", "lstm",
-"gru"). Cannot be tuned.</p></dd>
 
 
 <dt id="arg-activations">activations<a class="anchor" aria-label="anchor" href="#arg-activations"></a></dt>
@@ -166,29 +165,44 @@ Only relevant when <code>penalty &gt; 0</code>. Can be tuned.</p></li>
 "rmsprop"). Can be tuned.</p></dd>
 
 
-<dt id="arg-optimizer-args">optimizer_args<a class="anchor" aria-label="anchor" href="#arg-optimizer-args"></a></dt>
-<dd><p>A named list of additional arguments passed to the optimizer.
-Cannot be tuned.</p></dd>
-
-
-<dt id="arg-loss">loss<a class="anchor" aria-label="anchor" href="#arg-loss"></a></dt>
-<dd><p>A character string for the loss function ("mse", "mae",
-"cross_entropy", "bce"). Cannot be tuned.</p></dd>
-
-
 <dt id="arg-validation-split">validation_split<a class="anchor" aria-label="anchor" href="#arg-validation-split"></a></dt>
 <dd><p>A number between 0 and 1 for the proportion of data
 used for validation. Can be tuned.</p></dd>
 
 
+<dt id="arg-rnn-type">rnn_type<a class="anchor" aria-label="anchor" href="#arg-rnn-type"></a></dt>
+<dd><p>A character string for the type of RNN cell ("rnn", "lstm",
+"gru"). Cannot be tuned — pass via <code>set_engine()</code>.</p></dd>
+
+
+<dt id="arg-optimizer-args">optimizer_args<a class="anchor" aria-label="anchor" href="#arg-optimizer-args"></a></dt>
+<dd><p>A named list of additional arguments passed to the
+optimizer. Cannot be tuned — pass via <code>set_engine()</code>.</p></dd>
+
+
+<dt id="arg-loss">loss<a class="anchor" aria-label="anchor" href="#arg-loss"></a></dt>
+<dd><p>A character string for the loss function ("mse", "mae",
+"cross_entropy", "bce"). Cannot be tuned — pass via <code>set_engine()</code>.</p></dd>
+
+
+<dt id="arg-early-stopping">early_stopping<a class="anchor" aria-label="anchor" href="#arg-early-stopping"></a></dt>
+<dd><p>An <code><a href="early_stop.html">early_stop()</a></code> object or <code>NULL</code>. Cannot be tuned —
+pass via <code>set_engine()</code>.</p></dd>
+
+
 <dt id="arg-device">device<a class="anchor" aria-label="anchor" href="#arg-device"></a></dt>
-<dd><p>A character string for the device to use ("cpu", "cuda", "mps").
-If NULL, auto-detects available GPU. Cannot be tuned.</p></dd>
+<dd><p>A character string for the device ("cpu", "cuda", "mps").
+Cannot be tuned — pass via <code>set_engine()</code>.</p></dd>
 
 
 <dt id="arg-verbose">verbose<a class="anchor" aria-label="anchor" href="#arg-verbose"></a></dt>
-<dd><p>Logical for whether to print training progress. Default FALSE.
-Cannot be tuned.</p></dd>
+<dd><p>Logical for whether to print training progress. Cannot be
+tuned — pass via <code>set_engine()</code>.</p></dd>
+
+
+<dt id="arg-cache-weights">cache_weights<a class="anchor" aria-label="anchor" href="#arg-cache-weights"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, stores trained weight matrices in
+the returned object. Cannot be tuned — pass via <code>set_engine()</code>.</p></dd>
 
 </dl></div>
     <div class="section level2">
@@ -288,7 +302,7 @@ that can be used within tidymodels workflows. The model supports:</p><ul><li><p>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p>Developed by Joshua Marie.</p>
+  <p>Developed by Joshua Marie, Antoine Soetewey.</p>
 </div>
 
 <div class="pkgdown-footer-right">

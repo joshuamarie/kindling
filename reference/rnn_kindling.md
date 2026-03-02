@@ -11,7 +11,6 @@ rnn_kindling(
   mode = "unknown",
   engine = "kindling",
   hidden_neurons = NULL,
-  rnn_type = NULL,
   activations = NULL,
   output_activation = NULL,
   bias = NULL,
@@ -23,11 +22,14 @@ rnn_kindling(
   mixture = NULL,
   learn_rate = NULL,
   optimizer = NULL,
+  validation_split = NULL,
+  rnn_type = NULL,
   optimizer_args = NULL,
   loss = NULL,
-  validation_split = NULL,
+  early_stopping = NULL,
   device = NULL,
-  verbose = NULL
+  verbose = NULL,
+  cache_weights = NULL
 )
 ```
 
@@ -47,11 +49,6 @@ rnn_kindling(
 
   An integer vector for the number of units in each hidden layer. Can be
   tuned.
-
-- rnn_type:
-
-  A character string for the type of RNN cell ("rnn", "lstm", "gru").
-  Cannot be tuned.
 
 - activations:
 
@@ -110,30 +107,46 @@ rnn_kindling(
   A character string for the optimizer type ("adam", "sgd", "rmsprop").
   Can be tuned.
 
-- optimizer_args:
-
-  A named list of additional arguments passed to the optimizer. Cannot
-  be tuned.
-
-- loss:
-
-  A character string for the loss function ("mse", "mae",
-  "cross_entropy", "bce"). Cannot be tuned.
-
 - validation_split:
 
   A number between 0 and 1 for the proportion of data used for
   validation. Can be tuned.
 
+- rnn_type:
+
+  A character string for the type of RNN cell ("rnn", "lstm", "gru").
+  Cannot be tuned — pass via `set_engine()`.
+
+- optimizer_args:
+
+  A named list of additional arguments passed to the optimizer. Cannot
+  be tuned — pass via `set_engine()`.
+
+- loss:
+
+  A character string for the loss function ("mse", "mae",
+  "cross_entropy", "bce"). Cannot be tuned — pass via `set_engine()`.
+
+- early_stopping:
+
+  An
+  [`early_stop()`](https://kindling.joshuamarie.com/reference/early_stop.md)
+  object or `NULL`. Cannot be tuned — pass via `set_engine()`.
+
 - device:
 
-  A character string for the device to use ("cpu", "cuda", "mps"). If
-  NULL, auto-detects available GPU. Cannot be tuned.
+  A character string for the device ("cpu", "cuda", "mps"). Cannot be
+  tuned — pass via `set_engine()`.
 
 - verbose:
 
-  Logical for whether to print training progress. Default FALSE. Cannot
-  be tuned.
+  Logical for whether to print training progress. Cannot be tuned — pass
+  via `set_engine()`.
+
+- cache_weights:
+
+  Logical. If `TRUE`, stores trained weight matrices in the returned
+  object. Cannot be tuned — pass via `set_engine()`.
 
 ## Value
 

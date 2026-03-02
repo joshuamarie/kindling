@@ -27,10 +27,10 @@ act_funs(...)
 
   - Named with parameters: `softmax = args(dim = 2L)`
 
-  - Bracket syntax (named): `softshrink[lambd = 0.2]`,
+  - Indexed syntax (named): `softshrink[lambd = 0.2]`,
     `rrelu[lower = 1/5, upper = 1/4]`
 
-  - Bracket syntax (unnamed): `softshrink[0.5]`, `elu[0.5]`
+  - Indexed syntax (unnamed): `softshrink[0.5]`, `elu[0.5]`
 
 ## Value
 

@@ -6,8 +6,15 @@ Define neural network architectures for tidymodels
 
 - [`mlp_kindling()`](https://kindling.joshuamarie.com/reference/mlp_kindling.md)
   : Multi-Layer Perceptron (Feedforward Neural Network) via kindling
+
 - [`rnn_kindling()`](https://kindling.joshuamarie.com/reference/rnn_kindling.md)
   : Recurrent Neural Network via kindling
+
+- [`train_nnsnip()`](https://kindling.joshuamarie.com/reference/train_nnsnip.md)
+  :
+
+  Parsnip Interface of
+  [`train_nn()`](https://kindling.joshuamarie.com/reference/gen-nn-train.md)
 
 ## Training Functions
 
@@ -26,6 +33,13 @@ Direct training interface (Level 2)
   [`rnn()`](https://kindling.joshuamarie.com/reference/kindling-basemodels.md)
   : Base models for Neural Network Training in kindling
 
+### Utility Functions
+
+- [`nn_arch()`](https://kindling.joshuamarie.com/reference/nn_arch.md) :
+  Architecture specification for train_nn()
+- [`early_stop()`](https://kindling.joshuamarie.com/reference/early_stop.md)
+  : Early Stopping Specification
+
 ## Code Generators
 
 Generate
@@ -37,20 +51,12 @@ code (Lowest Level)
 - [`nn_module_generator()`](https://kindling.joshuamarie.com/reference/nn_module_generator.md)
   **\[experimental\]** : Generalized Neural Network Module Expression
   Generator
-- [`` `$`( ``*`<layer_pr>`*`)`](https://kindling.joshuamarie.com/reference/layer-attributes.md)
-  : "Layer" attributes
 - [`.layer`](https://kindling.joshuamarie.com/reference/layer_prs.md)
   [`.i`](https://kindling.joshuamarie.com/reference/layer_prs.md)
   [`.in`](https://kindling.joshuamarie.com/reference/layer_prs.md)
   [`.out`](https://kindling.joshuamarie.com/reference/layer_prs.md)
   [`.is_output`](https://kindling.joshuamarie.com/reference/layer_prs.md)
   : Layer argument pronouns for formula-based specifications
-- [`print(`*`<layer_pr>`*`)`](https://kindling.joshuamarie.com/reference/print-layer_pronoun.md)
-  [`print(`*`<layer_index_pr>`*`)`](https://kindling.joshuamarie.com/reference/print-layer_pronoun.md)
-  [`print(`*`<layer_input_pr>`*`)`](https://kindling.joshuamarie.com/reference/print-layer_pronoun.md)
-  [`print(`*`<layer_output_pr>`*`)`](https://kindling.joshuamarie.com/reference/print-layer_pronoun.md)
-  [`print(`*`<layer_is_output_pr>`*`)`](https://kindling.joshuamarie.com/reference/print-layer_pronoun.md)
-  : Print method for the pronouns
 
 ### High-level generators
 
@@ -93,17 +99,11 @@ Utilities for model configuration
   : Activation Functions Specification Helper
 - [`args()`](https://kindling.joshuamarie.com/reference/args.md)
   **\[superseded\]** : Activation Function Arguments Helper
+- [`new_act_fn()`](https://kindling.joshuamarie.com/reference/new_act_fn.md)
+  : Custom Activation Function Constructor
 - [`grid_depth()`](https://kindling.joshuamarie.com/reference/grid_depth.md)
   : Depth-Aware Grid Generation for Neural Networks
 - [`table_summary()`](https://kindling.joshuamarie.com/reference/table_summary.md)
   : Summarize and Display a Two-Column Data Frame as a Formatted Table
 - [`ordinal_gen()`](https://kindling.joshuamarie.com/reference/ordinal_gen.md)
   : Ordinal Suffixes Generator
-
-## Basemodels-tidymodels wrappers
-
-Functions for tidymodels integration (not for direct use)
-
-- [`ffnn_wrapper()`](https://kindling.joshuamarie.com/reference/kindling-nn-wrappers.md)
-  [`rnn_wrapper()`](https://kindling.joshuamarie.com/reference/kindling-nn-wrappers.md)
-  : Basemodels-tidymodels wrappers
