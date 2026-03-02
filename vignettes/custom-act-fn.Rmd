@@ -24,11 +24,11 @@ library(kindling)
 
 The biggest strength of `{kindling}` when modelling neural networks is its versatility — it inherits `{torch}`'s versatility while being human friendly, including the ability to apply custom optimizer functions, loss functions, and per-layer activation functions. Learn more: [https://kindling.joshuamarie.com/articles/special-cases](https://kindling.joshuamarie.com/articles/special-cases).
 
-With `act_funs()`, you are not limited to the activation functions available in `{torch}`'s namespace. Use `new_act_fn()` to wrap any compatible function into a validated custom activation. This feature, however, only available on version 0.3.0 and above. 
+With `act_funs()`, you are not limited to the activation functions available in `{torch}`'s namespace. Use `new_act_fn()` to wrap any compatible function into a validated custom activation. This feature, however, is only available on version 0.3.0 and above. 
 
 # Function to use
 
-To do this, use `new_act_fn()` and it takes a user-supplied function, validates it against a small dummy tensor at *definition time* (a dry-run probe), and wraps it in a call-time type guard. This means errors surface early — before your model ever starts training.
+To do this, use `new_act_fn()`. It takes a user-supplied function, validates it against a small dummy tensor at *definition time* (a dry-run probe), and wraps it in a call-time type guard. This means errors surface early — before your model ever starts training.
 
 The function you supply must:
 
@@ -37,7 +37,7 @@ The function you supply must:
 
 ## Basic Usage
 
-Currently, `nnf_tanh` doesn't exist in `{torch}` namespace, so `tanh` argument is not valid. With `new_act_fn()`, you can wrap `torch::torch_tanh()` to make it usable. 
+Currently, `nnf_tanh` doesn't exist in the `{torch}` namespace, so `tanh` is not a valid argument to `act_funs()`. With `new_act_fn()`, you can wrap `torch::torch_tanh()` to make it usable. 
 
 Here's a basic example that wraps `torch::torch_tanh()` as a custom activation:
 
@@ -53,7 +53,7 @@ act_funs(relu, elu, new_act_fn(\(x) torch::torch_tanh(x)))
 
 ## Using Custom Activations in a Model
 
-Naturally, functions for modelling like `ffnn()` accepts `act_funs()` into the `activations` argument. Again, you can pass a custom activation function within `new_act_fn()`, then pass it through `act_funs()`. 
+Naturally, functions for modelling, like `ffnn()`, accept `act_funs()` into the `activations` argument. Again, you can pass a custom activation function within `new_act_fn()`, then pass it through `act_funs()`. 
 
 Here's a basic example: 
 
