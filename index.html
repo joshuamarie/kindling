@@ -226,7 +226,7 @@
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         50          0         0</span></span>
 <span><span class="co">#&gt;   versicolor      0         48         2</span></span>
-<span><span class="co">#&gt;   virginica       0          2        48</span></span></code></pre></div>
+<span><span class="co">#&gt;   virginica       0          0        50</span></span></code></pre></div>
 </li>
 <li>
 <p><strong>With <code>newdata</code></strong> simply pass the new data frame as the new reference.</p>
@@ -264,7 +264,7 @@
 <span><span class="fu"><a href="reference/mlp_kindling.html">mlp_kindling</a></span><span class="op">(</span></span>
 <span>    mode <span class="op">=</span> <span class="st">"classification"</span>,</span>
 <span>    hidden_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">64</span><span class="op">)</span>,</span>
-<span>    activations <span class="op">=</span> <span class="fu"><a href="reference/act_funs.html">act_funs</a></span><span class="op">(</span><span class="va">relu</span>, softshrink <span class="op">=</span> <span class="fu"><a href="reference/args.html">args</a></span><span class="op">(</span>lambd <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    activations <span class="op">=</span> <span class="fu"><a href="reference/act_funs.html">act_funs</a></span><span class="op">(</span><span class="va">relu</span>, <span class="st">"softshrink(lambd = 0.5)"</span><span class="op">)</span>,</span>
 <span>    epochs <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">fit</span><span class="op">(</span><span class="va">Class</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">ionosphere_data</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -387,20 +387,20 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/garson.html" class="external-link">garson</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names  rel_imp</span></span>
-<span><span class="co">#&gt; 1  Petal.Width       y 30.28746</span></span>
-<span><span class="co">#&gt; 2 Sepal.Length       y 25.89413</span></span>
-<span><span class="co">#&gt; 3 Petal.Length       y 24.97980</span></span>
-<span><span class="co">#&gt; 4  Sepal.Width       y 18.83861</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 Petal.Length       y 30.71268</span></span>
+<span><span class="co">#&gt; 2 Sepal.Length       y 23.84382</span></span>
+<span><span class="co">#&gt; 3  Petal.Width       y 23.18722</span></span>
+<span><span class="co">#&gt; 4  Sepal.Width       y 22.25628</span></span></code></pre></div>
 </li>
 <li>
 <p>Olden’s Algorithm</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/olden.html" class="external-link">olden</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        x_names y_names     rel_imp</span></span>
-<span><span class="co">#&gt; 1  Petal.Width       y -0.22785314</span></span>
-<span><span class="co">#&gt; 2 Sepal.Length       y  0.19276435</span></span>
-<span><span class="co">#&gt; 3 Petal.Length       y -0.11285313</span></span>
-<span><span class="co">#&gt; 4  Sepal.Width       y  0.05431408</span></span></code></pre></div>
+<span><span class="co">#&gt;        x_names y_names    rel_imp</span></span>
+<span><span class="co">#&gt; 1 Petal.Length       y  0.8124560</span></span>
+<span><span class="co">#&gt; 2 Sepal.Length       y -0.6618801</span></span>
+<span><span class="co">#&gt; 3  Sepal.Width       y -0.6111587</span></span>
+<span><span class="co">#&gt; 4  Petal.Width       y  0.4480828</span></span></code></pre></div>
 </li>
 </ol>
 <div class="section level3">

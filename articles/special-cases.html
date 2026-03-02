@@ -186,8 +186,6 @@ mirrors classical gradient descent for OLS.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="font-style: italic;">-- Model Summary ---------------------------------------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
-<span><span class="co">## status 2</span></span></code></pre>
 <pre><code><span><span class="co">## -------------------------------------------------------------------</span></span>
 <span><span class="co">##   NN Model Type           :         FFNN    n_predictors :     10</span></span>
 <span><span class="co">##   Number of Epochs        :          200    n_response   :      1</span></span>
@@ -199,8 +197,6 @@ mirrors classical gradient descent for OLS.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="font-style: italic;">-- Activation Functions --------------------------------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
-<span><span class="co">## status 2</span></span></code></pre>
 <pre><code><span><span class="co">## -------------------------------------------------</span></span>
 <span><span class="co">##    Layer {}         :   No act function applied</span></span>
 <span><span class="co">##   Output Activation :   No act function applied</span></span>
@@ -209,8 +205,6 @@ mirrors classical gradient descent for OLS.</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="font-style: italic;">-- Architecture Spec -----------------------------------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
-<span><span class="co">## status 2</span></span></code></pre>
 <pre><code><span><span class="co">## --------------------------------------------------------------</span></span>
 <span><span class="co">##   nn_layer        :   N/A    before_output_transform :   N/A</span></span>
 <span><span class="co">##   out_nn_layer    :   N/A    after_output_transform  :   N/A</span></span>
@@ -222,7 +216,7 @@ mirrors classical gradient descent for OLS.</p>
 <div class="section level3">
 <h3 id="evaluation">Evaluation<a class="anchor" aria-label="anchor" href="#evaluation"></a>
 </h3>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">preds</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">lm_nn</span>, newdata <span class="op">=</span> <span class="va">test</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">tibble</span><span class="op">(</span></span>
@@ -233,13 +227,13 @@ mirrors classical gradient descent for OLS.</p>
 <pre><code><span><span class="co">## <span style="color: #949494;"># A tibble: 2 × 3</span></span></span>
 <span><span class="co">##   .metric .estimator .estimate</span></span>
 <span><span class="co">##   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>   <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>          <span style="color: #949494; font-style: italic;">&lt;dbl&gt;</span></span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">1</span> rmse    standard       4.79 </span></span>
-<span><span class="co">## <span style="color: #BCBCBC;">2</span> rsq     standard       0.873</span></span></code></pre>
+<span><span class="co">## <span style="color: #BCBCBC;">1</span> rmse    standard       4.40 </span></span>
+<span><span class="co">## <span style="color: #BCBCBC;">2</span> rsq     standard       0.930</span></span></code></pre>
 </div>
 <div class="section level3">
 <h3 id="comparison-with-lm">Comparison with <code>lm()</code><a class="anchor" aria-label="anchor" href="#comparison-with-lm"></a>
 </h3>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">lm_fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">train</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">tibble</span><span class="op">(</span></span>
@@ -280,7 +274,7 @@ for the loss function</li>
 </h3>
 <p>We use the <code>Sonar</code> dataset from <code>{mlbench}</code> to
 distinguish rocks from mines (binary outcome).</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"Sonar"</span>, package <span class="op">=</span> <span class="st">"mlbench"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">sonar</span> <span class="op">=</span> <span class="va">Sonar</span></span>
@@ -291,7 +285,7 @@ distinguish rocks from mines (binary outcome).</p>
 <span></span>
 <span><span class="va">rec_s</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">Class</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">train_s</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">logit_nn</span> <span class="op">=</span> <span class="fu"><a href="../reference/gen-nn-train.html">train_nn</a></span><span class="op">(</span></span>
 <span>    <span class="va">Class</span> <span class="op">~</span> <span class="va">.</span>,</span>
 <span>    data <span class="op">=</span> <span class="va">train_s</span>,</span>
@@ -309,8 +303,6 @@ distinguish rocks from mines (binary outcome).</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="font-style: italic;">-- Model Summary ---------------------------------------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
-<span><span class="co">## status 2</span></span></code></pre>
 <pre><code><span><span class="co">## -----------------------------------------------------------------------</span></span>
 <span><span class="co">##   NN Model Type           :             FFNN    n_predictors :     60</span></span>
 <span><span class="co">##   Number of Epochs        :              200    n_response   :      2</span></span>
@@ -322,8 +314,6 @@ distinguish rocks from mines (binary outcome).</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="font-style: italic;">-- Activation Functions --------------------------------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
-<span><span class="co">## status 2</span></span></code></pre>
 <pre><code><span><span class="co">## -------------------------------------------------</span></span>
 <span><span class="co">##    Layer {}         :   No act function applied</span></span>
 <span><span class="co">##   Output Activation :   No act function applied</span></span>
@@ -332,8 +322,6 @@ distinguish rocks from mines (binary outcome).</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="font-style: italic;">-- Architecture Spec -----------------------------------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
-<span><span class="co">## status 2</span></span></code></pre>
 <pre><code><span><span class="co">## --------------------------------------------------------------</span></span>
 <span><span class="co">##   nn_layer        :   N/A    before_output_transform :   N/A</span></span>
 <span><span class="co">##   out_nn_layer    :   N/A    after_output_transform  :   N/A</span></span>
@@ -341,7 +329,7 @@ distinguish rocks from mines (binary outcome).</p>
 <span><span class="co">##   layer_arg_fn    :   N/A    input_transform         :   N/A</span></span>
 <span><span class="co">##   forward_extract :   N/A                            :      </span></span>
 <span><span class="co">## --------------------------------------------------------------</span></span></code></pre>
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">preds_s</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">logit_nn</span>, newdata <span class="op">=</span> <span class="va">test_s</span>, type <span class="op">=</span> <span class="st">"response"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">tibble</span><span class="op">(</span></span>
@@ -389,14 +377,12 @@ distinguish rocks from mines (binary outcome).</p>
 <h3 id="comparison-with-glm-nnetmultinom">Comparison with <code>glm()</code> /
 <code>nnet::multinom()</code><a class="anchor" aria-label="anchor" href="#comparison-with-glm-nnetmultinom"></a>
 </h3>
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">nnet</span><span class="op">[</span><span class="va">multinom</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">glm_fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">Class</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">train_s</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<pre><code><span><span class="co">## Warning: glm.fit: algorithm did not converge</span></span></code></pre>
-<pre><code><span><span class="co">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></span></code></pre>
-<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">tibble</span><span class="op">(</span></span>
+<span><span class="va">glm_fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html" class="external-link">glm</a></span><span class="op">(</span><span class="va">Class</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">train_s</span>, family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html" class="external-link">binomial</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">tibble</span><span class="op">(</span></span>
 <span>    truth <span class="op">=</span> <span class="va">test_s</span><span class="op">$</span><span class="va">Class</span>,</span>
 <span>    estimate <span class="op">=</span> <span class="op">{</span></span>
 <span>        <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">as.factor</a></span><span class="op">(</span><span class="op">{</span></span>

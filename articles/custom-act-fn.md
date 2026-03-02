@@ -92,9 +92,6 @@ model
     ## 
     ## -- FFNN Model Summary ----------------------------------------------------------
 
-    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    ## status 2
-
     ## -------------------------------------------------------------------
     ##   NN Model Type           :         FFNN    n_predictors :      3
     ##   Number of Epochs        :           50    n_response   :      1
@@ -106,9 +103,6 @@ model
     ## 
     ## 
     ## -- Activation function ---------------------------------------------------------
-
-    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    ## status 2
 
     ## -------------------------------------------------
     ##   1st Layer {64}    :                      relu
@@ -140,9 +134,6 @@ ffnn(
     ## 
     ## -- FFNN Model Summary ----------------------------------------------------------
 
-    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    ## status 2
-
     ## -------------------------------------------------------------------
     ##   NN Model Type           :         FFNN    n_predictors :      3
     ##   Number of Epochs        :           50    n_response   :      1
@@ -154,9 +145,6 @@ ffnn(
     ## 
     ## 
     ## -- Activation function ---------------------------------------------------------
-
-    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    ## status 2
 
     ## -------------------------------------------------
     ##   1st Layer {64}    :                  <custom>
@@ -206,9 +194,6 @@ ffnn(
     ## 
     ## -- FFNN Model Summary ----------------------------------------------------------
 
-    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    ## status 2
-
     ## -------------------------------------------------------------------
     ##   NN Model Type           :         FFNN    n_predictors :      3
     ##   Number of Epochs        :           50    n_response   :      1
@@ -220,9 +205,6 @@ ffnn(
     ## 
     ## 
     ## -- Activation function ---------------------------------------------------------
-
-    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    ## status 2
 
     ## -------------------------------------------------
     ##   1st Layer {64}    :                      relu

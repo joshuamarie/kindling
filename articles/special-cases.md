@@ -96,9 +96,6 @@ lm_nn
     ## 
     ## -- Model Summary ---------------------------------------------------------------
 
-    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    ## status 2
-
     ## -------------------------------------------------------------------
     ##   NN Model Type           :         FFNN    n_predictors :     10
     ##   Number of Epochs        :          200    n_response   :      1
@@ -111,9 +108,6 @@ lm_nn
     ## 
     ## -- Activation Functions --------------------------------------------------------
 
-    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    ## status 2
-
     ## -------------------------------------------------
     ##    Layer {}         :   No act function applied
     ##   Output Activation :   No act function applied
@@ -122,9 +116,6 @@ lm_nn
     ## 
     ## 
     ## -- Architecture Spec -----------------------------------------------------------
-
-    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    ## status 2
 
     ## --------------------------------------------------------------
     ##   nn_layer        :   N/A    before_output_transform :   N/A
@@ -149,8 +140,8 @@ tibble(
     ## # A tibble: 2 × 3
     ##   .metric .estimator .estimate
     ##   <chr>   <chr>          <dbl>
-    ## 1 rmse    standard       4.79 
-    ## 2 rsq     standard       0.873
+    ## 1 rmse    standard       4.40 
+    ## 2 rsq     standard       0.930
 
 ### Comparison with `lm()`
 
@@ -228,9 +219,6 @@ logit_nn
     ## 
     ## -- Model Summary ---------------------------------------------------------------
 
-    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    ## status 2
-
     ## -----------------------------------------------------------------------
     ##   NN Model Type           :             FFNN    n_predictors :     60
     ##   Number of Epochs        :              200    n_response   :      2
@@ -243,9 +231,6 @@ logit_nn
     ## 
     ## -- Activation Functions --------------------------------------------------------
 
-    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    ## status 2
-
     ## -------------------------------------------------
     ##    Layer {}         :   No act function applied
     ##   Output Activation :   No act function applied
@@ -254,9 +239,6 @@ logit_nn
     ## 
     ## 
     ## -- Architecture Spec -----------------------------------------------------------
-
-    ## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    ## status 2
 
     ## --------------------------------------------------------------
     ##   nn_layer        :   N/A    before_output_transform :   N/A
@@ -287,13 +269,7 @@ tibble(
 box::use(nnet[multinom])
 
 glm_fit = glm(Class ~ ., data = train_s, family = binomial())
-```
 
-    ## Warning: glm.fit: algorithm did not converge
-
-    ## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred
-
-``` r
 tibble(
     truth = test_s$Class,
     estimate = {
