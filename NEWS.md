@@ -34,7 +34,16 @@
 
     -   `nn_arch()` must be supplied to inherit extra arguments from `nn_module_generator()` function. 
     -   Allows early stopping if `early_stopping` is supplied with `early_stop()`.
-    -   `train_nnsnip()` is now provided to make `train_nn()` interfaced with `{tidymodels}`
+    -   Supported with several data types: `matrix`, `data.frame`, `dataset` (`{torch}` dataset), and a formula interface. 
+    -   `train_nnsnip()` is now provided to make `train_nn()` bridges with `{tidymodels}`
+
+-   You can supply customized activation function under `act_funs()` with `new_act_fn()`. 
+
+    -   Activation functions that especially don't exist on `torch::nnf_*()`. 
+    -   Supply the argument with a function
+    -   The function supplied into `new_act_fn()` must return a `torch` tensor object. 
+    -   Example: `act_funs(new_act_fn(torch::torch_tanh))` or `act_funs(new_act_fn(\(x) torch::torch_tanh(x)))`
+    -   Use `.name` as a displayed name of the custom activation function. 
 
 ### Superset
 
