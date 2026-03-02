@@ -45,10 +45,28 @@
     function.
   - Allows early stopping if `early_stopping` is supplied with
     [`early_stop()`](https://kindling.joshuamarie.com/dev/reference/early_stop.md).
+  - Supported with several data types: `matrix`, `data.frame`, `dataset`
+    ([torch](https://torch.mlverse.org/docs) dataset), and a formula
+    interface.
   - [`train_nnsnip()`](https://kindling.joshuamarie.com/dev/reference/train_nnsnip.md)
     is now provided to make
     [`train_nn()`](https://kindling.joshuamarie.com/dev/reference/gen-nn-train.md)
-    interfaced with [tidymodels](https://tidymodels.tidymodels.org)
+    bridges with [tidymodels](https://tidymodels.tidymodels.org)
+
+- You can supply customized activation function under
+  [`act_funs()`](https://kindling.joshuamarie.com/dev/reference/act_funs.md)
+  with
+  [`new_act_fn()`](https://kindling.joshuamarie.com/dev/reference/new_act_fn.md).
+
+  - Activation functions that especially don’t exist on
+    `torch::nnf_*()`.
+  - Supply the argument with a function
+  - The function supplied into
+    [`new_act_fn()`](https://kindling.joshuamarie.com/dev/reference/new_act_fn.md)
+    must return a `torch` tensor object.
+  - Example: `act_funs(new_act_fn(torch::torch_tanh))` or
+    `act_funs(new_act_fn(\(x) torch::torch_tanh(x)))`
+  - Use `.name` as a displayed name of the custom activation function.
 
 #### Superset
 
@@ -80,6 +98,8 @@
   applied.
 
 ## kindling 0.2.0
+
+CRAN release: 2026-02-04
 
 ### New features
 
@@ -152,6 +172,8 @@
   and wrapper functions
 
 ## kindling 0.1.0
+
+CRAN release: 2026-01-31
 
 - Initial CRAN release
 - Higher-level interface for torch package to define, train, and tune
