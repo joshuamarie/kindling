@@ -1,5 +1,7 @@
 # Custom Activation Function Constructor
 
+**\[experimental\]**
+
 Wraps a user-supplied function into a validated custom activation,
 ensuring it accepts and returns a `torch_tensor`. Performs an eager
 dry-run probe at *definition time* so errors surface early, and wraps
@@ -25,7 +27,9 @@ new_act_fn(fn, probe = TRUE, .name = "<custom>")
 
 - .name:
 
-  A string. Default is `"<custom>"`.
+  A string to be stored in an attribute. Nothing special, except it is
+  used when displaying the info of a trained neural network model.
+  Default is `"<custom>"`.
 
 ## Value
 

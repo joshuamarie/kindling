@@ -45,10 +45,28 @@
     function.
   - Allows early stopping if `early_stopping` is supplied with
     [`early_stop()`](https://kindling.joshuamarie.com/reference/early_stop.md).
+  - Supported with several data types: `matrix`, `data.frame`, `dataset`
+    ([torch](https://torch.mlverse.org/docs) dataset), and a formula
+    interface.
   - [`train_nnsnip()`](https://kindling.joshuamarie.com/reference/train_nnsnip.md)
     is now provided to make
     [`train_nn()`](https://kindling.joshuamarie.com/reference/gen-nn-train.md)
-    interfaced with [tidymodels](https://tidymodels.tidymodels.org)
+    bridges with [tidymodels](https://tidymodels.tidymodels.org)
+
+- You can supply customized activation function under
+  [`act_funs()`](https://kindling.joshuamarie.com/reference/act_funs.md)
+  with
+  [`new_act_fn()`](https://kindling.joshuamarie.com/reference/new_act_fn.md).
+
+  - Activation functions that especially don’t exist on
+    `torch::nnf_*()`.
+  - Supply the argument with a function
+  - The function supplied into
+    [`new_act_fn()`](https://kindling.joshuamarie.com/reference/new_act_fn.md)
+    must return a `torch` tensor object.
+  - Example: `act_funs(new_act_fn(torch::torch_tanh))` or
+    `act_funs(new_act_fn(\(x) torch::torch_tanh(x)))`
+  - Use `.name` as a displayed name of the custom activation function.
 
 #### Superset
 

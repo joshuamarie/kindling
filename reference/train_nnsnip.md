@@ -1,5 +1,7 @@
 # Parsnip Interface of `train_nn()`
 
+**\[experimental\]**
+
 `train_nnsnip()` defines a neural network model specification that can
 be used for classification or regression. It integrates with the
 tidymodels ecosystem and uses
@@ -113,8 +115,9 @@ train_nnsnip(
 
 - loss:
 
-  A character string for the loss function ("mse", "mae",
-  "cross_entropy", "bce"). Cannot be tuned — pass via `set_engine()`.
+  A character string or a valid `{torch}` function for the loss function
+  ("mse", "mae", "cross_entropy", "bce"). Cannot be tuned — pass via
+  `set_engine()`.
 
 - architecture:
 

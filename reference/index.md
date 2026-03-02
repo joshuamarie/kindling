@@ -11,7 +11,7 @@ Define neural network architectures for tidymodels
   : Recurrent Neural Network via kindling
 
 - [`train_nnsnip()`](https://kindling.joshuamarie.com/reference/train_nnsnip.md)
-  :
+  **\[experimental\]** :
 
   Parsnip Interface of
   [`train_nn()`](https://kindling.joshuamarie.com/reference/gen-nn-train.md)
@@ -100,7 +100,7 @@ Utilities for model configuration
 - [`args()`](https://kindling.joshuamarie.com/reference/args.md)
   **\[superseded\]** : Activation Function Arguments Helper
 - [`new_act_fn()`](https://kindling.joshuamarie.com/reference/new_act_fn.md)
-  : Custom Activation Function Constructor
+  **\[experimental\]** : Custom Activation Function Constructor
 - [`grid_depth()`](https://kindling.joshuamarie.com/reference/grid_depth.md)
   : Depth-Aware Grid Generation for Neural Networks
 - [`table_summary()`](https://kindling.joshuamarie.com/reference/table_summary.md)
