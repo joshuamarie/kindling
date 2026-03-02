@@ -191,7 +191,7 @@ Two kinds of `predict()` usage:
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
     #>   versicolor      0         48         2
-    #>   virginica       0          2        48
+    #>   virginica       0          0        50
     ```
 
 2.  **With `newdata`** simply pass the new data frame as the new
@@ -232,7 +232,7 @@ ionosphere_data = Ionosphere[, -2]
 mlp_kindling(
     mode = "classification",
     hidden_neurons = c(128, 64),
-    activations = act_funs(relu, softshrink = args(lambd = 0.5)),
+    activations = act_funs(relu, "softshrink(lambd = 0.5)"),
     epochs = 100
 ) |>
     fit(Class ~ ., data = ionosphere_data) |>
@@ -364,21 +364,21 @@ networks. Two primary algorithms are available:
     ``` r
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1  Petal.Width       y 30.28746
-    #> 2 Sepal.Length       y 25.89413
-    #> 3 Petal.Length       y 24.97980
-    #> 4  Sepal.Width       y 18.83861
+    #> 1 Petal.Length       y 30.71268
+    #> 2 Sepal.Length       y 23.84382
+    #> 3  Petal.Width       y 23.18722
+    #> 4  Sepal.Width       y 22.25628
     ```
 
 2.  Olden’s Algorithm
 
     ``` r
     olden(model, bar_plot = FALSE)
-    #>        x_names y_names     rel_imp
-    #> 1  Petal.Width       y -0.22785314
-    #> 2 Sepal.Length       y  0.19276435
-    #> 3 Petal.Length       y -0.11285313
-    #> 4  Sepal.Width       y  0.05431408
+    #>        x_names y_names    rel_imp
+    #> 1 Petal.Length       y  0.8124560
+    #> 2 Sepal.Length       y -0.6618801
+    #> 3  Sepal.Width       y -0.6111587
+    #> 4  Petal.Width       y  0.4480828
     ```
 
 ### Integration with {vip}

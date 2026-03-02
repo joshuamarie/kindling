@@ -157,7 +157,7 @@ ionosphere_data = Ionosphere[, -2]
 mlp_kindling(
     mode = "classification",
     hidden_neurons = c(128, 64),
-    activations = act_funs(relu, softshrink = args(lambd = 0.5)),
+    activations = act_funs(relu, "softshrink(lambd = 0.5)"),
     epochs = 100
 ) |>
     fit(Class ~ ., data = ionosphere_data) |>
