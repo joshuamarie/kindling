@@ -1,5 +1,8 @@
 #' Parsnip Interface of `train_nn()`
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' `train_nnsnip()` defines a neural network model specification that can be used
 #' for classification or regression. It integrates with the tidymodels ecosystem
 #' and uses [train_nn()] as the fitting backend, supporting any architecture
@@ -34,7 +37,7 @@
 #'
 #' @param optimizer_args A named list of additional arguments passed to the
 #'   optimizer. Cannot be tuned — pass via `set_engine()`.
-#' @param loss A character string for the loss function ("mse", "mae",
+#' @param loss A character string or a valid `{torch}` function for the loss function ("mse", "mae",
 #'   "cross_entropy", "bce"). Cannot be tuned — pass via `set_engine()`.
 #' @param architecture An [nn_arch()] object for a custom architecture. Cannot
 #'   be tuned — pass via `set_engine()`.

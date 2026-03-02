@@ -1,5 +1,8 @@
 #' Custom Activation Function Constructor
 #'
+#' @description
+#' `r lifecycle::badge("experimental")`
+#'
 #' Wraps a user-supplied function into a validated custom activation,
 #' ensuring it accepts and returns a `torch_tensor`. Performs an eager
 #' dry-run probe at *definition time* so errors surface early, and
@@ -9,7 +12,9 @@
 #'   E.g. `\(x) torch::torch_tanh(x)`.
 #' @param probe Logical. If `TRUE` (default), runs a dry-run with a small
 #'   dummy tensor at definition time to catch obvious errors early.
-#' @param .name A string. Default is `"<custom>"`. 
+#' @param .name A string to be stored in an attribute. Nothing special, except it is 
+#'   used when displaying the info of a trained neural network model. 
+#'   Default is `"<custom>"`. 
 #'
 #' @return An object of class `c("custom_activation", "parameterized_activation")`,
 #'   compatible with `act_funs()`.

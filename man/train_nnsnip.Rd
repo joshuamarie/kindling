@@ -73,7 +73,7 @@ used for validation. Can be tuned.}
 \item{optimizer_args}{A named list of additional arguments passed to the
 optimizer. Cannot be tuned — pass via \code{set_engine()}.}
 
-\item{loss}{A character string for the loss function ("mse", "mae",
+\item{loss}{A character string or a valid \code{{torch}} function for the loss function ("mse", "mae",
 "cross_entropy", "bce"). Cannot be tuned — pass via \code{set_engine()}.}
 
 \item{architecture}{An \code{\link[=nn_arch]{nn_arch()}} object for a custom architecture. Cannot
@@ -99,6 +99,8 @@ the returned object. Cannot be tuned — pass via \code{set_engine()}.}
 A model specification object with class \code{train_nnsnip}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 \code{train_nnsnip()} defines a neural network model specification that can be used
 for classification or regression. It integrates with the tidymodels ecosystem
 and uses \code{\link[=train_nn]{train_nn()}} as the fitting backend, supporting any architecture

@@ -13,13 +13,17 @@ E.g. \verb{\\(x) torch::torch_tanh(x)}.}
 \item{probe}{Logical. If \code{TRUE} (default), runs a dry-run with a small
 dummy tensor at definition time to catch obvious errors early.}
 
-\item{.name}{A string. Default is \code{"<custom>"}.}
+\item{.name}{A string to be stored in an attribute. Nothing special, except it is
+used when displaying the info of a trained neural network model.
+Default is \code{"<custom>"}.}
 }
 \value{
 An object of class \code{c("custom_activation", "parameterized_activation")},
 compatible with \code{act_funs()}.
 }
 \description{
+\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#experimental}{\figure{lifecycle-experimental.svg}{options: alt='[Experimental]'}}}{\strong{[Experimental]}}
+
 Wraps a user-supplied function into a validated custom activation,
 ensuring it accepts and returns a \code{torch_tensor}. Performs an eager
 dry-run probe at \emph{definition time} so errors surface early, and
