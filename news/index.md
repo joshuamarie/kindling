@@ -2,6 +2,8 @@
 
 ## kindling (development version)
 
+## kindling 0.3.0
+
 ### New Experimental functions
 
 - Generalized `nn_module()` expression generator to generate
@@ -85,10 +87,6 @@
 - No suffix generated for `13` by
   [`ordinal_gen()`](https://kindling.joshuamarie.com/reference/ordinal_gen.md).
   Now fixed.
-
-## kindling 0.2.1
-
-### Fixes
 
 - `hd_neurons` for both
   [`ffnn_generator()`](https://kindling.joshuamarie.com/reference/nn_gens.md)
