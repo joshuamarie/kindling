@@ -1,5 +1,7 @@
 # kindling (development version)
 
+# kindling 0.3.0
+
 ## New Experimental functions
 
 -   Generalized `nn_module()` expression generator to generate `torch::nn_module()` expression for the same sequential NN architectures
@@ -55,10 +57,6 @@
 ### Bug Fixes
 
 -  No suffix generated for `13` by `ordinal_gen()`. Now fixed.  
-
-# kindling 0.2.1
-
-## Fixes
 
 -  `hd_neurons` for both `ffnn_generator()` and `rnn_generator()` accepts empty arguments, which implies there's no hidden layers applied. 
 
