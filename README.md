@@ -40,8 +40,8 @@ deep learning models within the familiar `{tidymodels}` ecosystem.
 
   - Base models interface: feedforward networks (MLP/DNN/FFNN) and
     recurrent variants (RNN, LSTM, GRU)
-  - Generalized neural network trainer that has the same sequence as
-    base models
+  - Generalized neural network trainer that has the same topology as
+    MLPs
 
 - Native support for titanic ML frameworks (currently supports
   `{tidymodels}`, `{mlr3}` for later) workflows and pipelines
@@ -77,11 +77,6 @@ abstraction level suits your task.
 
 ``` r
 library(kindling)
-#> 
-#> Attaching package: 'kindling'
-#> The following object is masked from 'package:base':
-#> 
-#>     args
 ```
 
 Before starting, you need to install LibTorch, the backend of PyTorch
@@ -143,7 +138,7 @@ model = ffnn(
     Species ~ .,
     data = iris,
     hidden_neurons = c(10, 15, 7),
-    activations = act_funs(relu, "softshrink(lambd = 0.5)", elu), 
+    activations = act_funs(relu, softshrink[lambd = 0.5], elu), 
     loss = "cross_entropy",
     epochs = 100
 )
@@ -176,6 +171,13 @@ model
                      Output Activation :   No act function applied
                    -------------------------------------------------
 
+> For parametric activation functions like softshrink, which contains
+> `"lambd"` ($\lambda$) as its parameter (the default is 1), use indexed
+> syntax (available on v0.3.x+) e.g. `softshrink[lambd = 0.5]` or
+> `softshrink[0.5]`, or a string literal expression
+> e.g. `"softshrink(lambd = 0.5)"`, to transmute the parameter value.
+> See `?kindling::act_funs()` for more details.
+
 Evaluate the prediction through `predict()`. The `predict()` method is
 extended for fitted models through its `newdata` argument.
 
@@ -190,8 +192,8 @@ Two kinds of `predict()` usage:
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
-    #>   versicolor      0         48         2
-    #>   virginica       0          0        50
+    #>   versicolor      0         47         3
+    #>   virginica       0          1        49
     ```
 
 2.  **With `newdata`** simply pass the new data frame as the new
@@ -232,7 +234,7 @@ ionosphere_data = Ionosphere[, -2]
 mlp_kindling(
     mode = "classification",
     hidden_neurons = c(128, 64),
-    activations = act_funs(relu, "softshrink(lambd = 0.5)"),
+    activations = act_funs(relu, softshrink[lambd = 0.5]),
     epochs = 100
 ) |>
     fit(Class ~ ., data = ionosphere_data) |>
@@ -364,21 +366,21 @@ networks. Two primary algorithms are available:
     ``` r
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1 Petal.Length       y 30.71268
-    #> 2 Sepal.Length       y 23.84382
-    #> 3  Petal.Width       y 23.18722
-    #> 4  Sepal.Width       y 22.25628
+    #> 1  Sepal.Width       y 29.60036
+    #> 2 Petal.Length       y 26.92774
+    #> 3  Petal.Width       y 26.28239
+    #> 4 Sepal.Length       y 17.18951
     ```
 
 2.  Olden’s Algorithm
 
     ``` r
     olden(model, bar_plot = FALSE)
-    #>        x_names y_names    rel_imp
-    #> 1 Petal.Length       y  0.8124560
-    #> 2 Sepal.Length       y -0.6618801
-    #> 3  Sepal.Width       y -0.6111587
-    #> 4  Petal.Width       y  0.4480828
+    #>        x_names y_names      rel_imp
+    #> 1  Petal.Width       y  0.037665642
+    #> 2 Sepal.Length       y  0.035827098
+    #> 3  Sepal.Width       y -0.020472638
+    #> 4 Petal.Length       y  0.009678024
     ```
 
 ### Integration with {vip}

@@ -9,7 +9,9 @@ knitr::opts_chunk$set(
     collapse = TRUE,
     comment = "#>",
     fig.path = "man/figures/README-",
-    out.width = "100%"
+    out.width = "100%",
+    message = FALSE,
+    warning = FALSE
 )
 
 desc = read.dcf("DESCRIPTION")
@@ -41,7 +43,7 @@ Whether you're generating neural network architectures expressions or direct fit
 -   Multiple architectures available
 
     -  Base models interface: feedforward networks (MLP/DNN/FFNN) and recurrent variants (RNN, LSTM, GRU)
-    -  Generalized neural network trainer that has the same sequence as base models
+    -  Generalized neural network trainer that has the same topology as MLPs
 
 -   Native support for titanic ML frameworks (currently supports `{tidymodels}`, `{mlr3}` for later) workflows and pipelines
 -   Fine-grained control over network depth, layer sizes, and activation functions
@@ -106,13 +108,15 @@ model = ffnn(
     Species ~ .,
     data = iris,
     hidden_neurons = c(10, 15, 7),
-    activations = act_funs(relu, "softshrink(lambd = 0.5)", elu), 
+    activations = act_funs(relu, softshrink[lambd = 0.5], elu), 
     loss = "cross_entropy",
     epochs = 100
 )
 
 model
 ```
+
+> For parametric activation functions like softshrink, which contains `"lambd"` ($\lambda$) as its parameter (the default is 1), use indexed syntax (available on v0.3.x+) e.g. `softshrink[lambd = 0.5]` or `softshrink[0.5]`, or a string literal expression e.g. `"softshrink(lambd = 0.5)"`, to transmute the parameter value. See `?kindling::act_funs()` for more details. 
 
 Evaluate the prediction through `predict()`. The `predict()` method is extended for fitted models through its `newdata` argument. 
 
@@ -157,7 +161,7 @@ ionosphere_data = Ionosphere[, -2]
 mlp_kindling(
     mode = "classification",
     hidden_neurons = c(128, 64),
-    activations = act_funs(relu, "softshrink(lambd = 0.5)"),
+    activations = act_funs(relu, softshrink[lambd = 0.5]),
     epochs = 100
 ) |>
     fit(Class ~ ., data = ionosphere_data) |>
