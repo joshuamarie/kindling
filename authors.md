@@ -10,7 +10,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/joshuamarie/kindling/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/joshuamarie/kindling/blob/v0.3.0/inst/CITATION)
 
 Marie, Joshua (2026). kindling: Higher-Level Interface of 'torch'
 Package to Auto-Train Neural Networks https://kindling.joshuamarie.com
