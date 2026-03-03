@@ -104,17 +104,17 @@ functions. Learn more: <a href="https://kindling.joshuamarie.com/articles/specia
 <p>With <code><a href="../reference/act_funs.html">act_funs()</a></code>, you are not limited to the activation
 functions available in <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>’s namespace. Use
 <code><a href="../reference/new_act_fn.html">new_act_fn()</a></code> to wrap any compatible function into a
-validated custom activation. This feature, however, only available on
+validated custom activation. This feature, however, is only available on
 version 0.3.0 and above.</p>
 </div>
 <div class="section level2">
 <h2 id="function-to-use">Function to use<a class="anchor" aria-label="anchor" href="#function-to-use"></a>
 </h2>
-<p>To do this, use <code><a href="../reference/new_act_fn.html">new_act_fn()</a></code> and it takes a
-user-supplied function, validates it against a small dummy tensor at
-<em>definition time</em> (a dry-run probe), and wraps it in a call-time
-type guard. This means errors surface early — before your model ever
-starts training.</p>
+<p>To do this, use <code><a href="../reference/new_act_fn.html">new_act_fn()</a></code>. It takes a user-supplied
+function, validates it against a small dummy tensor at <em>definition
+time</em> (a dry-run probe), and wraps it in a call-time type guard.
+This means errors surface early — before your model ever starts
+training.</p>
 <p>The function you supply must:</p>
 <ul>
 <li>Accept at least one argument (the input tensor).</li>
@@ -123,10 +123,10 @@ starts training.</p>
 <div class="section level3">
 <h3 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
 </h3>
-<p>Currently, <code>nnf_tanh</code> doesn’t exist in
-<a href="https://torch.mlverse.org/docs" class="external-link">torch</a> namespace, so <code>tanh</code> argument is not
-valid. With <code><a href="../reference/new_act_fn.html">new_act_fn()</a></code>, you can wrap
-<code><a href="https://torch.mlverse.org/docs/reference/torch_tanh.html" class="external-link">torch::torch_tanh()</a></code> to make it usable.</p>
+<p>Currently, <code>nnf_tanh</code> doesn’t exist in the
+<a href="https://torch.mlverse.org/docs" class="external-link">torch</a> namespace, so <code>tanh</code> is not a valid
+argument to <code><a href="../reference/act_funs.html">act_funs()</a></code>. With <code><a href="../reference/new_act_fn.html">new_act_fn()</a></code>, you
+can wrap <code><a href="https://torch.mlverse.org/docs/reference/torch_tanh.html" class="external-link">torch::torch_tanh()</a></code> to make it usable.</p>
 <p>Here’s a basic example that wraps <code><a href="https://torch.mlverse.org/docs/reference/torch_tanh.html" class="external-link">torch::torch_tanh()</a></code> as
 a custom activation:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -139,7 +139,7 @@ any built-in activation:</p>
 <div class="section level3">
 <h3 id="using-custom-activations-in-a-model">Using Custom Activations in a Model<a class="anchor" aria-label="anchor" href="#using-custom-activations-in-a-model"></a>
 </h3>
-<p>Naturally, functions for modelling like <code><a href="../reference/kindling-basemodels.html">ffnn()</a></code> accepts
+<p>Naturally, functions for modelling, like <code><a href="../reference/kindling-basemodels.html">ffnn()</a></code>, accept
 <code><a href="../reference/act_funs.html">act_funs()</a></code> into the <code>activations</code> argument.
 Again, you can pass a custom activation function within
 <code><a href="../reference/new_act_fn.html">new_act_fn()</a></code>, then pass it through

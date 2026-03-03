@@ -15,14 +15,14 @@ you are not limited to the activation functions available in
 [torch](https://torch.mlverse.org/docs)’s namespace. Use
 [`new_act_fn()`](https://kindling.joshuamarie.com/reference/new_act_fn.md)
 to wrap any compatible function into a validated custom activation. This
-feature, however, only available on version 0.3.0 and above.
+feature, however, is only available on version 0.3.0 and above.
 
 ## Function to use
 
 To do this, use
-[`new_act_fn()`](https://kindling.joshuamarie.com/reference/new_act_fn.md)
-and it takes a user-supplied function, validates it against a small
-dummy tensor at *definition time* (a dry-run probe), and wraps it in a
+[`new_act_fn()`](https://kindling.joshuamarie.com/reference/new_act_fn.md).
+It takes a user-supplied function, validates it against a small dummy
+tensor at *definition time* (a dry-run probe), and wraps it in a
 call-time type guard. This means errors surface early — before your
 model ever starts training.
 
@@ -33,9 +33,11 @@ The function you supply must:
 
 ### Basic Usage
 
-Currently, `nnf_tanh` doesn’t exist in
-[torch](https://torch.mlverse.org/docs) namespace, so `tanh` argument is
-not valid. With
+Currently, `nnf_tanh` doesn’t exist in the
+[torch](https://torch.mlverse.org/docs) namespace, so `tanh` is not a
+valid argument to
+[`act_funs()`](https://kindling.joshuamarie.com/reference/act_funs.md).
+With
 [`new_act_fn()`](https://kindling.joshuamarie.com/reference/new_act_fn.md),
 you can wrap
 [`torch::torch_tanh()`](https://torch.mlverse.org/docs/reference/torch_tanh.html)
@@ -59,9 +61,9 @@ act_funs(relu, elu, new_act_fn(\(x) torch::torch_tanh(x)))
 
 ### Using Custom Activations in a Model
 
-Naturally, functions for modelling like
-[`ffnn()`](https://kindling.joshuamarie.com/reference/kindling-basemodels.md)
-accepts
+Naturally, functions for modelling, like
+[`ffnn()`](https://kindling.joshuamarie.com/reference/kindling-basemodels.md),
+accept
 [`act_funs()`](https://kindling.joshuamarie.com/reference/act_funs.md)
 into the `activations` argument. Again, you can pass a custom activation
 function within
