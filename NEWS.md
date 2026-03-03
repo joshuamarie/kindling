@@ -94,7 +94,7 @@
 ## Documentation
 
 -   Add a vignette to showcase the comparison with other similar packages
--   The package description received clarifications
+-   The package description has been clarified
 -   Vignette to showcase the comparison with other similar packages
 -   `hidden_neurons` parameter now supports discrete values specification
 
