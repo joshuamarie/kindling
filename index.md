@@ -5,12 +5,12 @@
 Title: ***Higher-Level Interface of ‘torch’ Package to Auto-Train Neural
 Networks***
 
-Whether you’re generating neural network architectures expressions or
-direct fitting/training actual models,
+Whether you’re generating neural network architecture expressions or
+directly fitting/training models,
 [kindling](https://kindling.joshuamarie.com) minimizes boilerplate code
-while preserving [torch](https://torch.mlverse.org/docs). And since this
-package uses [torch](https://torch.mlverse.org/docs) as its backend,
-GPU/TPU devices are supported.
+while preserving [torch](https://torch.mlverse.org/docs). Since this
+package uses [torch](https://torch.mlverse.org/docs) as its backend, GPU
+acceleration is supported.
 
 [kindling](https://kindling.joshuamarie.com) also bridges the gap
 between [torch](https://torch.mlverse.org/docs) and
@@ -35,14 +35,14 @@ learning models within the familiar
   - Generalized neural network trainer that has the same topology as
     MLPs
 
-- Native support for titanic ML frameworks (currently supports
-  [tidymodels](https://tidymodels.tidymodels.org),
-  [mlr3](https://mlr3.mlr-org.com) for later) workflows and pipelines
+- Native support for R ML workflows and pipelines (currently
+  [tidymodels](https://tidymodels.tidymodels.org);
+  [mlr3](https://mlr3.mlr-org.com) planned)
 
 - Fine-grained control over network depth, layer sizes, and activation
   functions
 
-- GPU acceleration supports via [torch](https://torch.mlverse.org/docs)
+- GPU acceleration support via [torch](https://torch.mlverse.org/docs)
   tensors
 
 ## Installation
@@ -75,9 +75,8 @@ suits your task.
 library(kindling)
 ```
 
-Before starting, you need to install LibTorch, the backend of PyTorch
-which also the backend of [torch](https://torch.mlverse.org/docs) R
-package:
+Before starting, install LibTorch, the backend of PyTorch and the
+[torch](https://torch.mlverse.org/docs) R package:
 
 ``` r
 torch::install_torch()
@@ -154,7 +153,7 @@ model
       NN Model Type           :             FFNN    n_predictors :      4
       Number of Epochs        :              100    n_response   :      3
       Hidden Layer Units      :        10, 15, 7    reg.         :   None
-      Number of Hidden Layers :                3    Device       :    cpu
+      Number of Hidden Layers :                3    Device       :    mps
       Pred. Type              :   classification                 :       
     -----------------------------------------------------------------------
 
@@ -184,8 +183,7 @@ for fitted models through its `newdata` argument.
 
 Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
 
-1.  **Without `newdata`** predictions is the default to the parent data
-    frame.
+1.  **Without `newdata`** predictions default to the training data.
 
     ``` r
     predict(model) |>
@@ -193,7 +191,7 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
-    #>   versicolor      0         47         3
+    #>   versicolor      0         46         4
     #>   virginica       0          1        49
     ```
 
@@ -209,7 +207,7 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
     #>   versicolor      0         10         0
-    #>   virginica       0          0        10
+    #>   virginica       0          1         9
     ```
 
 ### Level 3: Conventional tidymodels Integration
@@ -375,21 +373,21 @@ networks. Two primary algorithms are available:
     ``` r
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1  Sepal.Width       y 29.60036
-    #> 2 Petal.Length       y 26.92774
-    #> 3  Petal.Width       y 26.28239
-    #> 4 Sepal.Length       y 17.18951
+    #> 1  Sepal.Width       y 28.80667
+    #> 2  Petal.Width       y 25.33185
+    #> 3 Sepal.Length       y 23.10922
+    #> 4 Petal.Length       y 22.75226
     ```
 
 2.  Olden’s Algorithm
 
     ``` r
     olden(model, bar_plot = FALSE)
-    #>        x_names y_names      rel_imp
-    #> 1  Petal.Width       y  0.037665642
-    #> 2 Sepal.Length       y  0.035827098
-    #> 3  Sepal.Width       y -0.020472638
-    #> 4 Petal.Length       y  0.009678024
+    #>        x_names y_names    rel_imp
+    #> 1  Sepal.Width       y  0.5660366
+    #> 2  Petal.Width       y -0.5193552
+    #> 3 Petal.Length       y -0.4961819
+    #> 4 Sepal.Length       y -0.1262867
     ```
 
 ### Integration with {vip}

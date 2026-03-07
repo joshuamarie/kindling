@@ -4,6 +4,8 @@
 
 ## kindling 0.3.0
 
+CRAN release: 2026-03-03
+
 ### New Experimental functions
 
 - Generalized `nn_module()` expression generator to generate
@@ -51,9 +53,9 @@
     ([torch](https://torch.mlverse.org/docs) dataset), and a formula
     interface.
   - [`train_nnsnip()`](https://kindling.joshuamarie.com/reference/train_nnsnip.md)
-    is now provided to make
+    is now provided to bridge
     [`train_nn()`](https://kindling.joshuamarie.com/reference/gen-nn-train.md)
-    bridges with [tidymodels](https://tidymodels.tidymodels.org)
+    with [tidymodels](https://tidymodels.tidymodels.org)
 
 - You can supply customized activation function under
   [`act_funs()`](https://kindling.joshuamarie.com/reference/act_funs.md)
@@ -147,7 +149,7 @@ CRAN release: 2026-02-04
 
 - Add a vignette to showcase the comparison with other similar packages
 
-- The package description got few clarifications
+- The package description has been clarified
 
 - Vignette to showcase the comparison with other similar packages
 

@@ -95,7 +95,7 @@
 <h2 id="package-overview">Package overview<a class="anchor" aria-label="anchor" href="#package-overview"></a>
 </h2>
 <p>Title: <strong><em>Higher-Level Interface of ‘torch’ Package to Auto-Train Neural Networks</em></strong></p>
-<p>Whether you’re generating neural network architectures expressions or direct fitting/training actual models, <a href="https://kindling.joshuamarie.com">kindling</a> minimizes boilerplate code while preserving <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>. And since this package uses <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> as its backend, GPU/TPU devices are supported.</p>
+<p>Whether you’re generating neural network architecture expressions or directly fitting/training models, <a href="https://kindling.joshuamarie.com">kindling</a> minimizes boilerplate code while preserving <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>. Since this package uses <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> as its backend, GPU acceleration is supported.</p>
 <p><a href="https://kindling.joshuamarie.com">kindling</a> also bridges the gap between <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> and <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>. It works seamlessly with <a href="https://github.com/tidymodels/parsnip" class="external-link">parsnip</a>, <a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a>, and <a href="https://github.com/tidymodels/workflows" class="external-link">workflows</a> to bring deep learning into your existing <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> modeling pipeline. This enables a streamlined interface for building, training, and tuning deep learning models within the familiar <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> ecosystem.</p>
 <div class="section level3">
 <h3 id="main-features">Main Features<a class="anchor" aria-label="anchor" href="#main-features"></a>
@@ -110,9 +110,9 @@
 <li>Generalized neural network trainer that has the same topology as MLPs</li>
 </ul>
 </li>
-<li><p>Native support for titanic ML frameworks (currently supports <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>, <a href="https://mlr3.mlr-org.com" class="external-link">mlr3</a> for later) workflows and pipelines</p></li>
+<li><p>Native support for R ML workflows and pipelines (currently <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>; <a href="https://mlr3.mlr-org.com" class="external-link">mlr3</a> planned)</p></li>
 <li><p>Fine-grained control over network depth, layer sizes, and activation functions</p></li>
-<li><p>GPU acceleration supports via <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> tensors</p></li>
+<li><p>GPU acceleration support via <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> tensors</p></li>
 </ul>
 </div>
 </div>
@@ -134,7 +134,7 @@
 <p><a href="https://kindling.joshuamarie.com">kindling</a> is powered by R’s metaprogramming capabilities through <em>code generation</em>. Generated <code><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">torch::nn_module()</a></code> expressions power the training functions, which in turn serve as engines for <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> integration. This architecture gives you flexibility to work at whatever abstraction level suits your task.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://kindling.joshuamarie.com">kindling</a></span><span class="op">)</span></span></code></pre></div>
-<p>Before starting, you need to install LibTorch, the backend of PyTorch which also the backend of <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> R package:</p>
+<p>Before starting, install LibTorch, the backend of PyTorch and the <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> R package:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/install_torch.html" class="external-link">install_torch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
@@ -195,7 +195,7 @@
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>      NN Model Type           <span class="sc">:</span>             FFNN    n_predictors <span class="sc">:</span>      <span class="dv">4</span></span>
 <span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>      Number of Epochs        <span class="sc">:</span>              <span class="dv">100</span>    n_response   <span class="sc">:</span>      <span class="dv">3</span></span>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>      Hidden Layer Units      <span class="sc">:</span>        <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">7</span>    reg.         <span class="sc">:</span>   None</span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>      Number of Hidden Layers <span class="sc">:</span>                <span class="dv">3</span>    Device       <span class="sc">:</span>    cpu</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>      Number of Hidden Layers <span class="sc">:</span>                <span class="dv">3</span>    Device       <span class="sc">:</span>    mps</span>
 <span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>      Pred. Type              <span class="sc">:</span>   classification                 <span class="sc">:</span>       </span>
 <span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>    <span class="sc">-----------------------------------------------------------------------</span></span>
 <span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a></span>
@@ -216,14 +216,14 @@
 <p>Two kinds of <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> usage:</p>
 <ol style="list-style-type: decimal">
 <li>
-<p><strong>Without <code>newdata</code></strong> predictions is the default to the parent data frame.</p>
+<p><strong>Without <code>newdata</code></strong> predictions default to the training data.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>    <span class="op">(</span>\<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/table.html" class="external-link">table</a></span><span class="op">(</span>actual <span class="op">=</span> <span class="va">iris</span><span class="op">$</span><span class="va">Species</span>, predicted <span class="op">=</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt;             predicted</span></span>
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         50          0         0</span></span>
-<span><span class="co">#&gt;   versicolor      0         47         3</span></span>
+<span><span class="co">#&gt;   versicolor      0         46         4</span></span>
 <span><span class="co">#&gt;   virginica       0          1        49</span></span></code></pre></div>
 </li>
 <li>
@@ -237,7 +237,7 @@
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         10          0         0</span></span>
 <span><span class="co">#&gt;   versicolor      0         10         0</span></span>
-<span><span class="co">#&gt;   virginica       0          0        10</span></span></code></pre></div>
+<span><span class="co">#&gt;   virginica       0          1         9</span></span></code></pre></div>
 </li>
 </ol>
 </div>
@@ -385,20 +385,20 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/garson.html" class="external-link">garson</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names  rel_imp</span></span>
-<span><span class="co">#&gt; 1  Sepal.Width       y 29.60036</span></span>
-<span><span class="co">#&gt; 2 Petal.Length       y 26.92774</span></span>
-<span><span class="co">#&gt; 3  Petal.Width       y 26.28239</span></span>
-<span><span class="co">#&gt; 4 Sepal.Length       y 17.18951</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  Sepal.Width       y 28.80667</span></span>
+<span><span class="co">#&gt; 2  Petal.Width       y 25.33185</span></span>
+<span><span class="co">#&gt; 3 Sepal.Length       y 23.10922</span></span>
+<span><span class="co">#&gt; 4 Petal.Length       y 22.75226</span></span></code></pre></div>
 </li>
 <li>
 <p>Olden’s Algorithm</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/olden.html" class="external-link">olden</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        x_names y_names      rel_imp</span></span>
-<span><span class="co">#&gt; 1  Petal.Width       y  0.037665642</span></span>
-<span><span class="co">#&gt; 2 Sepal.Length       y  0.035827098</span></span>
-<span><span class="co">#&gt; 3  Sepal.Width       y -0.020472638</span></span>
-<span><span class="co">#&gt; 4 Petal.Length       y  0.009678024</span></span></code></pre></div>
+<span><span class="co">#&gt;        x_names y_names    rel_imp</span></span>
+<span><span class="co">#&gt; 1  Sepal.Width       y  0.5660366</span></span>
+<span><span class="co">#&gt; 2  Petal.Width       y -0.5193552</span></span>
+<span><span class="co">#&gt; 3 Petal.Length       y -0.4961819</span></span>
+<span><span class="co">#&gt; 4 Sepal.Length       y -0.1262867</span></span></code></pre></div>
 </li>
 </ol>
 <div class="section level3">

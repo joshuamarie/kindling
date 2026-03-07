@@ -7,12 +7,12 @@ such as:
 
 - Recurrent Neural Networks (RNN)
 
-It is mainly designed to generate code expressions of the current
-architectures which happens to reduce boilerplate `{torch}` code for the
-said current architectures. It also integrate seamlessly with titanic ML
-frameworks - currently with `{tidymodels}`, which enables components
-like `{parsnip}`, `{recipes}`, and `{workflows}`, allowing ergonomic
-interface for model specification, training, and evaluation.
+It is mainly designed to generate code expressions for current
+architectures, which reduces boilerplate `{torch}` code. It also
+integrates seamlessly with machine learning workflows in R, currently
+through `{tidymodels}` and components like `{parsnip}`, `{recipes}`, and
+`{workflows}`, allowing an ergonomic interface for model specification,
+training, and evaluation.
 
 Thus, the package supports hyperparameter tuning for:
 
@@ -35,7 +35,7 @@ define, train, and tune deep learning models using the familiar
 
 ## How to use
 
-The following uses of this package has 3 levels:
+This package can be used at 3 levels:
 
 Level 1: Code generation
 
@@ -117,7 +117,7 @@ Level 3: Conventional tidymodels interface
 - Fine-grained control over network depth, layer sizes, and activation
   functions
 
-- GPU acceleration supports via `{torch}` tensors
+- GPU acceleration support via `{torch}` tensors
 
 ## License
 
