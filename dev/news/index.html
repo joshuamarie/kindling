@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,7 +55,18 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="kindling-development-version">kindling (development version)<a class="anchor" aria-label="anchor" href="#kindling-development-version"></a></h2>
 <div class="section level3">
-<h3 id="new-experimental-functions-development-version">New Experimental functions<a class="anchor" aria-label="anchor" href="#new-experimental-functions-development-version"></a></h3>
+<h3 id="ongoing-features-development-version">Ongoing features<a class="anchor" aria-label="anchor" href="#ongoing-features-development-version"></a></h3>
+<ul><li>
+<p>More visualization supports</p>
+<ul><li>Loss history plot</li>
+<li>NN architecture plot</li>
+</ul></li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="kindling-030">kindling 0.3.0<a class="anchor" aria-label="anchor" href="#kindling-030"></a></h2><p class="text-muted">CRAN release: 2026-03-03</p>
+<div class="section level3">
+<h3 id="new-experimental-functions-0-3-0">New Experimental functions<a class="anchor" aria-label="anchor" href="#new-experimental-functions-0-3-0"></a></h3>
 <ul><li>
 <p>Generalized <code>nn_module()</code> expression generator to generate <code><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">torch::nn_module()</a></code> expression for the same sequential NN architectures</p>
 <ul><li>This is how you use to generate <code>nn_module()</code> for 1D-CNN (Convolutional Neural Networks) with 3 hidden layers:</li>
@@ -89,7 +100,7 @@
 <li>Allows early stopping if <code>early_stopping</code> is supplied with <code><a href="../reference/early_stop.html">early_stop()</a></code>.</li>
 <li>Supported with several data types: <code>matrix</code>, <code>data.frame</code>, <code>dataset</code> (<a href="https://torch.mlverse.org/docs" class="external-link">torch</a> dataset), and a formula interface.</li>
 <li>
-<code><a href="../reference/train_nnsnip.html">train_nnsnip()</a></code> is now provided to make <code><a href="../reference/gen-nn-train.html">train_nn()</a></code> bridges with <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>
+<code><a href="../reference/train_nnsnip.html">train_nnsnip()</a></code> is now provided to bridge <code><a href="../reference/gen-nn-train.html">train_nn()</a></code> with <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a>
 </li>
 </ul></li>
 <li>
@@ -102,7 +113,7 @@
 <li>Use <code>.name</code> as a displayed name of the custom activation function.</li>
 </ul></li>
 </ul><div class="section level4">
-<h4 id="superset-development-version">Superset<a class="anchor" aria-label="anchor" href="#superset-development-version"></a></h4>
+<h4 id="superset-0-3-0">Superset<a class="anchor" aria-label="anchor" href="#superset-0-3-0"></a></h4>
 <ul><li>
 <p><code><a href="../reference/act_funs.html">act_funs()</a></code> as a DSL function now supports index-style parameter specification for parametric activation functions</p>
 <ul><li>Activation functions can now be modified using <code>[</code> syntax (e.g. <code>softplus[beta = 0.2]</code>)</li>
@@ -110,18 +121,11 @@
 </ul></li>
 </ul></div>
 <div class="section level4">
-<h4 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h4>
-<ul><li>No suffix generated for <code>13</code> by <code><a href="../reference/ordinal_gen.html">ordinal_gen()</a></code>. Now fixed.</li>
+<h4 id="bug-fixes-0-3-0">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-3-0"></a></h4>
+<ul><li><p>No suffix generated for <code>13</code> by <code><a href="../reference/ordinal_gen.html">ordinal_gen()</a></code>. Now fixed.</p></li>
+<li><p><code>hd_neurons</code> for both <code><a href="../reference/nn_gens.html">ffnn_generator()</a></code> and <code><a href="../reference/nn_gens.html">rnn_generator()</a></code> accepts empty arguments, which implies there’s no hidden layers applied.</p></li>
 </ul></div>
 </div>
-</div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.1" id="kindling-021">kindling 0.2.1<a class="anchor" aria-label="anchor" href="#kindling-021"></a></h2>
-<div class="section level3">
-<h3 id="fixes-0-2-1">Fixes<a class="anchor" aria-label="anchor" href="#fixes-0-2-1"></a></h3>
-<ul><li>
-<code>hd_neurons</code> for both <code><a href="../reference/nn_gens.html">ffnn_generator()</a></code> and <code><a href="../reference/nn_gens.html">rnn_generator()</a></code> accepts empty arguments, which implies there’s no hidden layers applied.</li>
-</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="kindling-020">kindling 0.2.0<a class="anchor" aria-label="anchor" href="#kindling-020"></a></h2><p class="text-muted">CRAN release: 2026-02-04</p>
@@ -162,7 +166,7 @@
 <div class="section level3">
 <h3 id="documentation-0-2-0">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-2-0"></a></h3>
 <ul><li><p>Add a vignette to showcase the comparison with other similar packages</p></li>
-<li><p>The package description got few clarifications</p></li>
+<li><p>The package description has been clarified</p></li>
 <li><p>Vignette to showcase the comparison with other similar packages</p></li>
 <li>
 <p><code>hidden_neurons</code> parameter now supports discrete values specification</p>

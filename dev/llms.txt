@@ -5,12 +5,12 @@
 Title: ***Higher-Level Interface of ‘torch’ Package to Auto-Train Neural
 Networks***
 
-Whether you’re generating neural network architectures expressions or
-direct fitting/training actual models,
+Whether you’re generating neural network architecture expressions or
+directly fitting/training models,
 [kindling](https://kindling.joshuamarie.com) minimizes boilerplate code
-while preserving [torch](https://torch.mlverse.org/docs). And since this
-package uses [torch](https://torch.mlverse.org/docs) as its backend,
-GPU/TPU devices are supported.
+while preserving [torch](https://torch.mlverse.org/docs). Since this
+package uses [torch](https://torch.mlverse.org/docs) as its backend, GPU
+acceleration is supported.
 
 [kindling](https://kindling.joshuamarie.com) also bridges the gap
 between [torch](https://torch.mlverse.org/docs) and
@@ -32,17 +32,17 @@ learning models within the familiar
 
   - Base models interface: feedforward networks (MLP/DNN/FFNN) and
     recurrent variants (RNN, LSTM, GRU)
-  - Generalized neural network trainer that has the same sequence as
-    base models
+  - Generalized neural network trainer that has the same topology as
+    MLPs
 
-- Native support for titanic ML frameworks (currently supports
-  [tidymodels](https://tidymodels.tidymodels.org),
-  [mlr3](https://mlr3.mlr-org.com) for later) workflows and pipelines
+- Native support for R ML workflows and pipelines (currently
+  [tidymodels](https://tidymodels.tidymodels.org);
+  [mlr3](https://mlr3.mlr-org.com) planned)
 
 - Fine-grained control over network depth, layer sizes, and activation
   functions
 
-- GPU acceleration supports via [torch](https://torch.mlverse.org/docs)
+- GPU acceleration support via [torch](https://torch.mlverse.org/docs)
   tensors
 
 ## Installation
@@ -73,16 +73,10 @@ suits your task.
 
 ``` r
 library(kindling)
-#> 
-#> Attaching package: 'kindling'
-#> The following object is masked from 'package:base':
-#> 
-#>     args
 ```
 
-Before starting, you need to install LibTorch, the backend of PyTorch
-which also the backend of [torch](https://torch.mlverse.org/docs) R
-package:
+Before starting, install LibTorch, the backend of PyTorch and the
+[torch](https://torch.mlverse.org/docs) R package:
 
 ``` r
 torch::install_torch()
@@ -141,7 +135,7 @@ model = ffnn(
     Species ~ .,
     data = iris,
     hidden_neurons = c(10, 15, 7),
-    activations = act_funs(relu, "softshrink(lambd = 0.5)", elu), 
+    activations = act_funs(relu, softshrink[lambd = 0.5], elu), 
     loss = "cross_entropy",
     epochs = 100
 )
@@ -159,7 +153,7 @@ model
       NN Model Type           :             FFNN    n_predictors :      4
       Number of Epochs        :              100    n_response   :      3
       Hidden Layer Units      :        10, 15, 7    reg.         :   None
-      Number of Hidden Layers :                3    Device       :    cpu
+      Number of Hidden Layers :                3    Device       :    mps
       Pred. Type              :   classification                 :       
     -----------------------------------------------------------------------
 
@@ -175,6 +169,13 @@ model
                -------------------------------------------------
 ```
 
+> For parametric activation functions like softshrink, which contains
+> `"lambd"` (\lambda) as its parameter (the default is 1), use indexed
+> syntax (available on v0.3.x+) e.g. `softshrink[lambd = 0.5]` or
+> `softshrink[0.5]`, or a string literal expression
+> e.g. `"softshrink(lambd = 0.5)"`, to transmute the parameter value.
+> See `?kindling::act_funs()` for more details.
+
 Evaluate the prediction through
 [`predict()`](https://rdrr.io/r/stats/predict.html). The
 [`predict()`](https://rdrr.io/r/stats/predict.html) method is extended
@@ -182,8 +183,7 @@ for fitted models through its `newdata` argument.
 
 Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
 
-1.  **Without `newdata`** predictions is the default to the parent data
-    frame.
+1.  **Without `newdata`** predictions default to the training data.
 
     ``` r
     predict(model) |>
@@ -191,8 +191,8 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
-    #>   versicolor      0         48         2
-    #>   virginica       0          2        48
+    #>   versicolor      0         46         4
+    #>   virginica       0          1        49
     ```
 
 2.  **With `newdata`** simply pass the new data frame as the new
@@ -207,7 +207,7 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
     #>   versicolor      0         10         0
-    #>   virginica       0          0        10
+    #>   virginica       0          1         9
     ```
 
 ### Level 3: Conventional tidymodels Integration
@@ -234,7 +234,7 @@ ionosphere_data = Ionosphere[, -2]
 mlp_kindling(
     mode = "classification",
     hidden_neurons = c(128, 64),
-    activations = act_funs(relu, softshrink = args(lambd = 0.5)),
+    activations = act_funs(relu, softshrink[lambd = 0.5]),
     epochs = 100
 ) |>
     fit(Class ~ ., data = ionosphere_data) |>
@@ -373,21 +373,21 @@ networks. Two primary algorithms are available:
     ``` r
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1  Petal.Width       y 30.28746
-    #> 2 Sepal.Length       y 25.89413
-    #> 3 Petal.Length       y 24.97980
-    #> 4  Sepal.Width       y 18.83861
+    #> 1  Sepal.Width       y 28.80667
+    #> 2  Petal.Width       y 25.33185
+    #> 3 Sepal.Length       y 23.10922
+    #> 4 Petal.Length       y 22.75226
     ```
 
 2.  Olden’s Algorithm
 
     ``` r
     olden(model, bar_plot = FALSE)
-    #>        x_names y_names     rel_imp
-    #> 1  Petal.Width       y -0.22785314
-    #> 2 Sepal.Length       y  0.19276435
-    #> 3 Petal.Length       y -0.11285313
-    #> 4  Sepal.Width       y  0.05431408
+    #>        x_names y_names    rel_imp
+    #> 1  Sepal.Width       y  0.5660366
+    #> 2  Petal.Width       y -0.5193552
+    #> 3 Petal.Length       y -0.4961819
+    #> 4 Sepal.Length       y -0.1262867
     ```
 
 ### Integration with {vip}

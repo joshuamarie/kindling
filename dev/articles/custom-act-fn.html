@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -105,17 +105,17 @@ functions. Learn more: <a href="https://kindling.joshuamarie.com/articles/specia
 <p>With <code><a href="../reference/act_funs.html">act_funs()</a></code>, you are not limited to the activation
 functions available in <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>’s namespace. Use
 <code><a href="../reference/new_act_fn.html">new_act_fn()</a></code> to wrap any compatible function into a
-validated custom activation. This feature, however, only available on
+validated custom activation. This feature, however, is only available on
 version 0.3.0 and above.</p>
 </div>
 <div class="section level2">
 <h2 id="function-to-use">Function to use<a class="anchor" aria-label="anchor" href="#function-to-use"></a>
 </h2>
-<p>To do this, use <code><a href="../reference/new_act_fn.html">new_act_fn()</a></code> and it takes a
-user-supplied function, validates it against a small dummy tensor at
-<em>definition time</em> (a dry-run probe), and wraps it in a call-time
-type guard. This means errors surface early — before your model ever
-starts training.</p>
+<p>To do this, use <code><a href="../reference/new_act_fn.html">new_act_fn()</a></code>. It takes a user-supplied
+function, validates it against a small dummy tensor at <em>definition
+time</em> (a dry-run probe), and wraps it in a call-time type guard.
+This means errors surface early — before your model ever starts
+training.</p>
 <p>The function you supply must:</p>
 <ul>
 <li>Accept at least one argument (the input tensor).</li>
@@ -124,10 +124,10 @@ starts training.</p>
 <div class="section level3">
 <h3 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
 </h3>
-<p>Currently, <code>nnf_tanh</code> doesn’t exist in
-<a href="https://torch.mlverse.org/docs" class="external-link">torch</a> namespace, so <code>tanh</code> argument is not
-valid. With <code><a href="../reference/new_act_fn.html">new_act_fn()</a></code>, you can wrap
-<code><a href="https://torch.mlverse.org/docs/reference/torch_tanh.html" class="external-link">torch::torch_tanh()</a></code> to make it usable.</p>
+<p>Currently, <code>nnf_tanh</code> doesn’t exist in the
+<a href="https://torch.mlverse.org/docs" class="external-link">torch</a> namespace, so <code>tanh</code> is not a valid
+argument to <code><a href="../reference/act_funs.html">act_funs()</a></code>. With <code><a href="../reference/new_act_fn.html">new_act_fn()</a></code>, you
+can wrap <code><a href="https://torch.mlverse.org/docs/reference/torch_tanh.html" class="external-link">torch::torch_tanh()</a></code> to make it usable.</p>
 <p>Here’s a basic example that wraps <code><a href="https://torch.mlverse.org/docs/reference/torch_tanh.html" class="external-link">torch::torch_tanh()</a></code> as
 a custom activation:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
@@ -140,7 +140,7 @@ any built-in activation:</p>
 <div class="section level3">
 <h3 id="using-custom-activations-in-a-model">Using Custom Activations in a Model<a class="anchor" aria-label="anchor" href="#using-custom-activations-in-a-model"></a>
 </h3>
-<p>Naturally, functions for modelling like <code><a href="../reference/kindling-basemodels.html">ffnn()</a></code> accepts
+<p>Naturally, functions for modelling, like <code><a href="../reference/kindling-basemodels.html">ffnn()</a></code>, accept
 <code><a href="../reference/act_funs.html">act_funs()</a></code> into the <code>activations</code> argument.
 Again, you can pass a custom activation function within
 <code><a href="../reference/new_act_fn.html">new_act_fn()</a></code>, then pass it through
@@ -164,8 +164,6 @@ Again, you can pass a custom activation function within
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="font-style: italic;">-- FFNN Model Summary ----------------------------------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
-<span><span class="co">## status 2</span></span></code></pre>
 <pre><code><span><span class="co">## -------------------------------------------------------------------</span></span>
 <span><span class="co">##   NN Model Type           :         FFNN    n_predictors :      3</span></span>
 <span><span class="co">##   Number of Epochs        :           50    n_response   :      1</span></span>
@@ -177,8 +175,6 @@ Again, you can pass a custom activation function within
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="font-style: italic;">-- Activation function ---------------------------------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
-<span><span class="co">## status 2</span></span></code></pre>
 <pre><code><span><span class="co">## -------------------------------------------------</span></span>
 <span><span class="co">##   1st Layer {64}    :                      relu</span></span>
 <span><span class="co">##   2nd Layer {32}    :                      silu</span></span>
@@ -190,7 +186,7 @@ layer, in order. Here, the first hidden layer uses ReLU, the second uses
 SiLU (Swish), and the third uses Tanh.</p>
 <p>You can also use a single custom activation recycled across all
 layers:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/kindling-basemodels.html">ffnn</a></span><span class="op">(</span></span>
 <span>    <span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">.</span>,</span>
 <span>    data <span class="op">=</span> <span class="va">iris</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>,</span>
@@ -203,8 +199,6 @@ layers:</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="font-style: italic;">-- FFNN Model Summary ----------------------------------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
-<span><span class="co">## status 2</span></span></code></pre>
 <pre><code><span><span class="co">## -------------------------------------------------------------------</span></span>
 <span><span class="co">##   NN Model Type           :         FFNN    n_predictors :      3</span></span>
 <span><span class="co">##   Number of Epochs        :           50    n_response   :      1</span></span>
@@ -216,8 +210,6 @@ layers:</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="font-style: italic;">-- Activation function ---------------------------------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
-<span><span class="co">## status 2</span></span></code></pre>
 <pre><code><span><span class="co">## -------------------------------------------------</span></span>
 <span><span class="co">##   1st Layer {64}    :                  &lt;custom&gt;</span></span>
 <span><span class="co">##   2nd Layer {32}    :                  &lt;custom&gt;</span></span>
@@ -231,7 +223,7 @@ layers:</p>
 small dummy tensor to validate your function before training. You can
 disable this with <code>probe = FALSE</code>, though this is generally
 not recommended:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_act</span> <span class="op">=</span> <span class="fu"><a href="../reference/new_act_fn.html">new_act_fn</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_tanh.html" class="external-link">torch_tanh</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, probe <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -239,10 +231,10 @@ not recommended:</p>
 </h3>
 <p>You can provide a human-readable name via <code>.name</code>, which
 is used in print output and diagnostics:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">my_act</span> <span class="op">=</span> <span class="fu"><a href="../reference/new_act_fn.html">new_act_fn</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_tanh.html" class="external-link">torch_tanh</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, .name <span class="op">=</span> <span class="st">"my_tanh"</span><span class="op">)</span></span></code></pre></div>
 <p>Here’s a simple application:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/kindling-basemodels.html">ffnn</a></span><span class="op">(</span></span>
 <span>    <span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">.</span>,</span>
 <span>    data <span class="op">=</span> <span class="va">iris</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>,</span>
@@ -258,8 +250,6 @@ is used in print output and diagnostics:</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="font-style: italic;">-- FFNN Model Summary ----------------------------------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
-<span><span class="co">## status 2</span></span></code></pre>
 <pre><code><span><span class="co">## -------------------------------------------------------------------</span></span>
 <span><span class="co">##   NN Model Type           :         FFNN    n_predictors :      3</span></span>
 <span><span class="co">##   Number of Epochs        :           50    n_response   :      1</span></span>
@@ -271,8 +261,6 @@ is used in print output and diagnostics:</p>
 <span><span class="co">## </span></span>
 <span><span class="co">## </span></span>
 <span><span class="co">## <span style="font-style: italic;">-- Activation function ---------------------------------------------------------</span></span></span></code></pre>
-<pre><code><span><span class="co">## Warning in system("tput cols", intern = TRUE): running command 'tput cols' had</span></span>
-<span><span class="co">## status 2</span></span></code></pre>
 <pre><code><span><span class="co">## -------------------------------------------------</span></span>
 <span><span class="co">##   1st Layer {64}    :                      relu</span></span>
 <span><span class="co">##   2nd Layer {32}    :                hyper_tanh</span></span>
@@ -289,7 +277,7 @@ Common errors include:</p>
 <li>
 <p>Function returns a non-tensor. This will error at definition
 time:</p>
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/new_act_fn.html">new_act_fn</a></span><span class="op">(</span>\<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `.assert_tensor_output()`:</span></span></span>
 <span><span class="co">## <span style="color: #BBBB00;">!</span> Dry-run must be a <span style="color: #0000BB;">&lt;torch_tensor&gt;</span>.</span></span>
@@ -298,7 +286,7 @@ time:</p>
 </li>
 <li>
 <p>Function accepts no arguments. This will error immediately:</p>
-<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/new_act_fn.html">new_act_fn</a></span><span class="op">(</span><span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_zeros.html" class="external-link">torch_zeros</a></span><span class="op">(</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <pre><code><span><span class="co">## <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `new_act_fn()`:</span></span></span>
 <span><span class="co">## <span style="color: #BBBB00;">!</span> `fn` must accept at least one argument (the input tensor).</span></span>
