@@ -10,11 +10,12 @@
 #' - Deep Neural Networks / (Deep) Feedforward Neural Networks (DNN / FFNN)
 #' - Recurrent Neural Networks (RNN)
 #'
-#' It is mainly designed to generate code expressions of the current architectures 
-#' which happens to reduce boilerplate `{torch}` code for the said current architectures. 
-#' It also integrate seamlessly with titanic ML frameworks - currently with `{tidymodels}`, 
-#' which enables components like `{parsnip}`, `{recipes}`, and `{workflows}`, 
-#' allowing ergonomic interface for model specification, training, and evaluation.
+#' It is mainly designed to generate code expressions for current architectures,
+#' which reduces boilerplate `{torch}` code.
+#' It also integrates seamlessly with machine learning workflows in R,
+#' currently through `{tidymodels}` and components like `{parsnip}`,
+#' `{recipes}`, and `{workflows}`, allowing an ergonomic interface for model
+#' specification, training, and evaluation.
 #'
 #' Thus, the package supports hyperparameter tuning for:
 #'
@@ -26,7 +27,7 @@
 #' but `n_hlayer()` dial parameter is not supported. This changes after 0.2.0 release.
 #'
 #' @section How to use:
-#' The following uses of this package has 3 levels:
+#' This package can be used at 3 levels:
 #'
 #' Level 1: Code generation
 #'
@@ -102,12 +103,12 @@
 #' #> 2 kap      binary         0
 #' ```
 #'
-#' @section Main Features: 
+#' @section Main Features:
 #' -   Code generation of `{torch}` expression
 #' -   Multiple architectures available: feedforward networks (MLP/DNN/FFNN) and recurrent variants (RNN, LSTM, GRU)
 #' -   Native support for `{tidymodels}` workflows and pipelines
 #' -   Fine-grained control over network depth, layer sizes, and activation functions
-#' -   GPU acceleration supports via `{torch}` tensors
+#' -   GPU acceleration support via `{torch}` tensors
 #'
 #' @references
 #'

@@ -32,7 +32,7 @@ desc = setNames(as.list(desc), colnames(desc))
 
 Title: ***`r desc$Title`***
 
-Whether you're generating neural network architectures expressions or direct fitting/training actual models, `{kindling}` minimizes boilerplate code while preserving `{torch}`. And since this package uses `{torch}` as its backend, GPU/TPU devices are supported. 
+Whether you're generating neural network architecture expressions or directly fitting/training models, `{kindling}` minimizes boilerplate code while preserving `{torch}`. Since this package uses `{torch}` as its backend, GPU acceleration is supported. 
 
 `{kindling}` also bridges the gap between `{torch}` and `{tidymodels}`. It works seamlessly with `{parsnip}`, `{recipes}`, and `{workflows}` to bring deep learning into your existing `{tidymodels}` modeling pipeline. This enables a streamlined interface for building, training, and tuning deep learning models within the familiar `{tidymodels}` ecosystem.
 
@@ -45,9 +45,9 @@ Whether you're generating neural network architectures expressions or direct fit
     -  Base models interface: feedforward networks (MLP/DNN/FFNN) and recurrent variants (RNN, LSTM, GRU)
     -  Generalized neural network trainer that has the same topology as MLPs
 
--   Native support for titanic ML frameworks (currently supports `{tidymodels}`, `{mlr3}` for later) workflows and pipelines
+-   Native support for R ML workflows and pipelines (currently `{tidymodels}`; `{mlr3}` planned)
 -   Fine-grained control over network depth, layer sizes, and activation functions
--   GPU acceleration supports via `{torch}` tensors
+-   GPU acceleration support via `{torch}` tensors
 
 ## Installation
 
@@ -73,7 +73,7 @@ pak::pak("joshuamarie/kindling")
 library(kindling)
 ```
 
-Before starting, you need to install LibTorch, the backend of PyTorch which also the backend of `{torch}` R package:
+Before starting, install LibTorch (the backend used by the `{torch}` R package):
 
 ``` r
 torch::install_torch()
@@ -122,7 +122,7 @@ Evaluate the prediction through `predict()`. The `predict()` method is extended 
 
 Two kinds of `predict()` usage: 
 
-1.  **Without `newdata`** predictions is the default to the parent data frame. 
+1.  **Without `newdata`** predictions default to the training data. 
 
     ```{r}
     predict(model) |>

@@ -12,11 +12,12 @@
 \item Recurrent Neural Networks (RNN)
 }
 
-It is mainly designed to generate code expressions of the current architectures
-which happens to reduce boilerplate \code{{torch}} code for the said current architectures.
-It also integrate seamlessly with titanic ML frameworks - currently with \code{{tidymodels}},
-which enables components like \code{{parsnip}}, \code{{recipes}}, and \code{{workflows}},
-allowing ergonomic interface for model specification, training, and evaluation.
+It is mainly designed to generate code expressions for current architectures,
+which reduces boilerplate \code{{torch}} code.
+It also integrates seamlessly with machine learning workflows in R,
+currently through \code{{tidymodels}} and components like \code{{parsnip}},
+\code{{recipes}}, and \code{{workflows}}, allowing an ergonomic interface for model
+specification, training, and evaluation.
 
 Thus, the package supports hyperparameter tuning for:
 \itemize{
@@ -35,7 +36,7 @@ and tune deep learning models using the familiar \code{tidymodels} workflow.
 }
 \section{How to use}{
 
-The following uses of this package has 3 levels:
+This package can be used at 3 levels:
 
 Level 1: Code generation
 
@@ -116,7 +117,7 @@ rnn_kindling(
 \item Multiple architectures available: feedforward networks (MLP/DNN/FFNN) and recurrent variants (RNN, LSTM, GRU)
 \item Native support for \code{{tidymodels}} workflows and pipelines
 \item Fine-grained control over network depth, layer sizes, and activation functions
-\item GPU acceleration supports via \code{{torch}} tensors
+\item GPU acceleration support via \code{{torch}} tensors
 }
 }
 
