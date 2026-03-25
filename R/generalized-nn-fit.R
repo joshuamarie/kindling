@@ -283,36 +283,36 @@ train_nn.matrix =
         cache_weights = FALSE,
         ...
     ) {
-    arch = .resolve_train_architecture(architecture = architecture, arch = arch)
+        arch = .resolve_train_architecture(architecture = architecture, arch = arch)
 
-    act_specs = eval_act_funs({{ activations }}, {{ output_activation }})
-    activations = act_specs$activations
-    output_activation = act_specs$output_activation
+        act_specs = eval_act_funs({{ activations }}, {{ output_activation }})
+        activations = act_specs$activations
+        output_activation = act_specs$output_activation
 
-    train_nn_impl(
-        x = x,
-        y = y,
-        hidden_neurons = hidden_neurons,
-        activations = activations,
-        output_activation = output_activation,
-        bias = bias,
-        arch = arch,
-        early_stopping = early_stopping,
-        epochs = epochs,
-        batch_size = batch_size,
-        penalty = penalty,
-        mixture = mixture,
-        learn_rate = learn_rate,
-        optimizer = optimizer,
-        optimizer_args = optimizer_args,
-        loss = loss,
-        validation_split = validation_split,
-        device = device,
-        verbose = verbose,
-        cache_weights = cache_weights,
-        fit_class = "nn_fit"
-    )
-}
+        train_nn_impl(
+            x = x,
+            y = y,
+            hidden_neurons = hidden_neurons,
+            activations = activations,
+            output_activation = output_activation,
+            bias = bias,
+            arch = arch,
+            early_stopping = early_stopping,
+            epochs = epochs,
+            batch_size = batch_size,
+            penalty = penalty,
+            mixture = mixture,
+            learn_rate = learn_rate,
+            optimizer = optimizer,
+            optimizer_args = optimizer_args,
+            loss = loss,
+            validation_split = validation_split,
+            device = device,
+            verbose = verbose,
+            cache_weights = cache_weights,
+            fit_class = "nn_fit"
+        )
+    }
 
 
 #' @rdname gen-nn-train
@@ -348,37 +348,37 @@ train_nn.data.frame =
         cache_weights = FALSE,
         ...
     ) {
-    arch = .resolve_train_architecture(architecture = architecture, arch = arch)
+        arch = .resolve_train_architecture(architecture = architecture, arch = arch)
 
-    act_specs = eval_act_funs({{ activations }}, {{ output_activation }})
-    activations = act_specs$activations
-    output_activation = act_specs$output_activation
+        act_specs = eval_act_funs({{ activations }}, {{ output_activation }})
+        activations = act_specs$activations
+        output_activation = act_specs$output_activation
 
-    processed = if (rlang::is_formula(y)) hardhat::mold(y, x) else hardhat::mold(x, y)
+        processed = if (rlang::is_formula(y)) hardhat::mold(y, x) else hardhat::mold(x, y)
 
-    .train_nn_tab_impl(
-        processed = processed,
-        formula = NULL,
-        hidden_neurons = hidden_neurons,
-        activations = activations,
-        output_activation = output_activation,
-        bias = bias,
-        arch = arch,
-        early_stopping = early_stopping,
-        epochs = epochs,
-        batch_size = batch_size,
-        penalty = penalty,
-        mixture = mixture,
-        learn_rate = learn_rate,
-        optimizer = optimizer,
-        optimizer_args = optimizer_args,
-        loss = loss,
-        validation_split = validation_split,
-        device = device,
-        verbose = verbose,
-        cache_weights = cache_weights
-    )
-}
+        .train_nn_tab_impl(
+            processed = processed,
+            formula = NULL,
+            hidden_neurons = hidden_neurons,
+            activations = activations,
+            output_activation = output_activation,
+            bias = bias,
+            arch = arch,
+            early_stopping = early_stopping,
+            epochs = epochs,
+            batch_size = batch_size,
+            penalty = penalty,
+            mixture = mixture,
+            learn_rate = learn_rate,
+            optimizer = optimizer,
+            optimizer_args = optimizer_args,
+            loss = loss,
+            validation_split = validation_split,
+            device = device,
+            verbose = verbose,
+            cache_weights = cache_weights
+        )
+    }
 
 
 #' @rdname gen-nn-train
@@ -413,41 +413,41 @@ train_nn.formula =
         cache_weights = FALSE,
         ...
     ) {
-    arch = .resolve_train_architecture(architecture = architecture, arch = arch)
+        arch = .resolve_train_architecture(architecture = architecture, arch = arch)
 
-    if (missing(data) || is.null(data)) {
-        cli::cli_abort("{.arg data} must be provided when using the formula interface.")
+        if (missing(data) || is.null(data)) {
+            cli::cli_abort("{.arg data} must be provided when using the formula interface.")
+        }
+
+        act_specs = eval_act_funs({{ activations }}, {{ output_activation }})
+        activations = act_specs$activations
+        output_activation = act_specs$output_activation
+
+        processed = hardhat::mold(x, data)
+
+        .train_nn_tab_impl(
+            processed = processed,
+            formula = x,
+            hidden_neurons = hidden_neurons,
+            activations = activations,
+            output_activation = output_activation,
+            bias = bias,
+            arch = arch,
+            early_stopping = early_stopping,
+            epochs = epochs,
+            batch_size = batch_size,
+            penalty = penalty,
+            mixture = mixture,
+            learn_rate = learn_rate,
+            optimizer = optimizer,
+            optimizer_args = optimizer_args,
+            loss = loss,
+            validation_split = validation_split,
+            device = device,
+            verbose = verbose,
+            cache_weights = cache_weights
+        )
     }
-
-    act_specs = eval_act_funs({{ activations }}, {{ output_activation }})
-    activations = act_specs$activations
-    output_activation = act_specs$output_activation
-
-    processed = hardhat::mold(x, data)
-
-    .train_nn_tab_impl(
-        processed = processed,
-        formula = x,
-        hidden_neurons = hidden_neurons,
-        activations = activations,
-        output_activation = output_activation,
-        bias = bias,
-        arch = arch,
-        early_stopping = early_stopping,
-        epochs = epochs,
-        batch_size = batch_size,
-        penalty = penalty,
-        mixture = mixture,
-        learn_rate = learn_rate,
-        optimizer = optimizer,
-        optimizer_args = optimizer_args,
-        loss = loss,
-        validation_split = validation_split,
-        device = device,
-        verbose = verbose,
-        cache_weights = cache_weights
-    )
-}
 
 
 #' @rdname gen-nn-train
@@ -485,46 +485,46 @@ train_nn.default = function(x, ...) {
         verbose,
         cache_weights
     ) {
-    predictors = processed$predictors
-    outcomes = processed$outcomes
+        predictors = processed$predictors
+        outcomes = processed$outcomes
 
-    if (!is.matrix(predictors)) predictors = as.matrix(predictors)
+        if (!is.matrix(predictors)) predictors = as.matrix(predictors)
 
-    if (is.data.frame(outcomes)) {
-        outcomes = if (ncol(outcomes) == 1L) outcomes[[1L]] else as.matrix(outcomes)
-    } else if (!is.null(ncol(outcomes)) && ncol(outcomes) == 1L) {
-        outcomes = outcomes[[1L]]
+        if (is.data.frame(outcomes)) {
+            outcomes = if (ncol(outcomes) == 1L) outcomes[[1L]] else as.matrix(outcomes)
+        } else if (!is.null(ncol(outcomes)) && ncol(outcomes) == 1L) {
+            outcomes = outcomes[[1L]]
+        }
+
+        fit = train_nn_impl(
+            x = predictors,
+            y = outcomes,
+            hidden_neurons = hidden_neurons,
+            activations = activations,
+            output_activation = output_activation,
+            bias = bias,
+            arch = arch,
+            early_stopping = early_stopping,
+            epochs = epochs,
+            batch_size = batch_size,
+            penalty = penalty,
+            mixture = mixture,
+            learn_rate = learn_rate,
+            optimizer = optimizer,
+            optimizer_args = optimizer_args,
+            loss = loss,
+            validation_split = validation_split,
+            device = device,
+            verbose = verbose,
+            cache_weights = cache_weights,
+            fit_class = "nn_fit_tab"
+        )
+
+        fit$blueprint = processed$blueprint
+        if (!is.null(formula)) fit$formula = formula
+
+        fit
     }
-
-    fit = train_nn_impl(
-        x = predictors,
-        y = outcomes,
-        hidden_neurons = hidden_neurons,
-        activations = activations,
-        output_activation = output_activation,
-        bias = bias,
-        arch = arch,
-        early_stopping = early_stopping,
-        epochs = epochs,
-        batch_size = batch_size,
-        penalty = penalty,
-        mixture = mixture,
-        learn_rate = learn_rate,
-        optimizer = optimizer,
-        optimizer_args = optimizer_args,
-        loss = loss,
-        validation_split = validation_split,
-        device = device,
-        verbose = verbose,
-        cache_weights = cache_weights,
-        fit_class = "nn_fit_tab"
-    )
-
-    fit$blueprint = processed$blueprint
-    if (!is.null(formula)) fit$formula = formula
-
-    fit
-}
 
 
 #' Shared core implementation
@@ -553,380 +553,351 @@ train_nn_impl =
         cache_weights = FALSE,
         fit_class = "nn_fit"
     ) {
-    if (!requireNamespace("torch", quietly = TRUE)) {
-        cli::cli_abort("Package {.pkg torch} is required but not installed.")
-    }
-
-    if (missing(hidden_neurons) || is.null(hidden_neurons) || length(hidden_neurons) == 0L) {
-        hidden_neurons = integer(0L)
-    }
-
-    # ---- Device ----
-    device = if (is.null(device)) get_default_device() else validate_device(device)
-    if (verbose) cli::cli_alert_info("Using device: {device}")
-
-    validate_regularization(penalty, mixture)
-
-    # ---- Input transform ----
-    input_fn = if (!is.null(arch) && !is.null(arch$input_transform)) {
-        rlang::as_function(arch$input_transform)
-    } else {
-        identity
-    }
-
-    # ---- Metadata ----
-    feature_names = colnames(x) %||% paste0("V", seq_len(ncol(x)))
-    response_name = names(y)[1L] %||% "y"
-    is_classification = is.factor(y) || is.character(y)
-
-    # ---- y encoding ----
-    if (is_classification) {
-        if (is.character(y)) y = as.factor(y)
-        y_levels = levels(y)
-        n_classes = length(y_levels)
-        y_numeric = as.integer(y)
-        no_y = n_classes
-    } else {
-        y_levels = NULL
-        n_classes = NULL
-        y_numeric = if (is.matrix(y)) y else as.numeric(y)
-        no_y = if (is.matrix(y)) ncol(y) else 1L
-    }
-
-    no_x = ncol(x)
-    n_obs = nrow(x)
-
-    # ---- Validation split ----
-    if (validation_split > 0 && validation_split < 1) {
-        n_val = floor(n_obs * validation_split)
-        val_idx = sample(n_obs, n_val)
-        train_idx = setdiff(seq_len(n_obs), val_idx)
-
-        x_train = x[train_idx, , drop = FALSE]
-        y_train = y_numeric[train_idx]
-        x_val = x[val_idx, , drop = FALSE]
-        y_val = y_numeric[val_idx]
-    } else {
-        x_train = x
-        y_train = y_numeric
-        x_val = NULL
-        y_val = NULL
-    }
-
-    # ---- Build model ----
-    arch_args = if (!is.null(arch)) {
-        args = unclass(arch)
-        args$input_transform = NULL
-        args
-    } else {
-        list()
-    }
-
-    arch_env = if (!is.null(arch)) attr(arch, "env") else parent.frame()
-    # model_expr = do.call(
-    #     nn_module_generator,
-    #     c(
-    #         list(
-    #             hd_neurons = hidden_neurons,
-    #             no_x = no_x,
-    #             no_y = no_y,
-    #             activations = activations,
-    #             output_activation = output_activation,
-    #             bias = bias
-    #         ),
-    #         arch_args,
-    #         .env = arch_env
-    #     )
-    # )
-    model_expr = rlang::exec(
-        nn_module_generator,
-
-        # Arguments
-        hd_neurons = hidden_neurons,
-        no_x = no_x,
-        no_y = no_y,
-        activations = activations,
-        output_activation = output_activation,
-        bias = bias,
-
-        # Executing arguments from `nn_arch()`
-        # To sync up with the current environment
-        !!!arch_args,
-        .env = arch_env
-    )
-
-    model = rlang::eval_tidy(model_expr)()
-    model$to(device = device)
-
-    # ---- Early stopping state ----
-    es_state = if (!is.null(early_stopping)) {
-        if (!inherits(early_stopping, "early_stop_spec")) {
-            cli::cli_abort(c(
-                "{.arg early_stopping} must be created with {.fn early_stop}.",
-                i = "Example: {.code early_stopping = early_stop(patience = 10)}."
-            ))
+        if (!requireNamespace("torch", quietly = TRUE)) {
+            cli::cli_abort("Package {.pkg torch} is required but not installed.")
         }
-        if (early_stopping$monitor == "val_loss" && validation_split == 0) {
-            cli::cli_abort(c(
-                "Early stopping on {.val val_loss} requires a validation set.",
-                i = "Set {.arg validation_split} > 0, or use {.code monitor = 'train_loss'}."
-            ))
+
+        if (missing(hidden_neurons) || is.null(hidden_neurons) || length(hidden_neurons) == 0L) {
+            hidden_neurons = integer(0L)
         }
-        list(
-            spec = early_stopping,
-            best_loss = Inf,
-            best_weights = NULL,
-            wait = 0L,
-            stopped_epoch = NA_integer_
+
+        # ---- Device ----
+        device = if (is.null(device)) get_default_device() else validate_device(device)
+        if (verbose) cli::cli_alert_info("Using device: {device}")
+
+        validate_regularization(penalty, mixture)
+
+        # ---- Input transform ----
+        input_fn = if (!is.null(arch) && !is.null(arch$input_transform)) {
+            rlang::as_function(arch$input_transform)
+        } else {
+            identity
+        }
+
+        # ---- Metadata ----
+        feature_names = colnames(x) %||% paste0("V", seq_len(ncol(x)))
+        response_name = names(y)[1L] %||% "y"
+        is_classification = is.factor(y) || is.character(y)
+
+        # ---- y encoding ----
+        if (is_classification) {
+            if (is.character(y)) y = as.factor(y)
+            y_levels = levels(y)
+            n_classes = length(y_levels)
+            y_numeric = as.integer(y)
+            no_y = n_classes
+        } else {
+            y_levels = NULL
+            n_classes = NULL
+            y_numeric = if (is.matrix(y)) y else as.numeric(y)
+            no_y = if (is.matrix(y)) ncol(y) else 1L
+        }
+
+        no_x = ncol(x)
+        n_obs = nrow(x)
+
+        # ---- Validation split ----
+        if (validation_split > 0 && validation_split < 1) {
+            n_val = floor(n_obs * validation_split)
+            val_idx = sample(n_obs, n_val)
+            train_idx = setdiff(seq_len(n_obs), val_idx)
+
+            x_train = x[train_idx, , drop = FALSE]
+            y_train = y_numeric[train_idx]
+            x_val = x[val_idx, , drop = FALSE]
+            y_val = y_numeric[val_idx]
+        } else {
+            x_train = x
+            y_train = y_numeric
+            x_val = NULL
+            y_val = NULL
+        }
+
+        # ---- Build model ----
+        arch_args = if (!is.null(arch)) {
+            args = unclass(arch)
+            args$input_transform = NULL
+            args
+        } else {
+            list()
+        }
+
+        arch_env = if (!is.null(arch)) attr(arch, "env") else parent.frame()
+        model_expr = do.call(
+            nn_module_generator,
+            c(
+                list(
+                    hd_neurons = hidden_neurons,
+                    no_x = no_x,
+                    no_y = no_y,
+                    activations = activations,
+                    output_activation = output_activation,
+                    bias = bias
+                ),
+                arch_args,
+                .env = arch_env
+            )
         )
-    } else {
-        NULL
-    }
 
-    # ---- Tensors ----
-    .make_tensor = function(mat, is_y = FALSE) {
-        t = torch::torch_tensor(
-            mat,
-            device = device,
-            dtype = if (is_y && is_classification) torch::torch_long()
-                    else torch::torch_float32()
-        )
-        if (!is_y) input_fn(t) else t
-    }
+        model = rlang::eval_tidy(model_expr)()
+        model$to(device = device)
 
-    x_train_t = .make_tensor(x_train)
-    y_train_t = .make_tensor(
-        if (is_classification || is.matrix(y_train)) y_train else matrix(y_train, ncol = 1L),
-        is_y = TRUE
-    )
+        # ---- Early stopping state ----
+        es_state = if (!is.null(early_stopping)) {
+            if (!inherits(early_stopping, "early_stop_spec")) {
+                cli::cli_abort(c(
+                    "{.arg early_stopping} must be created with {.fn early_stop}.",
+                    i = "Example: {.code early_stopping = early_stop(patience = 10)}."
+                ))
+            }
+            if (early_stopping$monitor == "val_loss" && validation_split == 0) {
+                cli::cli_abort(c(
+                    "Early stopping on {.val val_loss} requires a validation set.",
+                    i = "Set {.arg validation_split} > 0, or use {.code monitor = 'train_loss'}."
+                ))
+            }
+            list(
+                spec = early_stopping,
+                best_loss = Inf,
+                best_weights = NULL,
+                wait = 0L,
+                stopped_epoch = NA_integer_
+            )
+        } else {
+            NULL
+        }
 
-    if (!is.null(x_val)) {
-        x_val_t = .make_tensor(x_val)
-        y_val_t = .make_tensor(
-            if (is_classification || is.matrix(y_val)) y_val else matrix(y_val, ncol = 1L),
+        # ---- Tensors ----
+        .make_tensor = function(mat, is_y = FALSE) {
+            t = torch::torch_tensor(
+                mat,
+                device = device,
+                dtype = if (is_y && is_classification) torch::torch_long()
+                else torch::torch_float32()
+            )
+            if (!is_y) input_fn(t) else t
+        }
+
+        x_train_t = .make_tensor(x_train)
+        y_train_t = .make_tensor(
+            if (is_classification || is.matrix(y_train)) y_train else matrix(y_train, ncol = 1L),
             is_y = TRUE
         )
-    }
 
-    # ---- Optimizer ----
-    validate_optimizer(tolower(optimizer))
-    optimizer_fn = get(paste0("optim_", tolower(optimizer)), envir = asNamespace("torch"))
-    # opt = do.call(optimizer_fn, c(list(params = model$parameters, lr = learn_rate), optimizer_args))
-    opt = rlang::exec(
-        optimizer_fn,
-
-        # Arguments
-        params = model$parameters,
-        lr = learn_rate,
-
-        # Extra arguments from `optimizer_args`
-        !!!optimizer_args
-    )
-
-    # ---- Loss function ----
-    loss_fn = if (is.function(loss)) {
-        .validate_loss_fn(loss)
-    } else if (rlang::is_formula(loss)) {
-        .validate_loss_fn(rlang::as_function(loss))
-    } else {
-        loss_name = tolower(loss)
-
-        if (is_classification && loss_name == "mse") {
-            loss_name = "cross_entropy"
-            if (verbose) cli::cli_alert("Auto-detected classification task. Using {.val cross_entropy} loss.")
-        }
-
-        switch(
-            loss_name,
-            mse = function(input, target) torch::nnf_mse_loss(input, target),
-            mae = function(input, target) torch::nnf_l1_loss(input, target),
-            cross_entropy = function(input, target) torch::nnf_cross_entropy(input, target),
-            bce = function(input, target) torch::nnf_binary_cross_entropy_with_logits(input, target),
-            cli::cli_abort(
-                "Unknown loss: {.val {loss_name}}.",
-                i = "Use one of {.val mse}, {.val mae}, {.val cross_entropy}, {.val bce}, or supply a {.cls function}."
-            )
-        )
-    }
-
-    # ---- Training loop ----
-    loss_history = numeric(epochs)
-    val_loss_history = if (!is.null(x_val)) numeric(epochs) else NULL
-    n_batches = ceiling(nrow(x_train) / batch_size)
-
-    for (epoch in seq_len(epochs)) {
-        model$train()
-        epoch_loss = 0
-        idx = sample(nrow(x_train))
-
-        for (batch in seq_len(n_batches)) {
-            start_i = (batch - 1L) * batch_size + 1L
-            end_i = min(batch * batch_size, nrow(x_train))
-            batch_idx = idx[start_i:end_i]
-
-            x_batch = x_train_t[batch_idx, ]
-            y_batch = y_train_t[batch_idx]
-
-            opt$zero_grad()
-            y_pred = model(x_batch)
-            batch_loss = loss_fn(y_pred, y_batch)
-            reg_loss = regularizer(model, penalty, mixture)
-            total_loss = batch_loss + reg_loss
-            total_loss$backward()
-            opt$step()
-
-            epoch_loss = epoch_loss + total_loss$item()
-        }
-
-        loss_history[epoch] = epoch_loss / n_batches
-
-        # ---- Validation ----
         if (!is.null(x_val)) {
-            model$eval()
-            torch::with_no_grad({
-                y_val_pred = model(x_val_t)
-                val_loss = loss_fn(y_val_pred, y_val_t)
-                val_loss_history[epoch] = val_loss$item()
-            })
-        }
-
-        # ---- Verbose ----
-        if (verbose && (epoch %% max(1L, epochs %/% 10L) == 0L || epoch == epochs)) {
-            msg = glue::glue(
-                "Epoch {epoch}/{epochs} - Loss: {round(loss_history[epoch], 4)}"
+            x_val_t = .make_tensor(x_val)
+            y_val_t = .make_tensor(
+                if (is_classification || is.matrix(y_val)) y_val else matrix(y_val, ncol = 1L),
+                is_y = TRUE
             )
-            if (!is.null(val_loss_history))
-                msg = glue::glue("{msg} - Val Loss: {round(val_loss_history[epoch], 4)}")
-
-            message(msg)
         }
 
-        # ---- Early stopping check ----
-        if (!is.null(es_state)) {
-            monitored = if (es_state$spec$monitor == "val_loss") {
-                val_loss_history[epoch]
-            } else {
-                loss_history[epoch]
-            }
+        # ---- Optimizer ----
+        validate_optimizer(tolower(optimizer))
+        optimizer_fn = get(paste0("optim_", tolower(optimizer)), envir = asNamespace("torch"))
+        opt = do.call(optimizer_fn, c(list(params = model$parameters, lr = learn_rate), optimizer_args))
 
-            if (monitored < es_state$best_loss - es_state$spec$min_delta) {
-                es_state$best_loss = monitored
-                es_state$wait = 0L
-                if (es_state$spec$restore_best_weights) {
-                    es_state$best_weights = lapply(
-                        model$parameters,
-                        function(p) p$detach()$clone()
-                    )
-                }
-            } else {
-                es_state$wait = es_state$wait + 1L
-                if (es_state$wait >= es_state$spec$patience) {
-                    es_state$stopped_epoch = epoch
-                    if (verbose) cli::cli_alert_warning(
-                        "Early stopping at epoch {epoch}. Best {es_state$spec$monitor}: {round(es_state$best_loss, 4)}."
-                    )
-                    break
-                }
-            }
-        }
-    }
-
-    # ---- Restore best weights ----
-    if (!is.null(es_state) && es_state$spec$restore_best_weights && !is.null(es_state$best_weights)) {
-        params = model$parameters
-        torch::with_no_grad({
-            for (i in seq_along(params)) {
-                params[[i]]$set_data(es_state$best_weights[[i]])
-            }
-        })
-        if (verbose) {
-            best_ep = if (!is.na(es_state$stopped_epoch)) {
-                es_state$stopped_epoch - es_state$spec$patience
-            } else {
-                epoch
-            }
-            cli::cli_alert_info("Restored best weights from epoch {best_ep}.")
-        }
-    }
-
-    # ---- Trim histories to actual epochs run ----
-    actual_epochs = if (!is.null(es_state) && !is.na(es_state$stopped_epoch)) {
-        es_state$stopped_epoch
-    } else {
-        epochs
-    }
-    loss_history = loss_history[seq_len(actual_epochs)]
-    val_loss_history = if (!is.null(val_loss_history)) val_loss_history[seq_len(actual_epochs)] else NULL
-    stopped_epoch = if (!is.null(es_state) && !is.na(es_state$stopped_epoch)) {
-        es_state$stopped_epoch
-    } else {
-        NA_integer_
-    }
-
-    # ---- Fitted values ----
-    model$eval()
-    x_full_t = .make_tensor(x)
-    fitted_tensor = torch::with_no_grad(model(x_full_t))
-
-    fitted_values = if (is_classification) {
-        fitted_probs = torch::nnf_softmax(fitted_tensor, dim = 2L)
-        fitted_classes = torch::torch_argmax(fitted_probs, dim = 2L)
-        factor(
-            as.integer(fitted_classes$cpu()),
-            levels = seq_along(y_levels),
-            labels = y_levels
-        )
-    } else {
-        convert = as.matrix(fitted_tensor$cpu())
-        if (no_y == 1L) {
-            as.vector(convert)
+        # ---- Loss function ----
+        loss_fn = if (is.function(loss)) {
+            .validate_loss_fn(loss)
+        } else if (rlang::is_formula(loss)) {
+            .validate_loss_fn(rlang::as_function(loss))
         } else {
-            convert
-        }
-    }
+            loss_name = tolower(loss)
 
-    # ---- Weight caching ----
-    # For visualizing weight distribution
-    # Allow `cache_weights` to generate
-    cached_weights = if (cache_weights) {
-        tryCatch(
-            lapply(model$parameters, function(p) as.matrix(p$cpu())),
-            error = function(e) {
-                cli::cli_warn("Weight caching failed: {conditionMessage(e)}")
-                NULL
+            if (is_classification && loss_name == "mse") {
+                loss_name = "cross_entropy"
+                if (verbose) cli::cli_alert("Auto-detected classification task. Using {.val cross_entropy} loss.")
             }
+
+            switch(
+                loss_name,
+                mse = function(input, target) torch::nnf_mse_loss(input, target),
+                mae = function(input, target) torch::nnf_l1_loss(input, target),
+                cross_entropy = function(input, target) torch::nnf_cross_entropy(input, target),
+                bce = function(input, target) torch::nnf_binary_cross_entropy_with_logits(input, target),
+                cli::cli_abort(
+                    "Unknown loss: {.val {loss_name}}.",
+                    i = "Use one of {.val mse}, {.val mae}, {.val cross_entropy}, {.val bce}, or supply a {.cls function}."
+                )
+            )
+        }
+
+        # ---- Training loop ----
+        loss_history = numeric(epochs)
+        val_loss_history = if (!is.null(x_val)) numeric(epochs) else NULL
+        n_batches = ceiling(nrow(x_train) / batch_size)
+
+        for (epoch in seq_len(epochs)) {
+            model$train()
+            epoch_loss = 0
+            idx = sample(nrow(x_train))
+
+            for (batch in seq_len(n_batches)) {
+                start_i = (batch - 1L) * batch_size + 1L
+                end_i = min(batch * batch_size, nrow(x_train))
+                batch_idx = idx[start_i:end_i]
+
+                x_batch = x_train_t[batch_idx, ]
+                y_batch = y_train_t[batch_idx]
+
+                opt$zero_grad()
+                y_pred = model(x_batch)
+                batch_loss = loss_fn(y_pred, y_batch)
+                reg_loss = regularizer(model, penalty, mixture)
+                total_loss = batch_loss + reg_loss
+                total_loss$backward()
+                opt$step()
+
+                epoch_loss = epoch_loss + total_loss$item()
+            }
+
+            loss_history[epoch] = epoch_loss / n_batches
+
+            # ---- Validation ----
+            if (!is.null(x_val)) {
+                model$eval()
+                torch::with_no_grad({
+                    y_val_pred = model(x_val_t)
+                    val_loss = loss_fn(y_val_pred, y_val_t)
+                    val_loss_history[epoch] = val_loss$item()
+                })
+            }
+
+            # ---- Verbose ----
+            if (verbose && (epoch %% max(1L, epochs %/% 10L) == 0L || epoch == epochs)) {
+                msg = glue::glue(
+                    "Epoch {epoch}/{epochs} - Loss: {round(loss_history[epoch], 4)}"
+                )
+                if (!is.null(val_loss_history))
+                    msg = glue::glue("{msg} - Val Loss: {round(val_loss_history[epoch], 4)}")
+
+                message(msg)
+            }
+
+            # ---- Early stopping check ----
+            if (!is.null(es_state)) {
+                monitored = if (es_state$spec$monitor == "val_loss") {
+                    val_loss_history[epoch]
+                } else {
+                    loss_history[epoch]
+                }
+
+                if (monitored < es_state$best_loss - es_state$spec$min_delta) {
+                    es_state$best_loss = monitored
+                    es_state$wait = 0L
+                    if (es_state$spec$restore_best_weights) {
+                        es_state$best_weights = lapply(
+                            model$parameters,
+                            function(p) p$detach()$clone()
+                        )
+                    }
+                } else {
+                    es_state$wait = es_state$wait + 1L
+                    if (es_state$wait >= es_state$spec$patience) {
+                        es_state$stopped_epoch = epoch
+                        if (verbose) cli::cli_alert_warning(
+                            "Early stopping at epoch {epoch}. Best {es_state$spec$monitor}: {round(es_state$best_loss, 4)}."
+                        )
+                        break
+                    }
+                }
+            }
+        }
+
+        # ---- Restore best weights ----
+        if (!is.null(es_state) && es_state$spec$restore_best_weights && !is.null(es_state$best_weights)) {
+            params = model$parameters
+            torch::with_no_grad({
+                for (i in seq_along(params)) {
+                    params[[i]]$set_data(es_state$best_weights[[i]])
+                }
+            })
+            if (verbose) {
+                best_ep = if (!is.na(es_state$stopped_epoch)) {
+                    es_state$stopped_epoch - es_state$spec$patience
+                } else {
+                    epoch
+                }
+                cli::cli_alert_info("Restored best weights from epoch {best_ep}.")
+            }
+        }
+
+        # ---- Trim histories to actual epochs run ----
+        actual_epochs = if (!is.null(es_state) && !is.na(es_state$stopped_epoch)) {
+            es_state$stopped_epoch
+        } else {
+            epochs
+        }
+        loss_history = loss_history[seq_len(actual_epochs)]
+        val_loss_history = if (!is.null(val_loss_history)) val_loss_history[seq_len(actual_epochs)] else NULL
+        stopped_epoch = if (!is.null(es_state) && !is.na(es_state$stopped_epoch)) {
+            es_state$stopped_epoch
+        } else {
+            NA_integer_
+        }
+
+        # ---- Fitted values ----
+        model$eval()
+        x_full_t = .make_tensor(x)
+        fitted_tensor = torch::with_no_grad(model(x_full_t))
+
+        if (is_classification) {
+            fitted_probs = torch::nnf_softmax(fitted_tensor, dim = 2L)
+            fitted_classes = torch::torch_argmax(fitted_probs, dim = 2L)
+            fitted_values = factor(
+                as.integer(fitted_classes$cpu()),
+                levels = seq_along(y_levels),
+                labels = y_levels
+            )
+        } else {
+            fitted_values = as.matrix(fitted_tensor$cpu())
+            if (no_y == 1L) fitted_values = as.vector(fitted_values)
+        }
+
+        # ---- Weight caching ----
+        cached_weights = if (cache_weights) {
+            tryCatch(
+                lapply(model$parameters, function(p) as.matrix(p$cpu())),
+                error = function(e) {
+                    cli::cli_warn("Weight caching failed: {conditionMessage(e)}")
+                    NULL
+                }
+            )
+        } else {
+            NULL
+        }
+
+        structure(
+            list(
+                model = model,
+                fitted = fitted_values,
+                loss_history = loss_history,
+                val_loss_history = val_loss_history,
+                n_epochs = actual_epochs,
+                stopped_epoch = stopped_epoch,
+                hidden_neurons = hidden_neurons,
+                activations = activations,
+                output_activation = output_activation,
+                penalty = penalty,
+                mixture = mixture,
+                feature_names = feature_names,
+                response_name = response_name,
+                no_x = no_x,
+                no_y = no_y,
+                is_classification = is_classification,
+                y_levels = y_levels,
+                n_classes = n_classes,
+                device = device,
+                cached_weights = cached_weights,
+                arch = arch
+            ),
+            class = unique(c(fit_class, "nn_fit"))
         )
-    } else {
-        NULL
     }
 
-    structure(
-        list(
-            model = model,
-            fitted = fitted_values,
-            loss_history = loss_history,
-            val_loss_history = val_loss_history,
-            n_epochs = actual_epochs,
-            stopped_epoch = stopped_epoch,
-            hidden_neurons = hidden_neurons,
-            activations = activations,
-            output_activation = output_activation,
-            penalty = penalty,
-            mixture = mixture,
-            feature_names = feature_names,
-            response_name = response_name,
-            no_x = no_x,
-            no_y = no_y,
-            is_classification = is_classification,
-            y_levels = y_levels,
-            n_classes = n_classes,
-            device = device,
-            cached_weights = cached_weights,
-            arch = arch
-        ),
-        class = unique(c(fit_class, "nn_fit"))
-    )
-}
+
+# ---- Predict methods ----
 
 #' Predict from a trained neural network
 #'
@@ -974,70 +945,63 @@ predict.nn_fit =
         type = "response",
         ...
     ) {
-    if (!requireNamespace("torch", quietly = TRUE)) {
-        cli::cli_abort("Package {.pkg torch} is required but not installed.")
-    }
-
-    if (!type %in% c("response", "prob")) {
-        cli::cli_abort("{.arg type} must be one of {.val response} or {.val prob}.")
-    }
-
-    newdata = .resolve_predict_newdata(newdata = newdata, new_data = new_data)
-
-    device = object$device
-    input_fn = if (!is.null(object$arch) && !is.null(object$arch$input_transform)) {
-        rlang::as_function(object$arch$input_transform)
-    } else {
-        identity
-    }
-
-    # Early return is a must, when `newdata` / `new_data` is not used
-    # Do not attempt to use `type = "prob"` when classification is not applied
-    if (is.null(newdata)) {
-        if (type == "prob" && object$is_classification) {
-            cli::cli_abort("Cannot compute probabilities without {.arg newdata}. Use fitted values instead.")
+        if (!requireNamespace("torch", quietly = TRUE)) {
+            cli::cli_abort("Package {.pkg torch} is required but not installed.")
         }
-        if (type == "prob" && !object$is_classification) {
-            cli::cli_abort("{.arg type = 'prob'} is only available for classification models.")
+
+        if (!type %in% c("response", "prob")) {
+            cli::cli_abort("{.arg type} must be one of {.val response} or {.val prob}.")
         }
-        return(object$fitted)
-    }
 
-    if (!is.matrix(newdata)) newdata = as.matrix(newdata)
+        newdata = .resolve_predict_newdata(newdata = newdata, new_data = new_data)
 
-    x_new_t = input_fn(torch::torch_tensor(newdata, dtype = torch::torch_float32(), device = device))
-    object$model$eval()
-    pred_tensor = torch::with_no_grad(object$model(x_new_t))
-
-    predictions = if (object$is_classification) {
-        probs = torch::nnf_softmax(pred_tensor, dim = 2L)
-
-        if (type == "prob") {
-            prob_matrix = as.matrix(probs$cpu())
-            colnames(prob_matrix) = object$y_levels
-            prob_matrix
+        device = object$device
+        input_fn = if (!is.null(object$arch) && !is.null(object$arch$input_transform)) {
+            rlang::as_function(object$arch$input_transform)
         } else {
-            factor(
+            identity
+        }
+
+        if (is.null(newdata)) {
+            if (type == "prob" && object$is_classification) {
+                cli::cli_abort("Cannot compute probabilities without {.arg newdata}. Use fitted values instead.")
+            }
+            if (type == "prob" && !object$is_classification) {
+                cli::cli_abort("{.arg type = 'prob'} is only available for classification models.")
+            }
+            return(object$fitted)
+        }
+
+        if (!is.matrix(newdata)) newdata = as.matrix(newdata)
+
+        x_new_t = input_fn(torch::torch_tensor(newdata, dtype = torch::torch_float32(), device = device))
+        object$model$eval()
+        pred_tensor = torch::with_no_grad(object$model(x_new_t))
+
+        if (object$is_classification) {
+            probs = torch::nnf_softmax(pred_tensor, dim = 2L)
+
+            if (type == "prob") {
+                prob_matrix = as.matrix(probs$cpu())
+                colnames(prob_matrix) = object$y_levels
+                return(prob_matrix)
+            }
+
+            predictions = factor(
                 as.integer(torch::torch_argmax(probs, dim = 2L)$cpu()),
                 levels = seq_along(object$y_levels),
                 labels = object$y_levels
             )
-        }
-    } else {
-        if (type == "prob") {
-            cli::cli_abort("{.arg type = 'prob'} is only available for classification models.")
-        }
-
-        convert = as.matrix(pred_tensor$cpu())
-        if (object$no_y == 1L) {
-            as.vector(convert)
         } else {
-            convert
+            if (type == "prob") {
+                cli::cli_abort("{.arg type = 'prob'} is only available for classification models.")
+            }
+            predictions = as.matrix(pred_tensor$cpu())
+            if (object$no_y == 1L) predictions = as.vector(predictions)
         }
-    }
 
-    predictions
-}
+        predictions
+    }
 
 
 #' @rdname gen-nn-predict
@@ -1050,15 +1014,15 @@ predict.nn_fit_tab =
         type = "response",
         ...
     ) {
-    newdata = .resolve_predict_newdata(newdata = newdata, new_data = new_data)
+        newdata = .resolve_predict_newdata(newdata = newdata, new_data = new_data)
 
-    if (!is.null(newdata) && !is.null(object$blueprint)) {
-        processed = hardhat::forge(newdata, object$blueprint)
-        newdata = as.matrix(processed$predictors)
+        if (!is.null(newdata) && !is.null(object$blueprint)) {
+            processed = hardhat::forge(newdata, object$blueprint)
+            newdata = as.matrix(processed$predictors)
+        }
+
+        NextMethod()
     }
-
-    NextMethod()
-}
 
 
 #' @keywords internal
