@@ -72,26 +72,26 @@ test_that("train_nn() accepts various act_funs() syntaxes", {
     skip_if_no_torch()
     expect_no_error(
         train_nn(
-            iris_x, 
-            iris_y, 
+            iris_x,
+            iris_y,
             hidden_neurons = c(16, 8),
-            activations = act_funs(relu, ), 
+            activations = act_funs(relu, ),
             epochs = 5
         )
     )
     expect_no_error(
         train_nn(
-            iris_x, 
-            iris_y, 
+            iris_x,
+            iris_y,
             hidden_neurons = 16,
-            activations = act_funs(elu[alpha = 0.5]), 
+            activations = act_funs(elu[alpha = 0.5]),
             epochs = 5
         )
     )
     expect_no_error(
         train_nn(
-            iris_x, 
-            iris_y, 
+            iris_x,
+            iris_y,
             hidden_neurons = 16,
             activations = act_funs(new_act_fn(\(x) torch::torch_tanh(x))),
             epochs = 5
@@ -112,7 +112,7 @@ test_that("train_nn() accepts built-in and custom loss functions", {
     expect_no_error(train_nn(iris_x, iris_y, loss = "mae", epochs = 5))
     expect_no_error(
         train_nn(
-            iris_x, 
+            iris_x,
             iris_y,
             loss = \(input, target) torch::nnf_mse_loss(input, target),
             epochs = 5
@@ -141,20 +141,20 @@ describe("train_nn() early stopping", {
         expect_lt(length(m$loss_history), 50)
         expect_false(is.na(m$stopped_epoch))
     })
-    
+
     it("errors when val_loss monitor is used without validation_split", {
         skip_if_no_torch()
         expect_error(
             train_nn(
-                iris_x, 
-                iris_y, 
+                iris_x,
+                iris_y,
                 epochs = 10,
                 early_stopping = early_stop(patience = 3, monitor = "val_loss")
             ),
             class = "rlang_error"
         )
     })
-    
+
     it("errors when early_stopping is not an early_stop_spec", {
         skip_if_no_torch()
         expect_error(
@@ -168,15 +168,15 @@ test_that("predict.nn_fit() returns correct output types", {
     skip_if_no_torch()
     m_reg = train_nn(iris_x, iris_y, epochs = 5)
     m_cls = train_nn(iris_cls_x, iris_cls_y, epochs = 5)
-    
+
     expect_equal(predict(m_reg), m_reg$fitted)
     expect_type(predict(m_reg, newdata = iris_x), "double")
     expect_s3_class(predict(m_cls, newdata = iris_cls_x), "factor")
-    
+
     probs = predict(m_cls, newdata = iris_cls_x, type = "prob")
     expect_true(is.matrix(probs))
     expect_equal(rowSums(probs), rep(1, nrow(iris_cls_x)), tolerance = 1e-5)
-    
+
     expect_error(predict(m_reg, newdata = iris_x, type = "prob"), class = "rlang_error")
     expect_error(predict(m_reg, newdata = iris_x, type = "bad"), class = "rlang_error")
     expect_error(predict(m_reg, newdata = iris_x, type = "good"), class = "rlang_error")
@@ -193,13 +193,13 @@ test_that("train_nn() handles edge case inputs", {
     skip_if_no_torch()
     m = train_nn(iris_x, iris_y, epochs = 5)
     expect_length(predict(m, newdata = iris_x[1, , drop = FALSE]), 1)
-    
+
     expect_no_error(
         train_nn(iris_x[1:10, ], iris_y[1:10], batch_size = 50, epochs = 5)
     )
-    
+
     expect_length(train_nn(iris_x, iris_y, epochs = 1)$loss_history, 1)
-    
+
     m_multi = train_nn(as.matrix(iris[, 3:4]), as.matrix(iris[, 1:2]), epochs = 5)
     expect_equal(m_multi$no_y, 2L)
 })

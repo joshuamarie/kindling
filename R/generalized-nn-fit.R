@@ -877,10 +877,11 @@ train_nn_impl =
             labels = y_levels
         )
     } else {
+        convert = as.matrix(fitted_tensor$cpu())
         if (no_y == 1L) {
-            as.vector(fitted_tensor$cpu())
+            as.vector(convert)
         } else {
-            as.matrix(fitted_tensor$cpu())
+            convert
         }
     }
 
