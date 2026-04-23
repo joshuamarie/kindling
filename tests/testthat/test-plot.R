@@ -38,6 +38,7 @@ test_that("plot.nn_fit() returns the fit object invisibly", {
     skip_if_not_installed("ggplot2")
     m = train_nn(iris_x, iris_y, epochs = 5)
     pdf(NULL)
+    on.exit(dev.off(), add = TRUE)
     result = plot(m)
     dev.off()
     expect_identical(result, m)
