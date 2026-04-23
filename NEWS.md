@@ -1,10 +1,15 @@
-# kindling (development version)
+# kindling
+
+## New features
+
+-   `autoplot()` and `plot()` methods for `nn_fit` objects now visualize the
+    training loss history, with optional validation loss and an early-stopping
+    marker when early stopping fires.
 
 ## Ongoing features
 
 -  More visualization supports
 
-    -  Loss history plot
     -  NN architecture plot
 
 # kindling 0.3.0
