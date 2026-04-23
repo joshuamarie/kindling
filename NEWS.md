@@ -6,6 +6,11 @@
     training loss history, with optional validation loss and an early-stopping
     marker when early stopping fires.
 
+-   `autoplot_diagnostics()` and `plot_diagnostics()` produce prediction
+    diagnostic plots for `nn_fit` objects: residuals vs fitted and actual vs
+    fitted panels for regression, one panel per output for multi-output
+    regression, and a confusion matrix heatmap for classification.
+
 ## Ongoing features
 
 -  More visualization supports
