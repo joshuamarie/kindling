@@ -28,9 +28,19 @@ jobs:
           extra-packages: any::covr, any::xml2
           needs: coverage
 
+      - name: Cache torch installation
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/torch
+          key: ${{ runner.os }}-torch-${{ hashFiles('DESCRIPTION') }}
+
       - name: Install torch
+        env:
+          TORCH_HOME: ${{ runner.temp }}/torch
         run: |
-          torch::install_torch()
+          if (!torch::torch_is_installed()) {
+            torch::install_torch()
+          }
         shell: Rscript {0}
 
       - name: Test coverage
