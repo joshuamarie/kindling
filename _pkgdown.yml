@@ -124,6 +124,12 @@ reference:
     - table_summary
     - ordinal_gen
 
+  - title: Diagnostics
+    desc: Plotting helpers for fitted neural network objects
+    contents:
+    - autoplot_diagnostics
+    - plot_diagnostics
+
   # - title: Basemodels-tidymodels wrappers
   #   desc: Functions for tidymodels integration (not for direct use)
   #   contents:
