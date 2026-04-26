@@ -2,11 +2,26 @@
 
 ## kindling (development version)
 
+### New features
+
+- [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+  and [`plot()`](https://rdrr.io/r/graphics/plot.default.html) methods
+  for `nn_fit` objects now visualize the training loss history, with
+  optional validation loss and an early-stopping marker when early
+  stopping fires.
+
+- [`autoplot_diagnostics()`](https://kindling.joshuamarie.com/dev/reference/autoplot_diagnostics.md)
+  and
+  [`plot_diagnostics()`](https://kindling.joshuamarie.com/dev/reference/autoplot_diagnostics.md)
+  produce prediction diagnostic plots for `nn_fit` objects: residuals vs
+  fitted and actual vs fitted panels for regression, one panel per
+  output for multi-output regression, and a confusion matrix heatmap for
+  classification.
+
 ### Ongoing features
 
 - More visualization supports
 
-  - Loss history plot
   - NN architecture plot
 
 ## kindling 0.3.0

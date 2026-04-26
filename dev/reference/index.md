@@ -107,3 +107,11 @@ Utilities for model configuration
   : Summarize and Display a Two-Column Data Frame as a Formatted Table
 - [`ordinal_gen()`](https://kindling.joshuamarie.com/dev/reference/ordinal_gen.md)
   : Ordinal Suffixes Generator
+
+## Diagnostics
+
+Plotting helpers for fitted neural network objects
+
+- [`autoplot_diagnostics()`](https://kindling.joshuamarie.com/dev/reference/autoplot_diagnostics.md)
+  [`plot_diagnostics()`](https://kindling.joshuamarie.com/dev/reference/autoplot_diagnostics.md)
+  : Plot prediction diagnostics for a fitted neural network
