@@ -36,7 +36,24 @@ jobs:
           extra-packages: any::pkgdown, local::.
           needs: website
 
+      - name: Cache torch installation
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/Library/torch
+          key: ${{ runner.os }}-torch-${{ hashFiles('DESCRIPTION') }}
+
+      - name: Install torch
+        env:
+          TORCH_HOME: ${{ runner.temp }}/Library
+        run: |
+          if (!torch::torch_is_installed()) {
+            torch::install_torch()
+          }
+        shell: Rscript {0}
+
       - name: Build site
+        env:
+          TORCH_HOME: ${{ runner.temp }}/Library
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 

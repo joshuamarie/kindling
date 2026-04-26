@@ -14,7 +14,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      TORCH_HOME: ${{ runner.temp }}/Library
 
     steps:
       - uses: actions/checkout@v4
@@ -31,12 +30,12 @@ jobs:
       - name: Cache torch installation
         uses: actions/cache@v4
         with:
-          path: ${{ runner.temp }}/torch
+          path: ${{ runner.temp }}/Library/torch
           key: ${{ runner.os }}-torch-${{ hashFiles('DESCRIPTION') }}
 
       - name: Install torch
         env:
-          TORCH_HOME: ${{ runner.temp }}/torch
+          TORCH_HOME: ${{ runner.temp }}/Library
         run: |
           if (!torch::torch_is_installed()) {
             torch::install_torch()
@@ -44,6 +43,8 @@ jobs:
         shell: Rscript {0}
 
       - name: Test coverage
+        env:
+          TORCH_HOME: ${{ runner.temp }}/Library
         run: |
           cov <- covr::package_coverage(
             quiet = FALSE,
