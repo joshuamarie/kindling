@@ -7,8 +7,6 @@
 - **Antoine Soetewey**. Author.
   [](https://orcid.org/0000-0001-8159-0804)
 
-- **Harry Thompson**. Contributor.
-
 ## Citation
 
 Source:
