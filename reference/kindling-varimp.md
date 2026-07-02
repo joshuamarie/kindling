@@ -12,8 +12,7 @@ garson(mod_in, bar_plot = FALSE, ...)
 # S3 method for class 'ffnn_fit'
 olden(mod_in, bar_plot = TRUE, ...)
 
-# S3 method for class 'ffnn_fit'
-vi_model(object, type = c("olden", "garson"), ...)
+vi_model.ffnn_fit(object, type = c("olden", "garson"), ...)
 ```
 
 ## Arguments
@@ -62,9 +61,8 @@ A data frame for both "garson" and "olden" classes with columns:
 The data frame is sorted by importance in descending order.
 
 A tibble with columns "Variable" and "Importance" (via
-[`vip::vi()`](https://koalaverse.github.io/vip/reference/vi.html) /
-[`vip::vi_model()`](https://koalaverse.github.io/vip/reference/vi_model.html)
-only).
+[`vip::vi()`](https://rdrr.io/pkg/vip/man/vi.html) /
+[`vip::vi_model()`](https://rdrr.io/pkg/vip/man/vi_model.html) only).
 
 ## Garson's Algorithm for FFNN Models
 
@@ -84,12 +82,13 @@ model.
 
 ## Variable Importance via `{vip}` Package
 
-You can directly use
-[`vip::vi()`](https://koalaverse.github.io/vip/reference/vi.html) and
-[`vip::vi_model()`](https://koalaverse.github.io/vip/reference/vi_model.html)
-to extract the variable importance from the fitted
-[`ffnn()`](https://kindling.joshuamarie.com/reference/kindling-basemodels.md)
-model.
+If the `{vip}` package (Suggests only) is installed, `kindling`
+registers a
+[`vip::vi_model()`](https://rdrr.io/pkg/vip/man/vi_model.html) method
+for `"ffnn_fit"` objects, so
+[`vip::vi()`](https://rdrr.io/pkg/vip/man/vi.html) and
+[`vip::vi_model()`](https://rdrr.io/pkg/vip/man/vi_model.html) work out
+of the box.
 
 ## References
 
@@ -137,15 +136,15 @@ if (torch::torch_is_installed()) {
 }
 
 #>        x_names y_names     rel_imp
-#> 1  Petal.Width       y -0.29978349
-#> 2 Petal.Length       y -0.19180243
-#> 3  Sepal.Width       y  0.03910895
-#> 4 Sepal.Length       y  0.03031437
+#> 1 Petal.Length       y  0.21657695
+#> 2  Petal.Width       y  0.17037612
+#> 3  Sepal.Width       y -0.08429244
+#> 4 Sepal.Length       y -0.07889768
 # }
 
 # \donttest{
-# kindling also supports `vip::vi()` / `vip::vi_model()`
-if (torch::torch_is_installed()) {
+# kindling also supports `vip::vi()` / `vip::vi_model()` when {vip} is installed
+if (torch::torch_is_installed() && requireNamespace("vip", quietly = TRUE)) {
     model_mlp = ffnn(
         Species ~ .,
         data = iris,
@@ -160,7 +159,7 @@ if (torch::torch_is_installed()) {
         vip::vi(type = 'garson') |>
         vip::vip()
 } else {
-    message("Torch not fully installed — skipping example")
+    message("Torch and/or {vip} not installed — skipping example")
 }
 
 # }

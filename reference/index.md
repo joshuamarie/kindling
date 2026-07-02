@@ -72,7 +72,7 @@ Interpret neural network models
 
 - [`garson(`*`<ffnn_fit>`*`)`](https://kindling.joshuamarie.com/reference/kindling-varimp.md)
   [`olden(`*`<ffnn_fit>`*`)`](https://kindling.joshuamarie.com/reference/kindling-varimp.md)
-  [`vi_model(`*`<ffnn_fit>`*`)`](https://kindling.joshuamarie.com/reference/kindling-varimp.md)
+  [`vi_model.ffnn_fit()`](https://kindling.joshuamarie.com/reference/kindling-varimp.md)
   : Variable Importance Methods for kindling Models
 
 ## Tuning Parameters
@@ -107,3 +107,11 @@ Utilities for model configuration
   : Summarize and Display a Two-Column Data Frame as a Formatted Table
 - [`ordinal_gen()`](https://kindling.joshuamarie.com/reference/ordinal_gen.md)
   : Ordinal Suffixes Generator
+
+## Diagnostics
+
+Plotting helpers for fitted neural network objects
+
+- [`autoplot_diagnostics()`](https://kindling.joshuamarie.com/reference/autoplot_diagnostics.md)
+  [`plot_diagnostics()`](https://kindling.joshuamarie.com/reference/autoplot_diagnostics.md)
+  : Plot prediction diagnostics for a fitted neural network

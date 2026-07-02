@@ -153,3 +153,7 @@ Authors:
 
 - Antoine Soetewey <ant.soetewey@gmail.com>
   ([ORCID](https://orcid.org/0000-0001-8159-0804))
+
+Other contributors:
+
+- Harry Thompson <harry@mayesfield.uk> \[contributor\]

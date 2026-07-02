@@ -2,6 +2,30 @@
 
 ## kindling (development version)
 
+### Ongoing features
+
+- More visualization supports
+
+  - NN architecture plot
+
+## kindling 0.3.1
+
+### New features
+
+- [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+  and [`plot()`](https://rdrr.io/r/graphics/plot.default.html) methods
+  for `nn_fit` objects now visualize the training loss history, with
+  optional validation loss and an early-stopping marker when early
+  stopping fires.
+
+- [`autoplot_diagnostics()`](https://kindling.joshuamarie.com/reference/autoplot_diagnostics.md)
+  and
+  [`plot_diagnostics()`](https://kindling.joshuamarie.com/reference/autoplot_diagnostics.md)
+  produce prediction diagnostic plots for `nn_fit` objects: residuals vs
+  fitted and actual vs fitted panels for regression, one panel per
+  output for multi-output regression, and a confusion matrix heatmap for
+  classification.
+
 ## kindling 0.3.0
 
 CRAN release: 2026-03-03
@@ -16,6 +40,7 @@ CRAN release: 2026-03-03
     (Convolutional Neural Networks) with 3 hidden layers:
 
   ``` r
+
   nn_module_generator(
       nn_name = "CNN1DClassifier",
       nn_layer = "nn_conv1d",
