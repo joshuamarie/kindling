@@ -26,6 +26,10 @@
   output for multi-output regression, and a confusion matrix heatmap for
   classification.
 
+- [vip](https://github.com/koalaverse/vip/) is removed from
+  [kindling](https://kindling.joshuamarie.com)’s package dependencies,
+  and moved to “Suggests” instead to avoid dependency redundancy.
+
 ## kindling 0.3.0
 
 CRAN release: 2026-03-03
