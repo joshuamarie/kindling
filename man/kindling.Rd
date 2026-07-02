@@ -154,10 +154,5 @@ Authors:
   \item Antoine Soetewey \email{ant.soetewey@gmail.com} (\href{https://orcid.org/0000-0001-8159-0804}{ORCID})
 }
 
-Other contributors:
-\itemize{
-  \item Harry Thompson \email{harry@mayesfield.uk} [contributor]
-}
-
 }
 \keyword{internal}
