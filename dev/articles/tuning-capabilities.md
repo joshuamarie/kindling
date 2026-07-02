@@ -35,10 +35,11 @@ parameter grid, depending on `n_hlayer` you defined.
 We won’t stop you from using
 [`library()`](https://rdrr.io/r/base/library.html) function, but we
 strongly recommend using
-[`box::use()`](http://klmr.me/box/reference/use.md) and explicitly
+[`box::use()`](https://klmr.me/box/reference/use.html) and explicitly
 import the names from the namespaces you want to attach.
 
 ``` r
+
 # library(kindling)
 # library(tidymodels)
 # library(modeldata)
@@ -75,6 +76,7 @@ model spec. Parameters you want to search over are marked with
 [`tune()`](https://hardhat.tidymodels.org/reference/tune.html).
 
 ``` r
+
 spec = mlp_kindling(
     hidden_neurons = tune(),
     activations = tune(),
@@ -96,6 +98,7 @@ variable is `body_mass_kg`, derived from the original `body_mass_g`
 column.
 
 ``` r
+
 penguins_clean = penguins |>
     drop_na() |>
     select(body_mass_g, ends_with("_mm"), sex, species) |>
@@ -132,6 +135,7 @@ When `n_hlayer > 1`, the `hidden_neurons` and `activations` columns
 become list-columns, where each row holds a vector of per-layer values.
 
 ``` r
+
 set.seed(42)
 depth_grid = grid_depth(
     hidden_neurons(c(16, 32)),
@@ -172,6 +176,7 @@ so internally the configured argument unlisted through
 `list(c(1, 2))[[1]]` (it always produces only 1 element).
 
 ``` r
+
 wflow = workflow() |>
     add_recipe(rec) |>
     add_model(spec)
@@ -194,46 +199,48 @@ and
 [`show_best()`](https://tune.tidymodels.org/reference/show_best.html).
 
 ``` r
+
 collect_metrics(tune_res)
 ```
 
     ## # A tibble: 20 × 9
     ##    hidden_neurons activations learn_rate .metric .estimator   mean     n std_err
     ##    <list>         <list>           <dbl> <chr>   <chr>       <dbl> <int>   <dbl>
-    ##  1 <int [1]>      <chr [1]>     2.99e- 6 rmse    standard   4.38       5 0.117  
-    ##  2 <int [1]>      <chr [1]>     2.99e- 6 rsq     standard   0.403      5 0.172  
-    ##  3 <int [2]>      <chr [2]>     9.46e- 5 rmse    standard   4.08       5 0.131  
-    ##  4 <int [2]>      <chr [2]>     9.46e- 5 rsq     standard   0.537      5 0.124  
-    ##  5 <int [1]>      <chr [1]>     4.09e- 4 rmse    standard   3.88       5 0.0674 
-    ##  6 <int [1]>      <chr [1]>     4.09e- 4 rsq     standard   0.377      5 0.135  
-    ##  7 <int [1]>      <chr [1]>     2.98e- 8 rmse    standard   4.02       5 0.0658 
-    ##  8 <int [1]>      <chr [1]>     2.98e- 8 rsq     standard   0.311      5 0.141  
-    ##  9 <int [1]>      <chr [1]>     3.66e- 2 rmse    standard   0.0814     5 0.0122 
-    ## 10 <int [1]>      <chr [1]>     3.66e- 2 rsq     standard   0.991      5 0.00283
-    ## 11 <int [3]>      <chr [3]>     1.62e- 7 rmse    standard   4.24       5 0.0853 
-    ## 12 <int [3]>      <chr [3]>     1.62e- 7 rsq     standard   0.379      5 0.170  
-    ## 13 <int [3]>      <chr [3]>     5.56e-10 rmse    standard   4.34       5 0.0677 
-    ## 14 <int [3]>      <chr [3]>     5.56e-10 rsq     standard   0.284      5 0.150  
-    ## 15 <int [1]>      <chr [1]>     1.06e- 9 rmse    standard   4.30       5 0.116  
-    ## 16 <int [1]>      <chr [1]>     1.06e- 9 rsq     standard   0.455      5 0.166  
-    ## 17 <int [1]>      <chr [1]>     1.40e- 5 rmse    standard   4.15       5 0.126  
-    ## 18 <int [1]>      <chr [1]>     1.40e- 5 rsq     standard   0.487      5 0.132  
-    ## 19 <int [2]>      <chr [2]>     1.59e- 3 rmse    standard   1.11       5 0.207  
-    ## 20 <int [2]>      <chr [2]>     1.59e- 3 rsq     standard   0.534      5 0.120  
+    ##  1 <int [1]>      <chr [1]>     2.99e- 6 rmse    standard   4.46       5 0.0960 
+    ##  2 <int [1]>      <chr [1]>     2.99e- 6 rsq     standard   0.370      5 0.130  
+    ##  3 <int [2]>      <chr [2]>     9.46e- 5 rmse    standard   4.14       5 0.0696 
+    ##  4 <int [2]>      <chr [2]>     9.46e- 5 rsq     standard   0.216      5 0.0960 
+    ##  5 <int [1]>      <chr [1]>     4.09e- 4 rmse    standard   3.78       5 0.123  
+    ##  6 <int [1]>      <chr [1]>     4.09e- 4 rsq     standard   0.596      5 0.121  
+    ##  7 <int [1]>      <chr [1]>     2.98e- 8 rmse    standard   4.15       5 0.114  
+    ##  8 <int [1]>      <chr [1]>     2.98e- 8 rsq     standard   0.297      5 0.156  
+    ##  9 <int [1]>      <chr [1]>     3.66e- 2 rmse    standard   0.0933     5 0.0133 
+    ## 10 <int [1]>      <chr [1]>     3.66e- 2 rsq     standard   0.987      5 0.00440
+    ## 11 <int [3]>      <chr [3]>     1.62e- 7 rmse    standard   4.24       5 0.0643 
+    ## 12 <int [3]>      <chr [3]>     1.62e- 7 rsq     standard   0.450      5 0.177  
+    ## 13 <int [3]>      <chr [3]>     5.56e-10 rmse    standard   4.17       5 0.0937 
+    ## 14 <int [3]>      <chr [3]>     5.56e-10 rsq     standard   0.414      5 0.128  
+    ## 15 <int [1]>      <chr [1]>     1.06e- 9 rmse    standard   4.22       5 0.108  
+    ## 16 <int [1]>      <chr [1]>     1.06e- 9 rsq     standard   0.489      5 0.124  
+    ## 17 <int [1]>      <chr [1]>     1.40e- 5 rmse    standard   4.21       5 0.0618 
+    ## 18 <int [1]>      <chr [1]>     1.40e- 5 rsq     standard   0.515      5 0.162  
+    ## 19 <int [2]>      <chr [2]>     1.59e- 3 rmse    standard   0.677      5 0.111  
+    ## 20 <int [2]>      <chr [2]>     1.59e- 3 rsq     standard   0.604      5 0.125  
     ## # ℹ 1 more variable: .config <chr>
 
 ``` r
+
 show_best(tune_res, metric = "rmse", n = 5)
 ```
 
     ## # A tibble: 5 × 9
     ##   hidden_neurons activations  learn_rate .metric .estimator   mean     n std_err
     ##   <list>         <list>            <dbl> <chr>   <chr>       <dbl> <int>   <dbl>
-    ## 1 <int [1]>      <chr [1]>       3.66e-2 rmse    standard   0.0814     5  0.0122
-    ## 2 <int [2]>      <chr [2]>       1.59e-3 rmse    standard   1.11       5  0.207 
-    ## 3 <int [1]>      <chr [1]>       4.09e-4 rmse    standard   3.88       5  0.0674
-    ## 4 <int [1]>      <chr [1]>       2.98e-8 rmse    standard   4.02       5  0.0658
-    ## 5 <int [2]>      <chr [2]>       9.46e-5 rmse    standard   4.08       5  0.131 
+    ## 1 <int [1]>      <chr [1]>       3.66e-2 rmse    standard   0.0933     5  0.0133
+    ## 2 <int [2]>      <chr [2]>       1.59e-3 rmse    standard   0.677      5  0.111 
+    ## 3 <int [1]>      <chr [1]>       4.09e-4 rmse    standard   3.78       5  0.123 
+    ## 4 <int [2]>      <chr [2]>       9.46e-5 rmse    standard   4.14       5  0.0696
+    ## 5 <int [1]>      <chr [1]>       2.98e-8 rmse    standard   4.15       5  0.114 
     ## # ℹ 1 more variable: .config <chr>
 
 ## Visualizing Results
@@ -244,6 +251,7 @@ Once we’ve identified the best configuration, we finalize the workflow
 and fit it on the full training set.
 
 ``` r
+
 best_params = select_best(tune_res, metric = "rmse")
 final_wflow = wflow |>
     finalize_workflow(best_params)
@@ -290,6 +298,7 @@ final_model
 ### Evaluating on the test set
 
 ``` r
+
 final_model |>
     augment(new_data = test) |>
     metric_set(rmse, rsq)(
@@ -301,8 +310,8 @@ final_model |>
     ## # A tibble: 2 × 3
     ##   .metric .estimator .estimate
     ##   <chr>   <chr>          <dbl>
-    ## 1 rmse    standard      0.0890
-    ## 2 rsq     standard      0.987
+    ## 1 rmse    standard      0.0459
+    ## 2 rsq     standard      0.997
 
 ## A Note on Parametric Activations
 
@@ -322,6 +331,7 @@ For manual (non-tuned) use, you can also specify activations per layer
 explicitly:
 
 ``` r
+
 spec_manual = mlp_kindling(
     hidden_neurons = c(50, 15),
     activations = act_funs(

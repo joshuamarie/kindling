@@ -72,7 +72,7 @@ Interpret neural network models
 
 - [`garson(`*`<ffnn_fit>`*`)`](https://kindling.joshuamarie.com/dev/reference/kindling-varimp.md)
   [`olden(`*`<ffnn_fit>`*`)`](https://kindling.joshuamarie.com/dev/reference/kindling-varimp.md)
-  [`vi_model(`*`<ffnn_fit>`*`)`](https://kindling.joshuamarie.com/dev/reference/kindling-varimp.md)
+  [`vi_model.ffnn_fit()`](https://kindling.joshuamarie.com/dev/reference/kindling-varimp.md)
   : Variable Importance Methods for kindling Models
 
 ## Tuning Parameters

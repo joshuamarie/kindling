@@ -48,6 +48,7 @@ Here’s a basic example that wraps
 as a custom activation:
 
 ``` r
+
 hyper_tan = new_act_fn(\(x) torch::torch_tanh(x))
 ```
 
@@ -56,6 +57,7 @@ You can also pass it directly into
 just like any built-in activation:
 
 ``` r
+
 act_funs(relu, elu, new_act_fn(\(x) torch::torch_tanh(x)))
 ```
 
@@ -74,6 +76,7 @@ then pass it through
 Here’s a basic example:
 
 ``` r
+
 model = ffnn(
     Sepal.Length ~ .,
     data = iris[, 1:4],
@@ -121,6 +124,7 @@ uses ReLU, the second uses SiLU (Swish), and the third uses Tanh.
 You can also use a single custom activation recycled across all layers:
 
 ``` r
+
 ffnn(
     Sepal.Length ~ .,
     data = iris[, 1:4],
@@ -163,6 +167,7 @@ before training. You can disable this with `probe = FALSE`, though this
 is generally not recommended:
 
 ``` r
+
 my_act = new_act_fn(\(x) torch::torch_tanh(x), probe = FALSE)
 ```
 
@@ -172,12 +177,14 @@ You can provide a human-readable name via `.name`, which is used in
 print output and diagnostics:
 
 ``` r
+
 my_act = new_act_fn(\(x) torch::torch_tanh(x), .name = "my_tanh")
 ```
 
 Here’s a simple application:
 
 ``` r
+
 ffnn(
     Sepal.Length ~ .,
     data = iris[, 1:4],
@@ -222,6 +229,7 @@ is designed to fail loudly and early. Common errors include:
 1.  Function returns a non-tensor. This will error at definition time:
 
     ``` r
+
     new_act_fn(\(x) as.numeric(x))
     ```
 
@@ -233,6 +241,7 @@ is designed to fail loudly and early. Common errors include:
 2.  Function accepts no arguments. This will error immediately:
 
     ``` r
+
     new_act_fn(function() torch::torch_zeros(2))
     ```
 
@@ -245,10 +254,10 @@ ever flows through it.
 
 ## Summary
 
-| Feature                                                                                    | Details                                                  |
-|--------------------------------------------------------------------------------------------|----------------------------------------------------------|
-| Wraps any R function                                                                       | Must accept a tensor, return a tensor                    |
-| Dry-run probe                                                                              | Validates at definition time (`probe = TRUE` by default) |
-| Call-time guard                                                                            | Type-checks output on every forward pass                 |
-| Compatible with [`act_funs()`](https://kindling.joshuamarie.com/dev/reference/act_funs.md) | Use alongside built-in activations freely                |
-| Closures supported                                                                         | Parametric activations work naturally                    |
+| Feature | Details |
+|----|----|
+| Wraps any R function | Must accept a tensor, return a tensor |
+| Dry-run probe | Validates at definition time (`probe = TRUE` by default) |
+| Call-time guard | Type-checks output on every forward pass |
+| Compatible with [`act_funs()`](https://kindling.joshuamarie.com/dev/reference/act_funs.md) | Use alongside built-in activations freely |
+| Closures supported | Parametric activations work naturally |

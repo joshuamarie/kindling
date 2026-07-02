@@ -38,6 +38,7 @@ CRAN release: 2026-03-03
     (Convolutional Neural Networks) with 3 hidden layers:
 
   ``` r
+
   nn_module_generator(
       nn_name = "CNN1DClassifier",
       nn_layer = "nn_conv1d",

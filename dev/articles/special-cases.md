@@ -16,6 +16,7 @@ behavior.
 ## Setup
 
 ``` r
+
 box::use(
     kindling[train_nn, act_funs, args],
     recipes[
@@ -51,6 +52,7 @@ We use `mtcars` to predict fuel efficiency (`mpg`) from the other
 variables.
 
 ``` r
+
 set.seed(42)
 split = initial_split(mtcars, prop = 0.8)
 train = training(split)
@@ -76,6 +78,7 @@ inputs to output. The `optimizer = "rmsprop"` with a small `learn_rate`
 mirrors classical gradient descent for OLS.
 
 ``` r
+
 lm_nn = train_nn(
     mpg ~ .,
     data = train,
@@ -128,6 +131,7 @@ lm_nn
 ### Evaluation
 
 ``` r
+
 preds = predict(lm_nn, newdata = test)
 
 tibble(
@@ -140,12 +144,13 @@ tibble(
     ## # A tibble: 2 × 3
     ##   .metric .estimator .estimate
     ##   <chr>   <chr>          <dbl>
-    ## 1 rmse    standard       4.02 
-    ## 2 rsq     standard       0.944
+    ## 1 rmse    standard       4.51 
+    ## 2 rsq     standard       0.938
 
 ### Comparison with `lm()`
 
 ``` r
+
 lm_fit = lm(mpg ~ ., data = train)
 
 tibble(
@@ -186,6 +191,7 @@ We use the `Sonar` dataset from `{mlbench}` to distinguish rocks from
 mines (binary outcome).
 
 ``` r
+
 data("Sonar", package = "mlbench")
 
 sonar = Sonar
@@ -199,6 +205,7 @@ rec_s = recipe(Class ~ ., data = train_s) |>
 ```
 
 ``` r
+
 logit_nn = train_nn(
     Class ~ .,
     data = train_s,
@@ -249,6 +256,7 @@ logit_nn
     ## --------------------------------------------------------------
 
 ``` r
+
 preds_s = predict(logit_nn, newdata = test_s, type = "response")
 
 tibble(
@@ -266,6 +274,7 @@ tibble(
 ### Comparison with `glm()` / `nnet::multinom()`
 
 ``` r
+
 box::use(nnet[multinom])
 
 glm_fit = glm(Class ~ ., data = train_s, family = binomial())

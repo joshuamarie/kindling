@@ -50,12 +50,14 @@ learning models within the familiar
 You can install [kindling](https://kindling.joshuamarie.com) on CRAN:
 
 ``` r
+
 install.packages('kindling')
 ```
 
 Or install the development version from GitHub:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("joshuamarie/kindling")
 ## devtools::install_github("joshuamarie/kindling") 
@@ -72,6 +74,7 @@ architecture gives you flexibility to work at whatever abstraction level
 suits your task.
 
 ``` r
+
 library(kindling)
 ```
 
@@ -79,6 +82,7 @@ Before starting, install LibTorch, the backend of PyTorch and the
 [torch](https://torch.mlverse.org/docs) R package:
 
 ``` r
+
 torch::install_torch()
 ```
 
@@ -92,6 +96,7 @@ return unevaluated expressions you can inspect, modify, or execute.
 Here’s how to generate a feedforward network specification:
 
 ``` r
+
 ffnn_generator(
     nn_name = "MyFFNN",
     hd_neurons = c(64, 32, 16),
@@ -131,6 +136,7 @@ boilerplate when training the models internally.
 Let’s classify iris species:
 
 ``` r
+
 model = ffnn(
     Species ~ .,
     data = iris,
@@ -186,6 +192,7 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
 1.  **Without `newdata`** predictions default to the training data.
 
     ``` r
+
     predict(model) |>
         (\(x) table(actual = iris$Species, predicted = x))()
     #>             predicted
@@ -199,6 +206,7 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     reference.
 
     ``` r
+
     sample_iris = dplyr::slice_sample(iris, n = 10, by = Species)
 
     predict(model, newdata = sample_iris) |>
@@ -218,6 +226,7 @@ entire [tidymodels](https://tidymodels.tidymodels.org) toolkit for
 preprocessing, cross-validation, and model evaluation.
 
 ``` r
+
 # library(kindling)
 # library(parsnip)
 # library(yardstick)
@@ -291,6 +300,7 @@ also supported.
 Here’s an example:
 
 ``` r
+
 # library(tidymodels)
 box::use(
     kindling[
@@ -371,6 +381,7 @@ networks. Two primary algorithms are available:
 1.  Garson’s Algorithm
 
     ``` r
+
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
     #> 1  Sepal.Width       y 28.80667
@@ -382,6 +393,7 @@ networks. Two primary algorithms are available:
 2.  Olden’s Algorithm
 
     ``` r
+
     olden(model, bar_plot = FALSE)
     #>        x_names y_names    rel_imp
     #> 1  Sepal.Width       y  0.5660366
@@ -398,6 +410,7 @@ For users working within the
 the [vip](https://github.com/koalaverse/vip/) package:
 
 ``` r
+
 box::use(
     vip[vi, vip]
 )
@@ -509,7 +522,7 @@ Interpret neural network models
 
 - [`garson(`*`<ffnn_fit>`*`)`](https://kindling.joshuamarie.com/dev/reference/kindling-varimp.md)
   [`olden(`*`<ffnn_fit>`*`)`](https://kindling.joshuamarie.com/dev/reference/kindling-varimp.md)
-  [`vi_model(`*`<ffnn_fit>`*`)`](https://kindling.joshuamarie.com/dev/reference/kindling-varimp.md)
+  [`vi_model.ffnn_fit()`](https://kindling.joshuamarie.com/dev/reference/kindling-varimp.md)
   : Variable Importance Methods for kindling Models
 
 ## Tuning Parameters

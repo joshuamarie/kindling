@@ -13,18 +13,21 @@ vignette will guide you through the basic usage.
 You can install [kindling](https://kindling.joshuamarie.com) on CRAN:
 
 ``` r
+
 install.packages('kindling')
 ```
 
 Or install the development version from GitHub:
 
 ``` r
+
 # install.packages("pak")
 pak::pak("joshuamarie/kindling")
 ## devtools::install_github("joshuamarie/kindling") 
 ```
 
 ``` r
+
 library(kindling)
 #> 
 #> Attaching package: 'kindling'
@@ -40,6 +43,7 @@ which also the backend of [torch](https://torch.mlverse.org/docs) R
 package:
 
 ``` r
+
 torch::install_torch()
 ```
 
@@ -61,6 +65,7 @@ four levels of abstraction:
 Generate PyTorch-style module code:
 
 ``` r
+
 ffnn_generator(
     nn_name = "MyNetwork",
     hd_neurons = c(64, 32),
@@ -75,6 +80,7 @@ ffnn_generator(
 Train a model with one function call:
 
 ``` r
+
 model = ffnn(
     Species ~ .,
     data = iris,
@@ -92,6 +98,7 @@ predictions = predict(model, newdata = iris)
 Work with neural networks like any other `parsnip` model:
 
 ``` r
+
 box::use(
     parsnip[fit, augment],
     yardstick[metrics]
