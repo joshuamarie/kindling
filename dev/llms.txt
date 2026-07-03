@@ -233,9 +233,9 @@ preprocessing, cross-validation, and model evaluation.
 box::use(
     kindling[mlp_kindling, rnn_kindling, act_funs, args],
     parsnip[fit, augment],
-    yardstick[metrics],
-    mlbench[Ionosphere] # data(Ionosphere, package = "mlbench")
+    yardstick[metrics]
 )
+data(Ionosphere, package = "mlbench")
 
 ionosphere_data = Ionosphere[, -2]
 

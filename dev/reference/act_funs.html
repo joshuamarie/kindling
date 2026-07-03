@@ -91,6 +91,26 @@ function's formal arguments.</p>
 activation specifications.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">act_funs</span><span class="op">(</span><span class="va">relu</span>, <span class="va">sigmoid</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;activation_spec[2]&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                 </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    relu sigmoid </span>
+<span class="r-in"><span><span class="fu">act_funs</span><span class="op">(</span><span class="va">relu</span>, <span class="va">softshrink</span><span class="op">[</span>lambd <span class="op">=</span> <span class="fl">0.5</span><span class="op">]</span>, <span class="va">elu</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;activation_spec[3]&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>                </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> relu  0.5  elu </span>
+<span class="r-in"><span><span class="fu">act_funs</span><span class="op">(</span>softmax <span class="op">=</span> <span class="fu"><a href="args.html">args</a></span><span class="op">(</span>dim <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span class="warning">Warning: </span>`args()` was deprecated in kindling 0.3.0.</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Use indexed syntax for parametric activation functions, e.g. `&lt;softplus[beta</span>
+<span class="r-wrn co"><span class="r-pr">#&gt;</span>   = 0.5]&gt;`.</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;activation_spec[1]&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> softmax </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       2 </span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

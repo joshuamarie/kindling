@@ -36,3 +36,23 @@ act_funs(...)
 
 A `vctrs` vector with class "activation_spec" containing validated
 activation specifications.
+
+## Examples
+
+``` r
+act_funs(relu, sigmoid)
+#> <activation_spec[2]>
+#>                 
+#>    relu sigmoid 
+act_funs(relu, softshrink[lambd = 0.5], elu)
+#> <activation_spec[3]>
+#>                
+#> relu  0.5  elu 
+act_funs(softmax = args(dim = 2L))
+#> Warning: `args()` was deprecated in kindling 0.3.0.
+#> ℹ Use indexed syntax for parametric activation functions, e.g. `<softplus[beta
+#>   = 0.5]>`.
+#> <activation_spec[1]>
+#> softmax 
+#>       2 
+```
