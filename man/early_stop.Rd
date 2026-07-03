@@ -26,3 +26,7 @@ An object of class \code{"early_stop_spec"}.
 \description{
 \code{early_stop()} is a helper function to be supplied on \code{early_stopping} arguments.
 }
+\examples{
+early_stop(patience = 10L, min_delta = 1e-3, monitor = "train_loss")
+
+}

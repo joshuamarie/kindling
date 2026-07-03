@@ -11,3 +11,4 @@
 ^\.github$
 ^CRAN-SUBMISSION$
 ^cran-comments\.md$
+^JOSS_PRECHECK\.md$

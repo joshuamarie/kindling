@@ -16,6 +16,11 @@
 #' @return A `vctrs` vector with class "activation_spec" containing validated
 #' activation specifications.
 #'
+#' @examples
+#' act_funs(relu, sigmoid)
+#' act_funs(relu, softshrink[lambd = 0.5], elu)
+#' act_funs(softmax = args(dim = 2L))
+#'
 #' @importFrom rlang enquos quo_get_expr is_call call_name as_string eval_tidy
 #' @importFrom cli cli_abort
 #' @importFrom vctrs new_vctr
@@ -109,6 +114,9 @@ act_funs = function(...) {
 #'
 #' @param ... Named arguments for the activation function.
 #' @return A list with class "activation_args" containing the parameters.
+#'
+#' @examples
+#' act_funs(softmax = args(dim = 2L))
 #'
 #' @importFrom cli cli_abort
 #'
@@ -419,8 +427,6 @@ process_activations = function(activation_spec, prefix = "nnf_") {
         if (is.na(name)) {
             NULL
         } else if (name == "<custom>") {
-            # fn = attr(params, "act_fn")
-            # function(x_expr) call2(fn, x_expr)
             fn = params$fn
             local({
                 fn = fn

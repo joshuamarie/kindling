@@ -20,3 +20,7 @@ Type-safe helper to specify parameters for activation functions.
 All parameters must be named and match the formal arguments of the
 corresponding \code{{torch}} activation function.
 }
+\examples{
+act_funs(softmax = args(dim = 2L))
+
+}

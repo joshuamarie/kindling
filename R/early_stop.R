@@ -9,8 +9,12 @@
 #' @param monitor Character. Metric to monitor. One of `"val_loss"` (default) or `"train_loss"`.
 #'
 #' @return An object of class `"early_stop_spec"`.
+#'
+#' @examples
+#' early_stop(patience = 10L, min_delta = 1e-3, monitor = "train_loss")
+#'
 #' @export
-early_stop = 
+early_stop =
     function(
         patience = 5L,
         min_delta = 1e-4,

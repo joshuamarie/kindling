@@ -27,3 +27,9 @@ specify activation functions for neural network layers. It validates that
 activation functions exist in \code{torch} and that any parameters match the
 function's formal arguments.
 }
+\examples{
+act_funs(relu, sigmoid)
+act_funs(relu, softshrink[lambd = 0.5], elu)
+act_funs(softmax = args(dim = 2L))
+
+}
