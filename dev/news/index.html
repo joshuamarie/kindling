@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.1.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,16 +55,20 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="kindling-development-version">kindling (development version)<a class="anchor" aria-label="anchor" href="#kindling-development-version"></a></h2>
 <div class="section level3">
-<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
-<ul><li><p><code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> methods for <code>nn_fit</code> objects now visualize the training loss history, with optional validation loss and an early-stopping marker when early stopping fires.</p></li>
-<li><p><code><a href="../reference/autoplot_diagnostics.html">autoplot_diagnostics()</a></code> and <code><a href="../reference/autoplot_diagnostics.html">plot_diagnostics()</a></code> produce prediction diagnostic plots for <code>nn_fit</code> objects: residuals vs fitted and actual vs fitted panels for regression, one panel per output for multi-output regression, and a confusion matrix heatmap for classification.</p></li>
-</ul></div>
-<div class="section level3">
 <h3 id="ongoing-features-development-version">Ongoing features<a class="anchor" aria-label="anchor" href="#ongoing-features-development-version"></a></h3>
 <ul><li>
 <p>More visualization supports</p>
 <ul><li>NN architecture plot</li>
 </ul></li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.1" id="kindling-031">kindling 0.3.1<a class="anchor" aria-label="anchor" href="#kindling-031"></a></h2><p class="text-muted">CRAN release: 2026-07-02</p>
+<div class="section level3">
+<h3 id="new-features-0-3-1">New features<a class="anchor" aria-label="anchor" href="#new-features-0-3-1"></a></h3>
+<ul><li><p><code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">autoplot()</a></code> and <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> methods for <code>nn_fit</code> objects now visualize the training loss history, with optional validation loss and an early-stopping marker when early stopping fires.</p></li>
+<li><p><code><a href="../reference/autoplot_diagnostics.html">autoplot_diagnostics()</a></code> and <code><a href="../reference/autoplot_diagnostics.html">plot_diagnostics()</a></code> produce prediction diagnostic plots for <code>nn_fit</code> objects: residuals vs fitted and actual vs fitted panels for regression, one panel per output for multi-output regression, and a confusion matrix heatmap for classification.</p></li>
+<li><p><a href="https://github.com/koalaverse/vip/" class="external-link">vip</a> is removed from <a href="https://kindling.joshuamarie.com">kindling</a>’s package dependencies, and moved to “Suggests” instead to avoid dependency redundancy.</p></li>
 </ul></div>
 </div>
     <div class="section level2">

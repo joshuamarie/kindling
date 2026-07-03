@@ -2,6 +2,16 @@
 
 ## kindling (development version)
 
+### Ongoing features
+
+- More visualization supports
+
+  - NN architecture plot
+
+## kindling 0.3.1
+
+CRAN release: 2026-07-02
+
 ### New features
 
 - [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
@@ -18,11 +28,9 @@
   output for multi-output regression, and a confusion matrix heatmap for
   classification.
 
-### Ongoing features
-
-- More visualization supports
-
-  - NN architecture plot
+- [vip](https://github.com/koalaverse/vip/) is removed from
+  [kindling](https://kindling.joshuamarie.com)’s package dependencies,
+  and moved to “Suggests” instead to avoid dependency redundancy.
 
 ## kindling 0.3.0
 
