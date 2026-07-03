@@ -107,6 +107,42 @@ test_that("Activation functions are properly namespaced", {
     expect_equal(as.character(relu_call[[1]][[3]]), "nnf_relu")
 })
 
+test_that("\"linear\" activation resolves to identity(), not torch::nnf_linear()", {
+    skip_if_no_torch()
+
+    # Regression test for https://github.com/joshuamarie/kindling/issues/21 :
+    # `output_activation = "linear"` used to be resolved to `torch::nnf_linear()`,
+    # which is an affine transform requiring its own weight/bias tensors, not an
+    # activation function — calling it with only `x` crashed with
+    # `argument "weight" is missing, with no default`.
+    spec = parse_activation_spec("linear", n_layers = 1)
+    calls = process_activations(spec)
+    linear_call = calls[[1]](quote(x))
+
+    expect_equal(linear_call, quote(identity(x)))
+
+    # Must not error, and must not reference torch::nnf_linear
+    expect_false(grepl("nnf_linear", deparse(linear_call)))
+})
+
+test_that("output_activation = \"linear\" trains without error and behaves as identity", {
+    skip_if_no_torch()
+
+    set.seed(1)
+    model = ffnn(
+        mpg ~ .,
+        data = mtcars,
+        hidden_neurons = c(8),
+        activations = act_funs(relu),
+        output_activation = "linear",
+        epochs = 2
+    )
+
+    expect_no_error(preds <- predict(model))
+    expect_true(is.numeric(preds))
+    expect_equal(length(preds), nrow(mtcars))
+})
+
 test_that("Complex activations maintain namespace", {
     skip_if_no_torch()
 

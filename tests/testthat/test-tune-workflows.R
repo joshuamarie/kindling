@@ -53,9 +53,17 @@ test_that("Tuning mlp_kindling with grid_depth works", {
         grid = grid,
         control = tune::control_grid(save_pred = FALSE)
     )
-    
+
     expect_s3_class(out, "tune_results")
     expect_true(nrow(tune::collect_metrics(out)) > 0)
+
+    # Regression test for https://github.com/joshuamarie/kindling/issues/21 :
+    # `output_activation = "linear"` (sampled by the grid above) used to crash
+    # every resample it landed on with `argument "weight" is missing, with no
+    # default`. `tune_grid()` catches per-resample errors, so the assertion
+    # above (nrow(collect_metrics()) > 0) still passed even when some folds
+    # silently failed. Assert there were no per-resample errors/warnings too.
+    expect_equal(nrow(tune::collect_notes(out)), 0)
 })
 
 test_that("Tuning mlp_kindling with latin_hypercube grid works", {
@@ -118,42 +126,49 @@ test_that("Tuning rnn_kindling with grid_depth works", {
         mode = "classification",
         hidden_neurons = tune::tune(),
         activations = tune::tune(),
+        output_activation = tune::tune(),
+        rnn_type = "gru",
         epochs = 5
     )
-    
+
     iris_recipe = recipes::recipe(Species ~ ., data = iris)
     wf = workflows::workflow() |>
         workflows::add_recipe(iris_recipe) |>
         workflows::add_model(rnn_spec)
-    
+
     set.seed(789)
     folds = rsample::vfold_cv(iris, v = 2)
-    
+
     grid = grid_depth(
         hidden_neurons(c(16L, 32L)),
         activations(c("relu", "elu")),
+        output_activation(c("sigmoid", "linear")),
         n_hlayer = 2,
         size = 3,
         type = "random"
     )
-    
+
     expect_s3_class(grid, "tbl_df")
     expect_equal(nrow(grid), 3)
     expect_true("hidden_neurons" %in% names(grid))
     expect_true("activations" %in% names(grid))
-    
+
     # --RNN type shouldn't be tunable, thus it won't exist
     expect_false("rnn_type" %in% names(grid))
-    
+
     OUT = tune::tune_grid(
         wf,
         resamples = folds,
         grid = grid,
         control = tune::control_grid(save_pred = FALSE)
     )
-    
+
     expect_s3_class(OUT, "tune_results")
     expect_true(nrow(tune::collect_metrics(OUT)) > 0)
+
+    # Regression test for https://github.com/joshuamarie/kindling/issues/21
+    # (see the mlp_kindling tuning test above for details).
+    expect_equal(nrow(tune::collect_notes(OUT)), 0)
 })
 
 test_that("grid_depth handles different n_hlayer specifications", {
