@@ -151,5 +151,5 @@ Useful links:
 
 Authors:
 
-- Antoine Soetewey <ant.soetewey@gmail.com>
+- Antoine Soetewey <antoine.soetewey@uclouvain.be>
   ([ORCID](https://orcid.org/0000-0001-8159-0804))
