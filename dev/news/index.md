@@ -2,6 +2,16 @@
 
 ## kindling (development version)
 
+### Bug fixes
+
+- `"linear"` used as an `activations`/`output_activation` value no
+  longer crashes at training time. It was previously resolved to
+  [`torch::nnf_linear()`](https://torch.mlverse.org/docs/reference/nnf_linear.html)
+  (an affine transform requiring its own weight/bias), instead of
+  behaving as an identity/no-op activation. `"linear"` now consistently
+  maps to [`identity()`](https://rdrr.io/r/base/identity.html)
+  ([\#21](https://github.com/joshuamarie/kindling/issues/21)).
+
 ### Ongoing features
 
 - More visualization supports
