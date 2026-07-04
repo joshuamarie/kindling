@@ -11,3 +11,6 @@ renv.lock
 docs
 docs/
 inst/doc
+
+/.quarto/
+**/*.quarto_ipynb
