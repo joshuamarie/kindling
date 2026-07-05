@@ -146,7 +146,7 @@
 <p><a href="https://kindling.joshuamarie.com">kindling</a> is powered by R’s metaprogramming capabilities through <em>code generation</em>. Generated <code><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">torch::nn_module()</a></code> expressions power the training functions, which in turn serve as engines for <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> integration. This architecture gives you flexibility to work at whatever abstraction level suits your task.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://kindling.joshuamarie.com">kindling</a></span><span class="op">)</span></span></code></pre></div>
-<p>Before starting, install LibTorch, the backend of PyTorch and the <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> R package:</p>
+<p>Before starting, install LibTorch (the backend used by the <a href="https://torch.mlverse.org/docs" class="external-link">torch</a> R package):</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/install_torch.html" class="external-link">install_torch</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <div class="section level3">
@@ -207,7 +207,7 @@
 <span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>      NN Model Type           <span class="sc">:</span>             FFNN    n_predictors <span class="sc">:</span>      <span class="dv">4</span></span>
 <span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>      Number of Epochs        <span class="sc">:</span>              <span class="dv">100</span>    n_response   <span class="sc">:</span>      <span class="dv">3</span></span>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>      Hidden Layer Units      <span class="sc">:</span>        <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">7</span>    reg.         <span class="sc">:</span>   None</span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>      Number of Hidden Layers <span class="sc">:</span>                <span class="dv">3</span>    Device       <span class="sc">:</span>    mps</span>
+<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>      Number of Hidden Layers <span class="sc">:</span>                <span class="dv">3</span>    Device       <span class="sc">:</span>    cpu</span>
 <span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>      Pred. Type              <span class="sc">:</span>   classification                 <span class="sc">:</span>       </span>
 <span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>    <span class="sc">-----------------------------------------------------------------------</span></span>
 <span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a></span>
@@ -235,8 +235,8 @@
 <span><span class="co">#&gt;             predicted</span></span>
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         50          0         0</span></span>
-<span><span class="co">#&gt;   versicolor      0         46         4</span></span>
-<span><span class="co">#&gt;   virginica       0          1        49</span></span></code></pre></div>
+<span><span class="co">#&gt;   versicolor      0         48         2</span></span>
+<span><span class="co">#&gt;   virginica       0          0        50</span></span></code></pre></div>
 </li>
 <li>
 <p><strong>With <code>newdata</code></strong> simply pass the new data frame as the new reference.</p>
@@ -248,8 +248,8 @@
 <span><span class="co">#&gt;             predicted</span></span>
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         10          0         0</span></span>
-<span><span class="co">#&gt;   versicolor      0         10         0</span></span>
-<span><span class="co">#&gt;   virginica       0          1         9</span></span></code></pre></div>
+<span><span class="co">#&gt;   versicolor      0          9         1</span></span>
+<span><span class="co">#&gt;   virginica       0          0        10</span></span></code></pre></div>
 </li>
 </ol>
 </div>
@@ -397,20 +397,20 @@
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/garson.html" class="external-link">garson</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names  rel_imp</span></span>
-<span><span class="co">#&gt; 1  Sepal.Width       y 28.80667</span></span>
-<span><span class="co">#&gt; 2  Petal.Width       y 25.33185</span></span>
-<span><span class="co">#&gt; 3 Sepal.Length       y 23.10922</span></span>
-<span><span class="co">#&gt; 4 Petal.Length       y 22.75226</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 Petal.Length       y 30.29959</span></span>
+<span><span class="co">#&gt; 2 Sepal.Length       y 25.50089</span></span>
+<span><span class="co">#&gt; 3  Petal.Width       y 24.56154</span></span>
+<span><span class="co">#&gt; 4  Sepal.Width       y 19.63798</span></span></code></pre></div>
 </li>
 <li>
 <p>Olden’s Algorithm</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/olden.html" class="external-link">olden</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names    rel_imp</span></span>
-<span><span class="co">#&gt; 1  Sepal.Width       y  0.5660366</span></span>
-<span><span class="co">#&gt; 2  Petal.Width       y -0.5193552</span></span>
-<span><span class="co">#&gt; 3 Petal.Length       y -0.4961819</span></span>
-<span><span class="co">#&gt; 4 Sepal.Length       y -0.1262867</span></span></code></pre></div>
+<span><span class="co">#&gt; 1 Petal.Length       y -1.1477059</span></span>
+<span><span class="co">#&gt; 2  Petal.Width       y -0.9410617</span></span>
+<span><span class="co">#&gt; 3 Sepal.Length       y  0.5526031</span></span>
+<span><span class="co">#&gt; 4  Sepal.Width       y  0.5260558</span></span></code></pre></div>
 </li>
 </ol>
 <div class="section level3">
@@ -577,6 +577,7 @@
 <ul class="list-unstyled">
 <li><a href="https://CRAN.R-project.org/package=kindling" class="external-link"><img src="https://www.r-pkg.org/badges/version/kindling" alt="CRAN status"></a></li>
 <li><a href="https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/joshuamarie/kindling/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://CRAN.R-project.org/package=kindling" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/kindling" alt="CRAN Downloads"></a></li>
 <li><a href="https://app.codecov.io/gh/joshuamarie/kindling" class="external-link"><img src="https://codecov.io/gh/joshuamarie/kindling/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://www.repostatus.org/#active" class="external-link"><img src="https://www.repostatus.org/badges/latest/active.svg" alt="Project Status: Active – The project has reached a stable, usable state and is being actively developed."></a></li>
 </ul>
