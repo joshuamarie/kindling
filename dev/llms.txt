@@ -60,8 +60,21 @@ Or install the development version from GitHub:
 
 # install.packages("pak")
 pak::pak("joshuamarie/kindling")
-## devtools::install_github("joshuamarie/kindling") 
+## devtools::install_github("joshuamarie/kindling")
 ```
+
+## Learn more
+
+- [Getting Started with
+  kindling](https://kindling.joshuamarie.com/articles/kindling.html)
+- [Tuning
+  Capabilities](https://kindling.joshuamarie.com/articles/tuning-capabilities.html)
+- [Custom Activation
+  Function](https://kindling.joshuamarie.com/articles/custom-act-fn.html)
+- [Special Cases: Linear and Logistic
+  Regression](https://kindling.joshuamarie.com/articles/special-cases.html)
+- [Similar Packages and
+  Comparison](https://kindling.joshuamarie.com/articles/similar-packages.html)
 
 ## Usage: Three Levels of Interaction
 
@@ -436,6 +449,13 @@ Wickham H (2019). *Advanced R*, 2nd edition. Chapman and Hall/CRC. ISBN
 
 Goodfellow I, Bengio Y, Courville A (2016). *Deep Learning*. MIT Press.
 <https://www.deeplearningbook.org/>.
+
+## Citation
+
+If you use [kindling](https://kindling.joshuamarie.com) in a
+publication, please cite it. Run `citation("kindling")` in R to get the
+current citation, or see the [CITATION
+file](https://github.com/joshuamarie/kindling/blob/main/inst/CITATION).
 
 ## License
 
