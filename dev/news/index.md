@@ -2,6 +2,14 @@
 
 ## kindling (development version)
 
+### Ongoing features
+
+- More visualization supports
+
+  - NN architecture plot
+
+## kindling 0.3.2
+
 ### Bug fixes
 
 - `"linear"` used as an `activations`/`output_activation` value no
@@ -12,11 +20,19 @@
   maps to [`identity()`](https://rdrr.io/r/base/identity.html)
   ([\#21](https://github.com/joshuamarie/kindling/issues/21)).
 
-### Ongoing features
+- Fixed the README’s [tidymodels](https://tidymodels.tidymodels.org)
+  example: loading `Ionosphere` via `box::use(mlbench[Ionosphere])`
+  failed because `{mlbench}` does not export its datasets through
+  `NAMESPACE`/`LazyData`. The example now uses
+  `data(Ionosphere, package = "mlbench")` instead.
 
-- More visualization supports
+### Documentation
 
-  - NN architecture plot
+- Added missing `@examples` for
+  [`act_funs()`](https://kindling.joshuamarie.com/dev/reference/act_funs.md),
+  [`args()`](https://kindling.joshuamarie.com/dev/reference/args.md),
+  and
+  [`early_stop()`](https://kindling.joshuamarie.com/dev/reference/early_stop.md).
 
 ## kindling 0.3.1
 
