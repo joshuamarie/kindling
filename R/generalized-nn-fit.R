@@ -770,15 +770,22 @@ train_nn_impl =
                 opt$zero_grad()
                 y_pred = model(x_batch)
                 batch_loss = loss_fn(y_pred, y_batch)
-                reg_loss = regularizer(model, penalty, mixture)
-                total_loss = batch_loss + reg_loss
+                # reg_loss = regularizer(model, penalty, mixture, device = device)
+                # total_loss = batch_loss + reg_loss
+                total_loss = if (penalty > 0) {
+                    batch_loss + regularizer(model, penalty, mixture, device = device)
+                } else {
+                    batch_loss
+                }
                 total_loss$backward()
                 opt$step()
 
-                epoch_loss = epoch_loss + total_loss$item()
+                # epoch_loss = epoch_loss + total_loss$item()
+                epoch_loss = epoch_loss + total_loss$detach()
             }
 
-            loss_history[epoch] = epoch_loss / n_batches
+            # loss_history[epoch] = epoch_loss / n_batches
+            loss_history[epoch] = as.numeric(epoch_loss$cpu()) / n_batches
 
             # ---- Validation ----
             if (!is.null(x_val)) {
