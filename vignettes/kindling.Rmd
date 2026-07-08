@@ -143,7 +143,7 @@ Two kinds of `predict()` usage:
 
 Work with neural networks just like any other `{parsnip}` model. This unlocks the entire `{tidymodels}` toolkit for preprocessing, cross-validation, and model evaluation.
 
-```r
+```{r}
 # library(kindling)
 # library(parsnip)
 # library(yardstick)
@@ -166,11 +166,6 @@ mlp_kindling(
     fit(Class ~ ., data = ionosphere_data) |>
     augment(new_data = ionosphere_data) |>
     metrics(truth = Class, estimate = .pred_class)
-#> # A tibble: 2 × 3
-#>   .metric  .estimator .estimate
-#>   <chr>    <chr>          <dbl>
-#> 1 accuracy binary         0.989
-#> 2 kap      binary         0.975
 
 # Or try a recurrent architecture (demonstrative example with tabular data)
 rnn_kindling(
@@ -183,11 +178,6 @@ rnn_kindling(
     fit(Class ~ ., data = ionosphere_data) |>
     augment(new_data = ionosphere_data) |>
     metrics(truth = Class, estimate = .pred_class)
-#> # A tibble: 2 × 3
-#>   .metric  .estimator .estimate
-#>   <chr>    <chr>          <dbl>
-#> 1 accuracy binary         0.641
-#> 2 kap      binary         0
 ```
 
 ## Hyperparameter Tuning & Resampling
