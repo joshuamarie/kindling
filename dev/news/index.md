@@ -20,11 +20,14 @@
   maps to [`identity()`](https://rdrr.io/r/base/identity.html)
   ([\#21](https://github.com/joshuamarie/kindling/issues/21)).
 
-- Fixed the README’s [tidymodels](https://tidymodels.tidymodels.org)
-  example: loading `Ionosphere` via `box::use(mlbench[Ionosphere])`
-  failed because `{mlbench}` does not export its datasets through
+- Fixed the [tidymodels](https://tidymodels.tidymodels.org) example:
+  loading `Ionosphere` via `box::use(mlbench[Ionosphere])` failed
+  because `{mlbench}` does not export its datasets through
   `NAMESPACE`/`LazyData`. The example now uses
   `data(Ionosphere, package = "mlbench")` instead.
+
+- Usage examples from `README` gets transferred to
+  `vignettes/kindling.Rmd`.
 
 ### Documentation
 
