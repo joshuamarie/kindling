@@ -14,6 +14,8 @@ knitr::opts_chunk$set(
     fig.width = 7,
     fig.height = 5
 )
+
+fansi::set_knit_hooks(knitr::knit_hooks)
 ```
 
 ## Introduction
