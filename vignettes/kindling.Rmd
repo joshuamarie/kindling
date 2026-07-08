@@ -36,13 +36,13 @@ pak::pak("joshuamarie/kindling")
 ## devtools::install_github("joshuamarie/kindling") 
 ```
 
+## Before using {kindling}
+
 ```{r}
 library(kindling)
 ```
 
-## Before using {kindling}
-
-Before starting, you need to install LibTorch, the backend of PyTorch which also the backend of `{torch}` R package:
+Before starting, you need to install LibTorch first, the backend of PyTorch, which is also the backend of `{torch}` R package:
 
 ``` r
 torch::install_torch()
@@ -62,29 +62,19 @@ Current `{kindling}` supports the following:
 -   Fine-grained control over network depth, layer sizes, and activation functions
 -   GPU acceleration support via `{torch}` tensors
 
-### What doesn't
+### What it doesn't support
 
-As of `{kindling}` 0.3.x, it supports most of NN architectures thanks to its versatility, but it doesn't support:
+As of `{kindling}` >0.3.0, it supports most of NN architectures thanks to its versatility, as long as they follow typical MLP's topology. This package, however, does not support the following:
 
 1.  Residual Networks (ResNet)
 2.  Automatic Integration (AutoInt)
 3.  Self-Attention and Inter-sample Attention Transformer (Saint)
 
-To use all of these, use `{brulee}` (>= 1.0.0) to use the said NN architectures instead. 
+To use all of these, you might want to take an interest towards `{brulee}` package instead. The said NN architectures above are available on version 1.0.0 (and later) release. 
 
 ## Usage: Three Levels of Interaction
 
 `{kindling}` is powered by R's metaprogramming capabilities through *code generation*. Generated `torch::nn_module()` expressions power the training functions, which in turn serve as engines for `{tidymodels}` integration. This architecture gives you flexibility to work at whatever abstraction level suits your task.
-
-```{r}
-library(kindling)
-```
-
-Before starting, install LibTorch (the backend used by the `{torch}` R package):
-
-``` r
-torch::install_torch()
-```
 
 ### Level 1: Code Generation for `torch::nn_module`
 
