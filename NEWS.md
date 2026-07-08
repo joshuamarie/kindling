@@ -16,10 +16,12 @@
     instead of behaving as an identity/no-op activation. `"linear"` now
     consistently maps to `identity()` (#21).
 
--   Fixed the README's `{tidymodels}` example: loading `Ionosphere` via
+-   Fixed the `{tidymodels}` example: loading `Ionosphere` via
     `box::use(mlbench[Ionosphere])` failed because `{mlbench}` does not
     export its datasets through `NAMESPACE`/`LazyData`. The example now uses
     `data(Ionosphere, package = "mlbench")` instead.
+
+-   Usage examples from `README` gets transferred to `vignettes/kindling.Rmd`. 
 
 ## Documentation
 
