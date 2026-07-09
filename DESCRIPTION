@@ -59,6 +59,7 @@ Suggests:
     sfd,
     covr,
     fansi
+Remotes: cran/vip@0.4.6
 Config/testthat/edition: 3
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
