@@ -115,24 +115,25 @@ ffnn_generator(
     no_y = 1,
     activations = 'relu'
 )
-#> torch::nn_module("MyFFNN", initialize = function () 
-#> {
-#>     self$fc1 = torch::nn_linear(10, 64, bias = TRUE)
-#>     self$fc2 = torch::nn_linear(64, 32, bias = TRUE)
-#>     self$fc3 = torch::nn_linear(32, 16, bias = TRUE)
-#>     self$out = torch::nn_linear(16, 1, bias = TRUE)
-#> }, forward = function (x) 
-#> {
-#>     x = self$fc1(x)
-#>     x = torch::nnf_relu(x)
-#>     x = self$fc2(x)
-#>     x = torch::nnf_relu(x)
-#>     x = self$fc3(x)
-#>     x = torch::nnf_relu(x)
-#>     x = self$out(x)
-#>     x
-#> })
 ```
+
+    torch::nn_module("MyFFNN", initialize = function () 
+    {
+        self$fc1 = torch::nn_linear(10, 64, bias = TRUE)
+        self$fc2 = torch::nn_linear(64, 32, bias = TRUE)
+        self$fc3 = torch::nn_linear(32, 16, bias = TRUE)
+        self$out = torch::nn_linear(16, 1, bias = TRUE)
+    }, forward = function (x) 
+    {
+        x = self$fc1(x)
+        x = torch::nnf_relu(x)
+        x = self$fc2(x)
+        x = torch::nnf_relu(x)
+        x = self$fc3(x)
+        x = torch::nnf_relu(x)
+        x = self$out(x)
+        x
+    })
 
 This creates a three-hidden-layer network (64 - 32 - 16 neurons) that
 takes 10 inputs and produces 1 output. Each hidden layer uses ReLU
@@ -275,8 +276,8 @@ mlp_kindling(
 #> # A tibble: 2 × 3
 #>   .metric  .estimator .estimate
 #>   <chr>    <chr>          <dbl>
-#> 1 accuracy binary         0.991
-#> 2 kap      binary         0.981
+#> 1 accuracy binary             1
+#> 2 kap      binary             1
 ```
 
 ``` r
@@ -382,16 +383,21 @@ nn_tunes = tune::tune_grid(
 )
 
 best_nn = select_best(nn_tunes)
-#> Warning in select_best(nn_tunes): No value of `metric` was given;
-#> "roc_auc" will be used.
+```
+
+    Warning in select_best(nn_tunes):  [1m [22mNo value of `metric` was given;
+     [34m"roc_auc" [39m will be used.
+
+``` r
+
 best_nn
 ```
 
 ``` fansi
-#> # A tibble: 1 × 4
-#>   hidden_neurons activations output_activation .config         
-#>   <list>         <list>      <chr>             <chr>           
-#> 1 <int [2]>      <chr [2]>   sigmoid           pre0_mod06_post0
+# A tibble: 1 × 4
+  hidden_neurons activations output_activation .config         
+  <list>         <list>      <chr>             <chr>           
+1 <int [2]>      <chr [2]>   sigmoid           pre0_mod03_post0
 ```
 
 ``` r
@@ -402,64 +408,69 @@ final_nn_model
 ```
 
 ``` fansi
-#> ══ Workflow [trained] ══════════════════════════════════════════════════════════
-#> Preprocessor: Recipe
-#> Model: mlp_kindling()
-#> 
-#> ── Preprocessor ────────────────────────────────────────────────────────────────
-#> 0 Recipe Steps
-#> 
-#> ── Model ───────────────────────────────────────────────────────────────────────
+══ Workflow [trained] ══════════════════════════════════════════════════════════
+Preprocessor: Recipe
+Model: mlp_kindling()
+
+── Preprocessor ────────────────────────────────────────────────────────────────
+0 Recipe Steps
+
+── Model ───────────────────────────────────────────────────────────────────────
 ```
 
-    #> Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    #> status 2
-    #> Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    #> status 2
+    Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
+    status 2
+
+    Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
+    status 2
 
 ``` fansi
-#> 
-#> ======================= Feedforward Neural Networks (MLP) ======================
-#> 
-#> 
-#> -- FFNN Model Summary ----------------------------------------------------------
+
+======================= Feedforward Neural Networks (MLP) ======================
+
+
+-- FFNN Model Summary ----------------------------------------------------------
 ```
 
-    #> Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    #> status 2
+    Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
+    status 2
 
 ``` fansi
-#> -----------------------------------------------------------------------
-#>   NN Model Type           :             FFNN    n_predictors :      4
-#>   Number of Epochs        :              100    n_response   :      3
-#>   Hidden Layer Units      :           52, 80    reg.         :   None
-#>   Number of Hidden Layers :                2    Device       :    cpu
-#>   Pred. Type              :   classification                 :       
-#> -----------------------------------------------------------------------
-#> 
-#> 
-#> 
-#> -- Activation function ---------------------------------------------------------
+-----------------------------------------------------------------------
+  NN Model Type           :             FFNN    n_predictors :      4
+  Number of Epochs        :              100    n_response   :      3
+  Hidden Layer Units      :           41, 94    reg.         :   None
+  Number of Hidden Layers :                2    Device       :    cpu
+  Pred. Type              :   classification                 :       
+-----------------------------------------------------------------------
+
+
+
+-- Activation function ---------------------------------------------------------
 ```
 
-    #> Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    #> status 2
-    #> ---------------------------------
-    #>   1st Layer {52}    :       elu
-    #>   2nd Layer {80}    :       elu
-    #>   Output Activation :   sigmoid
-    #> ---------------------------------
+    Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
+    status 2
 
-    final_nn_model |>
-        augment(new_data = iris) |>
-        metrics(truth = Species, estimate = .pred_class)
+    ---------------------------------
+      1st Layer {41}    :       elu
+      2nd Layer {94}    :      relu
+      Output Activation :   sigmoid
+    ---------------------------------
+
+``` r
+
+final_nn_model |>
+    augment(new_data = iris) |>
+    metrics(truth = Species, estimate = .pred_class)
+```
 
 ``` fansi
-#> # A tibble: 2 × 3
-#>   .metric  .estimator .estimate
-#>   <chr>    <chr>          <dbl>
-#> 1 accuracy multiclass     0.667
-#> 2 kap      multiclass     0.5
+# A tibble: 2 × 3
+  .metric  .estimator .estimate
+  <chr>    <chr>          <dbl>
+1 accuracy multiclass     0.667
+2 kap      multiclass     0.5  
 ```
 
 Resampling strategies from [rsample](https://rsample.tidymodels.org)
@@ -480,10 +491,10 @@ networks. Two primary algorithms are available:
 
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1 Petal.Length       y 27.24382
-    #> 2  Petal.Width       y 24.55730
-    #> 3  Sepal.Width       y 24.45608
-    #> 4 Sepal.Length       y 23.74279
+    #> 1  Petal.Width       y 28.76965
+    #> 2 Petal.Length       y 27.53171
+    #> 3 Sepal.Length       y 22.13776
+    #> 4  Sepal.Width       y 21.56088
     ```
 
 2.  Olden’s Algorithm
@@ -491,11 +502,11 @@ networks. Two primary algorithms are available:
     ``` r
 
     olden(model, bar_plot = FALSE)
-    #>        x_names y_names     rel_imp
-    #> 1 Petal.Length       y  0.27949439
-    #> 2  Petal.Width       y  0.21698004
-    #> 3 Sepal.Length       y -0.09166022
-    #> 4  Sepal.Width       y -0.08617626
+    #>        x_names y_names    rel_imp
+    #> 1  Sepal.Width       y  0.4438439
+    #> 2  Petal.Width       y -0.3946272
+    #> 3 Sepal.Length       y  0.3943365
+    #> 4 Petal.Length       y -0.3002567
     ```
 
 ### Integration with {vip}
