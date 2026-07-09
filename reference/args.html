@@ -15,7 +15,7 @@ corresponding {torch} activation function."><meta property="og:image" content="h
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -57,7 +57,7 @@ corresponding {torch} activation function."><meta property="og:image" content="h
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Activation Function Arguments Helper</h1>
-      <small class="dont-index">Source: <a href="https://github.com/joshuamarie/kindling/blob/v0.3.1/R/act-fun.R" class="external-link"><code>R/act-fun.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/joshuamarie/kindling/blob/main/R/act-fun.R" class="external-link"><code>R/act-fun.R</code></a></small>
       <div class="d-none name"><code>args.Rd</code></div>
     </div>
 
@@ -87,6 +87,15 @@ corresponding <code>{torch}</code> activation function.</p>
     <p>A list with class "activation_args" containing the parameters.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="act_funs.html">act_funs</a></span><span class="op">(</span>softmax <span class="op">=</span> <span class="fu">args</span><span class="op">(</span>dim <span class="op">=</span> <span class="fl">2L</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;activation_spec[1]&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> softmax </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       2 </span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

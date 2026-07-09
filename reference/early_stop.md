@@ -36,3 +36,15 @@ early_stop(
 ## Value
 
 An object of class `"early_stop_spec"`.
+
+## Examples
+
+``` r
+early_stop(patience = 10L, min_delta = 1e-3, monitor = "train_loss")
+#> 
+#> ── Early Stopping Spec 
+#> • Monitor: train_loss
+#> • Patience: 10
+#> • Min delta: 0.001
+#> • Restore best weights: TRUE
+```

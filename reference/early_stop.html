@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.1</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.2</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -49,7 +49,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Early Stopping Specification</h1>
-      <small class="dont-index">Source: <a href="https://github.com/joshuamarie/kindling/blob/v0.3.1/R/early_stop.R" class="external-link"><code>R/early_stop.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/joshuamarie/kindling/blob/main/R/early_stop.R" class="external-link"><code>R/early_stop.R</code></a></small>
       <div class="d-none name"><code>early_stop.Rd</code></div>
     </div>
 
@@ -92,6 +92,18 @@
     <p>An object of class <code>"early_stop_spec"</code>.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu">early_stop</span><span class="op">(</span>patience <span class="op">=</span> <span class="fl">10L</span>, min_delta <span class="op">=</span> <span class="fl">1e-3</span>, monitor <span class="op">=</span> <span class="st">"train_loss"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── Early Stopping Spec </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Monitor: train_loss</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Patience: 10</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Min delta: 0.001</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">•</span> Restore best weights: TRUE</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

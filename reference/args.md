@@ -22,3 +22,12 @@ args(...)
 ## Value
 
 A list with class "activation_args" containing the parameters.
+
+## Examples
+
+``` r
+act_funs(softmax = args(dim = 2L))
+#> <activation_spec[1]>
+#> softmax 
+#>       2 
+```

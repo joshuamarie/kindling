@@ -8,7 +8,37 @@
 
   - NN architecture plot
 
+## kindling 0.3.2
+
+### Bug fixes
+
+- `"linear"` used as an `activations`/`output_activation` value no
+  longer crashes at training time. It was previously resolved to
+  [`torch::nnf_linear()`](https://torch.mlverse.org/docs/reference/nnf_linear.html)
+  (an affine transform requiring its own weight/bias), instead of
+  behaving as an identity/no-op activation. `"linear"` now consistently
+  maps to [`identity()`](https://rdrr.io/r/base/identity.html)
+  ([\#21](https://github.com/joshuamarie/kindling/issues/21)).
+
+### Documentation
+
+- Added missing `@examples` for
+  [`act_funs()`](https://kindling.joshuamarie.com/reference/act_funs.md),
+  [`args()`](https://kindling.joshuamarie.com/reference/args.md), and
+  [`early_stop()`](https://kindling.joshuamarie.com/reference/early_stop.md).
+
+- Fixed the [tidymodels](https://tidymodels.tidymodels.org) example:
+  loading `Ionosphere` via `box::use(mlbench[Ionosphere])` failed
+  because `{mlbench}` does not export its datasets through
+  `NAMESPACE`/`LazyData`. The example now uses
+  `data(Ionosphere, package = "mlbench")` instead.
+
+- Usage examples from `README` gets transferred to
+  `vignettes/kindling.Rmd`.
+
 ## kindling 0.3.1
+
+CRAN release: 2026-07-02
 
 ### New features
 
