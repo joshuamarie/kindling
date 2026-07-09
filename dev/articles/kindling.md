@@ -218,8 +218,8 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
-    #>   versicolor      0         47         3
-    #>   virginica       0          3        47
+    #>   versicolor      0         49         1
+    #>   virginica       0          1        49
     ```
 
 2.  **With `newdata`** simply pass the new data frame as the new
@@ -235,7 +235,7 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
     #>   versicolor      0          9         1
-    #>   virginica       0          1         9
+    #>   virginica       0          0        10
     ```
 
 ### Level 3: Conventional tidymodels Integration
@@ -275,8 +275,8 @@ mlp_kindling(
 #> # A tibble: 2 × 3
 #>   .metric  .estimator .estimate
 #>   <chr>    <chr>          <dbl>
-#> 1 accuracy binary         0.997
-#> 2 kap      binary         0.994
+#> 1 accuracy binary         0.991
+#> 2 kap      binary         0.981
 ```
 
 ``` r
@@ -379,17 +379,82 @@ nn_tunes = tune::tune_grid(
     nn_wf,
     iris_folds,
     grid = nn_grid_depth
-    # metrics = metric_set(accuracy, roc_auc)
 )
 
 best_nn = select_best(nn_tunes)
-final_nn = finalize_workflow(nn_wf, best_nn)
-# Last run: 4 - 91 (relu) - 3 (sigmoid) units
-final_nn_model = fit(final_nn, data = iris)
+#> Warning in select_best(nn_tunes): No value of `metric` was given;
+#> "roc_auc" will be used.
+best_nn
+```
 
-final_nn_model |>
-    augment(new_data = iris) |>
-    metrics(truth = Species, estimate = .pred_class)
+``` fansi
+#> # A tibble: 1 × 4
+#>   hidden_neurons activations output_activation .config         
+#>   <list>         <list>      <chr>             <chr>           
+#> 1 <int [2]>      <chr [2]>   sigmoid           pre0_mod06_post0
+```
+
+``` r
+
+final_nn = finalize_workflow(nn_wf, best_nn)
+final_nn_model = fit(final_nn, data = iris)
+final_nn_model
+```
+
+``` fansi
+#> ══ Workflow [trained] ══════════════════════════════════════════════════════════
+#> Preprocessor: Recipe
+#> Model: mlp_kindling()
+#> 
+#> ── Preprocessor ────────────────────────────────────────────────────────────────
+#> 0 Recipe Steps
+#> 
+#> ── Model ───────────────────────────────────────────────────────────────────────
+```
+
+    #> Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
+    #> status 2
+    #> Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
+    #> status 2
+
+``` fansi
+#> 
+#> ======================= Feedforward Neural Networks (MLP) ======================
+#> 
+#> 
+#> -- FFNN Model Summary ----------------------------------------------------------
+```
+
+    #> Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
+    #> status 2
+
+``` fansi
+#> -----------------------------------------------------------------------
+#>   NN Model Type           :             FFNN    n_predictors :      4
+#>   Number of Epochs        :              100    n_response   :      3
+#>   Hidden Layer Units      :           52, 80    reg.         :   None
+#>   Number of Hidden Layers :                2    Device       :    cpu
+#>   Pred. Type              :   classification                 :       
+#> -----------------------------------------------------------------------
+#> 
+#> 
+#> 
+#> -- Activation function ---------------------------------------------------------
+```
+
+    #> Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
+    #> status 2
+    #> ---------------------------------
+    #>   1st Layer {52}    :       elu
+    #>   2nd Layer {80}    :       elu
+    #>   Output Activation :   sigmoid
+    #> ---------------------------------
+
+    final_nn_model |>
+        augment(new_data = iris) |>
+        metrics(truth = Species, estimate = .pred_class)
+
+``` fansi
 #> # A tibble: 2 × 3
 #>   .metric  .estimator .estimate
 #>   <chr>    <chr>          <dbl>
@@ -415,10 +480,10 @@ networks. Two primary algorithms are available:
 
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1  Petal.Width       y 32.34915
-    #> 2  Sepal.Width       y 29.75559
-    #> 3 Petal.Length       y 20.71155
-    #> 4 Sepal.Length       y 17.18371
+    #> 1 Petal.Length       y 27.24382
+    #> 2  Petal.Width       y 24.55730
+    #> 3  Sepal.Width       y 24.45608
+    #> 4 Sepal.Length       y 23.74279
     ```
 
 2.  Olden’s Algorithm
@@ -426,11 +491,11 @@ networks. Two primary algorithms are available:
     ``` r
 
     olden(model, bar_plot = FALSE)
-    #>        x_names y_names      rel_imp
-    #> 1  Sepal.Width       y  0.100162062
-    #> 2  Petal.Width       y -0.037071030
-    #> 3 Sepal.Length       y -0.028464487
-    #> 4 Petal.Length       y -0.004399505
+    #>        x_names y_names     rel_imp
+    #> 1 Petal.Length       y  0.27949439
+    #> 2  Petal.Width       y  0.21698004
+    #> 3 Sepal.Length       y -0.09166022
+    #> 4  Sepal.Width       y -0.08617626
     ```
 
 ### Integration with {vip}
