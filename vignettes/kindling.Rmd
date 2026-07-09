@@ -84,7 +84,7 @@ At the lowest level, you can generate raw `torch::nn_module` code for maximum cu
 
 Here's how to generate a feedforward network specification:
 
-```{r}
+```{r, collapse=FALSE, comment=""}
 ffnn_generator(
     nn_name = "MyFFNN",
     hd_neurons = c(64, 32, 16),
@@ -199,7 +199,7 @@ The searchable parameters outside from `{kindling}`, i.e. under `{dials}` packag
 
 Here's an example: 
 
-```{r}
+```{r, collapse=FALSE, comment=""}
 # library(tidymodels)
 box::use(
     kindling[
