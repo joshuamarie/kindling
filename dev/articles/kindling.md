@@ -31,11 +31,6 @@ pak::pak("joshuamarie/kindling")
 ``` r
 
 library(kindling)
-#> 
-#> Attaching package: 'kindling'
-#> The following object is masked from 'package:base':
-#> 
-#>     args
 ```
 
 Before starting, you need to install LibTorch first, the backend of
@@ -169,9 +164,6 @@ model
 -- FFNN Model Summary ----------------------------------------------------------
 ```
 
-    Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    status 2
-
 ``` fansi
 -----------------------------------------------------------------------
   NN Model Type           :             FFNN    n_predictors :      4
@@ -185,9 +177,6 @@ model
 
 -- Activation function ---------------------------------------------------------
 ```
-
-    Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    status 2
 
     -------------------------------------------------
       1st Layer {10}    :                      relu
@@ -219,8 +208,8 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
-    #>   versicolor      0         49         1
-    #>   virginica       0          1        49
+    #>   versicolor      0         47         3
+    #>   virginica       0          3        47
     ```
 
 2.  **With `newdata`** simply pass the new data frame as the new
@@ -236,7 +225,7 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
     #>   versicolor      0          9         1
-    #>   virginica       0          0        10
+    #>   virginica       0          1         9
     ```
 
 ### Level 3: Conventional tidymodels Integration
@@ -383,13 +372,6 @@ nn_tunes = tune::tune_grid(
 )
 
 best_nn = select_best(nn_tunes)
-```
-
-    Warning in select_best(nn_tunes):  [1m [22mNo value of `metric` was given;
-     [34m"roc_auc" [39m will be used.
-
-``` r
-
 best_nn
 ```
 
@@ -418,12 +400,6 @@ Model: mlp_kindling()
 ── Model ───────────────────────────────────────────────────────────────────────
 ```
 
-    Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    status 2
-
-    Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    status 2
-
 ``` fansi
 
 ======================= Feedforward Neural Networks (MLP) ======================
@@ -431,9 +407,6 @@ Model: mlp_kindling()
 
 -- FFNN Model Summary ----------------------------------------------------------
 ```
-
-    Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    status 2
 
 ``` fansi
 -----------------------------------------------------------------------
@@ -448,9 +421,6 @@ Model: mlp_kindling()
 
 -- Activation function ---------------------------------------------------------
 ```
-
-    Warning in system("tput cols", intern = TRUE): running command 'tput cols' had
-    status 2
 
     ---------------------------------
       1st Layer {41}    :       elu
@@ -491,10 +461,10 @@ networks. Two primary algorithms are available:
 
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1  Petal.Width       y 28.76965
-    #> 2 Petal.Length       y 27.53171
-    #> 3 Sepal.Length       y 22.13776
-    #> 4  Sepal.Width       y 21.56088
+    #> 1  Sepal.Width       y 32.50031
+    #> 2  Petal.Width       y 28.67076
+    #> 3 Petal.Length       y 24.64049
+    #> 4 Sepal.Length       y 14.18845
     ```
 
 2.  Olden’s Algorithm
@@ -503,10 +473,10 @@ networks. Two primary algorithms are available:
 
     olden(model, bar_plot = FALSE)
     #>        x_names y_names    rel_imp
-    #> 1  Sepal.Width       y  0.4438439
-    #> 2  Petal.Width       y -0.3946272
-    #> 3 Sepal.Length       y  0.3943365
-    #> 4 Petal.Length       y -0.3002567
+    #> 1  Petal.Width       y  1.0952712
+    #> 2 Petal.Length       y  0.9921989
+    #> 3  Sepal.Width       y -0.8472952
+    #> 4 Sepal.Length       y -0.3176029
     ```
 
 ### Integration with {vip}
