@@ -10,6 +10,8 @@
 
 ## kindling 0.3.2
 
+CRAN release: 2026-07-10
+
 ### Bug fixes
 
 - `"linear"` used as an `activations`/`output_activation` value no

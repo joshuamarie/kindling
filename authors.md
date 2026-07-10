@@ -10,7 +10,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/joshuamarie/kindling/blob/main/inst/CITATION)
+[`inst/CITATION`](https://github.com/joshuamarie/kindling/blob/v0.3.x/inst/CITATION)
 
 Marie, Joshua and Soetewey, Antoine (2026). kindling: Higher-Level
 Interface of 'torch' Package to Auto-Train Neural Networks
