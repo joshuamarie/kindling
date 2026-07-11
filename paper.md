@@ -52,7 +52,7 @@ Within the generated code itself, activation functions are specified through `ac
 
 # Research impact statement
 
-`{kindling}` is a young package (development began with its first commit around early November 2025) and does not yet have external citations, publications, or third-party integrations to report; the evidence below documents community-readiness rather than realized adoption, as of this writing (July 2026). It is available on CRAN (initial release 0.1.0 on 2026-01-31; current release 0.3.1), with 1,434 downloads recorded since that release and 278 downloads in the last month, and the GitHub repository has 27 stars and 5 forks. Correctness is backed by a test suite of 206 `{testthat}` test blocks covering the code generators, the direct-training wrappers, the `{tidymodels}` engines, and the tuning/`{dials}` integration, run continuously via GitHub Actions `R-CMD-check` and tracked with Codecov.
+`{kindling}` is a young package (development began with its first commit around early November 2025) and does not yet have external citations, publications, or third-party integrations to report; the evidence below documents community-readiness rather than realized adoption, as of this writing (July 2026). It is available on CRAN (initial release 0.1.0 on 2026-01-31; current release 0.3.1), with 1,511 downloads recorded in total and 337 downloads in the last month, and the GitHub repository has 27 stars and 5 forks. Correctness is backed by a test suite of 206 `{testthat}` test blocks covering the code generators, the direct-training wrappers, the `{tidymodels}` engines, and the tuning/`{dials}` integration, run continuously via GitHub Actions `R-CMD-check` and tracked with Codecov.
 
 # AI usage disclosure
 
