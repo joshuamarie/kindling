@@ -20,5 +20,5 @@ https://kindling.joshuamarie.com
       title = {{kindling}: Higher-Level Interface of 'torch' Package to Auto-Train Neural Networks},
       author = {Joshua Marie and Antoine Soetewey},
       year = {2026},
-      note = {R package version 0.3.1.9000},
+      note = {R package version 0.3.2.9000},
     }

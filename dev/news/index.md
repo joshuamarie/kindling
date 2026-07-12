@@ -10,6 +10,8 @@
 
 ## kindling 0.3.2
 
+CRAN release: 2026-07-10
+
 ### Bug fixes
 
 - `"linear"` used as an `activations`/`output_activation` value no
@@ -20,6 +22,14 @@
   maps to [`identity()`](https://rdrr.io/r/base/identity.html)
   ([\#21](https://github.com/joshuamarie/kindling/issues/21)).
 
+### Documentation
+
+- Added missing `@examples` for
+  [`act_funs()`](https://kindling.joshuamarie.com/dev/reference/act_funs.md),
+  [`args()`](https://kindling.joshuamarie.com/dev/reference/args.md),
+  and
+  [`early_stop()`](https://kindling.joshuamarie.com/dev/reference/early_stop.md).
+
 - Fixed the [tidymodels](https://tidymodels.tidymodels.org) example:
   loading `Ionosphere` via `box::use(mlbench[Ionosphere])` failed
   because `{mlbench}` does not export its datasets through
@@ -28,14 +38,6 @@
 
 - Usage examples from `README` gets transferred to
   `vignettes/kindling.Rmd`.
-
-### Documentation
-
-- Added missing `@examples` for
-  [`act_funs()`](https://kindling.joshuamarie.com/dev/reference/act_funs.md),
-  [`args()`](https://kindling.joshuamarie.com/dev/reference/args.md),
-  and
-  [`early_stop()`](https://kindling.joshuamarie.com/dev/reference/early_stop.md).
 
 ## kindling 0.3.1
 

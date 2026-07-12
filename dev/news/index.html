@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">kindling</a>
 
-    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.1.9000</small>
+    <small class="nav-text text-default me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.2.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,16 +63,17 @@
 </ul></div>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.3.2" id="kindling-032">kindling 0.3.2<a class="anchor" aria-label="anchor" href="#kindling-032"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.3.2" id="kindling-032">kindling 0.3.2<a class="anchor" aria-label="anchor" href="#kindling-032"></a></h2><p class="text-muted">CRAN release: 2026-07-10</p>
 <div class="section level3">
 <h3 id="bug-fixes-0-3-2">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-3-2"></a></h3>
-<ul><li><p><code>"linear"</code> used as an <code>activations</code>/<code>output_activation</code> value no longer crashes at training time. It was previously resolved to <code><a href="https://torch.mlverse.org/docs/reference/nnf_linear.html" class="external-link">torch::nnf_linear()</a></code> (an affine transform requiring its own weight/bias), instead of behaving as an identity/no-op activation. <code>"linear"</code> now consistently maps to <code><a href="https://rdrr.io/r/base/identity.html" class="external-link">identity()</a></code> (<a href="https://github.com/joshuamarie/kindling/issues/21" class="external-link">#21</a>).</p></li>
-<li><p>Fixed the <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> example: loading <code>Ionosphere</code> via <code>box::use(mlbench[Ionosphere])</code> failed because <code>{mlbench}</code> does not export its datasets through <code>NAMESPACE</code>/<code>LazyData</code>. The example now uses <code>data(Ionosphere, package = "mlbench")</code> instead.</p></li>
-<li><p>Usage examples from <code>README</code> gets transferred to <code>vignettes/kindling.Rmd</code>.</p></li>
+<ul><li>
+<code>"linear"</code> used as an <code>activations</code>/<code>output_activation</code> value no longer crashes at training time. It was previously resolved to <code><a href="https://torch.mlverse.org/docs/reference/nnf_linear.html" class="external-link">torch::nnf_linear()</a></code> (an affine transform requiring its own weight/bias), instead of behaving as an identity/no-op activation. <code>"linear"</code> now consistently maps to <code><a href="https://rdrr.io/r/base/identity.html" class="external-link">identity()</a></code> (<a href="https://github.com/joshuamarie/kindling/issues/21" class="external-link">#21</a>).</li>
 </ul></div>
 <div class="section level3">
 <h3 id="documentation-0-3-2">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-3-2"></a></h3>
-<ul><li>Added missing <code>@examples</code> for <code><a href="../reference/act_funs.html">act_funs()</a></code>, <code><a href="../reference/args.html">args()</a></code>, and <code><a href="../reference/early_stop.html">early_stop()</a></code>.</li>
+<ul><li><p>Added missing <code>@examples</code> for <code><a href="../reference/act_funs.html">act_funs()</a></code>, <code><a href="../reference/args.html">args()</a></code>, and <code><a href="../reference/early_stop.html">early_stop()</a></code>.</p></li>
+<li><p>Fixed the <a href="https://tidymodels.tidymodels.org" class="external-link">tidymodels</a> example: loading <code>Ionosphere</code> via <code>box::use(mlbench[Ionosphere])</code> failed because <code>{mlbench}</code> does not export its datasets through <code>NAMESPACE</code>/<code>LazyData</code>. The example now uses <code>data(Ionosphere, package = "mlbench")</code> instead.</p></li>
+<li><p>Usage examples from <code>README</code> gets transferred to <code>vignettes/kindling.Rmd</code>.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
