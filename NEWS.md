@@ -6,6 +6,12 @@
 
     -  NN architecture plot
 
+## Fixes
+
+-  Lifting external package deps from all `{tidymodels}` interface, including the dependency to `{tidyr}` and `{dplyr}`. 
+
+    -  Functions relying on this packages is checked via `rlang::check_installed()`. 
+
 # kindling 0.3.2
 
 ## Bug fixes
