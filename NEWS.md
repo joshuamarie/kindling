@@ -12,6 +12,8 @@
 
     -  Functions relying on this packages is checked via `rlang::check_installed()`. 
 
+-  Rewriting `glue::glue()` dependency to `paste0()` / `sprintf()` for string interpolation. 
+
 # kindling 0.3.2
 
 ## Bug fixes
