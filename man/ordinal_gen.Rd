@@ -23,7 +23,7 @@ This function is originally from \code{numform::f_ordinal()}.
 }
 
 \examples{
-ordinal_gen(1:10)
+kindling:::ordinal_gen(1:10)
 
 # Note: this function is not exported into the public namespace.
 # Refer to `numform::f_ordinal()` instead.

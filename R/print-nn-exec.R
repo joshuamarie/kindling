@@ -41,7 +41,7 @@ concat = function(x) {
 #' ```
 #'
 #' @examples
-#' ordinal_gen(1:10)
+#' kindling:::ordinal_gen(1:10)
 #'
 #' # Note: this function is not exported into the public namespace.
 #' # Refer to `numform::f_ordinal()` instead.
