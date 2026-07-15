@@ -3,9 +3,32 @@ skip_if_no_torch = function() {
     skip_if_not(torch::torch_is_installed(), "Torch backend not available")
 }
 
+test_that("validate_optimizer errors clearly when torch itself is not installed, otherwise passes", {
+    skip_if_no_torch()
+    expect_error(validate_optimizer("ADAMW"), class = "rlang_error")
+    expect_error(validate_optimizer("SGDT"), class = "rlang_error")
+    expect_no_error(validate_optimizer("adam"))
+    expect_no_error(validate_optimizer("sgd"))
+})
+
+test_that("validate_optimizer errors for an unknown optimizer name", {
+    skip_if_not_installed("torch")
+    expect_error(validate_optimizer("not_a_real_optimizer"), class = "optimizer_not_found_error")
+})
+
+test_that("validate_device passes cpu straight through without touching torch", {
+    expect_equal(validate_device("cpu"), "cpu")
+    expect_equal(validate_device("CPU"), "cpu")
+})
+
+test_that("validate_device errors on an unsupported device string", {
+    expect_error(validate_device("banana"), "Invalid device")
+    expect_error(validate_device("banana"), "cpu.*cuda.*mps")
+})
+
 test_that("ffnn works with optimizer_args", {
     skip_if_no_torch()
-    
+
     model1 = ffnn(
         Sepal.Length ~ .,
         data = iris[1:50, 1:4],
@@ -16,10 +39,10 @@ test_that("ffnn works with optimizer_args", {
         optimizer_args = list(weight_decay = 0.01),
         verbose = FALSE
     )
-    
+
     expect_s3_class(model1, "ffnn_fit")
     expect_true(length(model1$loss_history) == 5)
-    
+
     # Test with momentum (SGD)
     model2 = ffnn(
         Species ~ .,
@@ -32,10 +55,10 @@ test_that("ffnn works with optimizer_args", {
         optimizer_args = list(momentum = 0.9),
         verbose = FALSE
     )
-    
+
     expect_s3_class(model2, "ffnn_fit")
     expect_true(model2$is_classification)
-    
+
     # Test with multiple optimizer args
     model3 = ffnn(
         Sepal.Length ~ .,
@@ -46,13 +69,13 @@ test_that("ffnn works with optimizer_args", {
         optimizer_args = list(weight_decay = 0.001, amsgrad = TRUE),
         verbose = FALSE
     )
-    
+
     expect_s3_class(model3, "ffnn_fit")
 })
 
 test_that("rnn works with optimizer_args", {
     skip_if_no_torch()
-    
+
     # Test LSTM with weight_decay
     model1 = rnn(
         Sepal.Length ~ .,
@@ -64,10 +87,10 @@ test_that("rnn works with optimizer_args", {
         optimizer_args = list(weight_decay = 0.01),
         verbose = FALSE
     )
-    
+
     expect_s3_class(model1, "rnn_fit")
     expect_equal(model1$rnn_type, "lstm")
-    
+
     # Test GRU with momentum
     model2 = rnn(
         Species ~ .,
@@ -79,7 +102,7 @@ test_that("rnn works with optimizer_args", {
         optimizer_args = list(momentum = 0.9, dampening = 0.1),
         verbose = FALSE
     )
-    
+
     expect_s3_class(model2, "rnn_fit")
     expect_true(model2$is_classification)
     expect_equal(model2$rnn_type, "gru")
@@ -87,7 +110,7 @@ test_that("rnn works with optimizer_args", {
 
 test_that("optimizer_args defaults to empty list", {
     skip_if_no_torch()
-    
+
     # Should work without optimizer_args
     model = ffnn(
         Sepal.Length ~ Sepal.Width,
@@ -96,13 +119,13 @@ test_that("optimizer_args defaults to empty list", {
         epochs = 3,
         verbose = FALSE
     )
-    
+
     expect_s3_class(model, "ffnn_fit")
 })
 
 test_that("invalid optimizer_args throw errors", {
     skip_if_no_torch()
-    
+
     expect_error(
         ffnn(
             Sepal.Length ~ .,
