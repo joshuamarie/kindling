@@ -28,3 +28,11 @@ Rinker, T. W. (2021). numform: A publication style number and plot
 formatter version 0.7.0. <https://github.com/trinker/numform>
 
 ## Examples
+
+``` r
+ordinal_gen(1:10)
+#> Error in ordinal_gen(1:10): could not find function "ordinal_gen"
+
+# Note: this function is not exported into the public namespace.
+# Refer to `numform::f_ordinal()` instead.
+```
