@@ -51,7 +51,8 @@ print.nn_fit = function(x, ...) {
             if (x$is_classification) "classification" else "regression",
             as.character(x$no_x),
             as.character(x$no_y),
-            if (x$penalty == 0) "None" else glue("[\u03BB = {x$penalty}, \u03B1 = {x$mixture}]"),
+            # if (x$penalty == 0) "None" else glue("[\u03BB = {x$penalty}, \u03B1 = {x$mixture}]"),
+            if (x$penalty == 0) "None" else paste0("[\u03BB = ", x$penalty, ", ", "\u03B1 = ", x$mixture, "]"),
             x$device
         ),
         stringsAsFactors = FALSE
