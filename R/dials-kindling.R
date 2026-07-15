@@ -27,7 +27,7 @@
 #'   \item{`validation_split`}{Proportion of training data held out for validation.}
 #'   \item{`bidirectional`}{Whether RNN layers are bidirectional.}
 #' }
-#' 
+#'
 #' @return
 #' Each function returns a `dials` parameter object:
 #' \describe{
@@ -92,25 +92,30 @@ n_hlayers = function(range = c(1L, 2L), trans = NULL) {
 #' Specifies the number of units per hidden layer.
 #'
 #' @param range A two-element integer vector with the default lower and upper bounds.
-#' @param disc_values `NULL` (default) or an integer vector of specific possible disc_values 
-#'     (e.g., `c(32L, 64L, 128L, 256L)`). When provided, tuning will be restricted to 
+#' @param disc_values `NULL` (default) or an integer vector of specific possible disc_values
+#'     (e.g., `c(32L, 64L, 128L, 256L)`). When provided, tuning will be restricted to
 #'     these discrete values. The range is automatically derived from these values if not explicitly given.
-#'     The `trans` parameter would still be ignored by this parameter when supplied. 
-#' @param trans An optional transformation; `NULL` for none. 
+#'     The `trans` parameter would still be ignored by this parameter when supplied.
+#' @param trans An optional transformation; `NULL` for none.
 #'
 #' @rdname dials-kindling
 #' @export
 hidden_neurons = function(range = c(8L, 512L), disc_values = NULL, trans = NULL) {
+    rlang::check_installed(
+        "dials",
+        reason = "Tunable from `{kindling}` depends on `{dials}`"
+    )
+
     param = if (!is.null(disc_values)) {
-        
+
         if (any(disc_values <= 0L) || anyNA(disc_values)) {
             rlang::abort("`disc_values` must be positive integers with no missing values.")
         }
-        
+
         dials::new_quant_param(
             type = "integer",
             # range = range,
-            values = disc_values, 
+            values = disc_values,
             inclusive = c(TRUE, TRUE),
             trans = NULL,
             label = c(hidden_neurons = "Hidden Units per Layer"),
@@ -127,7 +132,7 @@ hidden_neurons = function(range = c(8L, 512L), disc_values = NULL, trans = NULL)
             finalize = NULL
         )
     }
-    
+
     param
 }
 
