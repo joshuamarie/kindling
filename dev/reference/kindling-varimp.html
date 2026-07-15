@@ -31,6 +31,7 @@ NeuralNetTools and vip packages."><meta property="og:image" content="https://kin
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-learn-more" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Learn more</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-learn-more"><li><a class="external-link dropdown-item" href="https://www.tidymodels.org/learn/models/parsnip-ranger-glmnet/">Regression modeling</a></li>
     <li><a class="external-link dropdown-item" href="https://www.tidymodels.org/learn/models/parsnip-nnet/">Classification modeling</a></li>
+    <li><a class="external-link dropdown-item" href="https://statsandr.com/blog/bayesian-neural-networks-in-tidymodels-with-kindling/">Bayesian Neural Networks in tidymodels with kindling</a></li>
   </ul></li>
 <li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
@@ -170,11 +171,11 @@ importance from the fitted <code><a href="kindling-basemodels.html">ffnn()</a></
 <span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"Torch not fully installed — skipping example"</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-plt img"><img src="kindling-varimp-1.png" alt="" width="700" height="433"></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        x_names y_names     rel_imp</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  Petal.Width       y  0.22200441</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2 Petal.Length       y  0.20949427</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Sepal.Length       y -0.16039176</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  Sepal.Width       y -0.03755422</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        x_names y_names    rel_imp</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  Petal.Width       y  0.4343082</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  Sepal.Width       y -0.3313403</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 Petal.Length       y  0.3191294</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 Sepal.Length       y -0.1631369</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># \donttest{</span></span></span>
