@@ -208,6 +208,7 @@ grid_depth.model_spec =
             rlang::exec(call_info$fun, !!!call_info$args, .env = asNamespace(call_info$pkg))
         })
         names(param_list) = tunable_params$name
+        # params = rlang::exec(dials::parameters, !!!param_list)
         params = dials::parameters(param_list)
 
         grid_depth.parameters(
