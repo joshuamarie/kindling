@@ -208,8 +208,8 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
-    #>   versicolor      0         46         4
-    #>   virginica       0          0        50
+    #>   versicolor      0         48         2
+    #>   virginica       0          2        48
     ```
 
 2.  **With `newdata`** simply pass the new data frame as the new
@@ -225,7 +225,7 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
     #>   versicolor      0          9         1
-    #>   virginica       0          0        10
+    #>   virginica       0          1         9
     ```
 
 ### Level 3: Conventional tidymodels Integration
@@ -265,8 +265,8 @@ mlp_kindling(
 #> # A tibble: 2 × 3
 #>   .metric  .estimator .estimate
 #>   <chr>    <chr>          <dbl>
-#> 1 accuracy binary         0.997
-#> 2 kap      binary         0.994
+#> 1 accuracy binary         0.991
+#> 2 kap      binary         0.981
 ```
 
 ``` r
@@ -379,7 +379,7 @@ best_nn
 # A tibble: 1 × 4
   hidden_neurons activations output_activation .config         
   <list>         <list>      <chr>             <chr>           
-1 <int [2]>      <chr [2]>   linear            pre0_mod01_post0
+1 <int [2]>      <chr [2]>   sigmoid           pre0_mod03_post0
 ```
 
 ``` r
@@ -412,7 +412,7 @@ Model: mlp_kindling()
 -----------------------------------------------------------------------
   NN Model Type           :             FFNN    n_predictors :      4
   Number of Epochs        :              100    n_response   :      3
-  Hidden Layer Units      :         109, 111    reg.         :   None
+  Hidden Layer Units      :           41, 94    reg.         :   None
   Number of Hidden Layers :                2    Device       :    cpu
   Pred. Type              :   classification                 :       
 -----------------------------------------------------------------------
@@ -422,11 +422,11 @@ Model: mlp_kindling()
 -- Activation function ---------------------------------------------------------
 ```
 
-    --------------------------------
-      1st Layer {109}   :      elu
-      2nd Layer {111}   :     relu
-      Output Activation :   linear
-    --------------------------------
+    ---------------------------------
+      1st Layer {41}    :       elu
+      2nd Layer {94}    :      relu
+      Output Activation :   sigmoid
+    ---------------------------------
 
 ``` r
 
@@ -439,8 +439,8 @@ final_nn_model |>
 # A tibble: 2 × 3
   .metric  .estimator .estimate
   <chr>    <chr>          <dbl>
-1 accuracy multiclass     0.987
-2 kap      multiclass     0.98 
+1 accuracy multiclass     0.667
+2 kap      multiclass     0.5  
 ```
 
 Resampling strategies from [rsample](https://rsample.tidymodels.org)
@@ -461,10 +461,10 @@ networks. Two primary algorithms are available:
 
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1 Petal.Length       y 30.17285
-    #> 2 Sepal.Length       y 24.96289
-    #> 3  Sepal.Width       y 23.42503
-    #> 4  Petal.Width       y 21.43923
+    #> 1  Petal.Width       y 30.55608
+    #> 2  Sepal.Width       y 26.29143
+    #> 3 Petal.Length       y 21.70248
+    #> 4 Sepal.Length       y 21.45001
     ```
 
 2.  Olden’s Algorithm
@@ -472,11 +472,11 @@ networks. Two primary algorithms are available:
     ``` r
 
     olden(model, bar_plot = FALSE)
-    #>        x_names y_names    rel_imp
-    #> 1 Petal.Length       y  0.2744544
-    #> 2  Sepal.Width       y -0.1997801
-    #> 3 Sepal.Length       y  0.1690399
-    #> 4  Petal.Width       y  0.1288540
+    #>        x_names y_names     rel_imp
+    #> 1  Petal.Width       y  0.40620665
+    #> 2 Petal.Length       y  0.31516329
+    #> 3  Sepal.Width       y -0.22601396
+    #> 4 Sepal.Length       y -0.02890521
     ```
 
 ### Integration with {vip}
