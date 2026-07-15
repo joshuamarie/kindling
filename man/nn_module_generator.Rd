@@ -202,7 +202,6 @@ This function serves as the foundation for specialized generators like \code{ffn
 and \code{rnn_generator()}, but can be used directly to create custom architectures.
 }
 \examples{
-\dontrun{
 \donttest{
 if (torch::torch_is_installed()) {
     # Basic usage with formula interface
@@ -212,7 +211,7 @@ if (torch::torch_is_installed()) {
         layer_arg_fn = ~ if (.is_output) {
             list(.in, .out)
         } else {
-            list(input_size = .in, hidden_size = .out, 
+            list(input_size = .in, hidden_size = .out,
                  num_layers = 1L, batch_first = TRUE)
         },
         forward_extract = ~ .[[1]],
@@ -222,7 +221,7 @@ if (torch::torch_is_installed()) {
         no_y = 5,
         activations = "relu"
     )
-    
+
     # LSTM with cleaner syntax
     nn_module_generator(
         nn_name = "MyLSTM",
@@ -238,7 +237,7 @@ if (torch::torch_is_installed()) {
         no_x = 10,
         no_y = 2
     )
-    
+
     # CNN with global average pooling
     nn_module_generator(
         nn_name = "SimpleCNN",
@@ -255,7 +254,7 @@ if (torch::torch_is_installed()) {
         no_y = 10,
         activations = "relu"
     )
-    
+
     # CNN with after_output_transform (pooling applied AFTER output layer)
     nn_module_generator(
         nn_name = "CNN1DClassifier",
@@ -268,7 +267,7 @@ if (torch::torch_is_installed()) {
                 out_channels = .out,
                 kernel_size = 3L,
                 stride = 1L,
-                padding = 1L 
+                padding = 1L
             )
         },
         after_output_transform = ~ .$mean(dim = 2),
@@ -278,10 +277,9 @@ if (torch::torch_is_installed()) {
         no_y = 10,
         activations = "relu"
     )
-    
+
 } else {
   message("torch not installed - skipping examples")
-}
 }
 }
 
