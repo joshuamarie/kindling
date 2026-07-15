@@ -36,7 +36,6 @@ Imports:
     stats,
     NeuralNetTools,
     ggplot2,
-    tune,
     dials,
     hardhat,
     lifecycle, 
@@ -48,6 +47,7 @@ Suggests:
     vip,
     recipes,
     workflows,
+    tune,
     rsample,
     yardstick,
     mlbench,
@@ -59,6 +59,7 @@ Suggests:
     sfd,
     covr,
     fansi
+SystemRequirements: LibTorch (>= 1.13, via torch::install_torch())
 Additional_repositories: https://cran.r-universe.dev
 Remotes: cran/vip@0.4.6
 Config/testthat/edition: 3

@@ -792,11 +792,13 @@ train_nn_impl =
 
             # ---- Verbose ----
             if (verbose && (epoch %% max(1L, epochs %/% 10L) == 0L || epoch == epochs)) {
-                msg = glue::glue(
-                    "Epoch {epoch}/{epochs} - Loss: {round(loss_history[epoch], 4)}"
-                )
+                # msg = glue::glue(
+                #     "Epoch {epoch}/{epochs} - Loss: {round(loss_history[epoch], 4)}"
+                # )
+                msg = sprintf("Epoch %d/%d - Loss: %.4f", epoch, epochs, round(loss_history[epoch], 4))
                 if (!is.null(val_loss_history))
-                    msg = glue::glue("{msg} - Val Loss: {round(val_loss_history[epoch], 4)}")
+                    # msg = glue::glue("{msg} - Val Loss: {round(val_loss_history[epoch], 4)}")
+                    sprintf("Epoch {epoch}/{epochs} - Loss: {round(loss_history[epoch], 4)}")
 
                 message(msg)
             }
