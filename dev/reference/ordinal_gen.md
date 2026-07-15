@@ -22,10 +22,9 @@ Returns a string vector with ordinal suffixes.
 
     kindling:::ordinal_gen(1:10)
 
-Note: This is not exported into public namespace. So please, refer to
-`numform::f_ordinal()` instead.
-
 ## References
 
 Rinker, T. W. (2021). numform: A publication style number and plot
 formatter version 0.7.0. <https://github.com/trinker/numform>
+
+## Examples

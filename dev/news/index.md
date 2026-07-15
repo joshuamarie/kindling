@@ -8,6 +8,22 @@
 
   - NN architecture plot
 
+### Fixes
+
+- Lifting external package deps from all
+  [tidymodels](https://tidymodels.tidymodels.org) interface, including
+  the dependency to [tidyr](https://tidyr.tidyverse.org) and
+  [dplyr](https://dplyr.tidyverse.org).
+
+  - Functions relying on this packages is checked via
+    [`rlang::check_installed()`](https://rlang.r-lib.org/reference/is_installed.html).
+
+- Rewriting
+  [`glue::glue()`](https://glue.tidyverse.org/reference/glue.html)
+  dependency to [`paste0()`](https://rdrr.io/r/base/paste.html) /
+  [`sprintf()`](https://rdrr.io/r/base/sprintf.html) for string
+  interpolation.
+
 ## kindling 0.3.2
 
 CRAN release: 2026-07-10

@@ -283,3 +283,107 @@ If `eval = TRUE`: An instantiated `nn_module` class constructor that can
 be called directly to create model instances (e.g., `result()`).
 
 ## Examples
+
+``` r
+# \donttest{
+if (torch::torch_is_installed()) {
+    # Basic usage with formula interface
+    nn_module_generator(
+        nn_name = "MyGRU",
+        nn_layer = "nn_gru",
+        layer_arg_fn = ~ if (.is_output) {
+            list(.in, .out)
+        } else {
+            list(input_size = .in, hidden_size = .out,
+                 num_layers = 1L, batch_first = TRUE)
+        },
+        forward_extract = ~ .[[1]],
+        before_output_transform = ~ .[, .$size(2), ],
+        hd_neurons = c(128, 64, 32),
+        no_x = 20,
+        no_y = 5,
+        activations = "relu"
+    )
+
+    # LSTM with cleaner syntax
+    nn_module_generator(
+        nn_name = "MyLSTM",
+        nn_layer = "nn_lstm",
+        layer_arg_fn = ~ list(
+            input_size = .in,
+            hidden_size = .out,
+            batch_first = TRUE
+        ),
+        forward_extract = ~ .[[1]],
+        before_output_transform = ~ .[, .$size(2), ],
+        hd_neurons = c(64, 32),
+        no_x = 10,
+        no_y = 2
+    )
+
+    # CNN with global average pooling
+    nn_module_generator(
+        nn_name = "SimpleCNN",
+        nn_layer = "nn_conv1d",
+        layer_arg_fn = ~ list(
+            in_channels = .in,
+            out_channels = .out,
+            kernel_size = 3L,
+            padding = 1L
+        ),
+        before_output_transform = ~ .$mean(dim = 2),
+        hd_neurons = c(16, 32, 64),
+        no_x = 1,
+        no_y = 10,
+        activations = "relu"
+    )
+
+    # CNN with after_output_transform (pooling applied AFTER output layer)
+    nn_module_generator(
+        nn_name = "CNN1DClassifier",
+        nn_layer = "nn_conv1d",
+        layer_arg_fn = ~ if (.is_output) {
+            list(.in, .out)
+        } else {
+            list(
+                in_channels = .in,
+                out_channels = .out,
+                kernel_size = 3L,
+                stride = 1L,
+                padding = 1L
+            )
+        },
+        after_output_transform = ~ .$mean(dim = 2),
+        last_layer_args = list(kernel_size = 1, stride = 2),
+        hd_neurons = c(16, 32, 64),
+        no_x = 1,
+        no_y = 10,
+        activations = "relu"
+    )
+
+} else {
+  message("torch not installed - skipping examples")
+}
+#> <quosure>
+#> expr: ^torch::nn_module("CNN1DClassifier", initialize = <function() {
+#>           self$conv1d_1 = nn_conv1d(in_channels = 1, out_channels = 16,
+#>             kernel_size = 3L, stride = 1L, padding = 1L)
+#>           self$conv1d_2 = nn_conv1d(in_channels = 16, out_channels = 32,
+#>             kernel_size = 3L, stride = 1L, padding = 1L)
+#>           self$conv1d_3 = nn_conv1d(in_channels = 32, out_channels = 64,
+#>             kernel_size = 3L, stride = 1L, padding = 1L)
+#>           self$out = nn_conv1d(64, 10, kernel_size = 1, stride = 2)
+#>         }>, forward = <function(x) {
+#>           x = self$conv1d_1(x)
+#>           x = torch::nnf_relu(x)
+#>           x = self$conv1d_2(x)
+#>           x = torch::nnf_relu(x)
+#>           x = self$conv1d_3(x)
+#>           x = torch::nnf_relu(x)
+#>           x = self$out(x)
+#>           x = x$mean(dim = 2)
+#>           x
+#>         }>)
+#> env:  0x55b98ca731d8
+# }
+```

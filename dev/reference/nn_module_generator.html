@@ -263,7 +263,109 @@ directly to create model instances (e.g., <code>result()</code>).</p>
 
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
-
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># \donttest{</span></span></span>
+<span class="r-in"><span><span class="kw">if</span> <span class="op">(</span><span class="fu">torch</span><span class="fu">::</span><span class="fu"><a href="https://torch.mlverse.org/docs/reference/torch_is_installed.html" class="external-link">torch_is_installed</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>    <span class="co"># Basic usage with formula interface</span></span></span>
+<span class="r-in"><span>    <span class="fu">nn_module_generator</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        nn_name <span class="op">=</span> <span class="st">"MyGRU"</span>,</span></span>
+<span class="r-in"><span>        nn_layer <span class="op">=</span> <span class="st">"nn_gru"</span>,</span></span>
+<span class="r-in"><span>        layer_arg_fn <span class="op">=</span> <span class="op">~</span> <span class="kw">if</span> <span class="op">(</span><span class="va">.is_output</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>            <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">.in</span>, <span class="va">.out</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>            <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>input_size <span class="op">=</span> <span class="va">.in</span>, hidden_size <span class="op">=</span> <span class="va">.out</span>,</span></span>
+<span class="r-in"><span>                 num_layers <span class="op">=</span> <span class="fl">1L</span>, batch_first <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="op">}</span>,</span></span>
+<span class="r-in"><span>        forward_extract <span class="op">=</span> <span class="op">~</span> <span class="va">.</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>        before_output_transform <span class="op">=</span> <span class="op">~</span> <span class="va">.</span><span class="op">[</span>, <span class="va">.</span><span class="op">$</span><span class="fu">size</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>, <span class="op">]</span>,</span></span>
+<span class="r-in"><span>        hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">128</span>, <span class="fl">64</span>, <span class="fl">32</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        no_x <span class="op">=</span> <span class="fl">20</span>,</span></span>
+<span class="r-in"><span>        no_y <span class="op">=</span> <span class="fl">5</span>,</span></span>
+<span class="r-in"><span>        activations <span class="op">=</span> <span class="st">"relu"</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="co"># LSTM with cleaner syntax</span></span></span>
+<span class="r-in"><span>    <span class="fu">nn_module_generator</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        nn_name <span class="op">=</span> <span class="st">"MyLSTM"</span>,</span></span>
+<span class="r-in"><span>        nn_layer <span class="op">=</span> <span class="st">"nn_lstm"</span>,</span></span>
+<span class="r-in"><span>        layer_arg_fn <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>            input_size <span class="op">=</span> <span class="va">.in</span>,</span></span>
+<span class="r-in"><span>            hidden_size <span class="op">=</span> <span class="va">.out</span>,</span></span>
+<span class="r-in"><span>            batch_first <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span>,</span></span>
+<span class="r-in"><span>        forward_extract <span class="op">=</span> <span class="op">~</span> <span class="va">.</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>        before_output_transform <span class="op">=</span> <span class="op">~</span> <span class="va">.</span><span class="op">[</span>, <span class="va">.</span><span class="op">$</span><span class="fu">size</span><span class="op">(</span><span class="fl">2</span><span class="op">)</span>, <span class="op">]</span>,</span></span>
+<span class="r-in"><span>        hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">64</span>, <span class="fl">32</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        no_x <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>        no_y <span class="op">=</span> <span class="fl">2</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="co"># CNN with global average pooling</span></span></span>
+<span class="r-in"><span>    <span class="fu">nn_module_generator</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        nn_name <span class="op">=</span> <span class="st">"SimpleCNN"</span>,</span></span>
+<span class="r-in"><span>        nn_layer <span class="op">=</span> <span class="st">"nn_conv1d"</span>,</span></span>
+<span class="r-in"><span>        layer_arg_fn <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>            in_channels <span class="op">=</span> <span class="va">.in</span>,</span></span>
+<span class="r-in"><span>            out_channels <span class="op">=</span> <span class="va">.out</span>,</span></span>
+<span class="r-in"><span>            kernel_size <span class="op">=</span> <span class="fl">3L</span>,</span></span>
+<span class="r-in"><span>            padding <span class="op">=</span> <span class="fl">1L</span></span></span>
+<span class="r-in"><span>        <span class="op">)</span>,</span></span>
+<span class="r-in"><span>        before_output_transform <span class="op">=</span> <span class="op">~</span> <span class="va">.</span><span class="op">$</span><span class="fu">mean</span><span class="op">(</span>dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">16</span>, <span class="fl">32</span>, <span class="fl">64</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        no_x <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>        no_y <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>        activations <span class="op">=</span> <span class="st">"relu"</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="co"># CNN with after_output_transform (pooling applied AFTER output layer)</span></span></span>
+<span class="r-in"><span>    <span class="fu">nn_module_generator</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        nn_name <span class="op">=</span> <span class="st">"CNN1DClassifier"</span>,</span></span>
+<span class="r-in"><span>        nn_layer <span class="op">=</span> <span class="st">"nn_conv1d"</span>,</span></span>
+<span class="r-in"><span>        layer_arg_fn <span class="op">=</span> <span class="op">~</span> <span class="kw">if</span> <span class="op">(</span><span class="va">.is_output</span><span class="op">)</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>            <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="va">.in</span>, <span class="va">.out</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>            <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>                in_channels <span class="op">=</span> <span class="va">.in</span>,</span></span>
+<span class="r-in"><span>                out_channels <span class="op">=</span> <span class="va">.out</span>,</span></span>
+<span class="r-in"><span>                kernel_size <span class="op">=</span> <span class="fl">3L</span>,</span></span>
+<span class="r-in"><span>                stride <span class="op">=</span> <span class="fl">1L</span>,</span></span>
+<span class="r-in"><span>                padding <span class="op">=</span> <span class="fl">1L</span></span></span>
+<span class="r-in"><span>            <span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="op">}</span>,</span></span>
+<span class="r-in"><span>        after_output_transform <span class="op">=</span> <span class="op">~</span> <span class="va">.</span><span class="op">$</span><span class="fu">mean</span><span class="op">(</span>dim <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        last_layer_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>kernel_size <span class="op">=</span> <span class="fl">1</span>, stride <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        hd_neurons <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">16</span>, <span class="fl">32</span>, <span class="fl">64</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>        no_x <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>        no_y <span class="op">=</span> <span class="fl">10</span>,</span></span>
+<span class="r-in"><span>        activations <span class="op">=</span> <span class="st">"relu"</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span></span>
+<span class="r-in"><span>  <span class="fu"><a href="https://rdrr.io/r/base/message.html" class="external-link">message</a></span><span class="op">(</span><span class="st">"torch not installed - skipping examples"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">}</span></span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="font-weight: bold;">&lt;quosure&gt;</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> expr: <span style="color: #0000BB;">^torch::nn_module("CNN1DClassifier", initialize = &lt;function() {</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">          self$conv1d_1 = nn_conv1d(in_channels = 1, out_channels = 16,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">            kernel_size = 3L, stride = 1L, padding = 1L)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">          self$conv1d_2 = nn_conv1d(in_channels = 16, out_channels = 32,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">            kernel_size = 3L, stride = 1L, padding = 1L)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">          self$conv1d_3 = nn_conv1d(in_channels = 32, out_channels = 64,</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">            kernel_size = 3L, stride = 1L, padding = 1L)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">          self$out = nn_conv1d(64, 10, kernel_size = 1, stride = 2)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">        }&gt;, forward = &lt;function(x) {</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">          x = self$conv1d_1(x)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">          x = torch::nnf_relu(x)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">          x = self$conv1d_2(x)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">          x = torch::nnf_relu(x)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">          x = self$conv1d_3(x)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">          x = torch::nnf_relu(x)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">          x = self$out(x)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">          x = x$mean(dim = 2)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">          x</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> <span style="color: #0000BB;">        }&gt;)</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> env:  <span style="color: #0000BB;">0x55b98ca731d8</span></span>
+<span class="r-in"><span><span class="co"># }</span></span></span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
