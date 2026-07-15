@@ -25,8 +25,8 @@ This function is originally from \code{numform::f_ordinal()}.
 \examples{
 ordinal_gen(1:10)
 
-Note: This is not exported into public namespace.
-So please, refer to `numform::f_ordinal()` instead.
+# Note: this function is not exported into the public namespace.
+# Refer to `numform::f_ordinal()` instead.
 
 }
 \references{

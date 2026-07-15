@@ -43,8 +43,8 @@ concat = function(x) {
 #' @examples
 #' ordinal_gen(1:10)
 #'
-#' Note: This is not exported into public namespace.
-#' So please, refer to `numform::f_ordinal()` instead.
+#' # Note: this function is not exported into the public namespace.
+#' # Refer to `numform::f_ordinal()` instead.
 #'
 #' @rdname ordinal_gen
 ordinal_gen = function(x) {
