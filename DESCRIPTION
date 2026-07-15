@@ -57,7 +57,8 @@ Suggests:
     lhs,
     sfd,
     covr,
-    fansi
+    fansi,
+    withr
 SystemRequirements: LibTorch (>= 1.13, via torch::install_torch())
 Additional_repositories: https://cran.r-universe.dev
 Remotes: cran/vip@0.4.6
