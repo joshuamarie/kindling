@@ -28,6 +28,8 @@
     -  Element names are now resolved once, up front, and iterated alongside each element 
     via `purrr::pmap()` instead of relying on `imap()`'s name-or-index behavior.
 
+-  Wrap `!requireNamespace(pkg, quietly = TRUE)` as this causes hidden bugs to `has_namespace()`
+
 # kindling 0.3.2
 
 ## Bug fixes
