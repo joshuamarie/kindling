@@ -7,9 +7,9 @@
 #' @keywords internal
 make_kindling = function() {
     rlang::check_installed(
-        "parsnip",
-        reason = "Required by `{kindling}` to register the models into `{parsnip}`",
-        version = "1.0.0"
+        c("parsnip", "dials", "tune"),
+        reason = "Required by `{kindling}` to register the models",
+        version = c("1.0.0", NA, NA)
     )
 
     model_env = parsnip::get_model_env()
