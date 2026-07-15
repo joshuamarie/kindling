@@ -248,7 +248,8 @@ update.train_nnsnip =
     }
 
 
-#' @export
+#' @exportS3Method NULL
+#' @rawNamespace S3method(parsnip::translate, train_nnsnip)
 translate.train_nnsnip = function(x, engine = x$engine, ...) {
     if (is.null(engine)) {
         cli::cli_abort("Please set an engine with `set_engine()`.")
@@ -259,7 +260,8 @@ translate.train_nnsnip = function(x, engine = x$engine, ...) {
 }
 
 
-#' @export
+#' @exportS3Method NULL
+#' @rawNamespace S3method(tune::tunable, train_nnsnip)
 tunable.train_nnsnip = function(x, ...) {
     tibble::tibble(
         name = c(

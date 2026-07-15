@@ -199,7 +199,8 @@ update.rnn_kindling =
         )
     }
 
-#' @export
+#' @exportS3Method NULL
+#' @rawNamespace S3method(parsnip::translate, rnn_kindling)
 translate.rnn_kindling = function(x, engine = x$engine, ...) {
     if (is.null(engine)) {
         cli::cli_abort("Please set an engine with `set_engine()`.")
@@ -209,7 +210,8 @@ translate.rnn_kindling = function(x, engine = x$engine, ...) {
     x
 }
 
-#' @export
+#' @exportS3Method NULL
+#' @rawNamespace S3method(tune::tunable, rnn_kindling)
 tunable.rnn_kindling = function(x, ...) {
     tibble::tibble(
         name = c(
