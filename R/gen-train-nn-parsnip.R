@@ -113,7 +113,7 @@
 #' }
 #'
 #' @export
-train_nnsnip = 
+train_nnsnip =
     function(
         mode = "unknown",
         engine = "kindling",
@@ -139,50 +139,50 @@ train_nnsnip =
         verbose = NULL,
         cache_weights = NULL
     )
-{
-    
-    if (!requireNamespace("parsnip", quietly = TRUE)) {
-        cli::cli_abort("Package {.pkg parsnip} is required but not installed.")
+    {
+
+        if (!requireNamespace("parsnip", quietly = TRUE)) {
+            cli::cli_abort("Package {.pkg parsnip} is required but not installed.")
+        }
+
+        # ---- "Tunable" args ----
+        args = list(
+            hidden_neurons = rlang::enquo(hidden_neurons),
+            activations = rlang::enquo(activations),
+            output_activation = rlang::enquo(output_activation),
+            bias = rlang::enquo(bias),
+            epochs = rlang::enquo(epochs),
+            batch_size = rlang::enquo(batch_size),
+            penalty = rlang::enquo(penalty),
+            mixture = rlang::enquo(mixture),
+            learn_rate = rlang::enquo(learn_rate),
+            optimizer = rlang::enquo(optimizer),
+            validation_split = rlang::enquo(validation_split)
+        )
+
+        # ---- "Non-tunable" engine args ----
+        eng_args = list(
+            optimizer_args = rlang::enquo(optimizer_args),
+            loss = rlang::enquo(loss),
+            architecture = rlang::enquo(architecture),
+            flatten_input = rlang::enquo(flatten_input),
+            early_stopping = rlang::enquo(early_stopping),
+            device = rlang::enquo(device),
+            verbose = rlang::enquo(verbose),
+            cache_weights = rlang::enquo(cache_weights)
+        )
+
+        parsnip::new_model_spec(
+            "train_nnsnip",
+            args = args,
+            eng_args = eng_args,
+            mode = mode,
+            user_specified_mode = !missing(mode),
+            method = NULL,
+            engine = engine,
+            user_specified_engine = !missing(engine)
+        )
     }
-    
-    # ---- "Tunable" args ----
-    args = list(
-        hidden_neurons = rlang::enquo(hidden_neurons),
-        activations = rlang::enquo(activations),
-        output_activation = rlang::enquo(output_activation),
-        bias = rlang::enquo(bias),
-        epochs = rlang::enquo(epochs),
-        batch_size = rlang::enquo(batch_size),
-        penalty = rlang::enquo(penalty),
-        mixture = rlang::enquo(mixture),
-        learn_rate = rlang::enquo(learn_rate),
-        optimizer = rlang::enquo(optimizer),
-        validation_split = rlang::enquo(validation_split)
-    )
-    
-    # ---- "Non-tunable" engine args ----
-    eng_args = list(
-        optimizer_args = rlang::enquo(optimizer_args),
-        loss = rlang::enquo(loss),
-        architecture = rlang::enquo(architecture),
-        flatten_input = rlang::enquo(flatten_input),
-        early_stopping = rlang::enquo(early_stopping),
-        device = rlang::enquo(device),
-        verbose = rlang::enquo(verbose),
-        cache_weights = rlang::enquo(cache_weights)
-    )
-    
-    parsnip::new_model_spec(
-        "train_nnsnip",
-        args = args,
-        eng_args = eng_args,
-        mode = mode,
-        user_specified_mode = !missing(mode),
-        method = NULL,
-        engine = engine,
-        user_specified_engine = !missing(engine)
-    )
-}
 
 
 #' @export
@@ -195,7 +195,7 @@ print.train_nnsnip = function(x, ...) {
 
 #' @export
 #' @importFrom stats update
-update.train_nnsnip = 
+update.train_nnsnip =
     function(
         object,
         parameters = NULL,
@@ -217,51 +217,49 @@ update.train_nnsnip =
         fresh = FALSE,
         ...
     )
-{
-    
-    args = list(
-        hidden_neurons = rlang::enquo(hidden_neurons),
-        activations = rlang::enquo(activations),
-        output_activation = rlang::enquo(output_activation),
-        bias = rlang::enquo(bias),
-        epochs = rlang::enquo(epochs),
-        batch_size = rlang::enquo(batch_size),
-        penalty = rlang::enquo(penalty),
-        mixture = rlang::enquo(mixture),
-        learn_rate = rlang::enquo(learn_rate),
-        optimizer = rlang::enquo(optimizer),
-        optimizer_args = rlang::enquo(optimizer_args),
-        loss = rlang::enquo(loss),
-        validation_split = rlang::enquo(validation_split),
-        device = rlang::enquo(device),
-        verbose = rlang::enquo(verbose)
-    )
-    
-    parsnip::update_spec(
-        object = object,
-        parameters = parameters,
-        args_enquo_list = args,
-        fresh = fresh,
-        cls = "train_nnsnip",
-        ...
-    )
-}
+    {
+
+        args = list(
+            hidden_neurons = rlang::enquo(hidden_neurons),
+            activations = rlang::enquo(activations),
+            output_activation = rlang::enquo(output_activation),
+            bias = rlang::enquo(bias),
+            epochs = rlang::enquo(epochs),
+            batch_size = rlang::enquo(batch_size),
+            penalty = rlang::enquo(penalty),
+            mixture = rlang::enquo(mixture),
+            learn_rate = rlang::enquo(learn_rate),
+            optimizer = rlang::enquo(optimizer),
+            optimizer_args = rlang::enquo(optimizer_args),
+            loss = rlang::enquo(loss),
+            validation_split = rlang::enquo(validation_split),
+            device = rlang::enquo(device),
+            verbose = rlang::enquo(verbose)
+        )
+
+        parsnip::update_spec(
+            object = object,
+            parameters = parameters,
+            args_enquo_list = args,
+            fresh = fresh,
+            cls = "train_nnsnip",
+            ...
+        )
+    }
 
 
 #' @export
-#' @importFrom parsnip translate
 translate.train_nnsnip = function(x, engine = x$engine, ...) {
     if (is.null(engine)) {
         cli::cli_abort("Please set an engine with `set_engine()`.")
     }
-    
+
     x = parsnip::translate.default(x, engine, ...)
     x
 }
 
 
 #' @export
-#' @importFrom tune tunable
 tunable.train_nnsnip = function(x, ...) {
     tibble::tibble(
         name = c(
@@ -312,7 +310,7 @@ tunable.train_nnsnip = function(x, ...) {
 train_nn_wrapper = function(formula, data, ...) {
     dots = list(...)
     dots = prepare_kindling_args(dots)
-    
+
     do.call(
         train_nn,
         c(list(x = formula, data = data), dots)

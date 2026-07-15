@@ -106,7 +106,7 @@
 #' }
 #'
 #' @export
-mlp_kindling = 
+mlp_kindling =
     function(
         mode = "unknown",
         engine = "kindling",
@@ -132,50 +132,50 @@ mlp_kindling =
         verbose = NULL,
         cache_weights = NULL
     )
-{
-    
-    if (!requireNamespace("parsnip", quietly = TRUE)) {
-        cli::cli_abort("Package {.pkg parsnip} is required but not installed.")
+    {
+
+        if (!requireNamespace("parsnip", quietly = TRUE)) {
+            cli::cli_abort("Package {.pkg parsnip} is required but not installed.")
+        }
+
+        # ---- "Tunable" args ----
+        args = list(
+            hidden_neurons = rlang::enquo(hidden_neurons),
+            activations = rlang::enquo(activations),
+            output_activation = rlang::enquo(output_activation),
+            bias = rlang::enquo(bias),
+            epochs = rlang::enquo(epochs),
+            batch_size = rlang::enquo(batch_size),
+            penalty = rlang::enquo(penalty),
+            mixture = rlang::enquo(mixture),
+            learn_rate = rlang::enquo(learn_rate),
+            optimizer = rlang::enquo(optimizer),
+            validation_split = rlang::enquo(validation_split)
+        )
+
+        # ---- "Non-tunable" engine args ----
+        eng_args = list(
+            optimizer_args = rlang::enquo(optimizer_args),
+            loss = rlang::enquo(loss),
+            architecture = rlang::enquo(architecture),
+            flatten_input = rlang::enquo(flatten_input),
+            early_stopping = rlang::enquo(early_stopping),
+            device = rlang::enquo(device),
+            verbose = rlang::enquo(verbose),
+            cache_weights = rlang::enquo(cache_weights)
+        )
+
+        parsnip::new_model_spec(
+            "mlp_kindling",
+            args = args,
+            eng_args = eng_args,
+            mode = mode,
+            user_specified_mode = !missing(mode),
+            method = NULL,
+            engine = engine,
+            user_specified_engine = !missing(engine)
+        )
     }
-    
-    # ---- "Tunable" args ----
-    args = list(
-        hidden_neurons = rlang::enquo(hidden_neurons),
-        activations = rlang::enquo(activations),
-        output_activation = rlang::enquo(output_activation),
-        bias = rlang::enquo(bias),
-        epochs = rlang::enquo(epochs),
-        batch_size = rlang::enquo(batch_size),
-        penalty = rlang::enquo(penalty),
-        mixture = rlang::enquo(mixture),
-        learn_rate = rlang::enquo(learn_rate),
-        optimizer = rlang::enquo(optimizer),
-        validation_split = rlang::enquo(validation_split)
-    )
-    
-    # ---- "Non-tunable" engine args ----
-    eng_args = list(
-        optimizer_args = rlang::enquo(optimizer_args),
-        loss = rlang::enquo(loss),
-        architecture = rlang::enquo(architecture),
-        flatten_input = rlang::enquo(flatten_input),
-        early_stopping = rlang::enquo(early_stopping),
-        device = rlang::enquo(device),
-        verbose = rlang::enquo(verbose),
-        cache_weights = rlang::enquo(cache_weights)
-    )
-    
-    parsnip::new_model_spec(
-        "mlp_kindling",
-        args = args,
-        eng_args = eng_args,
-        mode = mode,
-        user_specified_mode = !missing(mode),
-        method = NULL,
-        engine = engine,
-        user_specified_engine = !missing(engine)
-    )
-}
 
 
 #' @export
@@ -188,7 +188,7 @@ print.mlp_kindling = function(x, ...) {
 
 #' @export
 #' @importFrom stats update
-update.mlp_kindling = 
+update.mlp_kindling =
     function(
         object,
         parameters = NULL,
@@ -214,35 +214,34 @@ update.mlp_kindling =
         fresh = FALSE,
         ...
     )
-{
-    
-    args = list(
-        hidden_neurons = rlang::enquo(hidden_neurons),
-        activations = rlang::enquo(activations),
-        output_activation = rlang::enquo(output_activation),
-        bias = rlang::enquo(bias),
-        epochs = rlang::enquo(epochs),
-        batch_size = rlang::enquo(batch_size),
-        penalty = rlang::enquo(penalty),
-        mixture = rlang::enquo(mixture),
-        learn_rate = rlang::enquo(learn_rate),
-        optimizer = rlang::enquo(optimizer),
-        validation_split = rlang::enquo(validation_split)
-    )
-    
-    parsnip::update_spec(
-        object = object,
-        parameters = parameters,
-        args_enquo_list = args,
-        fresh = fresh,
-        cls = "mlp_kindling",
-        ...
-    )
-}
+    {
+
+        args = list(
+            hidden_neurons = rlang::enquo(hidden_neurons),
+            activations = rlang::enquo(activations),
+            output_activation = rlang::enquo(output_activation),
+            bias = rlang::enquo(bias),
+            epochs = rlang::enquo(epochs),
+            batch_size = rlang::enquo(batch_size),
+            penalty = rlang::enquo(penalty),
+            mixture = rlang::enquo(mixture),
+            learn_rate = rlang::enquo(learn_rate),
+            optimizer = rlang::enquo(optimizer),
+            validation_split = rlang::enquo(validation_split)
+        )
+
+        parsnip::update_spec(
+            object = object,
+            parameters = parameters,
+            args_enquo_list = args,
+            fresh = fresh,
+            cls = "mlp_kindling",
+            ...
+        )
+    }
 
 
 #' @export
-#' @importFrom parsnip translate
 translate.mlp_kindling = function(x, engine = x$engine, ...) {
     if (is.null(engine)) {
         cli::cli_abort("Please set an engine with `set_engine()`.")
@@ -253,7 +252,6 @@ translate.mlp_kindling = function(x, engine = x$engine, ...) {
 
 
 #' @export
-#' @importFrom tune tunable
 tunable.mlp_kindling = function(x, ...) {
     tibble::tibble(
         name = c(
@@ -291,22 +289,22 @@ tunable.mlp_kindling = function(x, ...) {
 #' * `rnn_wrapper()` returns an object of class `"rnn_fit"` containing the trained recurrent neural network model and metadata. See [rnn()] for details.
 #'
 #' @details
-#' These wrapper functions are designed to interface with the `{tidymodels}` 
+#' These wrapper functions are designed to interface with the `{tidymodels}`
 #' ecosystem, particularly for use with [tune::tune_grid()] and workflows.
-#' They handle the conversion of tuning parameters (especially list-column 
+#' They handle the conversion of tuning parameters (especially list-column
 #' parameters from [grid_depth()]) into the format expected by [ffnn()] and [rnn()].
-#' 
+#'
 #' @rdname kindling-nn-wrappers
 #' @section FFNN (MLP) Wrapper for `{tidymodels}` interface:
 #' This is a function to interface into `{tidymodels}`
 #' (do not use this, use `kindling::ffnn()` instead).
-#' 
+#'
 #' @keywords internal
 #' @export
 ffnn_wrapper = function(formula, data, ...) {
     dots = list(...)
     dots = prepare_kindling_args(dots)
-    
+
     do.call(
         ffnn,
         c(list(formula = formula, data = data), dots)

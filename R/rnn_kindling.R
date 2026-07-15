@@ -62,7 +62,7 @@
 #' }
 #'
 #' @export
-rnn_kindling = 
+rnn_kindling =
     function(
         mode = "unknown",
         engine = "kindling",
@@ -89,51 +89,51 @@ rnn_kindling =
         verbose = NULL,
         cache_weights = NULL
     )
-{
-    
-    if (!requireNamespace("parsnip", quietly = TRUE)) {
-        cli::cli_abort("Package {.pkg parsnip} is required but not installed.")
+    {
+
+        if (!requireNamespace("parsnip", quietly = TRUE)) {
+            cli::cli_abort("Package {.pkg parsnip} is required but not installed.")
+        }
+
+        # ---- "Tunable" args ----
+        args = list(
+            hidden_neurons = rlang::enquo(hidden_neurons),
+            activations = rlang::enquo(activations),
+            output_activation = rlang::enquo(output_activation),
+            bias = rlang::enquo(bias),
+            bidirectional = rlang::enquo(bidirectional),
+            dropout = rlang::enquo(dropout),
+            epochs = rlang::enquo(epochs),
+            batch_size = rlang::enquo(batch_size),
+            penalty = rlang::enquo(penalty),
+            mixture = rlang::enquo(mixture),
+            learn_rate = rlang::enquo(learn_rate),
+            optimizer = rlang::enquo(optimizer),
+            validation_split = rlang::enquo(validation_split)
+        )
+
+        # ---- "Non-tunable" engine args ----
+        eng_args = list(
+            rnn_type = rlang::enquo(rnn_type),
+            optimizer_args = rlang::enquo(optimizer_args),
+            loss = rlang::enquo(loss),
+            early_stopping = rlang::enquo(early_stopping),
+            device = rlang::enquo(device),
+            verbose = rlang::enquo(verbose),
+            cache_weights = rlang::enquo(cache_weights)
+        )
+
+        parsnip::new_model_spec(
+            "rnn_kindling",
+            args = args,
+            eng_args = eng_args,
+            mode = mode,
+            user_specified_mode = !missing(mode),
+            method = NULL,
+            engine = engine,
+            user_specified_engine = !missing(engine)
+        )
     }
-    
-    # ---- "Tunable" args ----
-    args = list(
-        hidden_neurons = rlang::enquo(hidden_neurons),
-        activations = rlang::enquo(activations),
-        output_activation = rlang::enquo(output_activation),
-        bias = rlang::enquo(bias),
-        bidirectional = rlang::enquo(bidirectional),
-        dropout = rlang::enquo(dropout),
-        epochs = rlang::enquo(epochs),
-        batch_size = rlang::enquo(batch_size),
-        penalty = rlang::enquo(penalty),
-        mixture = rlang::enquo(mixture),
-        learn_rate = rlang::enquo(learn_rate),
-        optimizer = rlang::enquo(optimizer),
-        validation_split = rlang::enquo(validation_split)
-    )
-    
-    # ---- "Non-tunable" engine args ----
-    eng_args = list(
-        rnn_type = rlang::enquo(rnn_type),
-        optimizer_args = rlang::enquo(optimizer_args),
-        loss = rlang::enquo(loss),
-        early_stopping = rlang::enquo(early_stopping),
-        device = rlang::enquo(device),
-        verbose = rlang::enquo(verbose),
-        cache_weights = rlang::enquo(cache_weights)
-    )
-    
-    parsnip::new_model_spec(
-        "rnn_kindling",
-        args = args,
-        eng_args = eng_args,
-        mode = mode,
-        user_specified_mode = !missing(mode),
-        method = NULL,
-        engine = engine,
-        user_specified_engine = !missing(engine)
-    )
-}
 
 #' @export
 print.rnn_kindling = function(x, ...) {
@@ -144,7 +144,7 @@ print.rnn_kindling = function(x, ...) {
 
 #' @export
 #' @importFrom stats update
-update.rnn_kindling = 
+update.rnn_kindling =
     function(
         object,
         parameters = NULL,
@@ -171,47 +171,45 @@ update.rnn_kindling =
         fresh = FALSE,
         ...
     )
-{
-    
-    args = list(
-        hidden_neurons = rlang::enquo(hidden_neurons),
-        activations = rlang::enquo(activations),
-        output_activation = rlang::enquo(output_activation),
-        bias = rlang::enquo(bias),
-        bidirectional = rlang::enquo(bidirectional),
-        dropout = rlang::enquo(dropout),
-        epochs = rlang::enquo(epochs),
-        batch_size = rlang::enquo(batch_size),
-        penalty = rlang::enquo(penalty),
-        mixture = rlang::enquo(mixture),
-        learn_rate = rlang::enquo(learn_rate),
-        optimizer = rlang::enquo(optimizer),
-        validation_split = rlang::enquo(validation_split)
-    )
-    
-    parsnip::update_spec(
-        object = object,
-        parameters = parameters,
-        args_enquo_list = args,
-        fresh = fresh,
-        cls = "rnn_kindling",
-        ...
-    )
-}
+    {
+
+        args = list(
+            hidden_neurons = rlang::enquo(hidden_neurons),
+            activations = rlang::enquo(activations),
+            output_activation = rlang::enquo(output_activation),
+            bias = rlang::enquo(bias),
+            bidirectional = rlang::enquo(bidirectional),
+            dropout = rlang::enquo(dropout),
+            epochs = rlang::enquo(epochs),
+            batch_size = rlang::enquo(batch_size),
+            penalty = rlang::enquo(penalty),
+            mixture = rlang::enquo(mixture),
+            learn_rate = rlang::enquo(learn_rate),
+            optimizer = rlang::enquo(optimizer),
+            validation_split = rlang::enquo(validation_split)
+        )
+
+        parsnip::update_spec(
+            object = object,
+            parameters = parameters,
+            args_enquo_list = args,
+            fresh = fresh,
+            cls = "rnn_kindling",
+            ...
+        )
+    }
 
 #' @export
-#' @importFrom parsnip translate
 translate.rnn_kindling = function(x, engine = x$engine, ...) {
     if (is.null(engine)) {
         cli::cli_abort("Please set an engine with `set_engine()`.")
     }
-    
+
     x = parsnip::translate.default(x, engine, ...)
     x
 }
 
 #' @export
-#' @importFrom tune tunable
 tunable.rnn_kindling = function(x, ...) {
     tibble::tibble(
         name = c(
@@ -250,7 +248,7 @@ tunable.rnn_kindling = function(x, ...) {
 rnn_wrapper = function(formula, data, ...) {
     dots = list(...)
     dots = prepare_kindling_args(dots)
-    
+
     do.call(
         rnn,
         c(list(formula = formula, data = data), dots)
