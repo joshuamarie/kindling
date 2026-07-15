@@ -14,6 +14,20 @@
 
 -  Rewriting `glue::glue()` dependency to `paste0()` / `sprintf()` for string interpolation. 
 
+## Bug Fixes
+
+-   `activations` specified as a `list()` mixing named and unnamed elements
+    (the documented syntax, e.g. `list(relu, tanh, softmax = args(dim = 2L))`)
+    no longer crashes `parse_activation_spec()` with "missing value where
+    TRUE/FALSE needed". 
+    
+    -  The internal `purrr::imap()` call passed the element's *name* as the position 
+    argument whenever the list had any names at all, instead of its integer index, so 
+    looking up `names(activations)[i]` silently returned `NA`. 
+    
+    -  Element names are now resolved once, up front, and iterated alongside each element 
+    via `purrr::pmap()` instead of relying on `imap()`'s name-or-index behavior.
+
 # kindling 0.3.2
 
 ## Bug fixes
