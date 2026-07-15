@@ -13,7 +13,8 @@ concat = function(x) {
             sep = " = ",
             collapse = ", "
         )
-        glue::glue("{fname}({params})")
+        # glue::glue("{fname}({params})")
+        sprintf("%s(%s)", fname, params)
     } else {
         as.character(x)
     }
