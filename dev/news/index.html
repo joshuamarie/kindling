@@ -69,6 +69,14 @@
 </ul></li>
 <li><p>Rewriting <code><a href="https://glue.tidyverse.org/reference/glue.html" class="external-link">glue::glue()</a></code> dependency to <code><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0()</a></code> / <code><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf()</a></code> for string interpolation.</p></li>
 </ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>
+<p><code>activations</code> specified as a <code><a href="https://rdrr.io/r/base/list.html" class="external-link">list()</a></code> mixing named and unnamed elements (the documented syntax, e.g. <code>list(relu, tanh, softmax = args(dim = 2L))</code>) no longer crashes <code>parse_activation_spec()</code> with “missing value where TRUE/FALSE needed”.</p>
+<ul><li><p>The internal <code><a href="https://purrr.tidyverse.org/reference/imap.html" class="external-link">purrr::imap()</a></code> call passed the element’s <em>name</em> as the position argument whenever the list had any names at all, instead of its integer index, so looking up <code>names(activations)[i]</code> silently returned <code>NA</code>.</p></li>
+<li><p>Element names are now resolved once, up front, and iterated alongside each element via <code><a href="https://purrr.tidyverse.org/reference/pmap.html" class="external-link">purrr::pmap()</a></code> instead of relying on <code>imap()</code>’s name-or-index behavior.</p></li>
+</ul></li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.3.2" id="kindling-032">kindling 0.3.2<a class="anchor" aria-label="anchor" href="#kindling-032"></a></h2><p class="text-muted">CRAN release: 2026-07-10</p>
