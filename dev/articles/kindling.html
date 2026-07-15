@@ -291,7 +291,7 @@ data frame as the new reference.</p>
 <span><span class="co">#&gt; actual       setosa versicolor virginica</span></span>
 <span><span class="co">#&gt;   setosa         10          0         0</span></span>
 <span><span class="co">#&gt;   versicolor      0          8         2</span></span>
-<span><span class="co">#&gt;   virginica       0          0        10</span></span></code></pre></div>
+<span><span class="co">#&gt;   virginica       0          1         9</span></span></code></pre></div>
 </li>
 </ol>
 </div>
@@ -426,7 +426,7 @@ i.e. under <a href="https://dials.tidymodels.org" class="external-link">dials</
 <pre class="fansi fansi-output"><code><span style="color: #949494;"># A tibble: 1 × 4</span>
   hidden_neurons activations output_activation .config         
   <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>         <span style="color: #949494; font-style: italic;">&lt;list&gt;</span>      <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>             <span style="color: #949494; font-style: italic;">&lt;chr&gt;</span>           
-<span style="color: #BCBCBC;">1</span> <span style="color: #949494;">&lt;int [2]&gt;</span>      <span style="color: #949494;">&lt;chr [2]&gt;</span>   sigmoid           pre0_mod06_post0
+<span style="color: #BCBCBC;">1</span> <span style="color: #949494;">&lt;int [2]&gt;</span>      <span style="color: #949494;">&lt;chr [2]&gt;</span>   sigmoid           pre0_mod03_post0
 </code></pre>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">final_nn</span> <span class="op">=</span> <span class="fu"><a href="https://tune.tidymodels.org/reference/finalize_model.html" class="external-link">finalize_workflow</a></span><span class="op">(</span><span class="va">nn_wf</span>, <span class="va">best_nn</span><span class="op">)</span></span>
@@ -450,7 +450,7 @@ i.e. under <a href="https://dials.tidymodels.org" class="external-link">dials</
 <pre class="fansi fansi-output"><code>-----------------------------------------------------------------------
   NN Model Type           :             FFNN    n_predictors :      4
   Number of Epochs        :              100    n_response   :      3
-  Hidden Layer Units      :           52, 80    reg.         :   None
+  Hidden Layer Units      :           41, 94    reg.         :   None
   Number of Hidden Layers :                2    Device       :    cpu
   Pred. Type              :   classification                 :       
 -----------------------------------------------------------------------
@@ -460,8 +460,8 @@ i.e. under <a href="https://dials.tidymodels.org" class="external-link">dials</
 <span style="font-style: italic;">-- Activation function ---------------------------------------------------------</span>
 </code></pre>
 <pre><code>---------------------------------
-  1st Layer {52}    :       elu
-  2nd Layer {80}    :       elu
+  1st Layer {41}    :       elu
+  2nd Layer {94}    :      relu
   Output Activation :   sigmoid
 ---------------------------------</code></pre>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
@@ -491,20 +491,20 @@ algorithms are available:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/garson.html" class="external-link">garson</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        x_names y_names  rel_imp</span></span>
-<span><span class="co">#&gt; 1  Petal.Width       y 32.43794</span></span>
-<span><span class="co">#&gt; 2 Petal.Length       y 27.92766</span></span>
-<span><span class="co">#&gt; 3 Sepal.Length       y 23.99529</span></span>
-<span><span class="co">#&gt; 4  Sepal.Width       y 15.63911</span></span></code></pre></div>
+<span><span class="co">#&gt; 1  Petal.Width       y 29.89401</span></span>
+<span><span class="co">#&gt; 2 Petal.Length       y 27.04929</span></span>
+<span><span class="co">#&gt; 3 Sepal.Length       y 25.49461</span></span>
+<span><span class="co">#&gt; 4  Sepal.Width       y 17.56209</span></span></code></pre></div>
 </li>
 <li>
 <p>Olden’s Algorithm</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/NeuralNetTools/man/olden.html" class="external-link">olden</a></span><span class="op">(</span><span class="va">model</span>, bar_plot <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt;        x_names y_names    rel_imp</span></span>
-<span><span class="co">#&gt; 1  Petal.Width       y -0.3765292</span></span>
-<span><span class="co">#&gt; 2 Petal.Length       y -0.3197246</span></span>
-<span><span class="co">#&gt; 3  Sepal.Width       y  0.1061422</span></span>
-<span><span class="co">#&gt; 4 Sepal.Length       y  0.0841574</span></span></code></pre></div>
+<span><span class="co">#&gt;        x_names y_names     rel_imp</span></span>
+<span><span class="co">#&gt; 1 Petal.Length       y  0.37531631</span></span>
+<span><span class="co">#&gt; 2  Petal.Width       y  0.34166114</span></span>
+<span><span class="co">#&gt; 3 Sepal.Length       y -0.17484675</span></span>
+<span><span class="co">#&gt; 4  Sepal.Width       y -0.07617576</span></span></code></pre></div>
 </li>
 </ol>
 <div class="section level3">
