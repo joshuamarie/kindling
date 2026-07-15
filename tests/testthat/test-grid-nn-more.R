@@ -111,17 +111,17 @@ test_that("grid_depth() works from a workflow", {
     skip_if_not_installed("workflows")
     skip_if_not_installed("tune")
     skip_if_no_torch()
-    
+
     wf = workflows::workflow() |>
         workflows::add_model(
             mlp_kindling(
-                hidden_neurons = tune::tune(), 
+                hidden_neurons = tune::tune(),
                 activations = tune::tune(),
                 mode = "regression"
             )
         ) |>
         workflows::add_formula(Sepal.Length ~ .)
-    
+
     grid = grid_depth(wf, hidden_neurons(c(32L, 128L)), n_hlayer = 2L, type = "random", size = 5)
     expect_s3_class(grid, "tbl_df")
     expect_equal(nrow(grid), 5)
