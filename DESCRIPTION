@@ -30,7 +30,6 @@ Imports:
     vctrs,
     tibble,
     tidyr,
-    dplyr,
     stats,
     NeuralNetTools,
     ggplot2,
@@ -39,9 +38,9 @@ Imports:
     coro
 Suggests:
     testthat (>= 3.0.0),
+    dplyr,
     magrittr,
     box,
-    vip,
     recipes,
     workflows,
     parsnip (>= 1.0.0),
@@ -51,6 +50,7 @@ Suggests:
     yardstick,
     mlbench,
     modeldata,
+    vip,
     knitr,
     rmarkdown,
     DiceDesign,

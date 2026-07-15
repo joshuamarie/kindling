@@ -487,7 +487,8 @@ generate_lhs_grid =
         results[[i]] = tibble::as_tibble(row_data)
     }
 
-    dplyr::bind_rows(results)
+    # dplyr::bind_rows(results)
+    vctrs::vec_rbind(results)
 }
 
 generate_sfd_grid =
@@ -575,7 +576,8 @@ generate_sfd_grid =
         results[[i]] = tibble::as_tibble(row_data)
     }
 
-    dplyr::bind_rows(results)
+    # dplyr::bind_rows(results)
+    vctrs::vec_rbind(results)
 }
 
 extract_param_range = function(param, levels, original = TRUE) {
@@ -713,11 +715,13 @@ expand_architecture = function(neuron_vals, activation_vals, depth) {
 
     tibble::tibble(
         hidden_neurons = purrr::pmap(
-            dplyr::select(grid, dplyr::all_of(neuron_col_names)),
+            # dplyr::select(grid, dplyr::all_of(neuron_col_names))
+            grid[, neuron_col_names, drop = FALSE],
             ~ as.integer(c(...))
         ),
         activations = purrr::pmap(
-            dplyr::select(grid, dplyr::all_of(activation_col_names)),
+            # dplyr::select(grid, dplyr::all_of(activation_col_names)),
+            grid[, activation_col_names, drop = FALSE]
             ~ as.character(c(...))
         )
     )
@@ -808,7 +812,8 @@ decode_scalars = function(scalar_params, design_vals, original = TRUE) {
     }
 
     if (!is.null(decoded_numeric) && !is.null(decoded_categorical)) {
-        dplyr::bind_cols(decoded_numeric, decoded_categorical)
+        # dplyr::bind_cols(decoded_numeric, decoded_categorical)
+        vctrs::vec_cbind(decoded_numeric, decoded_categorical)
     } else if (!is.null(decoded_numeric)) {
         decoded_numeric
     } else if (!is.null(decoded_categorical)) {
