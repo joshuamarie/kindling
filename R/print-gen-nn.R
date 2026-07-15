@@ -12,23 +12,24 @@ print.nn_fit = function(x, ...) {
     title = "Generalized Neural Network"
     title_block = style_bold(rule(center = title, line = "="))
     cat_line("\n", title_block, "\n")
-    
+
     hidden_units_str = if (is.null(x$hidden_neurons)) {
         "Not specified"
     } else {
         paste(as.character(x$hidden_neurons), collapse = ", ")
     }
-    
+
     nn_model_type = if (!is.null(x$arch)) {
         nn_layer = x$arch$nn_layer %||% "nn_linear"
         if (inherits(nn_layer, "formula")) {
             nn_layer = paste(deparse(nn_layer), collapse = " ")
         }
-        glue("{x$arch$nn_name} ({nn_layer})")
+        # glue("{x$arch$nn_name} ({nn_layer})")
+        sprintf("%s (%s)", x$arch$nn_name, nn_layer)
     } else {
         "FFNN"
     }
-    
+
     # ---- Table 1: Model Summary ----
     summary_data = data.frame(
         type = c(
@@ -55,12 +56,12 @@ print.nn_fit = function(x, ...) {
         ),
         stringsAsFactors = FALSE
     )
-    
+
     heading1 = style_italic(rule(left = "Model Summary", line = "-"))
     cat_line("\n", heading1, "\n\n")
     table_summary(summary_data, l = 5, center_table = TRUE, style = list(sep = ":  "))
     cat("\n\n")
-    
+
     # ---- Table 2: Activation Functions ----
     inner_acts = if (is.list(x$activations)) {
         vapply(x$activations, concat, character(1))
@@ -74,7 +75,7 @@ print.nn_fit = function(x, ...) {
         rep("None", length(x$hidden_neurons))
     }
     outer_acts = concat(x$output_activation)
-    
+
     act_data = data.frame(
         layer = c(
             paste(
@@ -86,12 +87,12 @@ print.nn_fit = function(x, ...) {
         infos = c(inner_acts, outer_acts),
         stringsAsFactors = FALSE
     )
-    
+
     heading2 = style_italic(rule(left = "Activation Functions", line = "-"))
     cat_line("\n", heading2, "\n\n")
     table_summary(act_data, l = 5, center_table = TRUE, style = list(sep = ":  "))
     cat("\n\n")
-    
+
     # ---- Table 3: Architecture Spec ----
     flag = function(val) if (!is.null(val)) "yes" else "N/A"
     arch_str = function(val, default = "N/A") {
@@ -130,11 +131,11 @@ print.nn_fit = function(x, ...) {
         },
         stringsAsFactors = FALSE
     )
-    
+
     heading3 = style_italic(rule(left = "Architecture Spec", line = "-"))
     cat_line("\n", heading3, "\n\n")
     table_summary(arch_data, l = 5, center_table = TRUE, style = list(sep = ":  "))
     cat("\n")
-    
+
     invisible(x)
 }

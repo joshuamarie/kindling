@@ -92,7 +92,6 @@
 #'
 #' @importFrom rlang new_function call2 expr sym
 #' @importFrom purrr map map2
-#' @importFrom glue glue
 #' @importFrom cli cli_abort
 #'
 #' @export
@@ -105,9 +104,9 @@ ffnn_generator = function(nn_name = "DeepFFN",
                           bias = TRUE) {
 
     if (missing(hd_neurons) || is.null(hd_neurons) || length(hd_neurons) == 0L) {
-        hd_neurons = integer(0) 
+        hd_neurons = integer(0)
     }
-    
+
     nodes = c(no_x, hd_neurons, no_y)
     n_layers = length(nodes) - 1L
     n_hidden = length(hd_neurons)
@@ -139,7 +138,7 @@ ffnn_generator = function(nn_name = "DeepFFN",
         .x = seq_len(n_layers),
         .y = map2(nodes[-length(nodes)], nodes[-1], c),
         .f = function(i, dims) {
-            layer_name = if (i == n_layers) "out" else glue("fc{i}")
+            layer_name = if (i == n_layers) "out" else paste0("fc", i)
             call2(
                 "=",
                 call2("$", expr(self), sym(layer_name)),
@@ -160,7 +159,7 @@ ffnn_generator = function(nn_name = "DeepFFN",
 
     # ---- Build forward() ----
     forward_body_exprs = map(seq_len(n_layers), function(i) {
-        layer_name = if (i == n_layers) "out" else glue("fc{i}")
+        layer_name = if (i == n_layers) "out" else paste0("fc", i)
         act_call_fn = all_activation_calls[[i]]
 
         line1 = call2(
@@ -313,7 +312,6 @@ check_rnn_type = function(rnn_type, hd_neurons) {
 #'
 #' @importFrom rlang new_function call2 expr sym
 #' @importFrom purrr map map2
-#' @importFrom glue glue
 #' @importFrom cli cli_abort
 #'
 #' @export
@@ -328,9 +326,9 @@ rnn_generator = function(nn_name = "DeepRNN",
                          bidirectional = TRUE,
                          dropout = 0,
                          ...) {
-    
+
     if (missing(hd_neurons) || is.null(hd_neurons) || length(hd_neurons) == 0L) {
-        hd_neurons = integer(0) 
+        hd_neurons = integer(0)
     }
 
     check_rnn_type(rnn_type, hd_neurons)
@@ -354,7 +352,7 @@ rnn_generator = function(nn_name = "DeepRNN",
     input_sizes = c(no_x, hd_neurons[-n_rnn_layers] * (if (bidirectional) 2L else 1L))
 
     rnn_layers = map2(seq_len(n_rnn_layers), input_sizes, function(i, input_size) {
-        layer_name = glue("rnn{i}")
+        layer_name = paste0("rnn", i)
         hidden_size = hd_neurons[i]
         layer_dropout = if (i < n_rnn_layers && dropout > 0) dropout else 0
 
@@ -390,7 +388,8 @@ rnn_generator = function(nn_name = "DeepRNN",
 
     # ---- Build forward() ----
     rnn_forward_exprs = map(seq_len(n_rnn_layers), function(i) {
-        layer_name = glue("rnn{i}")
+        # layer_name = glue("rnn{i}")
+        layer_name = paste0("rnn", i)
         act_call_fn = activation_calls[[i]]
 
         rnn_call_expr = call2(

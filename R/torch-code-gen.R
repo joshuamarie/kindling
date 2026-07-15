@@ -244,7 +244,6 @@
 #'
 #' @importFrom rlang new_function call2 expr sym f_rhs is_formula
 #' @importFrom purrr map map2
-#' @importFrom glue glue
 #' @importFrom cli cli_abort
 #'
 #' @export
@@ -330,7 +329,7 @@ nn_module_generator =
         } else {
             nn_layer_name
         }
-        layer_name = if (is_output) "out" else glue("{layer_base_name}_{i}")
+        layer_name = if (is_output) "out" else paste0(layer_base_name, "_", i)
         in_dim = nodes[i]
         out_dim = nodes[i + 1]
 
@@ -388,7 +387,8 @@ nn_module_generator =
         } else {
             nn_layer_name
         }
-        layer_name = if (is_output) "out" else glue("{layer_base_name}_{i}")
+        # layer_name = if (is_output) "out" else glue("{layer_base_name}_{i}")
+        layer_name = if (is_output) "out" else paste0(layer_base_name, "_", i)
         act_call_fn = all_activation_calls[[i]]
 
         layer_expr = call2(call2("$", expr(self), sym(layer_name)), expr(x))
