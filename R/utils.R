@@ -11,3 +11,7 @@ utils::globalVariables(c(
     "fitted_val", "residuals", "actual_val",
     "actual", "predicted", "n", "prop"
 ))
+
+has_namespace = function(pkg) {
+    requireNamespace(pkg, quietly = TRUE)
+}

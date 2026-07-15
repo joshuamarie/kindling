@@ -250,7 +250,7 @@ validate_args_formals = function(act_name, params, prefix = "nnf_") {
         # "linear" (identity) takes no parameters.
         fn_formals = character(0)
         fn_name = "linear"
-    } else if (!requireNamespace("torch", quietly = TRUE)) {
+    } else if (!has_namespace("torch")) {
         return(invisible(NULL))
     } else {
         fn_name = paste0(prefix, act_name)
@@ -268,7 +268,7 @@ validate_args_formals = function(act_name, params, prefix = "nnf_") {
         if (length(invalid_params) > 0) {
             valid_params_str = paste(fn_formals, collapse = ", ")
             cli_abort(c(
-                "Invalid parameter{?s} for {.fn {fn_name}}: {.arg {invalid_params}}.",
+                "{cli::qty(invalid_params)}Invalid parameter{?s} for {.fn {fn_name}}: {.arg {invalid_params}}.",
                 i = "Valid parameters are: {.code {valid_params_str}}."
             ), class = "activation_invalid_params_error")
         }
