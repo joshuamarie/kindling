@@ -2,15 +2,15 @@ url: https://kindling.joshuamarie.com
 
 template:
   bootstrap: 5
-  light-switch: true  
+  light-switch: true
   bootswatch: flatly
   bslib:
-    base_font: {google: "Playfair Display"}  
+    base_font: {google: "Playfair Display"}
     heading_font: {google: "Playfair Display"}
-    code_font: {google: "Fira Mono"}  
+    code_font: {google: "Fira Mono"}
     primary: "#0054AD"
     link-color: "#0054AD"
-  math-rendering: katex 
+  math-rendering: katex
 
 home:
   title: "kindling • Higher-Level Interface for torch"
@@ -49,6 +49,8 @@ navbar:
           href: https://www.tidymodels.org/learn/models/parsnip-ranger-glmnet/
         - text: "Classification modeling"
           href: https://www.tidymodels.org/learn/models/parsnip-nnet/
+        - text: "Bayesian Neural Networks in tidymodels with kindling"
+          href: https://statsandr.com/blog/bayesian-neural-networks-in-tidymodels-with-kindling/
     blog:
       text: Blog
       icon: fa-blog
@@ -68,18 +70,18 @@ reference:
 
   - title: Training Functions
     desc: Direct training interface (Level 2)
-  
+
   - subtitle: Generalized Neural Network Trainer
     contents:
       - gen-nn-train
       - nn_arch
-      
+
   - subtitle: Base Models
     contents:
       - kindling-basemodels
       # - ffnn
       # - rnn
-      
+
   - subtitle: Utility Functions
     contents:
       - nn_arch
@@ -87,7 +89,7 @@ reference:
 
   - title: Code Generators
     desc: Generate `torch::nn_module()` code (Lowest Level)
-  
+
   - subtitle: General-purpose / low-level generator, including the layer utilities & pronouns
     contents:
       - nn_module_generator
