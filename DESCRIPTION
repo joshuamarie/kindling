@@ -29,7 +29,6 @@ Imports:
     cli,
     vctrs,
     tibble,
-    tidyr,
     stats,
     NeuralNetTools,
     ggplot2,
@@ -39,6 +38,7 @@ Imports:
 Suggests:
     testthat (>= 3.0.0),
     dplyr,
+    tidyr,
     magrittr,
     box,
     recipes,

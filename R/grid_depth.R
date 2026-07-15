@@ -366,6 +366,7 @@ generate_regular_grid =
         neuron_param, activation_param, n_hlayer,
         scalar_params, levels, original
     ) {
+    rlang::check_installed("tidyr")
     neuron_vals = extract_param_range(neuron_param, levels, original)
     activation_vals = extract_param_values(activation_param)
 
@@ -430,6 +431,7 @@ generate_lhs_grid =
         neuron_param, activation_param, n_hlayer,
         scalar_params, size, original
     ) {
+    rlang::check_installed("dplyr")
     if (!requireNamespace("lhs", quietly = TRUE)) {
         cli::cli_abort("Package {.pkg lhs} required for Latin Hypercube sampling.")
     }
@@ -487,8 +489,7 @@ generate_lhs_grid =
         results[[i]] = tibble::as_tibble(row_data)
     }
 
-    # dplyr::bind_rows(results)
-    vctrs::vec_rbind(results)
+    dplyr::bind_rows(results)
 }
 
 generate_sfd_grid =
@@ -496,6 +497,7 @@ generate_sfd_grid =
         neuron_param, activation_param, n_hlayer,
         scalar_params, size, sfd_type, variogram_range, iter, original
     ) {
+    rlang::check_installed("dplyr")
     if (!requireNamespace("sfd", quietly = TRUE)) {
         cli::cli_abort("Package {.pkg sfd} required for space-filling designs.")
     }
@@ -576,8 +578,7 @@ generate_sfd_grid =
         results[[i]] = tibble::as_tibble(row_data)
     }
 
-    # dplyr::bind_rows(results)
-    vctrs::vec_rbind(results)
+    dplyr::bind_rows(results)
 }
 
 extract_param_range = function(param, levels, original = TRUE) {
@@ -697,6 +698,9 @@ decode_neurons_from_design = function(param, design_vals, original = TRUE) {
 }
 
 expand_architecture = function(neuron_vals, activation_vals, depth) {
+    rlang::check_installed("dplyr")
+    rlang::check_installed("tidyr")
+
     neuron_cols = stats::setNames(
         rep(list(neuron_vals), depth),
         paste0("n", seq_len(depth))
@@ -715,19 +719,19 @@ expand_architecture = function(neuron_vals, activation_vals, depth) {
 
     tibble::tibble(
         hidden_neurons = purrr::pmap(
-            # dplyr::select(grid, dplyr::all_of(neuron_col_names))
-            grid[, neuron_col_names, drop = FALSE],
+            dplyr::select(grid, dplyr::all_of(neuron_col_names)),
             ~ as.integer(c(...))
         ),
         activations = purrr::pmap(
-            # dplyr::select(grid, dplyr::all_of(activation_col_names)),
-            grid[, activation_col_names, drop = FALSE]
+            dplyr::select(grid, dplyr::all_of(activation_col_names)),
             ~ as.character(c(...))
         )
     )
 }
 
 expand_neurons_only = function(neuron_vals, depth) {
+    rlang::check_installed("tidyr")
+
     neuron_cols = stats::setNames(
         rep(list(neuron_vals), depth),
         paste0("n", seq_len(depth))
@@ -741,6 +745,8 @@ expand_neurons_only = function(neuron_vals, depth) {
 }
 
 expand_activations_only = function(activation_vals, depth) {
+    rlang::check_installed("tidyr")
+
     activation_cols = stats::setNames(
         rep(list(activation_vals), depth),
         paste0("a", seq_len(depth))
@@ -772,6 +778,7 @@ count_numeric_params = function(scalar_params) {
 }
 
 decode_scalars = function(scalar_params, design_vals, original = TRUE) {
+    rlang::check_installed("dplyr")
     if (length(scalar_params) == 0) {
         return(tibble::tibble())
     }
@@ -812,8 +819,7 @@ decode_scalars = function(scalar_params, design_vals, original = TRUE) {
     }
 
     if (!is.null(decoded_numeric) && !is.null(decoded_categorical)) {
-        # dplyr::bind_cols(decoded_numeric, decoded_categorical)
-        vctrs::vec_cbind(decoded_numeric, decoded_categorical)
+        dplyr::bind_cols(decoded_numeric, decoded_categorical)
     } else if (!is.null(decoded_numeric)) {
         decoded_numeric
     } else if (!is.null(decoded_categorical)) {
