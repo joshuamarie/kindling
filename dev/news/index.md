@@ -44,6 +44,9 @@
     [`purrr::pmap()`](https://purrr.tidyverse.org/reference/pmap.html)
     instead of relying on `imap()`’s name-or-index behavior.
 
+- Wrap `!requireNamespace(pkg, quietly = TRUE)` as this causes hidden
+  bugs to `has_namespace()`
+
 ## kindling 0.3.2
 
 CRAN release: 2026-07-10

@@ -76,6 +76,7 @@
 <ul><li><p>The internal <code><a href="https://purrr.tidyverse.org/reference/imap.html" class="external-link">purrr::imap()</a></code> call passed the element’s <em>name</em> as the position argument whenever the list had any names at all, instead of its integer index, so looking up <code>names(activations)[i]</code> silently returned <code>NA</code>.</p></li>
 <li><p>Element names are now resolved once, up front, and iterated alongside each element via <code><a href="https://purrr.tidyverse.org/reference/pmap.html" class="external-link">purrr::pmap()</a></code> instead of relying on <code>imap()</code>’s name-or-index behavior.</p></li>
 </ul></li>
+<li><p>Wrap <code>!requireNamespace(pkg, quietly = TRUE)</code> as this causes hidden bugs to <code>has_namespace()</code></p></li>
 </ul></div>
 </div>
     <div class="section level2">
