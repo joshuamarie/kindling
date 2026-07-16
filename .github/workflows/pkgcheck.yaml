@@ -18,3 +18,5 @@ jobs:
       issues: write
     steps:
       - uses: ropensci-review-tools/pkgcheck-action@main
+        env:
+          TORCH_INSTALL: "1"
