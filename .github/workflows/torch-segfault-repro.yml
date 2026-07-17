@@ -37,6 +37,12 @@ jobs:
                   if (dir.exists(cache_dir)) print(list.files(cache_dir, recursive = TRUE))
                   '
 
+            - name: Sweep filesystem for torch install files
+              if: always()
+              run: |
+                  find / -newer /tmp -iname "*torch*" -type f 2>/dev/null | grep -v ^/proc > torch-files.txt || true
+                  cat torch-files.txt
+
             - name: Reproduce under gdb and capture backtrace
               if: always()
               run: |
@@ -59,3 +65,5 @@ jobs:
                   path: |
                       gdb-backtrace.txt
                       session-info.txt
+                      torch-files.txt
+                      
