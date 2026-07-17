@@ -1,0 +1,61 @@
+name: torch-segfault-repro
+
+on:
+    workflow_dispatch:
+
+jobs:
+    reproduce:
+        strategy:
+            fail-fast: false
+            matrix:
+                image: ["rocker/tidyverse:latest", "eddelbuettel/r2u:24.04"]
+        runs-on: ubuntu-latest
+        container:
+            image: ${{ matrix.image }}
+        steps:
+            - name: Install gdb
+              run: |
+                  apt-get update
+                  apt-get install -y gdb
+
+            - name: Install torch package
+              run: Rscript -e 'install.packages("torch")'
+
+            - name: Attempt install_torch (allowed to fail)
+              continue-on-error: true
+              run: |
+                  ulimit -c unlimited
+                  Rscript -e 'torch::install_torch()'
+
+            - name: Check whether libtorch was extracted despite the crash
+              if: always()
+              run: |
+                  Rscript -e '
+                  cache_dir = tools::R_user_dir("torch", "cache")
+                  cat("cache dir:", cache_dir, "\n")
+                  cat("exists:", dir.exists(cache_dir), "\n")
+                  if (dir.exists(cache_dir)) print(list.files(cache_dir, recursive = TRUE))
+                  '
+
+            - name: Reproduce under gdb and capture backtrace
+              if: always()
+              run: |
+                  gdb -q -batch -ex run -ex "bt full" --args Rscript -e 'torch::install_torch()' \
+                      > gdb-backtrace.txt 2>&1 || true
+                  cat gdb-backtrace.txt
+
+            - name: Record session and environment info
+              if: always()
+              run: |
+                  Rscript -e 'sessionInfo(); Sys.getenv("TORCH_INSTALL")' > session-info.txt
+                  uname -a >> session-info.txt
+                  cat /etc/os-release >> session-info.txt
+
+            - name: Upload diagnostics
+              if: always()
+              uses: actions/upload-artifact@v4
+              with:
+                  name: torch-repro-${{ strategy.job-index }}
+                  path: |
+                      gdb-backtrace.txt
+                      session-info.txt
