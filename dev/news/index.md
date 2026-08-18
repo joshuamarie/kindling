@@ -2,6 +2,49 @@
 
 ## kindling (development version)
 
+### New features
+
+- [`save_kindling()`](https://kindling.joshuamarie.com/dev/reference/kindling-save-load.md)
+  and
+  [`load_kindling()`](https://kindling.joshuamarie.com/dev/reference/kindling-save-load.md)
+  save and reload a trained model. Base
+  [`saveRDS()`](https://rdrr.io/r/base/readRDS.html) does not work for
+  [kindling](https://kindling.joshuamarie.com) fits, since the
+  underlying
+  [`torch::nn_module`](https://torch.mlverse.org/docs/reference/nn_module.html)
+  holds external pointers that don’t survive plain R serialization.
+
+- [`train_nn()`](https://kindling.joshuamarie.com/dev/reference/gen-nn-train.md)
+  gains `initial_model` to warm-start training from a previously trained
+  (or reloaded) fit, and `track_optim_path` to optionally retain
+  per-epoch loss, gradient norm, and a parameter hash in the returned
+  object’s `$optim_path`.
+
+- Training functions
+  ([`train_nn()`](https://kindling.joshuamarie.com/dev/reference/gen-nn-train.md),
+  [`ffnn()`](https://kindling.joshuamarie.com/dev/reference/kindling-basemodels.md),
+  [`rnn()`](https://kindling.joshuamarie.com/dev/reference/kindling-basemodels.md))
+  and [`predict()`](https://rdrr.io/r/stats/predict.html) now validate
+  their inputs up front and error informatively on empty data,
+  non-numeric predictors, missing/non-finite values, and length
+  mismatches, instead of failing deep inside
+  [torch](https://torch.mlverse.org/docs).
+
+### Documentation
+
+- Added a Life Cycle Statement to `CONTRIBUTING.md`.
+
+- [`?train_nn`](https://kindling.joshuamarie.com/dev/reference/gen-nn-train.md)
+  gains sections clarifying training/validation/test data semantics, the
+  missing-value policy (with a
+  [recipes](https://github.com/tidymodels/recipes) imputation example),
+  and guidance on learning rate, batch size, and epochs.
+
+- [`vignette("tuning-capabilities")`](https://kindling.joshuamarie.com/dev/articles/tuning-capabilities.md)
+  now points to custom
+  [yardstick](https://github.com/tidymodels/yardstick) metrics via
+  `metric_set()`.
+
 ### Ongoing features
 
 - More visualization supports
@@ -46,6 +89,16 @@
 
 - Wrap `!requireNamespace(pkg, quietly = TRUE)` as this causes hidden
   bugs to `has_namespace()`
+
+- [`autoplot_diagnostics()`](https://kindling.joshuamarie.com/dev/reference/autoplot_diagnostics.md)
+  errored on multi-output regression models instead of returning one
+  actual-vs-fitted panel per output column. The length check comparing
+  `actual` against the fitted values used
+  [`length()`](https://rdrr.io/r/base/length.html) on a matrix (always
+  2, the element count) instead of
+  [`nrow()`](https://rdrr.io/r/base/nrow.html) (the observation count),
+  so the mismatch check always failed before reaching the multi-output
+  branch.
 
 ## kindling 0.3.2
 

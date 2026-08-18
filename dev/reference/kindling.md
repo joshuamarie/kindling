@@ -151,5 +151,7 @@ Useful links:
 
 Authors:
 
+- Joshua Marie <joshua.marie.k@gmail.com>
+
 - Antoine Soetewey <antoine.soetewey@uclouvain.be>
   ([ORCID](https://orcid.org/0000-0001-8159-0804))

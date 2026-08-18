@@ -21,22 +21,6 @@ and related functions. They work similarly to
 .is_output
 ```
 
-## Format
-
-An object of class `layer_pr` (inherits from `list`) of length 0.
-
-An object of class `layer_index_pr` (inherits from `layer_pr`, `list`)
-of length 0.
-
-An object of class `layer_input_pr` (inherits from `layer_pr`, `list`)
-of length 0.
-
-An object of class `layer_output_pr` (inherits from `layer_pr`, `list`)
-of length 0.
-
-An object of class `layer_is_output_pr` (inherits from `layer_pr`,
-`list`) of length 0.
-
 ## Details
 
 Available pronouns:

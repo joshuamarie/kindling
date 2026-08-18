@@ -5,5 +5,5 @@ to see their documentation.
 
 - NeuralNetTools:
 
-  [`garson`](https://rdrr.io/pkg/NeuralNetTools/man/garson.html),
-  [`olden`](https://rdrr.io/pkg/NeuralNetTools/man/olden.html)
+  [`garson()`](https://rdrr.io/pkg/NeuralNetTools/man/garson.html),
+  [`olden()`](https://rdrr.io/pkg/NeuralNetTools/man/olden.html)

@@ -135,11 +135,11 @@ if (torch::torch_is_installed()) {
     message("Torch not fully installed — skipping example")
 }
 
-#>        x_names y_names    rel_imp
-#> 1  Sepal.Width       y -0.2042123
-#> 2 Sepal.Length       y -0.1964520
-#> 3  Petal.Width       y  0.1233698
-#> 4 Petal.Length       y  0.0125391
+#>        x_names y_names     rel_imp
+#> 1 Sepal.Length       y -0.16271562
+#> 2 Petal.Length       y  0.10408192
+#> 3  Sepal.Width       y -0.07618094
+#> 4  Petal.Width       y  0.03416439
 # }
 
 # \donttest{

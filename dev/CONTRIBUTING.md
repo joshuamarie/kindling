@@ -70,3 +70,21 @@ Please note that the kindling project is released with a [Contributor
 Code of
 Conduct](https://kindling.joshuamarie.com/dev/CODE_OF_CONDUCT.md). By
 contributing to this project you agree to abide by its terms.
+
+## Life cycle statement
+
+kindling is in an **active** development state ([repostatus:
+Active](https://www.repostatus.org/#active)): it has reached a stable,
+usable state on CRAN and is actively developed. The public API (code
+generation,
+[`ffnn()`](https://kindling.joshuamarie.com/dev/reference/kindling-basemodels.md)/[`rnn()`](https://kindling.joshuamarie.com/dev/reference/kindling-basemodels.md)/[`train_nn()`](https://kindling.joshuamarie.com/dev/reference/gen-nn-train.md),
+and the parsnip engines) is considered stable; experimental or
+superseded features are flagged with
+[lifecycle](https://lifecycle.r-lib.org/) badges in their documentation
+(e.g. [`train_nn()`](https://kindling.joshuamarie.com/dev/reference/gen-nn-train.md)
+is experimental,
+[`args()`](https://kindling.joshuamarie.com/dev/reference/args.md) is
+superseded). Anticipated future development includes additional
+architectures, save/load helpers for trained models, and continued
+tidymodels integration. Breaking changes will follow the lifecycle
+process, with deprecation warnings before removal.

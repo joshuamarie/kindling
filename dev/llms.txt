@@ -148,6 +148,12 @@ Direct training interface (Level 2)
 - [`early_stop()`](https://kindling.joshuamarie.com/dev/reference/early_stop.md)
   : Early Stopping Specification
 
+### Model Persistence
+
+- [`save_kindling()`](https://kindling.joshuamarie.com/dev/reference/kindling-save-load.md)
+  [`load_kindling()`](https://kindling.joshuamarie.com/dev/reference/kindling-save-load.md)
+  : Save and reload trained kindling models
+
 ## Code Generators
 
 Generate

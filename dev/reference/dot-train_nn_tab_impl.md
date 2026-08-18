@@ -25,6 +25,8 @@ Preprocessing bridge for data.frame and formula methods
   validation_split,
   device,
   verbose,
-  cache_weights
+  cache_weights,
+  initial_model = NULL,
+  track_optim_path = FALSE
 )
 ```

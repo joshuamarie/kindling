@@ -118,6 +118,8 @@ When <code>architecture = NULL</code>, the model falls back to a plain feed-forw
 <span>  device <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cache_weights <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  initial_model <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  track_optim_path <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -144,6 +146,8 @@ When <code>architecture = NULL</code>, the model falls back to a plain feed-forw
 <span>  device <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cache_weights <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  initial_model <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  track_optim_path <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -170,6 +174,8 @@ When <code>architecture = NULL</code>, the model falls back to a plain feed-forw
 <span>  device <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  cache_weights <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span>  initial_model <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  track_optim_path <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -333,6 +339,26 @@ intervals during training. Default <code>FALSE</code>.</p></dd>
 matrices in the returned object under <code>$cached_weights</code>. Default <code>FALSE</code>.</p></dd>
 
 
+<dt id="arg-initial-model">initial_model<a class="anchor" aria-label="anchor" href="#arg-initial-model"></a></dt>
+<dd><p>A previously trained kindling model of class
+<code>nn_fit</code> – from an earlier <code>train_nn()</code> call or reloaded with
+<code><a href="kindling-save-load.html">load_kindling()</a></code> – to warm-start from. Training continues on a deep
+copy of its trained module (the supplied object is left untouched).
+The architecture arguments (<code>hidden_neurons</code>, <code>activations</code>,
+<code>output_activation</code>, <code>architecture</code>) are ignored and inherited from
+the initial model, whose input/output dimensions must match the
+supplied data. Supported by the <code>matrix</code>, <code>data.frame</code>, and <code>formula</code>
+methods. Default <code>NULL</code> (train from scratch).</p></dd>
+
+
+<dt id="arg-track-optim-path">track_optim_path<a class="anchor" aria-label="anchor" href="#arg-track-optim-path"></a></dt>
+<dd><p>Logical. If <code>TRUE</code>, retain per-epoch information
+on the path taken by the optimizer in the returned object's
+<code>optim_path</code> component: the loss value, the global gradient norm, and
+a hash of all model parameters at each epoch. Default <code>FALSE</code> (only
+<code>loss_history</code> is retained).</p></dd>
+
+
 <dt id="arg-data">data<a class="anchor" aria-label="anchor" href="#arg-data"></a></dt>
 <dd><p>A data frame. Required when <code>x</code> is a formula.</p></dd>
 
@@ -363,6 +389,9 @@ components.</p>
 actual epochs run (relevant when early stopping is active)</p></li>
 <li><p><code>val_loss_history</code> — per-epoch validation loss, or <code>NULL</code> if
 <code>validation_split = 0</code></p></li>
+<li><p><code>optim_path</code> — when <code>track_optim_path = TRUE</code>, a data frame with one
+row per epoch (<code>epoch</code>, <code>loss</code>, <code>grad_norm</code>, <code>param_hash</code>) recording
+the optimizer's path; otherwise <code>NULL</code></p></li>
 <li><p><code>n_epochs</code> — number of epochs actually trained</p></li>
 <li><p><code>stopped_epoch</code> — epoch at which early stopping triggered, or <code>NA</code> if
 training ran to completion</p></li>
@@ -390,6 +419,52 @@ shaped for your first layer (commonly <code>[channels, height, width]</code> for
 <code><a href="https://torch.mlverse.org/docs/reference/nn_conv2d.html" class="external-link">torch::nn_conv2d</a></code>). If your source arrays are channel-last, reorder in the
 dataset or via <code>input_transform</code>.</p></li>
 </ul></div>
+    <div class="section level2">
+    <h2 id="training-validation-and-test-data">Training, validation, and test data<a class="anchor" aria-label="anchor" href="#training-validation-and-test-data"></a></h2>
+
+
+<p><code>train_nn()</code> always treats the data it receives as <strong>training</strong> data.
+A <strong>validation</strong> subset can be carved out of it with <code>validation_split</code>
+(used only to monitor <code>val_loss_history</code> and to drive <code><a href="early_stop.html">early_stop()</a></code>);
+<strong>test</strong> data is never seen during training and should be supplied
+post-hoc to <code><a href="gen-nn-predict.html">predict.nn_fit()</a></code>, or managed by resampling tools such as
+<code><a href="https://rsample.tidymodels.org/reference/initial_split.html" class="external-link">rsample::initial_split()</a></code> in the tidymodels workflow demonstrated in
+<code><a href="../articles/kindling.html">vignette("kindling")</a></code>. This proportion-based design (rather than
+labelled train/test inputs) follows tidymodels conventions, where data
+partitioning is the responsibility of <code>rsample</code>/<code>tune</code>.</p>
+<p>Outcomes supplied as <code>ordered</code> factors are treated as plain, unordered
+class labels: the ordering is ignored and the factor levels are used as
+categories.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="missing-values">Missing values<a class="anchor" aria-label="anchor" href="#missing-values"></a></h2>
+
+
+<p>kindling models cannot be trained on missing (<code>NA</code>) or non-finite
+(<code>NaN</code>, <code>Inf</code>) values: torch tensors have no notion of R's <code>NA</code>, so all
+inputs are checked up front and an informative error is raised instead
+of propagating undefined values. Imputation is deliberately delegated to
+the pre-processing layer of the modelling workflow, e.g.</p>
+<p></p><div class="sourceCode r"><pre><code><span><span class="fu">recipes</span><span class="fu">::</span><span class="fu"><a href="https://recipes.tidymodels.org/reference/recipe.html" class="external-link">recipe</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">recipes</span><span class="fu">::</span><span class="fu"><a href="https://recipes.tidymodels.org/reference/step_impute_mean.html" class="external-link">step_impute_mean</a></span><span class="op">(</span><span class="fu">recipes</span><span class="fu">::</span><span class="fu"><a href="https://recipes.tidymodels.org/reference/has_role.html" class="external-link">all_numeric_predictors</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code></pre><p></p></div>
+<p>or drop incomplete rows with <code><a href="https://tidyr.tidyverse.org/reference/drop_na.html" class="external-link">tidyr::drop_na()</a></code> before fitting.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="learning-rate-batch-size-and-epochs">Learning rate, batch size, and epochs<a class="anchor" aria-label="anchor" href="#learning-rate-batch-size-and-epochs"></a></h2>
+
+
+<p>The default <code>learn_rate = 0.001</code> is a common starting point for the
+default <code>"adam"</code> optimizer but is not universally valid: too high a rate
+can make the loss diverge, too low a rate slows convergence. Adaptive
+optimizers (<code>"adam"</code>, <code>"rmsprop"</code>) adjust per-parameter step sizes
+automatically, which is kindling's mechanism for automatic training-rate
+adaptation; inspect <code>loss_history</code> (e.g. via <code><a href="https://ggplot2.tidyverse.org/reference/autoplot.html" class="external-link">ggplot2::autoplot()</a></code>) to
+diagnose a poorly chosen rate. Smaller <code>batch_size</code> values give noisier
+but more frequent parameter updates per epoch; larger values give
+smoother gradients but fewer updates, typically requiring more <code>epochs</code>.
+One <em>epoch</em> is one full pass over the training data; each epoch performs
+<code>ceiling(n / batch_size)</code> gradient updates.</p>
+    </div>
     <div class="section level2">
     <h2 id="matrix-method">Matrix method<a class="anchor" aria-label="anchor" href="#matrix-method"></a></h2>
 
@@ -432,7 +507,8 @@ is automatically switched to <code>"cross_entropy"</code> in that case.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
-    <div class="dont-index"><p><code><a href="gen-nn-predict.html">predict.nn_fit()</a></code>, <code><a href="nn_arch.html">nn_arch()</a></code>, <code><a href="act_funs.html">act_funs()</a></code>, <code><a href="early_stop.html">early_stop()</a></code></p></div>
+    <div class="dont-index"><p><code><a href="gen-nn-predict.html">predict.nn_fit()</a></code>, <code><a href="nn_arch.html">nn_arch()</a></code>, <code><a href="act_funs.html">act_funs()</a></code>, <code><a href="early_stop.html">early_stop()</a></code>,
+<code><a href="kindling-save-load.html">save_kindling()</a></code> / <code><a href="kindling-save-load.html">load_kindling()</a></code></p></div>
     </div>
 
     <div class="section level2">
@@ -524,6 +600,24 @@ is automatically switched to <code>"cross_entropy"</code> in that case.</p>
 <span class="r-in"><span>        validation_split <span class="op">=</span> <span class="fl">0.2</span>,</span></span>
 <span class="r-in"><span>        early_stopping <span class="op">=</span> <span class="fu"><a href="early_stop.html">early_stop</a></span><span class="op">(</span>patience <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="co"># Track the optimizer's path, then inspect it</span></span></span>
+<span class="r-in"><span>    <span class="va">model</span> <span class="op">=</span> <span class="fu">train_nn</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        x <span class="op">=</span> <span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">.</span>,</span></span>
+<span class="r-in"><span>        data <span class="op">=</span> <span class="va">iris</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>        hidden_neurons <span class="op">=</span> <span class="fl">16</span>,</span></span>
+<span class="r-in"><span>        epochs <span class="op">=</span> <span class="fl">20</span>,</span></span>
+<span class="r-in"><span>        track_optim_path <span class="op">=</span> <span class="cn">TRUE</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
+<span class="r-in"><span>    <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">model</span><span class="op">$</span><span class="va">optim_path</span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span>    <span class="co"># Warm-start: continue training a previous (or reloaded) model</span></span></span>
+<span class="r-in"><span>    <span class="va">model2</span> <span class="op">=</span> <span class="fu">train_nn</span><span class="op">(</span></span></span>
+<span class="r-in"><span>        x <span class="op">=</span> <span class="va">Sepal.Length</span> <span class="op">~</span> <span class="va">.</span>,</span></span>
+<span class="r-in"><span>        data <span class="op">=</span> <span class="va">iris</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">4</span><span class="op">]</span>,</span></span>
+<span class="r-in"><span>        initial_model <span class="op">=</span> <span class="va">model</span>,</span></span>
+<span class="r-in"><span>        epochs <span class="op">=</span> <span class="fl">20</span></span></span>
+<span class="r-in"><span>    <span class="op">)</span></span></span>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
@@ -574,20 +668,20 @@ is automatically switched to <code>"cross_entropy"</code> in that case.</p>
 <span class="r-in"><span><span class="op">}</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> → Auto-detected classification task. Using cross_entropy loss.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Using device: cpu</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 8/80 - Loss: 0.4912 - Val Loss: 0.4569</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 16/80 - Loss: 0.2665 - Val Loss: 0.1911</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 24/80 - Loss: 0.1484 - Val Loss: 0.1051</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 32/80 - Loss: 0.1218 - Val Loss: 0.0990</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 40/80 - Loss: 0.2214 - Val Loss: 0.1846</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 48/80 - Loss: 0.1140 - Val Loss: 0.0461</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 56/80 - Loss: 0.1056 - Val Loss: 0.0603</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 64/80 - Loss: 0.0876 - Val Loss: 0.0371</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 72/80 - Loss: 0.1885 - Val Loss: 0.0345</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 80/80 - Loss: 0.0992 - Val Loss: 0.0279</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 8/80 - Loss: 0.1953 - Val Loss: 0.1932</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 16/80 - Loss: 0.1248 - Val Loss: 0.1625</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 24/80 - Loss: 0.1072 - Val Loss: 0.0686</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 32/80 - Loss: 0.1515 - Val Loss: 0.0799</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 40/80 - Loss: 0.0748 - Val Loss: 0.1499</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 48/80 - Loss: 0.1046 - Val Loss: 0.1855</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 56/80 - Loss: 0.0582 - Val Loss: 0.0979</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 64/80 - Loss: 0.0557 - Val Loss: 0.2541</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 72/80 - Loss: 0.1030 - Val Loss: 0.0422</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Epoch 80/80 - Loss: 0.0711 - Val Loss: 0.1795</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>             pred</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> actual       Setosa Versicolor Virginica</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   setosa         50          0         0</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   versicolor      0         47         3</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   versicolor      0         45         5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   virginica       0          0        50</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>

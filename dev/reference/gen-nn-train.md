@@ -50,6 +50,8 @@ train_nn(
   device = NULL,
   verbose = FALSE,
   cache_weights = FALSE,
+  initial_model = NULL,
+  track_optim_path = FALSE,
   ...
 )
 
@@ -76,6 +78,8 @@ train_nn(
   device = NULL,
   verbose = FALSE,
   cache_weights = FALSE,
+  initial_model = NULL,
+  track_optim_path = FALSE,
   ...
 )
 
@@ -102,6 +106,8 @@ train_nn(
   device = NULL,
   verbose = FALSE,
   cache_weights = FALSE,
+  initial_model = NULL,
+  track_optim_path = FALSE,
   ...
 )
 
@@ -280,6 +286,27 @@ train_nn(
   Logical. If `TRUE`, stores a copy of the trained weight matrices in
   the returned object under `$cached_weights`. Default `FALSE`.
 
+- initial_model:
+
+  A previously trained kindling model of class `nn_fit` – from an
+  earlier `train_nn()` call or reloaded with
+  [`load_kindling()`](https://kindling.joshuamarie.com/dev/reference/kindling-save-load.md)
+  – to warm-start from. Training continues on a deep copy of its trained
+  module (the supplied object is left untouched). The architecture
+  arguments (`hidden_neurons`, `activations`, `output_activation`,
+  `architecture`) are ignored and inherited from the initial model,
+  whose input/output dimensions must match the supplied data. Supported
+  by the `matrix`, `data.frame`, and `formula` methods. Default `NULL`
+  (train from scratch).
+
+- track_optim_path:
+
+  Logical. If `TRUE`, retain per-epoch information on the path taken by
+  the optimizer in the returned object's `optim_path` component: the
+  loss value, the global gradient norm, and a hash of all model
+  parameters at each epoch. Default `FALSE` (only `loss_history` is
+  retained).
+
 - data:
 
   A data frame. Required when `x` is a formula.
@@ -326,6 +353,10 @@ components:
 - `val_loss_history` — per-epoch validation loss, or `NULL` if
   `validation_split = 0`
 
+- `optim_path` — when `track_optim_path = TRUE`, a data frame with one
+  row per epoch (`epoch`, `loss`, `grad_norm`, `param_hash`) recording
+  the optimizer's path; otherwise `NULL`
+
 - `n_epochs` — number of epochs actually trained
 
 - `stopped_epoch` — epoch at which early stopping triggered, or `NA` if
@@ -369,6 +400,57 @@ Task behavior is determined by your input interface and architecture:
   [`torch::nn_conv2d`](https://torch.mlverse.org/docs/reference/nn_conv2d.html)).
   If your source arrays are channel-last, reorder in the dataset or via
   `input_transform`.
+
+## Training, validation, and test data
+
+`train_nn()` always treats the data it receives as **training** data. A
+**validation** subset can be carved out of it with `validation_split`
+(used only to monitor `val_loss_history` and to drive
+[`early_stop()`](https://kindling.joshuamarie.com/dev/reference/early_stop.md));
+**test** data is never seen during training and should be supplied
+post-hoc to
+[`predict.nn_fit()`](https://kindling.joshuamarie.com/dev/reference/gen-nn-predict.md),
+or managed by resampling tools such as
+[`rsample::initial_split()`](https://rsample.tidymodels.org/reference/initial_split.html)
+in the tidymodels workflow demonstrated in
+[`vignette("kindling")`](https://kindling.joshuamarie.com/dev/articles/kindling.md).
+This proportion-based design (rather than labelled train/test inputs)
+follows tidymodels conventions, where data partitioning is the
+responsibility of `rsample`/`tune`.
+
+Outcomes supplied as `ordered` factors are treated as plain, unordered
+class labels: the ordering is ignored and the factor levels are used as
+categories.
+
+## Missing values
+
+kindling models cannot be trained on missing (`NA`) or non-finite
+(`NaN`, `Inf`) values: torch tensors have no notion of R's `NA`, so all
+inputs are checked up front and an informative error is raised instead
+of propagating undefined values. Imputation is deliberately delegated to
+the pre-processing layer of the modelling workflow, e.g.
+
+    recipes::recipe(y ~ ., data = dat) |>
+        recipes::step_impute_mean(recipes::all_numeric_predictors())
+
+or drop incomplete rows with
+[`tidyr::drop_na()`](https://tidyr.tidyverse.org/reference/drop_na.html)
+before fitting.
+
+## Learning rate, batch size, and epochs
+
+The default `learn_rate = 0.001` is a common starting point for the
+default `"adam"` optimizer but is not universally valid: too high a rate
+can make the loss diverge, too low a rate slows convergence. Adaptive
+optimizers (`"adam"`, `"rmsprop"`) adjust per-parameter step sizes
+automatically, which is kindling's mechanism for automatic training-rate
+adaptation; inspect `loss_history` (e.g. via
+[`ggplot2::autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html))
+to diagnose a poorly chosen rate. Smaller `batch_size` values give
+noisier but more frequent parameter updates per epoch; larger values
+give smoother gradients but fewer updates, typically requiring more
+`epochs`. One *epoch* is one full pass over the training data; each
+epoch performs `ceiling(n / batch_size)` gradient updates.
 
 ## Matrix method
 
@@ -417,7 +499,10 @@ with `newdata` to obtain predictions after training.
 [`predict.nn_fit()`](https://kindling.joshuamarie.com/dev/reference/gen-nn-predict.md),
 [`nn_arch()`](https://kindling.joshuamarie.com/dev/reference/nn_arch.md),
 [`act_funs()`](https://kindling.joshuamarie.com/dev/reference/act_funs.md),
-[`early_stop()`](https://kindling.joshuamarie.com/dev/reference/early_stop.md)
+[`early_stop()`](https://kindling.joshuamarie.com/dev/reference/early_stop.md),
+[`save_kindling()`](https://kindling.joshuamarie.com/dev/reference/kindling-save-load.md)
+/
+[`load_kindling()`](https://kindling.joshuamarie.com/dev/reference/kindling-save-load.md)
 
 ## Examples
 
@@ -509,6 +594,24 @@ if (torch::torch_is_installed()) {
         validation_split = 0.2,
         early_stopping = early_stop(patience = 10)
     )
+
+    # Track the optimizer's path, then inspect it
+    model = train_nn(
+        x = Sepal.Length ~ .,
+        data = iris[, 1:4],
+        hidden_neurons = 16,
+        epochs = 20,
+        track_optim_path = TRUE
+    )
+    head(model$optim_path)
+
+    # Warm-start: continue training a previous (or reloaded) model
+    model2 = train_nn(
+        x = Sepal.Length ~ .,
+        data = iris[, 1:4],
+        initial_model = model,
+        epochs = 20
+    )
 }
 # }
 
@@ -559,20 +662,20 @@ if (torch::torch_is_installed()) {
 }
 #> → Auto-detected classification task. Using cross_entropy loss.
 #> ℹ Using device: cpu
-#> Epoch 8/80 - Loss: 0.4912 - Val Loss: 0.4569
-#> Epoch 16/80 - Loss: 0.2665 - Val Loss: 0.1911
-#> Epoch 24/80 - Loss: 0.1484 - Val Loss: 0.1051
-#> Epoch 32/80 - Loss: 0.1218 - Val Loss: 0.0990
-#> Epoch 40/80 - Loss: 0.2214 - Val Loss: 0.1846
-#> Epoch 48/80 - Loss: 0.1140 - Val Loss: 0.0461
-#> Epoch 56/80 - Loss: 0.1056 - Val Loss: 0.0603
-#> Epoch 64/80 - Loss: 0.0876 - Val Loss: 0.0371
-#> Epoch 72/80 - Loss: 0.1885 - Val Loss: 0.0345
-#> Epoch 80/80 - Loss: 0.0992 - Val Loss: 0.0279
+#> Epoch 8/80 - Loss: 0.1953 - Val Loss: 0.1932
+#> Epoch 16/80 - Loss: 0.1248 - Val Loss: 0.1625
+#> Epoch 24/80 - Loss: 0.1072 - Val Loss: 0.0686
+#> Epoch 32/80 - Loss: 0.1515 - Val Loss: 0.0799
+#> Epoch 40/80 - Loss: 0.0748 - Val Loss: 0.1499
+#> Epoch 48/80 - Loss: 0.1046 - Val Loss: 0.1855
+#> Epoch 56/80 - Loss: 0.0582 - Val Loss: 0.0979
+#> Epoch 64/80 - Loss: 0.0557 - Val Loss: 0.2541
+#> Epoch 72/80 - Loss: 0.1030 - Val Loss: 0.0422
+#> Epoch 80/80 - Loss: 0.0711 - Val Loss: 0.1795
 #>             pred
 #> actual       Setosa Versicolor Virginica
 #>   setosa         50          0         0
-#>   versicolor      0         47         3
+#>   versicolor      0         45         5
 #>   virginica       0          0        50
 # }
 ```

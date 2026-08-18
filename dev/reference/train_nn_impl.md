@@ -26,6 +26,8 @@ train_nn_impl(
   device = NULL,
   verbose = FALSE,
   cache_weights = FALSE,
+  initial_model = NULL,
+  track_optim_path = FALSE,
   fit_class = "nn_fit"
 )
 ```

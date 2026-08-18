@@ -56,6 +56,18 @@
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="kindling-development-version">kindling (development version)<a class="anchor" aria-label="anchor" href="#kindling-development-version"></a></h2>
 <div class="section level3">
+<h3 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h3>
+<ul><li><p><code><a href="../reference/kindling-save-load.html">save_kindling()</a></code> and <code><a href="../reference/kindling-save-load.html">load_kindling()</a></code> save and reload a trained model. Base <code><a href="https://rdrr.io/r/base/readRDS.html" class="external-link">saveRDS()</a></code> does not work for <a href="https://kindling.joshuamarie.com">kindling</a> fits, since the underlying <code><a href="https://torch.mlverse.org/docs/reference/nn_module.html" class="external-link">torch::nn_module</a></code> holds external pointers that don’t survive plain R serialization.</p></li>
+<li><p><code><a href="../reference/gen-nn-train.html">train_nn()</a></code> gains <code>initial_model</code> to warm-start training from a previously trained (or reloaded) fit, and <code>track_optim_path</code> to optionally retain per-epoch loss, gradient norm, and a parameter hash in the returned object’s <code>$optim_path</code>.</p></li>
+<li><p>Training functions (<code><a href="../reference/gen-nn-train.html">train_nn()</a></code>, <code><a href="../reference/kindling-basemodels.html">ffnn()</a></code>, <code><a href="../reference/kindling-basemodels.html">rnn()</a></code>) and <code><a href="https://rdrr.io/r/stats/predict.html" class="external-link">predict()</a></code> now validate their inputs up front and error informatively on empty data, non-numeric predictors, missing/non-finite values, and length mismatches, instead of failing deep inside <a href="https://torch.mlverse.org/docs" class="external-link">torch</a>.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-development-version">Documentation<a class="anchor" aria-label="anchor" href="#documentation-development-version"></a></h3>
+<ul><li><p>Added a Life Cycle Statement to <code>CONTRIBUTING.md</code>.</p></li>
+<li><p><code><a href="../reference/gen-nn-train.html">?train_nn</a></code> gains sections clarifying training/validation/test data semantics, the missing-value policy (with a <a href="https://github.com/tidymodels/recipes" class="external-link">recipes</a> imputation example), and guidance on learning rate, batch size, and epochs.</p></li>
+<li><p><code><a href="../articles/tuning-capabilities.html">vignette("tuning-capabilities")</a></code> now points to custom <a href="https://github.com/tidymodels/yardstick" class="external-link">yardstick</a> metrics via <code>metric_set()</code>.</p></li>
+</ul></div>
+<div class="section level3">
 <h3 id="ongoing-features-development-version">Ongoing features<a class="anchor" aria-label="anchor" href="#ongoing-features-development-version"></a></h3>
 <ul><li>
 <p>More visualization supports</p>
@@ -78,6 +90,7 @@
 <li><p>Element names are now resolved once, up front, and iterated alongside each element via <code><a href="https://purrr.tidyverse.org/reference/pmap.html" class="external-link">purrr::pmap()</a></code> instead of relying on <code>imap()</code>’s name-or-index behavior.</p></li>
 </ul></li>
 <li><p>Wrap <code>!requireNamespace(pkg, quietly = TRUE)</code> as this causes hidden bugs to <code>has_namespace()</code></p></li>
+<li><p><code><a href="../reference/autoplot_diagnostics.html">autoplot_diagnostics()</a></code> errored on multi-output regression models instead of returning one actual-vs-fitted panel per output column. The length check comparing <code>actual</code> against the fitted values used <code><a href="https://rdrr.io/r/base/length.html" class="external-link">length()</a></code> on a matrix (always 2, the element count) instead of <code><a href="https://rdrr.io/r/base/nrow.html" class="external-link">nrow()</a></code> (the observation count), so the mismatch check always failed before reaching the multi-output branch.</p></li>
 </ul></div>
 </div>
     <div class="section level2">

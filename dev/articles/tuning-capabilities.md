@@ -189,6 +189,12 @@ tune_res = tune_grid(
 )
 ```
 
+`metric_set()` is not limited to built-in metrics: it also accepts
+custom metrics created with
+[`yardstick::new_numeric_metric()`](https://yardstick.tidymodels.org/reference/new-metric.html)
+(see `vignette("custom-metrics", package = "yardstick")`), so kindling
+models can be tuned and assessed against user-defined criteria as well.
+
 ### Inspect
 
 Even with the list-columns, it still normally produces the output we
@@ -204,28 +210,28 @@ collect_metrics(tune_res)
 ```
 
     ## # A tibble: 20 × 9
-    ##    hidden_neurons activations learn_rate .metric .estimator  mean     n std_err
-    ##    <list>         <list>           <dbl> <chr>   <chr>      <dbl> <int>   <dbl>
-    ##  1 <int [1]>      <chr [1]>     2.99e- 6 rmse    standard   4.34      5 0.0999 
-    ##  2 <int [1]>      <chr [1]>     2.99e- 6 rsq     standard   0.334     5 0.178  
-    ##  3 <int [2]>      <chr [2]>     9.46e- 5 rmse    standard   3.98      5 0.0881 
-    ##  4 <int [2]>      <chr [2]>     9.46e- 5 rsq     standard   0.269     5 0.0938 
-    ##  5 <int [1]>      <chr [1]>     4.09e- 4 rmse    standard   3.80      5 0.108  
-    ##  6 <int [1]>      <chr [1]>     4.09e- 4 rsq     standard   0.616     5 0.153  
-    ##  7 <int [1]>      <chr [1]>     2.98e- 8 rmse    standard   4.23      5 0.124  
-    ##  8 <int [1]>      <chr [1]>     2.98e- 8 rsq     standard   0.479     5 0.145  
-    ##  9 <int [1]>      <chr [1]>     3.66e- 2 rmse    standard   0.102     5 0.0147 
-    ## 10 <int [1]>      <chr [1]>     3.66e- 2 rsq     standard   0.983     5 0.00667
-    ## 11 <int [3]>      <chr [3]>     1.62e- 7 rmse    standard   4.24      5 0.0702 
-    ## 12 <int [3]>      <chr [3]>     1.62e- 7 rsq     standard   0.248     5 0.0972 
-    ## 13 <int [3]>      <chr [3]>     5.56e-10 rmse    standard   4.07      5 0.0581 
-    ## 14 <int [3]>      <chr [3]>     5.56e-10 rsq     standard   0.318     5 0.121  
-    ## 15 <int [1]>      <chr [1]>     1.06e- 9 rmse    standard   4.22      5 0.0448 
-    ## 16 <int [1]>      <chr [1]>     1.06e- 9 rsq     standard   0.384     5 0.172  
-    ## 17 <int [1]>      <chr [1]>     1.40e- 5 rmse    standard   4.26      5 0.142  
-    ## 18 <int [1]>      <chr [1]>     1.40e- 5 rsq     standard   0.315     5 0.123  
-    ## 19 <int [2]>      <chr [2]>     1.59e- 3 rmse    standard   0.896     5 0.0626 
-    ## 20 <int [2]>      <chr [2]>     1.59e- 3 rsq     standard   0.551     5 0.166  
+    ##    hidden_neurons activations learn_rate .metric .estimator   mean     n std_err
+    ##    <list>         <list>           <dbl> <chr>   <chr>       <dbl> <int>   <dbl>
+    ##  1 <int [1]>      <chr [1]>     2.99e- 6 rmse    standard   4.24       5 0.0717 
+    ##  2 <int [1]>      <chr [1]>     2.99e- 6 rsq     standard   0.401      5 0.141  
+    ##  3 <int [2]>      <chr [2]>     9.46e- 5 rmse    standard   4.04       5 0.0700 
+    ##  4 <int [2]>      <chr [2]>     9.46e- 5 rsq     standard   0.412      5 0.148  
+    ##  5 <int [1]>      <chr [1]>     4.09e- 4 rmse    standard   3.92       5 0.0862 
+    ##  6 <int [1]>      <chr [1]>     4.09e- 4 rsq     standard   0.595      5 0.125  
+    ##  7 <int [1]>      <chr [1]>     2.98e- 8 rmse    standard   4.35       5 0.150  
+    ##  8 <int [1]>      <chr [1]>     2.98e- 8 rsq     standard   0.254      5 0.136  
+    ##  9 <int [1]>      <chr [1]>     3.66e- 2 rmse    standard   0.0856     5 0.00429
+    ## 10 <int [1]>      <chr [1]>     3.66e- 2 rsq     standard   0.990      5 0.00215
+    ## 11 <int [3]>      <chr [3]>     1.62e- 7 rmse    standard   4.33       5 0.0651 
+    ## 12 <int [3]>      <chr [3]>     1.62e- 7 rsq     standard   0.322      5 0.134  
+    ## 13 <int [3]>      <chr [3]>     5.56e-10 rmse    standard   4.31       5 0.101  
+    ## 14 <int [3]>      <chr [3]>     5.56e-10 rsq     standard   0.263      5 0.142  
+    ## 15 <int [1]>      <chr [1]>     1.06e- 9 rmse    standard   4.35       5 0.0301 
+    ## 16 <int [1]>      <chr [1]>     1.06e- 9 rsq     standard   0.180      5 0.113  
+    ## 17 <int [1]>      <chr [1]>     1.40e- 5 rmse    standard   4.42       5 0.0170 
+    ## 18 <int [1]>      <chr [1]>     1.40e- 5 rsq     standard   0.685      5 0.130  
+    ## 19 <int [2]>      <chr [2]>     1.59e- 3 rmse    standard   0.833      5 0.149  
+    ## 20 <int [2]>      <chr [2]>     1.59e- 3 rsq     standard   0.605      5 0.102  
     ## # ℹ 1 more variable: .config <chr>
 
 ``` r
@@ -234,13 +240,13 @@ show_best(tune_res, metric = "rmse", n = 5)
 ```
 
     ## # A tibble: 5 × 9
-    ##   hidden_neurons activations learn_rate .metric .estimator  mean     n std_err
-    ##   <list>         <list>           <dbl> <chr>   <chr>      <dbl> <int>   <dbl>
-    ## 1 <int [1]>      <chr [1]>     3.66e- 2 rmse    standard   0.102     5  0.0147
-    ## 2 <int [2]>      <chr [2]>     1.59e- 3 rmse    standard   0.896     5  0.0626
-    ## 3 <int [1]>      <chr [1]>     4.09e- 4 rmse    standard   3.80      5  0.108 
-    ## 4 <int [2]>      <chr [2]>     9.46e- 5 rmse    standard   3.98      5  0.0881
-    ## 5 <int [3]>      <chr [3]>     5.56e-10 rmse    standard   4.07      5  0.0581
+    ##   hidden_neurons activations learn_rate .metric .estimator   mean     n std_err
+    ##   <list>         <list>           <dbl> <chr>   <chr>       <dbl> <int>   <dbl>
+    ## 1 <int [1]>      <chr [1]>   0.0366     rmse    standard   0.0856     5 0.00429
+    ## 2 <int [2]>      <chr [2]>   0.00159    rmse    standard   0.833      5 0.149  
+    ## 3 <int [1]>      <chr [1]>   0.000409   rmse    standard   3.92       5 0.0862 
+    ## 4 <int [2]>      <chr [2]>   0.0000946  rmse    standard   4.04       5 0.0700 
+    ## 5 <int [1]>      <chr [1]>   0.00000299 rmse    standard   4.24       5 0.0717 
     ## # ℹ 1 more variable: .config <chr>
 
 ## Visualizing Results
@@ -310,8 +316,8 @@ final_model |>
     ## # A tibble: 2 × 3
     ##   .metric .estimator .estimate
     ##   <chr>   <chr>          <dbl>
-    ## 1 rmse    standard      0.0324
-    ## 2 rsq     standard      0.998
+    ## 1 rmse    standard      0.0837
+    ## 2 rsq     standard      0.990
 
 ## A Note on Parametric Activations
 
