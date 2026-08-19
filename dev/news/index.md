@@ -90,6 +90,21 @@
 - Wrap `!requireNamespace(pkg, quietly = TRUE)` as this causes hidden
   bugs to `has_namespace()`
 
+- `train_nn(verbose = TRUE)` now reports validation loss alongside
+  training loss when `validation_split > 0`, matching
+  [`ffnn()`](https://kindling.joshuamarie.com/dev/reference/kindling-basemodels.md)
+  and
+  [`rnn()`](https://kindling.joshuamarie.com/dev/reference/kindling-basemodels.md).
+  The validation branch computed a message but discarded it (a leftover
+  from the
+  [`glue::glue()`](https://glue.tidyverse.org/reference/glue.html) to
+  [`sprintf()`](https://rdrr.io/r/base/sprintf.html) rewrite), so the
+  validation loss never reached the console.
+
+- [`table_summary()`](https://kindling.joshuamarie.com/dev/reference/table_summary.md)
+  no longer iterates over `1:max(...)`, which produced a descending
+  sequence when the table was empty.
+
 - [`autoplot_diagnostics()`](https://kindling.joshuamarie.com/dev/reference/autoplot_diagnostics.md)
   errored on multi-output regression models instead of returning one
   actual-vs-fitted panel per output column. The length check comparing

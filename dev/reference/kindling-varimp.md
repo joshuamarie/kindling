@@ -123,23 +123,23 @@ if (torch::torch_is_installed()) {
         verbose = FALSE,
         cache_weights = TRUE
     )
-    
+
     # Directly use `NeuralNetTools::garson`
     model_mlp |>
         garson()
-    
-    # Directly use `NeuralNetTools::olden`    
+
+    # Directly use `NeuralNetTools::olden`
     model_mlp |>
         olden()
 } else {
     message("Torch not fully installed — skipping example")
 }
 
-#>        x_names y_names     rel_imp
-#> 1 Sepal.Length       y -0.16271562
-#> 2 Petal.Length       y  0.10408192
-#> 3  Sepal.Width       y -0.07618094
-#> 4  Petal.Width       y  0.03416439
+#>        x_names y_names    rel_imp
+#> 1  Petal.Width       y  0.4392664
+#> 2 Sepal.Length       y -0.2930008
+#> 3  Sepal.Width       y -0.2885507
+#> 4 Petal.Length       y  0.2373047
 # }
 
 # \donttest{
