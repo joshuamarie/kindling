@@ -25,7 +25,8 @@ print(x, ...)
 
 - x:
 
-  An object of class "ffnn_fit"
+  A layer pronoun object (`.layer`, `.i`, `.in`, `.out`, or
+  `.is_output`)
 
 - ...:
 
