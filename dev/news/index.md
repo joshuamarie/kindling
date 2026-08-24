@@ -123,6 +123,16 @@
   so the mismatch check always failed before reaching the multi-output
   branch.
 
+- [`grid_depth()`](https://kindling.joshuamarie.com/dev/reference/grid_depth.md)
+  no longer crashes with a cryptic `'from' must be a finite number`
+  error from [`seq()`](https://rdrr.io/r/base/seq.html) when given an
+  unfinalized [dials](https://dials.tidymodels.org) parameter
+  (e.g. [`hidden_neurons()`](https://kindling.joshuamarie.com/dev/reference/dials-kindling.md)
+  before
+  [`finalize()`](https://dials.tidymodels.org/reference/finalize.html),
+  whose range bounds are `NA`). It now raises an informative error
+  asking for the range to be finalized first.
+
 ## kindling 0.3.2
 
 CRAN release: 2026-07-10
