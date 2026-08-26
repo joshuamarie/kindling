@@ -16,6 +16,8 @@ coverage](https://codecov.io/gh/joshuamarie/kindling/graph/badge.svg)](https://a
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![rOpenSci software
+peer-review](https://badges.ropensci.org/801_status.svg)](https://github.com/ropensci/software-review/issues/801)
 <!-- badges: end -->
 
 ## Package overview
