@@ -212,26 +212,26 @@ collect_metrics(tune_res)
     ## # A tibble: 20 × 9
     ##    hidden_neurons activations learn_rate .metric .estimator   mean     n std_err
     ##    <list>         <list>           <dbl> <chr>   <chr>       <dbl> <int>   <dbl>
-    ##  1 <int [1]>      <chr [1]>     2.99e- 6 rmse    standard   4.18       5 0.135  
-    ##  2 <int [1]>      <chr [1]>     2.99e- 6 rsq     standard   0.328      5 0.119  
-    ##  3 <int [2]>      <chr [2]>     9.46e- 5 rmse    standard   4.08       5 0.125  
-    ##  4 <int [2]>      <chr [2]>     9.46e- 5 rsq     standard   0.404      5 0.164  
-    ##  5 <int [1]>      <chr [1]>     4.09e- 4 rmse    standard   3.75       5 0.0760 
-    ##  6 <int [1]>      <chr [1]>     4.09e- 4 rsq     standard   0.541      5 0.182  
-    ##  7 <int [1]>      <chr [1]>     2.98e- 8 rmse    standard   4.32       5 0.102  
-    ##  8 <int [1]>      <chr [1]>     2.98e- 8 rsq     standard   0.342      5 0.143  
-    ##  9 <int [1]>      <chr [1]>     3.66e- 2 rmse    standard   0.0788     5 0.00252
-    ## 10 <int [1]>      <chr [1]>     3.66e- 2 rsq     standard   0.991      5 0.00205
-    ## 11 <int [3]>      <chr [3]>     1.62e- 7 rmse    standard   4.24       5 0.0534 
-    ## 12 <int [3]>      <chr [3]>     1.62e- 7 rsq     standard   0.248      5 0.148  
-    ## 13 <int [3]>      <chr [3]>     5.56e-10 rmse    standard   4.13       5 0.0462 
-    ## 14 <int [3]>      <chr [3]>     5.56e-10 rsq     standard   0.134      5 0.0510 
-    ## 15 <int [1]>      <chr [1]>     1.06e- 9 rmse    standard   4.37       5 0.0532 
-    ## 16 <int [1]>      <chr [1]>     1.06e- 9 rsq     standard   0.428      5 0.143  
-    ## 17 <int [1]>      <chr [1]>     1.40e- 5 rmse    standard   4.19       5 0.110  
-    ## 18 <int [1]>      <chr [1]>     1.40e- 5 rsq     standard   0.292      5 0.139  
-    ## 19 <int [2]>      <chr [2]>     1.59e- 3 rmse    standard   0.733      5 0.113  
-    ## 20 <int [2]>      <chr [2]>     1.59e- 3 rsq     standard   0.700      5 0.0711 
+    ##  1 <int [1]>      <chr [1]>     2.99e- 6 rmse    standard   4.24       5 0.0823 
+    ##  2 <int [1]>      <chr [1]>     2.99e- 6 rsq     standard   0.150      5 0.0730 
+    ##  3 <int [2]>      <chr [2]>     9.46e- 5 rmse    standard   4.04       5 0.105  
+    ##  4 <int [2]>      <chr [2]>     9.46e- 5 rsq     standard   0.628      5 0.0642 
+    ##  5 <int [1]>      <chr [1]>     4.09e- 4 rmse    standard   3.71       5 0.0754 
+    ##  6 <int [1]>      <chr [1]>     4.09e- 4 rsq     standard   0.627      5 0.0875 
+    ##  7 <int [1]>      <chr [1]>     2.98e- 8 rmse    standard   4.44       5 0.0719 
+    ##  8 <int [1]>      <chr [1]>     2.98e- 8 rsq     standard   0.236      5 0.129  
+    ##  9 <int [1]>      <chr [1]>     3.66e- 2 rmse    standard   0.0791     5 0.0144 
+    ## 10 <int [1]>      <chr [1]>     3.66e- 2 rsq     standard   0.987      5 0.00562
+    ## 11 <int [3]>      <chr [3]>     1.62e- 7 rmse    standard   4.26       5 0.0882 
+    ## 12 <int [3]>      <chr [3]>     1.62e- 7 rsq     standard   0.227      5 0.0813 
+    ## 13 <int [3]>      <chr [3]>     5.56e-10 rmse    standard   4.20       5 0.0894 
+    ## 14 <int [3]>      <chr [3]>     5.56e-10 rsq     standard   0.263      5 0.0915 
+    ## 15 <int [1]>      <chr [1]>     1.06e- 9 rmse    standard   4.13       5 0.0680 
+    ## 16 <int [1]>      <chr [1]>     1.06e- 9 rsq     standard   0.445      5 0.172  
+    ## 17 <int [1]>      <chr [1]>     1.40e- 5 rmse    standard   4.00       5 0.126  
+    ## 18 <int [1]>      <chr [1]>     1.40e- 5 rsq     standard   0.251      5 0.109  
+    ## 19 <int [2]>      <chr [2]>     1.59e- 3 rmse    standard   0.868      5 0.0636 
+    ## 20 <int [2]>      <chr [2]>     1.59e- 3 rsq     standard   0.507      5 0.110  
     ## # ℹ 1 more variable: .config <chr>
 
 ``` r
@@ -242,11 +242,11 @@ show_best(tune_res, metric = "rmse", n = 5)
     ## # A tibble: 5 × 9
     ##   hidden_neurons activations learn_rate .metric .estimator   mean     n std_err
     ##   <list>         <list>           <dbl> <chr>   <chr>       <dbl> <int>   <dbl>
-    ## 1 <int [1]>      <chr [1]>     3.66e- 2 rmse    standard   0.0788     5 0.00252
-    ## 2 <int [2]>      <chr [2]>     1.59e- 3 rmse    standard   0.733      5 0.113  
-    ## 3 <int [1]>      <chr [1]>     4.09e- 4 rmse    standard   3.75       5 0.0760 
-    ## 4 <int [2]>      <chr [2]>     9.46e- 5 rmse    standard   4.08       5 0.125  
-    ## 5 <int [3]>      <chr [3]>     5.56e-10 rmse    standard   4.13       5 0.0462 
+    ## 1 <int [1]>      <chr [1]>    0.0366    rmse    standard   0.0791     5  0.0144
+    ## 2 <int [2]>      <chr [2]>    0.00159   rmse    standard   0.868      5  0.0636
+    ## 3 <int [1]>      <chr [1]>    0.000409  rmse    standard   3.71       5  0.0754
+    ## 4 <int [1]>      <chr [1]>    0.0000140 rmse    standard   4.00       5  0.126 
+    ## 5 <int [2]>      <chr [2]>    0.0000946 rmse    standard   4.04       5  0.105 
     ## # ℹ 1 more variable: .config <chr>
 
 ## Visualizing Results
@@ -316,8 +316,8 @@ final_model |>
     ## # A tibble: 2 × 3
     ##   .metric .estimator .estimate
     ##   <chr>   <chr>          <dbl>
-    ## 1 rmse    standard      0.0774
-    ## 2 rsq     standard      0.990
+    ## 1 rmse    standard      0.0903
+    ## 2 rsq     standard      0.987
 
 ## A Note on Parametric Activations
 

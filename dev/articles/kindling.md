@@ -379,7 +379,7 @@ best_nn
 # A tibble: 1 × 4
   hidden_neurons activations output_activation .config         
   <list>         <list>      <chr>             <chr>           
-1 <int [2]>      <chr [2]>   sigmoid           pre0_mod02_post0
+1 <int [2]>      <chr [2]>   sigmoid           pre0_mod08_post0
 ```
 
 ``` r
@@ -412,7 +412,7 @@ Model: mlp_kindling()
 -----------------------------------------------------------------------
   NN Model Type           :             FFNN    n_predictors :      4
   Number of Epochs        :              100    n_response   :      3
-  Hidden Layer Units      :          50, 101    reg.         :   None
+  Hidden Layer Units      :           96, 49    reg.         :   None
   Number of Hidden Layers :                2    Device       :    cpu
   Pred. Type              :   classification                 :       
 -----------------------------------------------------------------------
@@ -423,8 +423,8 @@ Model: mlp_kindling()
 ```
 
     ---------------------------------
-      1st Layer {50}    :       elu
-      2nd Layer {101}   :       elu
+      1st Layer {96}    :      relu
+      2nd Layer {49}    :      relu
       Output Activation :   sigmoid
     ---------------------------------
 
@@ -461,10 +461,10 @@ networks. Two primary algorithms are available:
 
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1 Sepal.Length       y 29.29985
-    #> 2 Petal.Length       y 24.88434
-    #> 3  Petal.Width       y 24.70182
-    #> 4  Sepal.Width       y 21.11398
+    #> 1  Petal.Width       y 33.58476
+    #> 2 Petal.Length       y 24.10410
+    #> 3  Sepal.Width       y 21.48689
+    #> 4 Sepal.Length       y 20.82425
     ```
 
 2.  Olden’s Algorithm
@@ -472,11 +472,11 @@ networks. Two primary algorithms are available:
     ``` r
 
     olden(model, bar_plot = FALSE)
-    #>        x_names y_names    rel_imp
-    #> 1 Petal.Length       y  0.7489214
-    #> 2  Petal.Width       y  0.7328798
-    #> 3 Sepal.Length       y -0.4642646
-    #> 4  Sepal.Width       y -0.4640944
+    #>        x_names y_names     rel_imp
+    #> 1  Petal.Width       y  0.14291638
+    #> 2 Petal.Length       y  0.13494693
+    #> 3 Sepal.Length       y -0.09560677
+    #> 4  Sepal.Width       y -0.07253552
     ```
 
 ### Integration with {vip}
