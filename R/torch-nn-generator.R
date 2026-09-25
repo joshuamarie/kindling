@@ -332,6 +332,8 @@ rnn_generator = function(nn_name = "DeepRNN",
     }
 
     check_rnn_type(rnn_type, hd_neurons)
+    # check_rnn_type() accepts any case; torch only exports the lower-case constructors
+    rnn_type = tolower(rnn_type)
 
     n_rnn_layers = length(hd_neurons)
 
