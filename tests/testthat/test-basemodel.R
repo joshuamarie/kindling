@@ -237,6 +237,34 @@ test_that("RNN types use correct namespace", {
     }
 })
 
+test_that("rnn_type is case-insensitive", {
+    skip_if_no_torch()
+
+    for (rnn_type in c("RNN", "LSTM", "Gru")) {
+        expr = rnn_generator(
+            hd_neurons = c(10),
+            no_x = 5,
+            no_y = 1,
+            rnn_type = rnn_type
+        )
+
+        code_str = paste(deparse(expr), collapse = " ")
+        expected_call = paste0("torch::nn_", tolower(rnn_type), "(")
+
+        expect_match(code_str, expected_call, fixed = TRUE,
+                    info = paste("RNN type:", rnn_type))
+    }
+
+    fit = rnn(
+        Sepal.Length ~ .,
+        data = iris[, 1:4],
+        hidden_neurons = 4,
+        rnn_type = "LSTM",
+        epochs = 2
+    )
+    expect_s3_class(fit, "rnn_fit")
+})
+
 test_that("Bidirectional RNN maintains namespace", {
     skip_if_no_torch()
 

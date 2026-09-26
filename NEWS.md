@@ -88,6 +88,12 @@
     bounds are `NA`). It now raises an informative error asking for the
     range to be finalized first.
 
+-   `rnn_type` is now case-insensitive throughout, as its validation already
+    was. `rnn(rnn_type = "LSTM")` (and `rnn_generator()`, `rnn_kindling()`)
+    passed the check but then failed with "'nn_LSTM' is not an exported
+    object from 'namespace:torch'", because the lower-cased value was only
+    used for validation, not to build the layer.
+
 # kindling 0.3.2
 
 ## Bug fixes
