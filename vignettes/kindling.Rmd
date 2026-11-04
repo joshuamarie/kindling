@@ -19,6 +19,9 @@ knitr::opts_chunk$set(
 )
 
 fansi::set_knit_hooks(knitr::knit_hooks)
+
+# {vip} is only suggested: skip its chunk when it isn't installed
+eval_vip <- knitr::opts_chunk$get("eval") && requireNamespace("vip", quietly = TRUE)
 ```
 
 ## Introduction
@@ -285,7 +288,7 @@ Resampling strategies from `{rsample}` will enable robust cross-validation workf
 
 For users working within the `{tidymodels}` ecosystem, `{kindling}` models work seamlessly with the `{vip}` package:
 
-```{r, fig.height=6, fig.width=8}
+```{r, fig.height=6, fig.width=8, eval = eval_vip}
 #| label: example
 #| fig.alt: "Variable Importance Plot"
 box::use(
