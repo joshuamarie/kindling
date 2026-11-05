@@ -208,7 +208,7 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         50          0         0
-    #>   versicolor      0         49         1
+    #>   versicolor      0         48         2
     #>   virginica       0          1        49
     ```
 
@@ -224,7 +224,7 @@ Two kinds of [`predict()`](https://rdrr.io/r/stats/predict.html) usage:
     #>             predicted
     #> actual       setosa versicolor virginica
     #>   setosa         10          0         0
-    #>   versicolor      0          9         1
+    #>   versicolor      0          8         2
     #>   virginica       0          0        10
     ```
 
@@ -265,8 +265,8 @@ mlp_kindling(
 #> # A tibble: 2 × 3
 #>   .metric  .estimator .estimate
 #>   <chr>    <chr>          <dbl>
-#> 1 accuracy binary             1
-#> 2 kap      binary             1
+#> 1 accuracy binary         0.989
+#> 2 kap      binary         0.975
 ```
 
 ``` r
@@ -289,8 +289,8 @@ rnn_kindling(
 #> # A tibble: 2 × 3
 #>   .metric  .estimator .estimate
 #>   <chr>    <chr>          <dbl>
-#> 1 accuracy binary             1
-#> 2 kap      binary             1
+#> 1 accuracy binary         0.997
+#> 2 kap      binary         0.994
 ```
 
 ## Hyperparameter Tuning & Resampling
@@ -379,7 +379,7 @@ best_nn
 # A tibble: 1 × 4
   hidden_neurons activations output_activation .config         
   <list>         <list>      <chr>             <chr>           
-1 <int [2]>      <chr [2]>   sigmoid           pre0_mod07_post0
+1 <int [2]>      <chr [2]>   sigmoid           pre0_mod06_post0
 ```
 
 ``` r
@@ -412,7 +412,7 @@ Model: mlp_kindling()
 -----------------------------------------------------------------------
   NN Model Type           :             FFNN    n_predictors :      4
   Number of Epochs        :              100    n_response   :      3
-  Hidden Layer Units      :           66, 52    reg.         :   None
+  Hidden Layer Units      :           52, 80    reg.         :   None
   Number of Hidden Layers :                2    Device       :    cpu
   Pred. Type              :   classification                 :       
 -----------------------------------------------------------------------
@@ -423,8 +423,8 @@ Model: mlp_kindling()
 ```
 
     ---------------------------------
-      1st Layer {66}    :       elu
-      2nd Layer {52}    :      relu
+      1st Layer {52}    :       elu
+      2nd Layer {80}    :       elu
       Output Activation :   sigmoid
     ---------------------------------
 
@@ -461,10 +461,10 @@ networks. Two primary algorithms are available:
 
     garson(model, bar_plot = FALSE)
     #>        x_names y_names  rel_imp
-    #> 1  Petal.Width       y 26.93737
-    #> 2 Petal.Length       y 26.32325
-    #> 3 Sepal.Length       y 26.18527
-    #> 4  Sepal.Width       y 20.55410
+    #> 1 Sepal.Length       y 28.49144
+    #> 2 Petal.Length       y 27.65110
+    #> 3  Petal.Width       y 25.17369
+    #> 4  Sepal.Width       y 18.68377
     ```
 
 2.  Olden’s Algorithm
@@ -472,11 +472,11 @@ networks. Two primary algorithms are available:
     ``` r
 
     olden(model, bar_plot = FALSE)
-    #>        x_names y_names     rel_imp
-    #> 1 Petal.Length       y -0.09388005
-    #> 2  Sepal.Width       y  0.09340449
-    #> 3  Petal.Width       y -0.07656273
-    #> 4 Sepal.Length       y  0.04188941
+    #>        x_names y_names    rel_imp
+    #> 1  Petal.Width       y -0.6544683
+    #> 2 Petal.Length       y -0.6455755
+    #> 3 Sepal.Length       y  0.4952660
+    #> 4  Sepal.Width       y  0.3908212
     ```
 
 ### Integration with {vip}
