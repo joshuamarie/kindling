@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 fansi::set_knit_hooks(knitr::knit_hooks)
 
 # {vip} is only suggested: skip its chunk when it isn't installed
-eval_vip <- knitr::opts_chunk$get("eval") && requireNamespace("vip", quietly = TRUE)
+eval_vip = knitr::opts_chunk$get("eval") && requireNamespace("vip", quietly = TRUE)
 ```
 
 ## Introduction
